@@ -1,0 +1,185 @@
+/* static/css/components.css - Extensión para main.css */
+
+/* ===== EXTENDED COMPONENT STYLES ===== */
+
+/* Badge Components - Extending existing badges */
+.badge-xs { 
+  padding: var(--space-1) var(--space-2);
+  font-size: 0.6875rem; /* 11px */
+}
+
+.badge-sm { 
+  padding: calc(var(--space-1) * 1.5) var(--space-3);
+  font-size: var(--text-xs);
+}
+
+.badge-md { 
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+}
+
+.badge-lg { 
+  padding: calc(var(--space-2) * 1.5) var(--space-5);
+  font-size: var(--text-sm);
+}
+
+/* Additional Badge Variants */
+.badge-outline {
+  background-color: transparent;
+  border: 1px solid currentColor;
+}
+
+.badge-with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.badge-with-icon svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+/* Card Components */
+.card {
+  @apply bg-white rounded-2xl border border-gray-200 shadow-sm;
+}
+
+.dark .card {
+  @apply bg-gray-900 border-gray-800;
+}
+
+.card-header {
+  @apply px-6 py-5 border-b border-gray-100;
+}
+
+.dark .card-header {
+  @apply border-gray-800;
+}
+
+.card-body {
+  @apply px-6 py-6;
+}
+
+.card-body.no-padding {
+  @apply p-0;
+}
+
+.card-footer {
+  @apply px-6 py-4 bg-gray-50 border-t border-gray-100 rounded-b-2xl;
+}
+
+.dark .card-footer {
+  @apply bg-gray-800 border-gray-800;
+}
+
+/* Button Components */
+.btn {
+  @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+.btn:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+.btn-sm {
+  @apply px-3 py-1.5 text-xs;
+}
+
+.btn-lg {
+  @apply px-6 py-3 text-base;
+}
+
+/* Button Variants */
+.btn-primary {
+  @apply bg-brand-500 text-white hover:bg-brand-600 focus:ring-brand-500 border border-transparent;
+}
+
+.btn-secondary {
+  @apply bg-white text-gray-700 hover:bg-gray-50 focus:ring-gray-500 border border-gray-300;
+}
+
+.dark .btn-secondary {
+  @apply bg-gray-800 text-gray-300 hover:bg-gray-700 border-gray-700;
+}
+
+.btn-success {
+  @apply bg-success-500 text-white hover:bg-success-600 focus:ring-success-500 border border-transparent;
+}
+
+.btn-warning {
+  @apply bg-warning-500 text-white hover:bg-warning-600 focus:ring-warning-500 border border-transparent;
+}
+
+.btn-error {
+  @apply bg-error-500 text-white hover:bg-error-600 focus:ring-error-500 border border-transparent;
+}
+
+.btn-outline {
+  @apply bg-transparent text-gray-700 hover:bg-gray-50 focus:ring-gray-500 border border-gray-300;
+}
+
+/* Table Components */
+.table-container {
+  @apply overflow-x-auto;
+}
+
+.table-responsive {
+  @apply min-w-full;
+}
+
+.table-hover tbody tr:hover {
+  @apply bg-gray-50;
+}
+
+.dark .table-hover tbody tr:hover {
+  @apply bg-gray-800;
+}
+
+/* Chart Components */
+.chart-container {
+  @apply relative w-full;
+}
+
+.chart-loading {
+  @apply flex items-center justify-center;
+}
+
+.chart-tooltip {
+  @apply absolute bg-gray-900 text-white text-xs rounded-lg px-3 py-2 pointer-events-none z-50 shadow-lg;
+}
+
+/* Dropdown Components */
+.dropdown {
+  @apply relative;
+}
+
+.dropdown-menu {
+  @apply absolute right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 z-10 transform transition-all duration-200 origin-top-right;
+}
+
+.dropdown-menu.hidden {
+  @apply opacity-0 scale-95 pointer-events-none;
+}
+
+.dropdown-menu:not(.hidden) {
+  @apply opacity-100 scale-100;
+}
+
+.dark .dropdown-menu {
+  @apply bg-gray-800 border-gray-700;
+}
+
+.dropdown-item {
+  @apply block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors;
+}
+
+.dark .dropdown-item {
+  @apply text-gray-300 hover:bg-gray-700;
+}
+
+.dropdown-divider {
+  @apply border-t border-gray-100 my-1;
+}
+
+.dark .dropdown-divider {
