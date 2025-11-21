@@ -6,23 +6,41 @@ from data_access.repositories.variant_repository import VariantRepository
 from data_access.repositories.allocation_repository import AllocationRepository
 from orchestration.factories.optimizer_factory import OptimizerFactory
 from orchestration.interfaces.optimization_interface import OptimizationStrategy
+from .cache_service import CacheService  # ✅ AÑADIR
 import logging
 
 class ExperimentService:
     """
-    Experiment management service
-    
-    Orquesta entre:
-    - Data layer (Supabase via repositories)
-    - Optimization engine (algoritmos ofuscados)
-    - Public API
+    Experiment management service con caching
     """
     
     def __init__(self, db_manager):
         self.experiment_repo = ExperimentRepository(db_manager.pool)
         self.variant_repo = VariantRepository(db_manager.pool)
         self.allocation_repo = AllocationRepository(db_manager.pool)
+        self.cache = CacheService()  # ✅ AÑADIR
         self.logger = logging.getLogger(__name__)
+    
+    async def get_experiment(self, experiment_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Get experiment with caching
+        """
+        # Try cache first
+        cache_key = f"experiment:{experiment_id}"
+        cached = self.cache.get_variants(experiment_id)  # Reusar método existente
+        
+        if cached:
+            self.logger.debug(f"Cache hit for experiment {experiment_id}")
+            return cached
+        
+        # Fetch from DB
+        experiment = await self.experiment_repo.find_by_id(experiment_id)
+        
+        if experiment:
+            # Cache for 5 minutes
+            self.cache.set_variants(experiment_id, experiment, ttl=300)
+        
+        return experiment
     
     async def create_experiment(self,
                                user_id: str,
@@ -31,8 +49,6 @@ class ExperimentService:
                                config: Optional[Dict] = None) -> Dict[str, Any]:
         """
         Create new experiment with variants
-        
-        Automatically initializes algorithm state (encrypted)
         """
         
         # Determine optimization strategy
@@ -63,6 +79,9 @@ class ExperimentService:
             
             variant_ids.append(variant_id)
         
+        # Invalidate cache for user's experiments list
+        self.cache.invalidate_experiment(f"user:{user_id}:experiments")
+        
         return {
             'experiment_id': experiment_id,
             'variant_ids': variant_ids,
@@ -72,9 +91,6 @@ class ExperimentService:
     def _select_strategy(self, config: Optional[Dict]) -> OptimizationStrategy:
         """
         Select optimization strategy based on config
-        
-        This is where we decide Thompson vs Epsilon vs Sequential
-        but client never knows which we chose
         """
         
         if not config:
@@ -98,9 +114,6 @@ class ExperimentService:
                                     strategy: OptimizationStrategy) -> Dict[str, Any]:
         """
         Initialize algorithm state based on strategy
-        
-        This returns Thompson Sampling params, Epsilon params, etc.
-        pero con nombres genéricos
         """
         
         if strategy == OptimizationStrategy.FAST_LEARNING:
@@ -109,16 +122,16 @@ class ExperimentService:
                 'success_count': 0,
                 'failure_count': 0,
                 'samples': 0,
-                'exploration_rate': 0.15,  # No llamarlo "epsilon"
-                'algorithm_type': 'explore_exploit'  # Genérico
+                'exploration_rate': 0.15,
+                'algorithm_type': 'explore_exploit'
             }
         
         # Thompson Sampling state (default)
         return {
-            'success_count': 1,  # Prior (alpha en Thompson)
-            'failure_count': 1,  # Prior (beta en Thompson)
+            'success_count': 1,  # Prior (alpha)
+            'failure_count': 1,  # Prior (beta)
             'samples': 0,
-            'algorithm_type': 'bayesian'  # Genérico
+            'algorithm_type': 'bayesian'
         }
     
     async def allocate_user_to_variant(self,
@@ -127,13 +140,6 @@ class ExperimentService:
                                       context: Optional[Dict] = None) -> Dict[str, Any]:
         """
         Allocate user to variant using optimization algorithm
-        
-        Flow:
-        1. Check existing allocation
-        2. Get variants with decrypted state
-        3. Use optimizer to select
-        4. Update algorithm state (encrypted)
-        5. Store allocation
         """
         
         # Check existing allocation
@@ -143,7 +149,6 @@ class ExperimentService:
         )
         
         if existing:
-            # Return existing allocation
             variant_data = await self.variant_repo.get_variant_public_data(
                 existing['variant_id']
             )
@@ -153,8 +158,8 @@ class ExperimentService:
                 'new_allocation': False
             }
         
-        # Get experiment config
-        experiment = await self.experiment_repo.find_by_id(experiment_id)
+        # Get experiment config (with cache)
+        experiment = await self.get_experiment(experiment_id)  # ✅ Usa método con cache
         strategy = OptimizationStrategy(experiment['optimization_strategy'])
         
         # Get variants WITH algorithm state (decrypted)
@@ -174,15 +179,13 @@ class ExperimentService:
                 'id': variant['id'],
                 'performance': variant['observed_conversion_rate'],
                 'samples': state.get('samples', 0),
-                # Internal state for optimizer (sin exponer nombres)
                 '_internal_state': state
             })
         
-        # SELECT VARIANT (aquí está el Thompson Sampling)
+        # SELECT VARIANT (Thompson Sampling)
         selected_id = await optimizer.select(options, context or {})
         
         # Update variant's algorithm state
-        # (increment allocation counter en state cifrado)
         selected_variant = next(v for v in variants if v['id'] == selected_id)
         updated_state = selected_variant['algorithm_state'].copy()
         updated_state['samples'] = updated_state.get('samples', 0) + 1
@@ -200,6 +203,9 @@ class ExperimentService:
             context=context
         )
         
+        # Invalidate cache for this experiment
+        self.cache.invalidate_experiment(experiment_id)
+        
         # Get public variant data
         variant_data = await self.variant_repo.get_variant_public_data(selected_id)
         
@@ -215,11 +221,6 @@ class ExperimentService:
                                value: float = 1.0) -> None:
         """
         Record conversion
-        
-        Updates:
-        1. Allocation record
-        2. Variant metrics
-        3. Algorithm state (encrypted)
         """
         
         # Get allocation
@@ -229,7 +230,7 @@ class ExperimentService:
         )
         
         if not allocation or allocation['converted_at']:
-            return  # Already converted or no allocation
+            return
         
         variant_id = allocation['variant_id']
         
@@ -249,10 +250,8 @@ class ExperimentService:
         
         # Update based on algorithm type
         if state.get('algorithm_type') == 'bayesian':
-            # Thompson Sampling update (pero ofuscado)
             state['success_count'] = state.get('success_count', 1) + 1
         elif state.get('algorithm_type') == 'explore_exploit':
-            # Epsilon-Greedy update
             state['success_count'] = state.get('success_count', 0) + 1
         
         # Save updated state (encrypted)
@@ -261,5 +260,8 @@ class ExperimentService:
             new_state=state
         )
         
-        # Update public metrics (via DB function - no expone estado)
+        # Update public metrics
         await self.variant_repo.increment_conversion(variant_id)
+        
+        # Invalidate cache
+        self.cache.invalidate_experiment(experiment_id)
