@@ -31,7 +31,15 @@ from public_api.routers import (
     emails,
     notifications,
     installations,
-    subscriptions
+    subscriptions,
+    tracker,
+    simulator,
+    onboarding,
+    dashboard,
+    visual_editor,
+    traffic_filters,
+    public_dashboard,
+    proxy
 )
 
 # ============================================
@@ -265,6 +273,112 @@ if settings.ENABLE_PUSH_OPTIMIZATION:
         prefix=f"{settings.API_PREFIX}/notifications",
         tags=["Push Notifications"]
     )
+
+# Simulator (público - no requiere auth)
+app.include_router(
+    simulator.router,
+    prefix=f"{settings.API_PREFIX}/simulator",
+    tags=["Simulator (Public)"]
+)
+
+# Onboarding
+app.include_router(
+    onboarding.router,
+    prefix=f"{settings.API_PREFIX}/onboarding",
+    tags=["Onboarding"]
+)
+
+# Dashboard
+app.include_router(
+    dashboard.router,
+    prefix=f"{settings.API_PREFIX}/dashboard",
+    tags=["Dashboard"]
+)
+
+# Visual Editor
+app.include_router(
+    visual_editor.router,
+    prefix=f"{settings.API_PREFIX}/visual-editor",
+    tags=["Visual Editor"]
+)
+
+# Traffic Filters
+app.include_router(
+    traffic_filters.router,
+    prefix=f"{settings.API_PREFIX}/traffic-filters",
+    tags=["Traffic Filters"]
+)
+
+# Public Dashboard
+app.include_router(
+    public_dashboard.router,
+    prefix="/public",
+    tags=["Public"]
+)
+
+# Proxy (IMPORTANTE: debe ir al final, es catch-all)
+app.include_router(
+    proxy.router,
+    prefix="/proxy",
+    tags=["Proxy Middleware (Public)"]
+)
+
+# ===== CONFIGURAR TEMPLATES =====
+
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+
+# Mount static files
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Templates
+templates = Jinja2Templates(directory="templates")
+
+# ===== LIFESPAN: CLEANUP PROXY SESSION =====
+
+# Modificar el lifespan para cerrar la sesión del proxy
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Application lifespan manager"""
+    # STARTUP
+    logger.info("🚀 Starting Samplit Platform...")
+    logger.info(f"Environment: {settings.ENVIRONMENT}")
+    logger.info(f"Version: {settings.APP_VERSION}")
+    
+    # Initialize database
+    db = DatabaseManager()
+    await db.initialize()
+    app.state.db = db
+    
+    logger.info("✅ Database initialized")
+    
+    # Health check
+    if await db.health_check():
+        logger.info("✅ Database health check passed")
+    else:
+        logger.error("❌ Database health check failed")
+        raise Exception("Database not healthy")
+    
+    # ✅ Initialize proxy middleware
+    from integration.proxy.proxy_middleware import MABProxyMiddleware
+    app.state.proxy = MABProxyMiddleware(api_url=settings.BASE_URL or "")
+    logger.info("✅ Proxy middleware initialized")
+    
+    logger.info("✨ Samplit Platform ready!")
+    
+    yield
+    
+    # SHUTDOWN
+    logger.info("🛑 Shutting down Samplit Platform...")
+    
+    # ✅ Close proxy session
+    if hasattr(app.state, 'proxy'):
+        await app.state.proxy.close()
+        logger.info("✅ Proxy session closed")
+    
+    await db.close()
+    logger.info("👋 Samplit Platform stopped")
 
 # ============================================
 # ROOT ENDPOINTS
