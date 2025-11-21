@@ -92,6 +92,26 @@ class Settings(BaseSettings):
     ENABLE_EMAIL_OPTIMIZATION: bool = True
     ENABLE_PUSH_OPTIMIZATION: bool = True
     
+    # ============================================
+    # PROXY CONFIGURATION
+    # ============================================
+    PROXY_ENABLED: bool = True
+    PROXY_TIMEOUT: int = 30  # seconds
+    BASE_URL: str = ""  # Your domain, e.g., "https://samplit.com"
+    
+    # ============================================
+    # CACHE CONFIGURATION
+    # ============================================
+    CACHE_ENABLED: bool = True
+    CACHE_DEFAULT_TTL: int = 300  # 5 minutes
+    REDIS_URL: Optional[str] = None  # For future Redis integration
+    
+    # ============================================
+    # VISUAL EDITOR
+    # ============================================
+    VISUAL_EDITOR_ENABLED: bool = True
+    ALLOW_IFRAME_EMBEDDING: bool = True
+    
     class Config:
         env_file = ".env"
         case_sensitive = True
