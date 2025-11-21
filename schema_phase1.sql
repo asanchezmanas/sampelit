@@ -180,3 +180,39 @@ CREATE TABLE excluded_sessions (
 );
 
 CREATE INDEX idx_excluded_sessions_experiment ON excluded_sessions(experiment_id);
+
+-- Añadir al final de schema_phase1.sql
+
+-- ============================================
+-- ONBOARDING TABLE
+-- ============================================
+
+CREATE TABLE user_onboarding (
+    user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+    completed BOOLEAN DEFAULT false,
+    current_step VARCHAR(50) DEFAULT 'welcome',
+    installation_verified BOOLEAN DEFAULT false,
+    completed_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    
+    CONSTRAINT valid_step CHECK (current_step IN ('welcome', 'install', 'verify', 'complete'))
+);
+
+CREATE INDEX idx_onboarding_user ON user_onboarding(user_id);
+CREATE INDEX idx_onboarding_completed ON user_onboarding(completed);
+
+-- Trigger para updated_at
+CREATE TRIGGER update_onboarding_updated_at 
+    BEFORE UPDATE ON user_onboarding
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================
+-- ROW LEVEL SECURITY
+-- ============================================
+
+ALTER TABLE user_onboarding ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY onboarding_user_policy ON user_onboarding
+    FOR ALL USING (auth.uid()::uuid = user_id);
+
