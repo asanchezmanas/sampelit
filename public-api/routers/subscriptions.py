@@ -46,17 +46,17 @@ PLANS_CONFIG = {
     },
     "starter": {
         "name": "Starter",
-        "price": 29,
+        "price": 99,
         "stripe_price_id": os.getenv("STRIPE_STARTER_PRICE_ID", "price_starter"),
         "limits": {
-            "experiments": 10,
+            "experiments": 5,
             "monthly_visitors": 50000,
             "email_campaigns": 5,
             "team_members": 3,
             "api_calls_per_month": 100000
         },
         "features": [
-            "10 Active Experiments",
+            "5 Active Experiments",
             "50,000 Monthly Visitors",
             "5 Email Campaigns",
             "Advanced Analytics",
@@ -65,18 +65,38 @@ PLANS_CONFIG = {
     },
     "professional": {
         "name": "Professional",
-        "price": 99,
+        "price": 299,
         "stripe_price_id": os.getenv("STRIPE_PRO_PRICE_ID", "price_pro"),
         "limits": {
-            "experiments": 50,
-            "monthly_visitors": 500000,
+            "experiments": 25,
+            "monthly_visitors": 250000,
             "email_campaigns": 50,
             "team_members": 10,
             "api_calls_per_month": 1000000
         },
         "features": [
-            "50 Active Experiments",
-            "500,000 Monthly Visitors",
+            "25 Active Experiments",
+            "250,000 Monthly Visitors",
+            "50 Email Campaigns",
+            "Advanced Analytics + Heatmaps",
+            "Priority Support",
+            "Custom Integrations"
+        ]
+    },
+    "scale": {
+        "name": "Scale",
+        "price": 999,
+        "stripe_price_id": os.getenv("STRIPE_PRO_PRICE_ID", "price_pro"),
+        "limits": {
+            "experiments": 100,
+            "monthly_visitors": 1000000,
+            "email_campaigns": 50,
+            "team_members": 10,
+            "api_calls_per_month": 1000000
+        },
+        "features": [
+            "100 Active Experiments",
+            "1M Monthly Visitors",
             "50 Email Campaigns",
             "Advanced Analytics + Heatmaps",
             "Priority Support",
@@ -85,7 +105,7 @@ PLANS_CONFIG = {
     },
     "enterprise": {
         "name": "Enterprise",
-        "price": 299,
+        "price": 2000,
         "stripe_price_id": os.getenv("STRIPE_ENTERPRISE_PRICE_ID", "price_enterprise"),
         "limits": {
             "experiments": -1,  # Unlimited
