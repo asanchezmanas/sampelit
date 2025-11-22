@@ -6,7 +6,7 @@ from data_access.repositories.variant_repository import VariantRepository
 from data_access.repositories.allocation_repository import AllocationRepository
 from orchestration.factories.optimizer_factory import OptimizerFactory
 from orchestration.interfaces.optimization_interface import OptimizationStrategy
-from .cache_service import CacheService  # ✅ AÑADIR
+from .cache_service import CacheService
 import logging
 
 class ExperimentService:
@@ -18,16 +18,15 @@ class ExperimentService:
         self.experiment_repo = ExperimentRepository(db_manager.pool)
         self.variant_repo = VariantRepository(db_manager.pool)
         self.allocation_repo = AllocationRepository(db_manager.pool)
-        self.cache = CacheService()  # ✅ AÑADIR
+        self.cache = CacheService()
         self.logger = logging.getLogger(__name__)
     
     async def get_experiment(self, experiment_id: str) -> Optional[Dict[str, Any]]:
         """
         Get experiment with caching
         """
-        # Try cache first
         cache_key = f"experiment:{experiment_id}"
-        cached = self.cache.get_variants(experiment_id)  # Reusar método existente
+        cached = self.cache.get(cache_key)
         
         if cached:
             self.logger.debug(f"Cache hit for experiment {experiment_id}")
@@ -38,7 +37,7 @@ class ExperimentService:
         
         if experiment:
             # Cache for 5 minutes
-            self.cache.set_variants(experiment_id, experiment, ttl=300)
+            self.cache.set(cache_key, experiment, ttl=300)
         
         return experiment
     
@@ -80,7 +79,7 @@ class ExperimentService:
             variant_ids.append(variant_id)
         
         # Invalidate cache for user's experiments list
-        self.cache.invalidate_experiment(f"user:{user_id}:experiments")
+        self.cache.invalidate(f"user:{user_id}:experiments")
         
         return {
             'experiment_id': experiment_id,
@@ -131,6 +130,8 @@ class ExperimentService:
             'success_count': 1,  # Prior (alpha)
             'failure_count': 1,  # Prior (beta)
             'samples': 0,
+            'alpha': 1.0,        # Beta distribution alpha parameter
+            'beta': 1.0,         # Beta distribution beta parameter
             'algorithm_type': 'bayesian'
         }
     
@@ -155,17 +156,28 @@ class ExperimentService:
             return {
                 'variant_id': existing['variant_id'],
                 'variant': variant_data,
-                'new_allocation': False
+                'new_allocation': False,
+                'allocation_id': existing['id']
             }
         
         # Get experiment config (with cache)
-        experiment = await self.get_experiment(experiment_id)  # ✅ Usa método con cache
+        experiment = await self.get_experiment(experiment_id)
+        if not experiment:
+            raise ValueError(f"Experiment {experiment_id} not found")
+            
         strategy = OptimizationStrategy(experiment['optimization_strategy'])
         
-        # Get variants WITH algorithm state (decrypted)
-        variants = await self.variant_repo.get_variants_for_optimization(
-            experiment_id
-        )
+        # Try cache for variants
+        cache_key = f"variants:{experiment_id}"
+        variants = self.cache.get(cache_key)
+        
+        if not variants:
+            # Get variants WITH algorithm state (decrypted)
+            variants = await self.variant_repo.get_variants_for_optimization(
+                experiment_id
+            )
+            # Cache for 1 minute (short TTL because state changes)
+            self.cache.set(cache_key, variants, ttl=60)
         
         # Get optimizer
         optimizer = OptimizerFactory.create(strategy)
@@ -195,16 +207,19 @@ class ExperimentService:
             new_state=updated_state
         )
         
+        # Increment allocation counter
+        await self.variant_repo.increment_allocation(selected_id)
+        
         # Store allocation
-        await self.allocation_repo.create_allocation(
+        allocation_id = await self.allocation_repo.create_allocation(
             experiment_id=experiment_id,
             variant_id=selected_id,
             user_identifier=user_identifier,
             context=context
         )
         
-        # Invalidate cache for this experiment
-        self.cache.invalidate_experiment(experiment_id)
+        # Invalidate cache
+        self.cache.invalidate(cache_key)
         
         # Get public variant data
         variant_data = await self.variant_repo.get_variant_public_data(selected_id)
@@ -212,7 +227,8 @@ class ExperimentService:
         return {
             'variant_id': selected_id,
             'variant': variant_data,
-            'new_allocation': True
+            'new_allocation': True,
+            'allocation_id': allocation_id
         }
     
     async def record_conversion(self,
@@ -220,7 +236,7 @@ class ExperimentService:
                                user_identifier: str,
                                value: float = 1.0) -> None:
         """
-        Record conversion
+        Record conversion - FIXED Thompson Sampling learning
         """
         
         # Get allocation
@@ -229,7 +245,7 @@ class ExperimentService:
             user_identifier
         )
         
-        if not allocation or allocation['converted_at']:
+        if not allocation or allocation.get('converted_at'):
             return
         
         variant_id = allocation['variant_id']
@@ -245,13 +261,21 @@ class ExperimentService:
             variant_id
         )
         
-        # Update algorithm state
+        # Update algorithm state - FIXED: Now Thompson Sampling learns correctly
         state = variant['algorithm_state_decrypted']
         
         # Update based on algorithm type
         if state.get('algorithm_type') == 'bayesian':
+            # Thompson Sampling: Update Beta distribution parameters
             state['success_count'] = state.get('success_count', 1) + 1
+            
+            # ✅ FIX: Recalculate alpha and beta for Thompson Sampling
+            total_samples = state.get('samples', 0)
+            state['alpha'] = state['success_count']
+            state['beta'] = (total_samples - state['success_count'] + state.get('failure_count', 1))
+            
         elif state.get('algorithm_type') == 'explore_exploit':
+            # Epsilon-Greedy: Just increment success
             state['success_count'] = state.get('success_count', 0) + 1
         
         # Save updated state (encrypted)
@@ -264,4 +288,4 @@ class ExperimentService:
         await self.variant_repo.increment_conversion(variant_id)
         
         # Invalidate cache
-        self.cache.invalidate_experiment(experiment_id)
+        self.cache.invalidate(f"variants:{experiment_id}")
