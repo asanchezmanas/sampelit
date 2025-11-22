@@ -150,7 +150,9 @@ class VariantRepository(BaseRepository):
             else:
                 variant['algorithm_state'] = {
                     'alpha': 1.0,
-                    'beta': 1.0
+                    'beta': 1.0,
+                    'samples': 0,
+                    'algorithm_type': 'bayesian'
                 }
             
             variants.append(variant)
@@ -180,9 +182,6 @@ class VariantRepository(BaseRepository):
         
         return dict(row) if row else None
 
-    # data-access/repositories/variant_repository.py
-    # AGREGAR este método a la clase VariantRepository
-
     async def increment_conversion(self, variant_id: str) -> None:
         """
         Increment conversion count and update metrics
@@ -205,6 +204,25 @@ class VariantRepository(BaseRepository):
                 variant_id
             )
 
+    async def increment_allocation(self, variant_id: str) -> None:
+        """
+        Increment allocation count
+        
+        ✅ FIX: Ahora está DENTRO de la clase (indentación correcta)
+        Called when user is assigned to this variant.
+        """
+        async with self.db.acquire() as conn:
+            await conn.execute(
+                """
+                UPDATE variants
+                SET 
+                    total_allocations = total_allocations + 1,
+                    updated_at = NOW()
+                WHERE id = $1
+                """,
+                variant_id
+            )
+
     async def find_by_id(self, id: str) -> Optional[Dict[str, Any]]:
         """Get variant by ID (required by BaseRepository)"""
         return await self.get_variant_public_data(id)
@@ -219,6 +237,8 @@ class VariantRepository(BaseRepository):
                 'success_count': 1,
                 'failure_count': 1,
                 'samples': 0,
+                'alpha': 1.0,
+                'beta': 1.0,
                 'algorithm_type': 'bayesian'
             })
         )
@@ -229,21 +249,3 @@ class VariantRepository(BaseRepository):
             await self.update_algorithm_state(id, data['algorithm_state'])
             return True
         return False
-
-    async def increment_allocation(self, variant_id: str) -> None:
-    """
-    Increment allocation count
-    
-    Called when user is assigned to this variant.
-    """
-    async with self.db.acquire() as conn:
-        await conn.execute(
-            """
-            UPDATE variants
-            SET 
-                total_allocations = total_allocations + 1,
-                updated_at = NOW()
-            WHERE id = $1
-            """,
-            variant_id
-        )
