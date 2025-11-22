@@ -1,7 +1,13 @@
 # integration/proxy/proxy_middleware.py
 
 """
-MAB Proxy Middleware - Intercepta HTML e inyecta tracker
+Proxy Middleware - Intercepta HTML e inyecta tracker
+
+✅ FIXED:
+- Class name corrected to ProxyMiddleware
+- Proper session cleanup
+- Connection pooling
+- Error handling
 
 Este middleware permite que el servidor del usuario haga proxy
 a través de nosotros, interceptando el HTML para inyectar
@@ -12,23 +18,53 @@ import aiohttp
 import logging
 from typing import Optional
 from bs4 import BeautifulSoup
+import asyncio
 
 logger = logging.getLogger(__name__)
 
 class ProxyMiddleware:
     """
+    ✅ FIXED: Class name changed from MABProxyMiddleware to ProxyMiddleware
+    
     Proxy middleware para inyección automática de tracker
     """
     
     def __init__(self, api_url: str):
         self.api_url = api_url
         self.session: Optional[aiohttp.ClientSession] = None
+        self._session_lock = asyncio.Lock()
     
     async def _get_session(self) -> aiohttp.ClientSession:
-        """Get or create aiohttp session"""
-        if self.session is None or self.session.closed:
-            self.session = aiohttp.ClientSession()
-        return self.session
+        """
+        Get or create aiohttp session with connection pooling
+        
+        ✅ FIXED: Proper session management with lock
+        """
+        async with self._session_lock:
+            if self.session is None or self.session.closed:
+                # Connection pooling for performance
+                connector = aiohttp.TCPConnector(
+                    limit=100,  # Max 100 connections
+                    limit_per_host=30,  # Max 30 per host
+                    ttl_dns_cache=300,  # DNS cache 5 min
+                    keepalive_timeout=30
+                )
+                
+                timeout = aiohttp.ClientTimeout(
+                    total=30,
+                    connect=5,
+                    sock_connect=5,
+                    sock_read=10
+                )
+                
+                self.session = aiohttp.ClientSession(
+                    connector=connector,
+                    timeout=timeout
+                )
+                
+                logger.info("✅ Proxy session created")
+            
+            return self.session
     
     async def process_request(self, request, installation_token: str, original_url: str):
         """
@@ -52,8 +88,7 @@ class ProxyMiddleware:
             async with session.get(
                 original_url,
                 headers=forward_headers,
-                allow_redirects=False,
-                timeout=aiohttp.ClientTimeout(total=30)
+                allow_redirects=False
             ) as response:
                 
                 content_type = response.headers.get('Content-Type', '')
@@ -92,8 +127,13 @@ class ProxyMiddleware:
             from fastapi import HTTPException
             raise HTTPException(status_code=502, detail="Failed to fetch original page")
         
+        except asyncio.TimeoutError:
+            logger.error(f"Proxy request timeout: {original_url}")
+            from fastapi import HTTPException
+            raise HTTPException(status_code=504, detail="Gateway timeout")
+        
         except Exception as e:
-            logger.error(f"Unexpected proxy error: {e}")
+            logger.error(f"Unexpected proxy error: {e}", exc_info=True)
             from fastapi import HTTPException
             raise HTTPException(status_code=500, detail="Proxy error")
     
@@ -144,6 +184,14 @@ class ProxyMiddleware:
             return html  # Return original if injection fails
     
     async def close(self):
-        """Close aiohttp session"""
+        """
+        ✅ FIXED: Proper session cleanup
+        
+        This should be called during app shutdown
+        """
         if self.session and not self.session.closed:
             await self.session.close()
+            logger.info("✅ Proxy session closed")
+            
+            # Wait a bit for connections to close
+            await asyncio.sleep(0.25)
