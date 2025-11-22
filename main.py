@@ -5,8 +5,11 @@ Samplit Platform - Main Application
 
 ⚠️  CONFIDENTIAL - Proprietary A/B Testing Platform
 
-This is the main entry point for Samplit's optimization platform.
-Algorithm implementations are proprietary trade secrets.
+✅ FIXED:
+- Error handling doesn't reveal algorithm details
+- Proxy middleware import corrected
+- Proper session cleanup
+- Security headers
 
 Copyright (c) 2024 Samplit Technologies. All rights reserved.
 """
@@ -82,12 +85,23 @@ async def lifespan(app: FastAPI):
         logger.error("❌ Database health check failed")
         raise Exception("Database not healthy")
     
+    # ✅ Initialize proxy middleware (FIXED: correct class name)
+    from integration.proxy.proxy_middleware import ProxyMiddleware
+    app.state.proxy = ProxyMiddleware(api_url=settings.BASE_URL or "")
+    logger.info("✅ Proxy middleware initialized")
+    
     logger.info("✨ Samplit Platform ready!")
     
     yield
     
     # SHUTDOWN
     logger.info("🛑 Shutting down Samplit Platform...")
+    
+    # ✅ Close proxy session
+    if hasattr(app.state, 'proxy'):
+        await app.state.proxy.close()
+        logger.info("✅ Proxy session closed")
+    
     await db.close()
     logger.info("👋 Samplit Platform stopped")
 
@@ -135,13 +149,13 @@ async def add_process_time_header(request: Request, call_next: Callable):
     response.headers["X-Process-Time"] = str(process_time)
     return response
 
-# Security headers middleware
+# ✅ FIXED: Security headers - NO revelar tecnología
 @app.middleware("http")
 async def add_security_headers(request: Request, call_next: Callable):
-    """Add security headers"""
+    """Add security headers - Hide technology stack"""
     response = await call_next(request)
     
-    # NO revelar stack technology
+    # ✅ Generic headers - don't reveal FastAPI/Python
     response.headers["X-Powered-By"] = "Samplit"
     response.headers["Server"] = "Samplit"
     
@@ -154,24 +168,6 @@ async def add_security_headers(request: Request, call_next: Callable):
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     
     return response
-
-# ============================================
-# PUBLIC ENDPOINTS (No Auth)
-# ============================================
-
-# Tracker API (usado por JavaScript tracker en sitios de usuarios)
-app.include_router(
-    tracker.router,
-    prefix=f"{settings.API_PREFIX}/tracker",
-    tags=["Tracker (Public)"]
-)
-
-# Proxy Middleware (intercepta y modifica HTML)
-app.include_router(
-    proxy.router,
-    prefix="/proxy",
-    tags=["Proxy Middleware (Public)"]
-)
 
 # ============================================
 # EXCEPTION HANDLERS
@@ -188,26 +184,38 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         }
     )
 
+# ✅ FIXED: Exception handler - NO revelar detalles del algoritmo
 @app.exception_handler(Exception)
 async def general_exception_handler(request: Request, exc: Exception):
-    """Handle general exceptions"""
-    logger.error(f"Unhandled exception: {str(exc)}", exc_info=True)
+    """
+    Handle general exceptions
     
-    # Don't expose internal errors in production
+    ✅ CRITICAL: Don't expose algorithm details in production
+    """
+    # Log full error internally (includes traceback)
+    logger.error(
+        f"Unhandled exception on {request.method} {request.url.path}: {str(exc)}", 
+        exc_info=True  # Full traceback in logs
+    )
+    
+    # ✅ Production: Generic error message
     if settings.ENVIRONMENT == "production":
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={
-                "error": "Internal Server Error",
-                "message": "An unexpected error occurred"
+                "error": "Service Temporarily Unavailable",
+                "message": "An unexpected error occurred. Please try again later.",
+                "request_id": str(hash(time.time()))  # For support
             }
         )
+    # Development: Show details
     else:
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={
                 "error": "Internal Server Error",
-                "message": str(exc)
+                "message": str(exc),
+                "type": type(exc).__name__
             }
         )
 
@@ -316,69 +324,23 @@ app.include_router(
     tags=["Public"]
 )
 
-# Proxy (IMPORTANTE: debe ir al final, es catch-all)
+# ============================================
+# PUBLIC ENDPOINTS (No Auth)
+# ============================================
+
+# Tracker API (usado por JavaScript tracker en sitios de usuarios)
+app.include_router(
+    tracker.router,
+    prefix=f"{settings.API_PREFIX}/tracker",
+    tags=["Tracker (Public)"]
+)
+
+# Proxy Middleware (intercepta y modifica HTML)
 app.include_router(
     proxy.router,
     prefix="/proxy",
     tags=["Proxy Middleware (Public)"]
 )
-
-# ===== CONFIGURAR TEMPLATES =====
-
-from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
-
-# Mount static files
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
-# Templates
-templates = Jinja2Templates(directory="templates")
-
-# ===== LIFESPAN: CLEANUP PROXY SESSION =====
-
-# Modificar el lifespan para cerrar la sesión del proxy
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """Application lifespan manager"""
-    # STARTUP
-    logger.info("🚀 Starting Samplit Platform...")
-    logger.info(f"Environment: {settings.ENVIRONMENT}")
-    logger.info(f"Version: {settings.APP_VERSION}")
-    
-    # Initialize database
-    db = DatabaseManager()
-    await db.initialize()
-    app.state.db = db
-    
-    logger.info("✅ Database initialized")
-    
-    # Health check
-    if await db.health_check():
-        logger.info("✅ Database health check passed")
-    else:
-        logger.error("❌ Database health check failed")
-        raise Exception("Database not healthy")
-    
-    # ✅ Initialize proxy middleware
-    from integration.proxy.proxy_middleware import MABProxyMiddleware
-    app.state.proxy = MABProxyMiddleware(api_url=settings.BASE_URL or "")
-    logger.info("✅ Proxy middleware initialized")
-    
-    logger.info("✨ Samplit Platform ready!")
-    
-    yield
-    
-    # SHUTDOWN
-    logger.info("🛑 Shutting down Samplit Platform...")
-    
-    # ✅ Close proxy session
-    if hasattr(app.state, 'proxy'):
-        await app.state.proxy.close()
-        logger.info("✅ Proxy session closed")
-    
-    await db.close()
-    logger.info("👋 Samplit Platform stopped")
 
 # ============================================
 # ROOT ENDPOINTS
