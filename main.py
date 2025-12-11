@@ -85,7 +85,7 @@ async def lifespan(app: FastAPI):
         logger.error("❌ Database health check failed")
         raise Exception("Database not healthy")
     
-    # ✅ Initialize proxy middleware (FIXED: correct class name)
+    # ✅ FIXED: Initialize proxy middleware with correct class name
     from integration.proxy.proxy_middleware import ProxyMiddleware
     app.state.proxy = ProxyMiddleware(api_url=settings.BASE_URL or "")
     logger.info("✅ Proxy middleware initialized")
