@@ -5,20 +5,20 @@ Proxy Middleware Endpoints
 
 Intercepta requests del sitio del usuario e inyecta el tracker automáticamente.
 PÚBLICO - No requiere auth (es el sitio del usuario quien hace las requests).
+
 """
 
 from fastapi import APIRouter, HTTPException, status, Request
 from fastapi.responses import Response
 import logging
 
-from integration.proxy.proxy_middleware import MABProxyMiddleware
+from integration.proxy.proxy_middleware import ProxyMiddleware
 from config.settings import settings
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
-# Inicializar proxy middleware
-proxy_middleware = MABProxyMiddleware(api_url=settings.BASE_URL)
+proxy_middleware = ProxyMiddleware(api_url=settings.BASE_URL)
 
 # ============================================
 # PROXY REQUESTS
