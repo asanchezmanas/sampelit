@@ -12,6 +12,7 @@ import logging
 class ExperimentService:
     """
     Experiment management service con caching
+    
     """
     
     def __init__(self, db_manager):
@@ -236,7 +237,7 @@ class ExperimentService:
                                user_identifier: str,
                                value: float = 1.0) -> None:
         """
-        Record conversion - FIXED Thompson Sampling learning
+        Record conversion 
         """
         
         # Get allocation
@@ -261,7 +262,7 @@ class ExperimentService:
             variant_id
         )
         
-        # Update algorithm state - FIXED: Now Thompson Sampling learns correctly
+        # Update algorithm state 
         state = variant['algorithm_state_decrypted']
         
         # Update based on algorithm type
@@ -269,10 +270,14 @@ class ExperimentService:
             # Thompson Sampling: Update Beta distribution parameters
             state['success_count'] = state.get('success_count', 1) + 1
             
-            # ✅ FIX: Recalculate alpha and beta for Thompson Sampling
+            # Alpha = total successes (including prior)
+            # Beta = total failures (including prior)
             total_samples = state.get('samples', 0)
-            state['alpha'] = state['success_count']
-            state['beta'] = (total_samples - state['success_count'] + state.get('failure_count', 1))
+            total_successes = state['success_count']
+            total_failures = total_samples - (total_successes - 1) + state.get('failure_count', 1)
+            
+            state['alpha'] = float(total_successes)
+            state['beta'] = float(total_failures)
             
         elif state.get('algorithm_type') == 'explore_exploit':
             # Epsilon-Greedy: Just increment success
