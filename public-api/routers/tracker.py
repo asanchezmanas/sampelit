@@ -6,10 +6,6 @@ Tracker API
 Endpoints públicos usados por el JavaScript tracker.
 NO requieren autenticación (son llamados por el sitio del usuario).
 
-✅ FIXED: 
-- Added assignment endpoint
-- Implemented caching
-- Optimized DB queries
 """
 
 from fastapi import APIRouter, HTTPException, status, Query, Request
@@ -111,7 +107,6 @@ async def get_experiments_for_tracker(
                 }
                 return result
             
-            # ✅ OPTIMIZED: Single query with LEFT JOIN instead of subquery
             rows = await conn.fetch(
                 """
                 SELECT 
@@ -208,7 +203,7 @@ async def get_experiments_for_tracker(
 
 
 # ============================================
-# ✅ NEW: ASSIGNMENT ENDPOINT
+# ✅ ASSIGNMENT ENDPOINT
 # ============================================
 
 @router.post("/assign")
@@ -216,10 +211,8 @@ async def assign_variant(
     request_data: AssignmentRequest,
     request: Request = None
 ):
-    """
-    ✅ NEW ENDPOINT: Asignar variante a usuario
-    
-    Este es el endpoint que faltaba para que Thompson Sampling funcione.
+    """    
+    Este es el endpoint que permite que Thompson Sampling funcione.
     El tracker JS llama a este endpoint cuando detecta un experimento activo.
     
     Returns:
@@ -275,7 +268,7 @@ async def assign_variant(
 
 
 # ============================================
-# ✅ NEW: CONVERSION ENDPOINT
+# ✅ CONVERSION ENDPOINT
 # ============================================
 
 @router.post("/convert")
@@ -283,9 +276,7 @@ async def record_conversion_tracker(
     conversion: ConversionRequest,
     request: Request = None
 ):
-    """
-    ✅ NEW ENDPOINT: Registrar conversión desde el tracker
-    
+    """    
     Actualiza Thompson Sampling con el resultado observado.
     """
     try:
