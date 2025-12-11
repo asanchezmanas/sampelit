@@ -6,7 +6,10 @@ import json
 from datetime import datetime, timezone
 
 class AllocationRepository(BaseRepository):
-    """Repository for user assignments"""
+    """
+    Repository for user assignments
+    
+    """
     
     async def get_allocation(
         self, 
@@ -18,11 +21,11 @@ class AllocationRepository(BaseRepository):
             row = await conn.fetchrow(
                 """
                 SELECT 
-                    id, experiment_id, variant_id, user_identifier,
-                    session_id, context, allocated_at, converted_at,
-                    conversion_value, metadata
+                    id, experiment_id, variant_id, user_id as user_identifier,
+                    session_id, context, assigned_at as allocated_at, 
+                    converted_at, conversion_value, metadata
                 FROM assignments 
-                WHERE experiment_id = $1 AND user_identifier = $2
+                WHERE experiment_id = $1 AND user_id = $2
                 """,
                 experiment_id, user_identifier
             )
@@ -55,8 +58,8 @@ class AllocationRepository(BaseRepository):
         async with self.db.acquire() as conn:
             allocation_id = await conn.fetchval(
                 """
-                INSERT INTO allocations 
-                (experiment_id, variant_id, user_identifier, session_id, context)
+                INSERT INTO assignments 
+                (experiment_id, variant_id, user_id, session_id, context)
                 VALUES ($1, $2, $3, $4, $5)
                 RETURNING id
                 """,
@@ -79,7 +82,7 @@ class AllocationRepository(BaseRepository):
         async with self.db.acquire() as conn:
             result = await conn.execute(
                 """
-                UPDATE allocations 
+                UPDATE assignments 
                 SET 
                     converted_at = NOW(),
                     conversion_value = $2,
@@ -104,13 +107,13 @@ class AllocationRepository(BaseRepository):
             rows = await conn.fetch(
                 """
                 SELECT 
-                    a.id, a.variant_id, a.user_identifier,
-                    a.allocated_at, a.converted_at, a.conversion_value,
+                    a.id, a.variant_id, a.user_id as user_identifier,
+                    a.assigned_at as allocated_at, a.converted_at, a.conversion_value,
                     v.name as variant_name
-                FROM allocations a
-                JOIN variants v ON a.variant_id = v.id
+                FROM assignments a
+                LEFT JOIN variants v ON a.variant_id = v.id
                 WHERE a.experiment_id = $1
-                ORDER BY a.allocated_at DESC
+                ORDER BY a.assigned_at DESC
                 LIMIT $2 OFFSET $3
                 """,
                 experiment_id, limit, offset
@@ -128,7 +131,7 @@ class AllocationRepository(BaseRepository):
             rows = await conn.fetch(
                 """
                 SELECT 
-                    DATE_TRUNC('hour', allocated_at) as hour,
+                    DATE_TRUNC('hour', assigned_at) as hour,
                     COUNT(*) as allocations,
                     COUNT(converted_at) as conversions,
                     CASE 
@@ -136,11 +139,11 @@ class AllocationRepository(BaseRepository):
                         THEN COUNT(converted_at)::FLOAT / COUNT(*)::FLOAT
                         ELSE 0
                     END as conversion_rate
-                FROM allocations
+                FROM assignments
                 WHERE 
                     experiment_id = $1 
-                    AND allocated_at >= NOW() - INTERVAL '1 hour' * $2
-                GROUP BY DATE_TRUNC('hour', allocated_at)
+                    AND assigned_at >= NOW() - INTERVAL '1 hour' * $2
+                GROUP BY DATE_TRUNC('hour', assigned_at)
                 ORDER BY hour DESC
                 """,
                 experiment_id, hours
@@ -152,7 +155,7 @@ class AllocationRepository(BaseRepository):
         """Get allocation by ID"""
         async with self.db.acquire() as conn:
             row = await conn.fetchrow(
-                "SELECT * FROM allocations WHERE id = $1",
+                "SELECT * FROM assignments WHERE id = $1",
                 id
             )
         
