@@ -81,6 +81,7 @@ async def get_experiment_analytics(
     - Variant performance metrics
     - Bayesian statistical analysis
     - Recommendations
+    
     """
     
     try:
@@ -107,7 +108,7 @@ async def get_experiment_analytics(
                 detail="Access denied"
             )
         
-        # Get variant analytics
+        # Get variant analytics using the 'variants' view
         async with db.pool.acquire() as conn:
             variant_rows = await conn.fetch(
                 """
@@ -203,6 +204,7 @@ async def get_timeseries_analytics(
     Get timeseries analytics
     
     Returns hourly aggregated data for the last N hours.
+    
     """
     
     try:
@@ -225,7 +227,7 @@ async def get_timeseries_analytics(
                 rows = await conn.fetch(
                     """
                     SELECT 
-                        DATE_TRUNC('hour', allocated_at) as hour,
+                        DATE_TRUNC('hour', assigned_at) as hour,
                         COUNT(*) as allocations,
                         COUNT(converted_at) as conversions,
                         CASE 
@@ -233,12 +235,12 @@ async def get_timeseries_analytics(
                             THEN COUNT(converted_at)::FLOAT / COUNT(*)::FLOAT
                             ELSE 0
                         END as conversion_rate
-                    FROM allocations
+                    FROM assignments
                     WHERE 
                         experiment_id = $1 
                         AND variant_id = $2
-                        AND allocated_at >= NOW() - INTERVAL '1 hour' * $3
-                    GROUP BY DATE_TRUNC('hour', allocated_at)
+                        AND assigned_at >= NOW() - INTERVAL '1 hour' * $3
+                    GROUP BY DATE_TRUNC('hour', assigned_at)
                     ORDER BY hour ASC
                     """,
                     experiment_id, variant_id, hours
@@ -247,7 +249,7 @@ async def get_timeseries_analytics(
                 rows = await conn.fetch(
                     """
                     SELECT 
-                        DATE_TRUNC('hour', allocated_at) as hour,
+                        DATE_TRUNC('hour', assigned_at) as hour,
                         COUNT(*) as allocations,
                         COUNT(converted_at) as conversions,
                         CASE 
@@ -255,11 +257,11 @@ async def get_timeseries_analytics(
                             THEN COUNT(converted_at)::FLOAT / COUNT(*)::FLOAT
                             ELSE 0
                         END as conversion_rate
-                    FROM allocations
+                    FROM assignments
                     WHERE 
                         experiment_id = $1
-                        AND allocated_at >= NOW() - INTERVAL '1 hour' * $2
-                    GROUP BY DATE_TRUNC('hour', allocated_at)
+                        AND assigned_at >= NOW() - INTERVAL '1 hour' * $2
+                    GROUP BY DATE_TRUNC('hour', assigned_at)
                     ORDER BY hour ASC
                     """,
                     experiment_id, hours
@@ -300,6 +302,7 @@ async def get_variant_details(
     Get detailed analytics for specific variant
     
     Includes recent allocations and conversion patterns.
+    
     """
     
     try:
@@ -321,7 +324,7 @@ async def get_variant_details(
             variant = await conn.fetchrow(
                 """
                 SELECT 
-                    id, name, description, content,
+                    id, name, content,
                     total_allocations, total_conversions,
                     observed_conversion_rate, created_at
                 FROM variants
@@ -341,10 +344,10 @@ async def get_variant_details(
             recent_allocations = await conn.fetch(
                 """
                 SELECT 
-                    allocated_at, converted_at, conversion_value
-                FROM allocations
+                    assigned_at, converted_at, conversion_value
+                FROM assignments
                 WHERE variant_id = $1
-                ORDER BY allocated_at DESC
+                ORDER BY assigned_at DESC
                 LIMIT 50
                 """,
                 variant_id
