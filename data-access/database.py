@@ -1,12 +1,5 @@
 # data-access/database.py
 
-"""
-✅ FIXED:
-- Corrected environment variable names (DATABASE_URL, SUPABASE_SERVICE_KEY)
-- Fixed table name consistency (allocations instead of assignments)
-- Added proper error handling
-"""
-
 import os
 import asyncpg
 from typing import Optional, Dict, Any, List
