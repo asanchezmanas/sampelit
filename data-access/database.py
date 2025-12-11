@@ -18,7 +18,6 @@ class DatabaseManager:
     def __init__(self):
         self.pool: Optional[asyncpg.Pool] = None
         
-        # ✅ FIXED: Use correct environment variable names from settings.py
         self.database_url = os.environ.get("DATABASE_URL")
         self.service_role_key = os.environ.get("SUPABASE_SERVICE_KEY")
         
@@ -87,12 +86,11 @@ class DatabaseManager:
                     'pool_used': self.pool.get_size() - self.pool.get_idle_size()
                 }
             
-                # ✅ FIXED: Use correct table name 'allocations'
                 counts = await conn.fetch("""
                     SELECT 
                         (SELECT COUNT(*) FROM experiments) as experiments,
                         (SELECT COUNT(*) FROM element_variants) as variants,
-                        (SELECT COUNT(*) FROM allocations) as allocations,
+                        (SELECT COUNT(*) FROM assignments) as assignments,
                         (SELECT COUNT(*) FROM users) as users
                 """)
             
@@ -202,11 +200,6 @@ async def get_database() -> DatabaseManager:
     """Get database manager singleton"""
     global _db_manager
     
-    if _db_manager is None:
-        _db_manager = DatabaseManager()
-        await _db_manager.initialize()
-    
-    return _db_manager
     if _db_manager is None:
         _db_manager = DatabaseManager()
         await _db_manager.initialize()
