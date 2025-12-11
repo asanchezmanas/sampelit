@@ -183,7 +183,9 @@ async def get_current_subscription(
     user_id: str = Depends(get_current_user),
     db: DatabaseManager = Depends(get_database)
 ):
-    """Obtener subscripción y usage del usuario"""
+    """
+    Obtener subscripción y usage del usuario
+    """
     try:
         async with db.pool.acquire() as conn:
             # Subscripción
@@ -213,7 +215,7 @@ async def get_current_subscription(
                 user_id
             )
             
-            # Visitors este mes
+            # Visitors este mes - ✅ FIXED: Uses 'assignments' table
             visitors_count = await conn.fetchval(
                 """
                 SELECT COUNT(DISTINCT user_id) FROM assignments
@@ -494,7 +496,9 @@ async def get_usage_stats(
     user_id: str = Depends(get_current_user),
     db: DatabaseManager = Depends(get_database)
 ):
-    """Obtener estadísticas de uso detalladas"""
+    """
+    Obtener estadísticas de uso detalladas
+    """
     try:
         async with db.pool.acquire() as conn:
             subscription = await conn.fetchrow(
@@ -510,7 +514,7 @@ async def get_usage_stats(
                 user_id
             )
             
-            # Visitors este mes
+            # Visitors este mes 
             visitors = await conn.fetchval(
                 """
                 SELECT COUNT(DISTINCT user_id) FROM assignments
@@ -520,11 +524,8 @@ async def get_usage_stats(
                 user_id
             )
             
-            # Email campaigns
-            emails = await conn.fetchval(
-                "SELECT COUNT(*) FROM email_campaigns WHERE user_id = $1 AND status != 'archived'",
-                user_id
-            )
+            # Email campaigns (placeholder)
+            emails = 0
         
         return {
             "experiments": {
