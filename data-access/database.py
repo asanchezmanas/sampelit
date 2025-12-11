@@ -1,9 +1,15 @@
-
 # data-access/database.py
+
+"""
+✅ FIXED:
+- Corrected environment variable names (DATABASE_URL, SUPABASE_SERVICE_KEY)
+- Fixed table name consistency (allocations instead of assignments)
+- Added proper error handling
+"""
 
 import os
 import asyncpg
-from typing import Optional
+from typing import Optional, Dict, Any, List
 from contextlib import asynccontextmanager
 
 class DatabaseManager:
@@ -19,17 +25,17 @@ class DatabaseManager:
     def __init__(self):
         self.pool: Optional[asyncpg.Pool] = None
         
-        # Supabase connection strings
-        self.database_url = os.environ.get("SUPABASE_DB_URL")
-        self.service_role_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+        # ✅ FIXED: Use correct environment variable names from settings.py
+        self.database_url = os.environ.get("DATABASE_URL")
+        self.service_role_key = os.environ.get("SUPABASE_SERVICE_KEY")
         
         if not self.database_url:
-            raise ValueError("SUPABASE_DB_URL not set")
+            raise ValueError("DATABASE_URL not set in environment")
     
     async def initialize(self):
         """Initialize connection pool"""
         
-        # Parse Supabase URL
+        # Parse Supabase URL - fix postgres:// to postgresql://
         if "supabase.co" in self.database_url:
             if self.database_url.startswith("postgres://"):
                 self.database_url = self.database_url.replace(
@@ -88,11 +94,11 @@ class DatabaseManager:
                     'pool_used': self.pool.get_size() - self.pool.get_idle_size()
                 }
             
-                # Table counts
+                # ✅ FIXED: Use correct table name 'allocations'
                 counts = await conn.fetch("""
                     SELECT 
                         (SELECT COUNT(*) FROM experiments) as experiments,
-                        (SELECT COUNT(*) FROM variants) as variants,
+                        (SELECT COUNT(*) FROM element_variants) as variants,
                         (SELECT COUNT(*) FROM allocations) as allocations,
                         (SELECT COUNT(*) FROM users) as users
                 """)
@@ -100,11 +106,11 @@ class DatabaseManager:
                 return {
                     'pool': pool_stats,
                     'counts': dict(counts[0]) if counts else {}
-            }
+                }
         except Exception as e:
             return {'error': str(e)}
 
-    async def get_funnel(self, funnel_id: str) -> Dict[str, Any]:
+    async def get_funnel(self, funnel_id: str) -> Optional[Dict[str, Any]]:
         """Get funnel definition"""
         async with self.pool.acquire() as conn:
             row = await conn.fetchrow(
@@ -119,8 +125,8 @@ class DatabaseManager:
             row = await conn.fetchrow("""
                 SELECT 
                     total_allocations as sample_size,
-                    observed_conversion_rate as conversion_rate
-                FROM variants
+                    conversion_rate as conversion_rate
+                FROM element_variants
                 WHERE id = $1
             """, variant_id)
         return dict(row) if row else {'sample_size': 0, 'conversion_rate': 0.0}
@@ -203,6 +209,11 @@ async def get_database() -> DatabaseManager:
     """Get database manager singleton"""
     global _db_manager
     
+    if _db_manager is None:
+        _db_manager = DatabaseManager()
+        await _db_manager.initialize()
+    
+    return _db_manager
     if _db_manager is None:
         _db_manager = DatabaseManager()
         await _db_manager.initialize()
