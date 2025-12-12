@@ -16,10 +16,7 @@ class ExploreExploitAllocator(BaseAllocator):
     """
     Fast-learning allocator for low-traffic scenarios
     
-    This uses a proprietary explore-exploit strategy
-    optimized for sparse data situations.
-    
-    Note: Not traditional epsilon-greedy (enhanced version)
+    ✅ FIXED: Now uses real state from database
     """
     
     def __init__(self, config: Dict[str, Any]):
@@ -30,8 +27,7 @@ class ExploreExploitAllocator(BaseAllocator):
         self.decay_rate = config.get('decay', 0.995)
         self.min_exploration = config.get('min_exploration', 0.01)
         
-        self._performance_cache = {}
-        self._exploration_schedule = self._init_schedule()
+        # ✅ REMOVED: No más cache local
     
     async def select(self, 
                     options: List[Dict[str, Any]], 
@@ -39,20 +35,29 @@ class ExploreExploitAllocator(BaseAllocator):
         """
         Select option using adaptive explore-exploit
         
-        Implementation uses Samplit's enhanced exploration strategy
-        with dynamic decay and contextual awareness.
+        ✅ FIXED: Uses real state from database
         """
         
-        # Actualizar tasa de exploración (epsilon decay)
-        current_exploration = self._get_current_exploration_rate()
+        # ───────────────────────────────────
+        # Calcular tasa de exploración dinámica
+        # ───────────────────────────────────
+        total_samples = sum(
+            opt.get('_internal_state', {}).get('samples', 0)
+            for opt in options
+        )
         
+        current_exploration = self.exploration_factor * (self.decay_rate ** total_samples)
+        current_exploration = max(current_exploration, self.min_exploration)
+        
+        # ───────────────────────────────────
         # Decisión: explorar o explotar
+        # ───────────────────────────────────
         if random.random() < current_exploration:
-            # EXPLORACIÓN: selección uniforme
+            # EXPLORACIÓN: priorizar bajo-sampled
             selected = self._explore(options)
             self._log_decision("explore", selected)
         else:
-            # EXPLOTACIÓN: mejor performer actual
+            # EXPLOTACIÓN: mejor performer
             selected = self._exploit(options)
             self._log_decision("exploit", selected)
         
@@ -60,14 +65,13 @@ class ExploreExploitAllocator(BaseAllocator):
     
     def _explore(self, options: List[Dict]) -> str:
         """
-        Exploration strategy (confidential implementation)
+        Exploration strategy
         
-        Not pure random - uses smart exploration with
-        under-sampling bias.
+        ✅ FIXED: Uses samples from database state
         """
         # Priorizar opciones con menos samples
         sample_counts = {
-            opt['id']: self._get_sample_count(opt['id'])
+            opt['id']: opt.get('_internal_state', {}).get('samples', 0)
             for opt in options
         }
         
@@ -83,37 +87,35 @@ class ExploreExploitAllocator(BaseAllocator):
     
     def _exploit(self, options: List[Dict]) -> str:
         """
-        Exploitation strategy (proprietary)
+        Exploitation strategy
         
-        Selects best performing option with confidence weighting.
+        ✅ FIXED: Uses real performance from database
         """
         performance_scores = {}
         
         for option in options:
             opt_id = option['id']
-            perf_data = self._performance_cache.get(opt_id, {})
+            state = option.get('_internal_state', {})
             
-            # Calcular score ajustado por confianza
-            if perf_data.get('samples', 0) > 0:
-                raw_rate = perf_data['successes'] / perf_data['samples']
-                confidence = self._calculate_confidence(perf_data['samples'])
-                performance_scores[opt_id] = raw_rate * confidence
+            samples = state.get('samples', 0)
+            success_count = state.get('success_count', 1)
+            
+            if samples > 0:
+                # Conversion rate observado
+                raw_rate = (success_count - 1) / samples  # -1 por el prior
+                
+                # Confidence penalty (menos samples = menos confianza)
+                confidence = min(1.0, samples / 100.0)
+                
+                performance_scores[opt_id] = raw_rate * (0.5 + 0.5 * confidence)
             else:
                 performance_scores[opt_id] = 0.0
         
         return max(performance_scores, key=performance_scores.get)
     
-    def _get_current_exploration_rate(self) -> float:
-        """Dynamic exploration rate with decay"""
-        total_samples = sum(
-            data.get('samples', 0)
-            for data in self._performance_cache.values()
-        )
-        
-        # Decay basado en experiencia
-        decayed = self.exploration_factor * (self.decay_rate ** total_samples)
-        
-        return max(decayed, self.min_exploration)
+    async def update(self, option_id: str, reward: float, context: Dict[str, Any]):
+        """Update handled by repository layer"""
+        pass
     
     def _log_decision(self, decision_type: str, selected_id: str):
         """Sanitized logging"""
