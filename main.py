@@ -37,7 +37,8 @@ from public_api.routers import (
     visual_editor,
     traffic_filters,
     public_dashboard,
-    proxy
+    proxy,
+    system
 )
 
 # ============================================
@@ -246,7 +247,7 @@ app.include_router(
     tags=["Analytics"]
 )
 
-# Metrics
+# System metrics
 app.include_router(
     system.router,
     prefix=f"{settings.API_PREFIX}/system",
