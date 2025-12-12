@@ -1,13 +1,22 @@
 # orchestration/services/cache_service.py
 
 """
-Cache Service - Improved Implementation
+Cache Service - Política de Uso
 
-✅ FIXED:
-- Added get/set/invalidate methods
-- Proper JSON serialization
-- TTL support
-- Fallback to in-memory if Redis unavailable
+✅ CACHEAR (TTL largo):
+  • Metadata de experimentos (nombre, descripción, config)
+  • Listas de experimentos por usuario
+  • Datos de usuario
+  • Cualquier dato que cambie rara vez
+
+❌ NO CACHEAR:
+  • Estado Engine
+  • Contadores de asignaciones/conversiones en tiempo real
+  • Cualquier dato que cambie con cada request
+
+REGLA DE ORO:
+  Si el dato cambia más de 1 vez por minuto → NO cachear
+  Si el dato cambia menos de 1 vez por hora → Sí cachear
 """
 
 import redis
@@ -157,33 +166,39 @@ class CacheService:
             return 0
     
     # ============================================
-    # CONVENIENCE METHODS
+    # CONVENIENCE METHODS (METADATA ONLY)
     # ============================================
     
-    def get_variants(self, experiment_id: str) -> Optional[list]:
-        """Get cached variants for experiment"""
-        key = f"variants:{experiment_id}"
+    def get_experiment_metadata(self, experiment_id: str) -> Optional[Dict]:
+        """
+        ✅ Get cached experiment METADATA
+        
+        Solo metadata estática, NO estado Engine
+        """
+        key = f"experiment_meta:{experiment_id}"
         return self.get(key)
     
-    def set_variants(self, experiment_id: str, variants: list, ttl: int = 60):
-        """Cache variants (short TTL because state changes)"""
-        key = f"variants:{experiment_id}"
-        self.set(key, variants, ttl)
+    def set_experiment_metadata(self, experiment_id: str, metadata: Dict, ttl: int = 300):
+        """✅ Cache experiment metadata (5 min default)"""
+        key = f"experiment_meta:{experiment_id}"
+        self.set(key, metadata, ttl)
     
     def invalidate_experiment(self, experiment_id: str):
-        """Invalidate all cache for an experiment"""
-        self.invalidate(f"experiment:{experiment_id}")
-        self.invalidate(f"variants:{experiment_id}")
+        """
+        ✅ Invalidar cache de metadata cuando cambia
+        
+        Usar cuando:
+        - Cambias nombre
+        - Cambias status
+        - Cambias configuración
+        """
+        self.invalidate(f"experiment_meta:{experiment_id}")
     
-    def get_experiment(self, experiment_id: str) -> Optional[Dict]:
-        """Get cached experiment"""
-        key = f"experiment:{experiment_id}"
-        return self.get(key)
-    
-    def set_experiment(self, experiment_id: str, experiment: Dict, ttl: int = 300):
-        """Cache experiment"""
-        key = f"experiment:{experiment_id}"
-        self.set(key, experiment, ttl)
+    # ============================================
+    # ❌ REMOVED: No más cache de variants
+    # ============================================
+    # def get_variants() - REMOVED
+    # def set_variants() - REMOVED
     
     def clear_all(self):
         """Clear all cache (for testing)"""
