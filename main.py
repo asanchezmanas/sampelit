@@ -14,6 +14,7 @@ from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from contextlib import asynccontextmanager
+from orchestration.services.service_factory import ServiceFactory
 import logging
 import time
 from typing import Callable
@@ -53,13 +54,15 @@ logger = logging.getLogger("samplit.main")
 # LIFESPAN MANAGEMENT
 # ============================================
 
+# main.py
+
+from contextlib import asynccontextmanager
+from orchestration.services.service_factory import ServiceFactory
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """
-    Application lifespan manager
+    """Application lifespan manager"""
     
-    Handles startup and shutdown events
-    """
     # STARTUP
     logger.info("🚀 Starting Samplit Platform...")
     logger.info(f"Environment: {settings.ENVIRONMENT}")
@@ -69,17 +72,21 @@ async def lifespan(app: FastAPI):
     db = DatabaseManager()
     await db.initialize()
     app.state.db = db
-    
     logger.info("✅ Database initialized")
     
-    # Health check
-    if await db.health_check():
-        logger.info("✅ Database health check passed")
-    else:
-        logger.error("❌ Database health check failed")
-        raise Exception("Database not healthy")
+    # ══════════════════════════════════════════════
+    # ✅ NEW: Auto-detect and create service
+    # ══════════════════════════════════════════════
+    app.state.experiment_service = await ServiceFactory.create_experiment_service(db)
     
-    # ✅ FIXED: Initialize proxy middleware with correct class name
+    # Get metrics for logging
+    metrics = await ServiceFactory.get_metrics()
+    if metrics:
+        logger.info(f"📊 Current metrics:")
+        logger.info(f"   Last 24h: {metrics.get('last_24h', 0):,} requests")
+        logger.info(f"   Threshold: {metrics.get('threshold_percentage', 0):.1f}%")
+    
+    # Initialize proxy
     from integration.proxy.proxy_middleware import ProxyMiddleware
     app.state.proxy = ProxyMiddleware(api_url=settings.BASE_URL or "")
     logger.info("✅ Proxy middleware initialized")
@@ -91,10 +98,11 @@ async def lifespan(app: FastAPI):
     # SHUTDOWN
     logger.info("🛑 Shutting down Samplit Platform...")
     
-    # ✅ Close proxy session
+    # Shutdown metrics monitoring
+    await ServiceFactory.shutdown()
+    
     if hasattr(app.state, 'proxy'):
         await app.state.proxy.close()
-        logger.info("✅ Proxy session closed")
     
     await db.close()
     logger.info("👋 Samplit Platform stopped")
@@ -236,6 +244,13 @@ app.include_router(
     analytics.router,
     prefix=f"{settings.API_PREFIX}/analytics",
     tags=["Analytics"]
+)
+
+# Metrics
+app.include_router(
+    system.router,
+    prefix=f"{settings.API_PREFIX}/system",
+    tags=["System"]
 )
 
 # Installations
