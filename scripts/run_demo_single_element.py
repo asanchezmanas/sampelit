@@ -1,113 +1,79 @@
-# scripts/generate_demo_single_element.py
+# scripts/run_demo_single_element.py
 
-import numpy as np
+import asyncio
 import pandas as pd
 import json
-from datetime import datetime
+import numpy as np
 
-class SingleElementDemoGenerator:
+async def run_single_element_demo():
     """
-    Demo de 1 ELEMENTO con 5 VARIANTES
-    
-    Ejemplo: Testing CTA button text
+    Demo single-element CON comparación
     """
     
-    def __init__(self):
-        self.n_visitors = 10000
-        
-        # 1 elemento, 5 variantes
-        self.element = {
-            'name': 'CTA Button',
-            'variants': {
-                'A': {'text': 'Sign Up Now', 'color': '#0066FF'},
-                'B': {'text': 'Get Started Free', 'color': '#00C853'},
-                'C': {'text': 'Try It Free', 'color': '#FF6B35'},
-                'D': {'text': 'Start Your Trial', 'color': '#9C27B0'},
-                'E': {'text': 'Join Today', 'color': '#FF5722'}
-            }
-        }
-        
-        # Conversion rates realistas
-        self.conversion_rates = {
-            'A': 0.028,  # 2.8%
-            'B': 0.042,  # 4.2% ← WINNER
-            'C': 0.035,  # 3.5%
-            'D': 0.031,  # 3.1%
-            'E': 0.024   # 2.4%
-        }
+    print("📂 Loading single-element matrix...")
     
-    def generate_conversion_matrix(self):
-        """
-        Genera matriz (10000 × 5)
-        """
-        print("🎲 Generating SINGLE-ELEMENT conversion matrix...")
-        print(f"   Element: {self.element['name']}")
-        print(f"   Variants: {len(self.element['variants'])}")
-        print(f"   Visitors: {self.n_visitors}")
-        
-        n_variants = len(self.element['variants'])
-        matrix = np.zeros((self.n_visitors, n_variants), dtype=int)
-        
-        for col_idx, (var_id, var_data) in enumerate(self.element['variants'].items()):
-            cr = self.conversion_rates[var_id]
-            
-            for row_idx in range(self.n_visitors):
-                if np.random.rand() <= cr:
-                    matrix[row_idx, col_idx] = 1
-            
-            conversions = matrix[:, col_idx].sum()
-            actual_cr = conversions / self.n_visitors
-            
-            print(f"\n   Variant {var_id}: {var_data['text']}")
-            print(f"      Target CR: {cr:.1%} | Actual: {actual_cr:.1%} | Conversions: {conversions}")
-        
-        return matrix
+    df = pd.read_csv('demo_single_element_matrix.csv', index_col='visitor_id')
+    matrix = df.values
     
-    def save_matrix(self, matrix):
-        """Guardar CSV"""
-        variant_names = list(self.element['variants'].keys())
-        df = pd.DataFrame(matrix, columns=variant_names)
-        df.index.name = 'visitor_id'
-        df.to_csv('demo_single_element_matrix.csv')
-        
-        print(f"\n💾 Matrix saved: demo_single_element_matrix.csv")
-        return 'demo_single_element_matrix.csv'
+    with open('demo_single_element_metadata.json', 'r') as f:
+        metadata = json.load(f)
     
-    def export_metadata(self, matrix):
-        """Metadata"""
-        metadata = {
-            'generated_at': datetime.now().isoformat(),
-            'n_visitors': self.n_visitors,
-            'element': self.element,
-            'conversion_rates': self.conversion_rates,
-            'actual_conversions': {
-                var_id: int(matrix[:, idx].sum())
-                for idx, var_id in enumerate(self.element['variants'].keys())
-            },
-            'winner': {
-                'variant': 'B',
-                'text': self.element['variants']['B']['text'],
-                'cr': self.conversion_rates['B']
-            }
-        }
-        
-        with open('demo_single_element_metadata.json', 'w') as f:
-            json.dump(metadata, f, indent=2)
-        
-        print(f"💾 Metadata saved: demo_single_element_metadata.json")
-        return metadata
-
-
-def generate_single_element_dataset():
-    """Generate dataset"""
-    generator = SingleElementDemoGenerator()
-    matrix = generator.generate_conversion_matrix()
-    generator.save_matrix(matrix)
-    metadata = generator.export_metadata(matrix)
+    print(f"✅ Loaded: {matrix.shape[0]} visitors × {matrix.shape[1]} variants")
     
-    print("\n✅ Single-element dataset ready!")
-    return matrix, metadata
+    # ══════════════════════════════════════
+    # TRADICIONAL
+    # ══════════════════════════════════════
+    print("\n" + "="*80)
+    print("📊 TRADITIONAL A/B TEST (20% traffic each)")
+    print("="*80)
+    
+    n_visitors = matrix.shape[0]
+    n_variants = matrix.shape[1]
+    visitors_per_variant = n_visitors // n_variants
+    
+    trad_conversions = 0
+    
+    for var_idx in range(n_variants):
+        start = var_idx * visitors_per_variant
+        end = start + visitors_per_variant if var_idx < n_variants - 1 else n_visitors
+        
+        conversions = matrix[start:end, var_idx].sum()
+        trad_conversions += conversions
+        
+        var_id = list(metadata['element']['variants'].keys())[var_idx]
+        var_name = metadata['element']['variants'][var_id]['text']
+        allocated = end - start
+        cr = conversions / allocated
+        
+        print(f"   {var_name:<20} | {allocated:>5} visits | {conversions:>4} conv | {cr:.2%}")
+    
+    print(f"\n   Total: {trad_conversions} conversions")
+    
+    # ══════════════════════════════════════
+    # SAMPLIT
+    # ══════════════════════════════════════
+    print("\n" + "="*80)
+    print("🚀 SAMPLIT ADAPTIVE ALGORITHM")
+    print("="*80)
+    
+    # [Mismo código que multi-element pero para 1 elemento]
+    samplit_conversions = await simulate_single_element_samplit(matrix, metadata)
+    
+    # ══════════════════════════════════════
+    # COMPARACIÓN
+    # ══════════════════════════════════════
+    print("\n" + "="*80)
+    print("💰 RESULTS")
+    print("="*80)
+    
+    additional = samplit_conversions - trad_conversions
+    improvement = (additional / trad_conversions) * 100
+    
+    print(f"\n   Traditional A/B Test:  {trad_conversions} conversions")
+    print(f"   Samplit Adaptive:      {samplit_conversions} conversions")
+    print(f"   ")
+    print(f"   Gain: +{additional} conversions ({improvement:+.1f}%)")
 
 
 if __name__ == '__main__':
-    generate_single_element_dataset()
+    asyncio.run(run_single_element_demo())
