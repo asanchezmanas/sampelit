@@ -22,7 +22,9 @@ from typing import Callable
 from config.settings import settings
 from data_access.database import DatabaseManager
 from public_api.routers import (
+    audit,
     auth,
+    downloads,
     experiments,
     analytics,
     funnels,
@@ -226,11 +228,25 @@ async def general_exception_handler(request: Request, exc: Exception):
 # INCLUDE ROUTERS
 # ============================================
 
+# Audit endpoints (public)
+app.include_router(
+    audit.router,
+    prefix=f"{settings.API_PREFIX}/audit",
+    tags=["Audit & Verification"]
+)
+
 # Auth (Supabase OAuth)
 app.include_router(
     auth.router,
     prefix=f"{settings.API_PREFIX}/auth",
     tags=["Authentication"]
+)
+
+# Downloads (public)
+app.include_router(
+    downloads.router,
+    prefix=f"{settings.API_PREFIX}/downloads",
+    tags=["Downloads & Exports"]
 )
 
 # Experiments
