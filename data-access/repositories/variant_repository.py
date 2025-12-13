@@ -1,4 +1,13 @@
 # data-access/repositories/variant_repository.py
+"""
+Variant Repository - FIXED VERSION (Adapted to element_variants schema)
+
+Correcciones:
+- increment_allocation() con operación atómica usando RETURNING
+- increment_conversion() con operación atómica usando RETURNING
+- Compatible con schema element_variants/experiment_elements
+- Mantiene encriptación de algorithm_state
+"""
 
 from typing import Optional, List, Dict, Any
 from .base_repository import BaseRepository
@@ -9,6 +18,7 @@ class VariantRepository(BaseRepository):
     Repository for variants 
     
     Handles encryption of algorithm internal state
+    ✅ FIXED: Atomic operations for increment methods
     """
     
     async def create_variant(self,
@@ -35,16 +45,15 @@ class VariantRepository(BaseRepository):
         async with self.db.acquire() as conn:
             variant_id = await conn.fetchval(
                 """
-                INSERT INTO variants (
-                    experiment_id, name, content, algorithm_state, state_version
-                ) VALUES ($1, $2, $3, $4, $5)
+                INSERT INTO element_variants (
+                    element_id, name, content, algorithm_state
+                ) VALUES ($1, $2, $3, $4)
                 RETURNING id
                 """,
-                experiment_id,
+                experiment_id,  # En tu schema, esto sería element_id
                 name,
                 json.dumps(content),
-                encrypted_state,
-                1  # Version 1
+                encrypted_state
             )
         
         return str(variant_id)
@@ -61,13 +70,14 @@ class VariantRepository(BaseRepository):
             row = await conn.fetchrow(
                 """
                 SELECT 
-                    id, experiment_id, name, content,
-                    algorithm_state, state_version,
-                    total_allocations, total_conversions,
-                    observed_conversion_rate,
-                    created_at, updated_at
-                FROM variants
-                WHERE id = $1
+                    ev.id, ee.experiment_id, ev.name, ev.content,
+                    ev.algorithm_state,
+                    ev.total_allocations, ev.total_conversions,
+                    ev.conversion_rate as observed_conversion_rate,
+                    ev.created_at, ev.updated_at
+                FROM element_variants ev
+                JOIN experiment_elements ee ON ev.element_id = ee.id
+                WHERE ev.id = $1
                 """,
                 variant_id
             )
@@ -106,7 +116,7 @@ class VariantRepository(BaseRepository):
         async with self.db.acquire() as conn:
             await conn.execute(
                 """
-                UPDATE variants
+                UPDATE element_variants
                 SET 
                     algorithm_state = $1,
                     updated_at = NOW()
@@ -128,13 +138,14 @@ class VariantRepository(BaseRepository):
             rows = await conn.fetch(
                 """
                 SELECT 
-                    id, name, content,
-                    algorithm_state,
-                    total_allocations, total_conversions,
-                    observed_conversion_rate,
-                    is_active
-                FROM variants
-                WHERE experiment_id = $1 AND is_active = true
+                    ev.id, ev.name, ev.content,
+                    ev.algorithm_state,
+                    ev.total_allocations, ev.total_conversions,
+                    ev.conversion_rate as observed_conversion_rate,
+                    TRUE as is_active
+                FROM element_variants ev
+                JOIN experiment_elements ee ON ev.element_id = ee.id
+                WHERE ee.experiment_id = $1
                 """,
                 experiment_id
             )
@@ -170,58 +181,82 @@ class VariantRepository(BaseRepository):
             row = await conn.fetchrow(
                 """
                 SELECT 
-                    id, experiment_id, name, content,
-                    total_allocations, total_conversions,
-                    observed_conversion_rate,
-                    is_active, created_at
-                FROM variants
-                WHERE id = $1
+                    ev.id, ee.experiment_id, ev.name, ev.content,
+                    ev.total_allocations, ev.total_conversions,
+                    ev.conversion_rate as observed_conversion_rate,
+                    TRUE as is_active, ev.created_at
+                FROM element_variants ev
+                JOIN experiment_elements ee ON ev.element_id = ee.id
+                WHERE ev.id = $1
                 """,
                 variant_id
             )
         
         return dict(row) if row else None
 
-    async def increment_conversion(self, variant_id: str) -> None:
+    async def increment_conversion(self, variant_id: str) -> int:
         """
-        Increment conversion count and update metrics
+        ✅ FIXED: Increment conversion count atomically with RETURNING
     
         Called after recording a conversion in allocations table.
         Updates public-facing metrics.
+        
+        Returns:
+            New total_conversions value
+        
+        Raises:
+            ValueError if variant not found
         """
         async with self.db.acquire() as conn:
-            await conn.execute(
+            result = await conn.fetchrow(
                 """
-                UPDATE variants
+                UPDATE element_variants
                 SET 
                     total_conversions = total_conversions + 1,
-                    observed_conversion_rate = 
+                    conversion_rate = 
                         (total_conversions + 1)::DECIMAL / 
                         GREATEST(total_allocations, 1)::DECIMAL,
                     updated_at = NOW()
                 WHERE id = $1
+                RETURNING total_conversions, conversion_rate
                 """,
                 variant_id
             )
-
-    async def increment_allocation(self, variant_id: str) -> None:
-        """
-        Increment allocation count
         
-        ✅ FIX: Ahora está DENTRO de la clase (indentación correcta)
+        if result is None:
+            raise ValueError(f"Variant {variant_id} not found")
+        
+        return result['total_conversions']
+
+    async def increment_allocation(self, variant_id: str) -> int:
+        """
+        ✅ FIXED: Increment allocation count atomically with RETURNING
+        
         Called when user is assigned to this variant.
+        
+        Returns:
+            New total_allocations value
+        
+        Raises:
+            ValueError if variant not found
         """
         async with self.db.acquire() as conn:
-            await conn.execute(
+            new_total = await conn.fetchval(
                 """
-                UPDATE variants
+                UPDATE element_variants
                 SET 
                     total_allocations = total_allocations + 1,
                     updated_at = NOW()
                 WHERE id = $1
+                RETURNING total_allocations
                 """,
                 variant_id
             )
+        
+        if new_total is None:
+            raise ValueError(f"Variant {variant_id} not found")
+        
+        return new_total
 
     async def find_by_id(self, id: str) -> Optional[Dict[str, Any]]:
         """Get variant by ID (required by BaseRepository)"""
@@ -230,7 +265,7 @@ class VariantRepository(BaseRepository):
     async def create(self, data: Dict[str, Any]) -> str:
         """Create variant (required by BaseRepository)"""
         return await self.create_variant(
-            experiment_id=data['experiment_id'],
+            experiment_id=data['experiment_id'],  # Esto será element_id en tu caso
             name=data['name'],
             content=data['content'],
             initial_algorithm_state=data.get('initial_algorithm_state', {
