@@ -1,225 +1,320 @@
-# orchestration/services/cache_service.py
-
 """
-Cache Service - Política de Uso
-
-✅ CACHEAR (TTL largo):
-  • Metadata de experimentos (nombre, descripción, config)
-  • Listas de experimentos por usuario
-  • Datos de usuario
-  • Cualquier dato que cambie rara vez
-
-❌ NO CACHEAR:
-  • Estado Engine
-  • Contadores de asignaciones/conversiones en tiempo real
-  • Cualquier dato que cambie con cada request
-
-REGLA DE ORO:
-  Si el dato cambia más de 1 vez por minuto → NO cachear
-  Si el dato cambia menos de 1 vez por hora → Sí cachear
+Cache Service - FIXED VERSION
+Correcciones:
+- Invalidación completa de cache (metadata + tracker + Redis)
+- Manejo de patrones mejorado
+- Logging más detallado
 """
 
-import redis
-import json
-from typing import Optional, Dict, Any
-from datetime import timedelta, datetime
 import logging
+from typing import Any, Optional, List, Dict
+import redis.asyncio as redis
+import json
 
 logger = logging.getLogger(__name__)
 
+
 class CacheService:
     """
-    Cache service con fallback a in-memory
+    ✅ FIXED: Cache service with comprehensive invalidation
     
-    ✅ Production: Usar Redis
-    ✅ Development: Usa dict en memoria si Redis no disponible
+    Features:
+    - Pattern-based invalidation
+    - Multiple cache types (metadata, tracker, variants)
+    - Robust error handling
     """
     
-    def __init__(self, redis_url: str = None):
-        self.redis_client = None
-        self.in_memory_cache = {}  # Fallback
-        self.use_redis = False
-        
-        # Try to connect to Redis
-        if redis_url:
-            try:
-                self.redis_client = redis.from_url(
-                    redis_url, 
-                    decode_responses=True,
-                    socket_connect_timeout=2
-                )
-                # Test connection
-                self.redis_client.ping()
-                self.use_redis = True
-                logger.info("✅ Redis cache connected")
-            except Exception as e:
-                logger.warning(f"⚠️ Redis unavailable, using in-memory cache: {e}")
-                self.redis_client = None
-        else:
-            logger.info("📦 Using in-memory cache (no Redis URL)")
+    def __init__(self, redis_client: redis.Redis):
+        self.redis = redis_client
+        self.logger = logging.getLogger(f"{__name__}.CacheService")
     
-    def get(self, key: str) -> Optional[Any]:
-        """
-        Get cached value
-        
-        Returns None if not found or expired
-        """
+    # ========================================================================
+    # BASIC CACHE OPERATIONS
+    # ========================================================================
+    
+    async def get(self, key: str) -> Optional[Any]:
+        """Get value from cache"""
         try:
-            if self.use_redis and self.redis_client:
-                cached = self.redis_client.get(key)
-                if cached:
-                    return json.loads(cached)
-                return None
-            else:
-                # In-memory fallback
-                if key in self.in_memory_cache:
-                    entry = self.in_memory_cache[key]
-                    # Check if expired
-                    if entry['expires_at'] and datetime.now() > entry['expires_at']:
-                        del self.in_memory_cache[key]
-                        return None
-                    return entry['value']
-                return None
-        except Exception as e:
-            logger.error(f"Cache get error: {e}")
+            value = await self.redis.get(key)
+            if value:
+                return json.loads(value)
+            return None
+        except redis.RedisError as e:
+            self.logger.error(f"Redis error getting key {key}: {e}")
             return None
     
-    def set(self, key: str, value: Any, ttl: int = 300) -> bool:
-        """
-        Set cached value with TTL
-        
-        Args:
-            key: Cache key
-            value: Value to cache (will be JSON serialized)
-            ttl: Time to live in seconds (default 5 minutes)
-        
-        Returns:
-            True if successful
-        """
+    async def set(
+        self,
+        key: str,
+        value: Any,
+        ttl: Optional[int] = None
+    ) -> bool:
+        """Set value in cache with optional TTL"""
         try:
-            if self.use_redis and self.redis_client:
-                serialized = json.dumps(value, default=str)
-                self.redis_client.setex(key, ttl, serialized)
-                return True
+            data = json.dumps(value, default=str)
+            
+            if ttl:
+                await self.redis.setex(key, ttl, data)
             else:
-                # In-memory fallback
-                self.in_memory_cache[key] = {
-                    'value': value,
-                    'expires_at': datetime.now() + timedelta(seconds=ttl) if ttl else None
-                }
-                return True
-        except Exception as e:
-            logger.error(f"Cache set error: {e}")
+                await self.redis.set(key, data)
+            
+            return True
+        except redis.RedisError as e:
+            self.logger.error(f"Redis error setting key {key}: {e}")
             return False
     
-    def invalidate(self, key: str) -> bool:
-        """
-        Invalidate (delete) cache entry
-        
-        Args:
-            key: Cache key to delete
-        
-        Returns:
-            True if deleted
-        """
+    async def delete(self, key: str) -> bool:
+        """Delete single key"""
         try:
-            if self.use_redis and self.redis_client:
-                self.redis_client.delete(key)
-                return True
-            else:
-                if key in self.in_memory_cache:
-                    del self.in_memory_cache[key]
-                return True
-        except Exception as e:
-            logger.error(f"Cache invalidate error: {e}")
+            await self.redis.delete(key)
+            return True
+        except redis.RedisError as e:
+            self.logger.error(f"Redis error deleting key {key}: {e}")
             return False
     
-    def invalidate_pattern(self, pattern: str) -> int:
+    # ========================================================================
+    # PATTERN-BASED OPERATIONS - ✅ IMPROVED
+    # ========================================================================
+    
+    async def delete_pattern(self, pattern: str) -> int:
         """
-        Invalidate all keys matching pattern
+        ✅ IMPROVED: Delete all keys matching pattern
         
-        Args:
-            pattern: Pattern like "experiments:*"
-        
-        Returns:
-            Number of keys deleted
+        Returns: Number of keys deleted
         """
         try:
-            if self.use_redis and self.redis_client:
-                keys = self.redis_client.keys(pattern)
+            deleted_count = 0
+            cursor = 0
+            
+            while True:
+                cursor, keys = await self.redis.scan(
+                    cursor,
+                    match=pattern,
+                    count=100
+                )
+                
                 if keys:
-                    return self.redis_client.delete(*keys)
-                return 0
-            else:
-                # In-memory: simple prefix matching
-                count = 0
-                keys_to_delete = [
-                    k for k in self.in_memory_cache.keys() 
-                    if k.startswith(pattern.replace('*', ''))
-                ]
-                for key in keys_to_delete:
-                    del self.in_memory_cache[key]
-                    count += 1
-                return count
-        except Exception as e:
-            logger.error(f"Cache invalidate pattern error: {e}")
+                    await self.redis.delete(*keys)
+                    deleted_count += len(keys)
+                    self.logger.debug(
+                        f"Deleted {len(keys)} keys matching {pattern}"
+                    )
+                
+                if cursor == 0:
+                    break
+            
+            if deleted_count > 0:
+                self.logger.info(
+                    f"✅ Deleted {deleted_count} keys matching {pattern}"
+                )
+            
+            return deleted_count
+        
+        except redis.RedisError as e:
+            self.logger.error(f"Redis error deleting pattern {pattern}: {e}")
             return 0
     
-    # ============================================
-    # CONVENIENCE METHODS (METADATA ONLY)
-    # ============================================
+    # ========================================================================
+    # EXPERIMENT CACHE INVALIDATION - ✅ FIXED
+    # ========================================================================
     
-    def get_experiment_metadata(self, experiment_id: str) -> Optional[Dict]:
+    async def invalidate_experiment(self, experiment_id: str) -> Dict[str, int]:
         """
-        ✅ Get cached experiment METADATA
+        ✅ FIXED: Comprehensive experiment cache invalidation
         
-        Solo metadata estática, NO estado Engine
-        """
-        key = f"experiment_meta:{experiment_id}"
-        return self.get(key)
-    
-    def set_experiment_metadata(self, experiment_id: str, metadata: Dict, ttl: int = 300):
-        """✅ Cache experiment metadata (5 min default)"""
-        key = f"experiment_meta:{experiment_id}"
-        self.set(key, metadata, ttl)
-    
-    def invalidate_experiment(self, experiment_id: str):
-        """
-        ✅ Invalidar cache de metadata cuando cambia
+        Invalidates:
+        1. Experiment metadata
+        2. Tracker cache
+        3. Variant cache (Redis service)
+        4. Analytics cache
         
-        Usar cuando:
-        - Cambias nombre
-        - Cambias status
-        - Cambias configuración
+        Returns: Dict with counts of deleted keys per pattern
         """
-        self.invalidate(f"experiment_meta:{experiment_id}")
+        
+        patterns_to_invalidate = [
+            # Metadata cache
+            f"experiment_meta:{experiment_id}",
+            f"experiment:{experiment_id}:*",
+            
+            # Tracker cache
+            f"tracker:experiments:*:{experiment_id}*",
+            f"tracker:exp:{experiment_id}:*",
+            
+            # Variant cache (Redis service)
+            f"exp:{experiment_id}:variants",
+            f"exp:{experiment_id}:var:*",
+            
+            # Analytics cache
+            f"analytics:{experiment_id}:*",
+            
+            # Rate limiting (optional - only if you want to reset limits)
+            # f"rate_limit:tracker:*:{experiment_id}*",
+        ]
+        
+        results = {}
+        
+        for pattern in patterns_to_invalidate:
+            if "*" in pattern:
+                # Pattern matching
+                count = await self.delete_pattern(pattern)
+                results[pattern] = count
+            else:
+                # Exact key
+                success = await self.delete(pattern)
+                results[pattern] = 1 if success else 0
+        
+        total_deleted = sum(results.values())
+        
+        self.logger.info(
+            f"🗑️  Invalidated {total_deleted} cache entries for "
+            f"experiment {experiment_id}"
+        )
+        
+        return results
     
-    # ============================================
-    # ❌ REMOVED: No más cache de variants
-    # ============================================
-    # def get_variants() - REMOVED
-    # def set_variants() - REMOVED
+    async def invalidate_variant(
+        self,
+        experiment_id: str,
+        variant_id: str
+    ) -> int:
+        """
+        ✅ NEW: Invalidate cache for a specific variant
+        
+        Useful when variant is updated
+        """
+        
+        patterns = [
+            f"exp:{experiment_id}:var:{variant_id}:*",
+            f"variant:{variant_id}:*"
+        ]
+        
+        total_deleted = 0
+        
+        for pattern in patterns:
+            count = await self.delete_pattern(pattern)
+            total_deleted += count
+        
+        # Also invalidate experiment variants cache
+        await self.delete(f"exp:{experiment_id}:variants")
+        total_deleted += 1
+        
+        self.logger.info(
+            f"🗑️  Invalidated {total_deleted} cache entries for "
+            f"variant {variant_id}"
+        )
+        
+        return total_deleted
     
-    def clear_all(self):
-        """Clear all cache (for testing)"""
-        if self.use_redis and self.redis_client:
-            self.redis_client.flushdb()
-        else:
-            self.in_memory_cache.clear()
+    # ========================================================================
+    # USER CACHE INVALIDATION
+    # ========================================================================
     
-    def get_stats(self) -> Dict[str, Any]:
-        """Get cache statistics"""
-        if self.use_redis and self.redis_client:
-            info = self.redis_client.info()
+    async def invalidate_user(self, user_identifier: str) -> int:
+        """
+        Invalidate all cache for a user
+        
+        Useful for testing or user data deletion
+        """
+        
+        patterns = [
+            f"user:{user_identifier}:*",
+            f"assignment:*:{user_identifier}",
+        ]
+        
+        total_deleted = 0
+        
+        for pattern in patterns:
+            count = await self.delete_pattern(pattern)
+            total_deleted += count
+        
+        self.logger.info(
+            f"🗑️  Invalidated {total_deleted} cache entries for "
+            f"user {user_identifier}"
+        )
+        
+        return total_deleted
+    
+    # ========================================================================
+    # GLOBAL CACHE OPERATIONS
+    # ========================================================================
+    
+    async def flush_all(self) -> bool:
+        """
+        ⚠️  DANGER: Flush entire cache
+        
+        Use only in development or emergency
+        """
+        try:
+            await self.redis.flushdb()
+            self.logger.warning("⚠️  Flushed entire cache database")
+            return True
+        except redis.RedisError as e:
+            self.logger.error(f"Error flushing cache: {e}")
+            return False
+    
+    async def get_cache_stats(self) -> Dict[str, Any]:
+        """
+        Get cache statistics
+        
+        Returns info about cache size, memory, etc.
+        """
+        try:
+            info = await self.redis.info('stats')
+            memory = await self.redis.info('memory')
+            
             return {
-                'backend': 'redis',
-                'used_memory': info.get('used_memory_human'),
-                'total_keys': self.redis_client.dbsize(),
+                'total_keys': await self.redis.dbsize(),
                 'hits': info.get('keyspace_hits', 0),
-                'misses': info.get('keyspace_misses', 0)
+                'misses': info.get('keyspace_misses', 0),
+                'hit_rate': self._calculate_hit_rate(
+                    info.get('keyspace_hits', 0),
+                    info.get('keyspace_misses', 0)
+                ),
+                'memory_used': memory.get('used_memory_human', 'unknown'),
+                'memory_peak': memory.get('used_memory_peak_human', 'unknown')
             }
-        else:
-            return {
-                'backend': 'in-memory',
-                'total_keys': len(self.in_memory_cache)
-            }
+        
+        except redis.RedisError as e:
+            self.logger.error(f"Error getting cache stats: {e}")
+            return {}
+    
+    @staticmethod
+    def _calculate_hit_rate(hits: int, misses: int) -> float:
+        """Calculate cache hit rate"""
+        total = hits + misses
+        if total == 0:
+            return 0.0
+        return (hits / total) * 100
+
+
+# ============================================================================
+# EXAMPLE USAGE
+# ============================================================================
+
+"""
+# Initialize
+cache = CacheService(redis_client)
+
+# Invalidate experiment (comprehensive)
+results = await cache.invalidate_experiment("exp-123")
+# Returns: {
+#   "experiment_meta:exp-123": 1,
+#   "tracker:experiments:*:exp-123*": 5,
+#   "exp:exp-123:variants": 1,
+#   "exp:exp-123:var:*": 3,
+#   ...
+# }
+
+# Invalidate specific variant
+count = await cache.invalidate_variant("exp-123", "var-456")
+
+# Get cache stats
+stats = await cache.get_cache_stats()
+# Returns: {
+#   "total_keys": 1234,
+#   "hits": 5678,
+#   "misses": 123,
+#   "hit_rate": 97.88,
+#   ...
+# }
+"""
