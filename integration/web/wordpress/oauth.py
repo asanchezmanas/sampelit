@@ -13,367 +13,277 @@ Flow:
 4. Sincronización automática
 """
 
-import aiohttp
-import hashlib
 import hmac
-from typing import Dict, Any, Optional
-from datetime import datetime, timedelta
-from urllib.parse import urlencode, parse_qs
-import os
-
-from ..base import WebIntegration, OAuthError, SyncError
+import hashlib
 import logging
+from typing import Dict, Any, Optional
+from fastapi import HTTPException, Request
+import httpx
 
 logger = logging.getLogger(__name__)
 
 
-class WordPressIntegration(WebIntegration):
+class WordPressIntegration:
     """
-    WordPress Integration via OAuth
+    ✅ FIXED: WordPress OAuth and webhook integration
     
-    Soporta:
-    - WordPress.com sites
-    - WooCommerce stores
-    - Self-hosted WordPress con plugin
+    Features:
+    - Robust webhook signature verification
+    - Raw bytes verification before parsing
+    - Proper error handling
     """
     
-    # OAuth endpoints
-    OAUTH_AUTHORIZE_URL = "https://public-api.wordpress.com/oauth2/authorize"
-    OAUTH_TOKEN_URL = "https://public-api.wordpress.com/oauth2/token"
-    API_BASE_URL = "https://public-api.wordpress.com/rest/v1.1"
+    def __init__(
+        self,
+        client_id: str,
+        client_secret: str,
+        redirect_uri: str
+    ):
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.redirect_uri = redirect_uri
+        self.logger = logging.getLogger(f"{__name__}.WordPressIntegration")
     
-    def __init__(self, installation_id: str, config: Dict[str, Any]):
-        super().__init__(installation_id, config)
+    # ========================================================================
+    # OAUTH FLOW
+    # ========================================================================
+    
+    def get_authorization_url(self, state: str) -> str:
+        """Generate OAuth authorization URL"""
         
-        # OAuth credentials (from environment)
-        self.client_id = os.getenv("WORDPRESS_CLIENT_ID")
-        self.client_secret = os.getenv("WORDPRESS_CLIENT_SECRET")
+        base_url = "https://public-api.wordpress.com/oauth2/authorize"
         
-        # Site-specific data
-        self.site_url = config.get('site_url')
-        self.access_token = config.get('access_token')
-        self.refresh_token = config.get('refresh_token')
-        self.blog_id = config.get('blog_id')  # WordPress.com blog ID
-    
-    def get_platform_name(self) -> str:
-        return "wordpress"
-    
-    # ============================================
-    # OAuth Flow
-    # ============================================
-    
-    async def get_oauth_url(self, redirect_uri: str, state: str) -> str:
-        """
-        Generar URL de autorización de WordPress
-        
-        El usuario será redirigido a WordPress.com para autorizar.
-        """
         params = {
             'client_id': self.client_id,
-            'redirect_uri': redirect_uri,
+            'redirect_uri': self.redirect_uri,
             'response_type': 'code',
-            'state': state,
-            'scope': 'global',  # Full access (customize según necesidades)
+            'scope': 'global',  # Adjust as needed
+            'state': state
         }
         
-        return f"{self.OAUTH_AUTHORIZE_URL}?{urlencode(params)}"
-    
-    async def exchange_code_for_token(self, code: str, redirect_uri: str) -> Dict[str, Any]:
-        """
-        Intercambiar código por access token
-        """
-        try:
-            async with aiohttp.ClientSession() as session:
-                data = {
-                    'client_id': self.client_id,
-                    'client_secret': self.client_secret,
-                    'code': code,
-                    'redirect_uri': redirect_uri,
-                    'grant_type': 'authorization_code'
-                }
-                
-                async with session.post(self.OAUTH_TOKEN_URL, data=data) as response:
-                    if response.status != 200:
-                        error_text = await response.text()
-                        raise OAuthError(f"Token exchange failed: {error_text}")
-                    
-                    result = await response.json()
-                    
-                    # Get blog info
-                    blog_info = await self._get_primary_blog(result['access_token'])
-                    
-                    return {
-                        'access_token': result['access_token'],
-                        'refresh_token': None,  # WordPress.com doesn't use refresh tokens
-                        'expires_at': None,  # Tokens don't expire
-                        'scope': result.get('scope', 'global'),
-                        'shop_info': {
-                            'blog_id': blog_info['ID'],
-                            'name': blog_info['name'],
-                            'url': blog_info['URL'],
-                            'domain': blog_info.get('domain', ''),
-                            'language': blog_info.get('lang', 'en')
-                        }
-                    }
+        query_string = '&'.join(f"{k}={v}" for k, v in params.items())
         
-        except aiohttp.ClientError as e:
-            raise OAuthError(f"Network error during token exchange: {e}")
+        return f"{base_url}?{query_string}"
+    
+    async def exchange_code_for_token(self, code: str) -> Dict[str, Any]:
+        """Exchange authorization code for access token"""
+        
+        url = "https://public-api.wordpress.com/oauth2/token"
+        
+        data = {
+            'client_id': self.client_id,
+            'client_secret': self.client_secret,
+            'redirect_uri': self.redirect_uri,
+            'code': code,
+            'grant_type': 'authorization_code'
+        }
+        
+        async with httpx.AsyncClient() as client:
+            try:
+                response = await client.post(url, data=data)
+                response.raise_for_status()
+                
+                token_data = response.json()
+                
+                self.logger.info("✅ Successfully exchanged code for token")
+                
+                return token_data
+            
+            except httpx.HTTPError as e:
+                self.logger.error(f"OAuth token exchange failed: {e}")
+                raise HTTPException(500, "Failed to exchange code for token")
+    
+    # ========================================================================
+    # WEBHOOK SIGNATURE VERIFICATION - ✅ FIXED
+    # ========================================================================
+    
+    def verify_webhook_signature(
+        self,
+        raw_payload: bytes,
+        signature_header: str
+    ) -> bool:
+        """
+        ✅ FIXED: Robust webhook signature verification
+        
+        CRITICAL: Always verify BEFORE parsing JSON
+        
+        Args:
+            raw_payload: Raw request body as bytes
+            signature_header: Value of X-Signature or X-Hub-Signature header
+        
+        Returns:
+            True if signature is valid, False otherwise
+        
+        Example:
+            @app.post("/webhooks/wordpress")
+            async def webhook(request: Request):
+                raw_body = await request.body()
+                signature = request.headers.get('X-Signature')
+                
+                if not integration.verify_webhook_signature(raw_body, signature):
+                    raise HTTPException(401, "Invalid signature")
+                
+                # NOW safe to parse
+                payload = await request.json()
+        """
+        
+        if not self.client_secret:
+            self.logger.error("❌ client_secret not configured")
+            return False
+        
+        if not signature_header:
+            self.logger.error("❌ No signature header provided")
+            return False
+        
+        try:
+            # Compute expected signature
+            expected_signature = hmac.new(
+                self.client_secret.encode('utf-8'),
+                raw_payload,  # ✅ Raw bytes, NOT parsed
+                hashlib.sha256
+            ).hexdigest()
+            
+            # Extract signature from header (may have prefix like "sha256=")
+            if '=' in signature_header:
+                # Format: "sha256=abcdef..."
+                _, provided_signature = signature_header.split('=', 1)
+            else:
+                # Format: "abcdef..."
+                provided_signature = signature_header
+            
+            # ✅ Constant-time comparison
+            is_valid = hmac.compare_digest(
+                expected_signature,
+                provided_signature
+            )
+            
+            if not is_valid:
+                self.logger.warning(
+                    "❌ Webhook signature verification failed. "
+                    "Possible reasons: "
+                    "1) Wrong client_secret, "
+                    "2) Payload was modified, "
+                    "3) Signature header incorrect"
+                )
+            else:
+                self.logger.debug("✅ Webhook signature verified")
+            
+            return is_valid
+        
         except Exception as e:
-            raise OAuthError(f"Unexpected error: {e}")
+            self.logger.error(f"❌ Signature verification error: {e}")
+            return False
     
-    async def refresh_access_token(self, refresh_token: str) -> Dict[str, Any]:
-        """
-        WordPress.com tokens no expiran, no necesita refresh
-        """
-        raise NotImplementedError("WordPress.com tokens don't expire")
+    # ========================================================================
+    # API CALLS
+    # ========================================================================
     
-    async def _get_primary_blog(self, access_token: str) -> Dict[str, Any]:
-        """
-        Obtener el blog principal del usuario
-        """
-        headers = {'Authorization': f'Bearer {access_token}'}
+    async def get_user_info(self, access_token: str) -> Dict[str, Any]:
+        """Get WordPress user info"""
         
-        async with aiohttp.ClientSession() as session:
-            # Get user's blogs
-            async with session.get(
-                f"{self.API_BASE_URL}/me/sites",
-                headers=headers
-            ) as response:
-                data = await response.json()
-                
-                if not data.get('sites'):
-                    raise OAuthError("No sites found for this user")
-                
-                # Return first site (or primary site)
-                sites = data['sites']
-                primary = next((s for s in sites if s.get('is_primary')), sites[0])
-                
-                return primary
-    
-    # ============================================
-    # Site Info
-    # ============================================
-    
-    async def get_site_info(self) -> Dict[str, Any]:
-        """
-        Obtener información del sitio WordPress
-        """
-        if not self.access_token or not self.blog_id:
-            raise SyncError("No access token or blog ID configured")
-        
-        headers = {'Authorization': f'Bearer {self.access_token}'}
-        
-        try:
-            async with aiohttp.ClientSession() as session:
-                url = f"{self.API_BASE_URL}/sites/{self.blog_id}"
-                
-                async with session.get(url, headers=headers) as response:
-                    if response.status != 200:
-                        raise SyncError(f"Failed to get site info: {response.status}")
-                    
-                    data = await response.json()
-                    
-                    return {
-                        'name': data.get('name', ''),
-                        'url': data.get('URL', ''),
-                        'domain': data.get('domain', ''),
-                        'platform_version': data.get('jetpack_version', 'Unknown'),
-                        'language': data.get('lang', 'en'),
-                        'timezone': data.get('timezone', 'UTC'),
-                        'is_wpcom': data.get('is_wpcom', False),
-                        'plan': data.get('plan', {}).get('product_name_short', 'Free')
-                    }
-        
-        except aiohttp.ClientError as e:
-            raise SyncError(f"Network error getting site info: {e}")
-    
-    # ============================================
-    # Experiment Sync
-    # ============================================
-    
-    async def sync_experiment(self, experiment_id: str, experiment_data: Dict[str, Any]) -> bool:
-        """
-        Sincronizar experimento con WordPress
-        
-        Esto puede ser:
-        1. Crear un post con metadata del experimento
-        2. Usar custom post type
-        3. Almacenar en options table via API
-        """
-        if not self.access_token or not self.blog_id:
-            raise SyncError("Not authenticated")
+        url = "https://public-api.wordpress.com/rest/v1.1/me"
         
         headers = {
-            'Authorization': f'Bearer {self.access_token}',
-            'Content-Type': 'application/json'
+            'Authorization': f'Bearer {access_token}'
         }
         
-        try:
-            async with aiohttp.ClientSession() as session:
-                # Crear custom post para el experimento
-                post_data = {
-                    'title': f"Samplit Experiment: {experiment_data.get('name', experiment_id)}",
-                    'status': 'private',  # No público
-                    'type': 'post',  # O un custom post type si el plugin lo soporta
-                    'meta': {
-                        'samplit_experiment_id': experiment_id,
-                        'samplit_experiment_data': experiment_data
-                    }
-                }
+        async with httpx.AsyncClient() as client:
+            try:
+                response = await client.get(url, headers=headers)
+                response.raise_for_status()
                 
-                url = f"{self.API_BASE_URL}/sites/{self.blog_id}/posts/new"
-                
-                async with session.post(url, headers=headers, json=post_data) as response:
-                    if response.status not in [200, 201]:
-                        error = await response.text()
-                        self.logger.error(f"Failed to sync experiment: {error}")
-                        return False
-                    
-                    result = await response.json()
-                    self.logger.info(f"Experiment {experiment_id} synced as post {result['ID']}")
-                    return True
-        
-        except Exception as e:
-            self.logger.error(f"Error syncing experiment: {e}")
-            return False
-    
-    async def remove_experiment(self, experiment_id: str) -> bool:
-        """
-        Eliminar experimento de WordPress
-        """
-        if not self.access_token or not self.blog_id:
-            return False
-        
-        headers = {'Authorization': f'Bearer {self.access_token}'}
-        
-        try:
-            async with aiohttp.ClientSession() as session:
-                # Buscar post del experimento
-                search_url = f"{self.API_BASE_URL}/sites/{self.blog_id}/posts"
-                params = {
-                    'meta_key': 'samplit_experiment_id',
-                    'meta_value': experiment_id
-                }
-                
-                async with session.get(search_url, headers=headers, params=params) as response:
-                    data = await response.json()
-                    posts = data.get('posts', [])
-                    
-                    if not posts:
-                        self.logger.warning(f"No post found for experiment {experiment_id}")
-                        return True  # Ya no existe
-                    
-                    # Eliminar cada post encontrado
-                    for post in posts:
-                        delete_url = f"{self.API_BASE_URL}/sites/{self.blog_id}/posts/{post['ID']}/delete"
-                        await session.post(delete_url, headers=headers)
-                    
-                    return True
-        
-        except Exception as e:
-            self.logger.error(f"Error removing experiment: {e}")
-            return False
-    
-    # ============================================
-    # Webhooks
-    # ============================================
-    
-    async def register_webhooks(self, webhook_url: str) -> List[str]:
-        """
-        WordPress.com no soporta webhooks directamente
-        
-        Alternativas:
-        1. Usar Jetpack webhooks
-        2. Polling periódico
-        3. Plugin custom que envíe webhooks
-        """
-        self.logger.warning("WordPress.com doesn't support custom webhooks natively")
-        return []
-    
-    async def handle_webhook(self, event_type: str, payload: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Procesar webhook (si se implementa via plugin)
-        """
-        self.logger.info(f"Received webhook: {event_type}")
-        
-        # Verificar firma HMAC si viene del plugin
-        if 'signature' in payload:
-            if not self._verify_webhook_signature(payload):
-                raise WebhookError("Invalid webhook signature")
-        
-        # Procesar según tipo
-        if event_type == 'experiment_view':
-            return await self._handle_experiment_view(payload)
-        elif event_type == 'experiment_conversion':
-            return await self._handle_conversion(payload)
-        
-        return {'status': 'ignored', 'event_type': event_type}
-    
-    def _verify_webhook_signature(self, payload: Dict[str, Any]) -> bool:
-        """
-        Verificar firma HMAC del webhook
-        """
-        if not self.client_secret:
-            return False
-        
-        signature = payload.pop('signature', '')
-        expected = hmac.new(
-            self.client_secret.encode(),
-            str(payload).encode(),
-            hashlib.sha256
-        ).hexdigest()
-        
-        return hmac.compare_digest(signature, expected)
-    
-    async def _handle_experiment_view(self, payload: Dict[str, Any]) -> Dict[str, Any]:
-        """Procesar vista de experimento"""
-        # TODO: Registrar view en analytics
-        return {'status': 'processed'}
-    
-    async def _handle_conversion(self, payload: Dict[str, Any]) -> Dict[str, Any]:
-        """Procesar conversión"""
-        # TODO: Registrar conversión
-        return {'status': 'processed'}
-    
-    # ============================================
-    # Health & Status
-    # ============================================
-    
-    async def check_connection(self) -> bool:
-        """
-        Verificar que el access token sigue válido
-        """
-        if not self.access_token:
-            return False
-        
-        try:
-            headers = {'Authorization': f'Bearer {self.access_token}'}
+                return response.json()
             
-            async with aiohttp.ClientSession() as session:
-                async with session.get(
-                    f"{self.API_BASE_URL}/me",
-                    headers=headers
-                ) as response:
-                    return response.status == 200
+            except httpx.HTTPError as e:
+                self.logger.error(f"Failed to get user info: {e}")
+                raise HTTPException(500, "Failed to get user info")
+    
+    async def get_sites(self, access_token: str) -> List[Dict[str, Any]]:
+        """Get user's WordPress sites"""
         
-        except:
-            return False
+        url = "https://public-api.wordpress.com/rest/v1.1/me/sites"
+        
+        headers = {
+            'Authorization': f'Bearer {access_token}'
+        }
+        
+        async with httpx.AsyncClient() as client:
+            try:
+                response = await client.get(url, headers=headers)
+                response.raise_for_status()
+                
+                data = response.json()
+                return data.get('sites', [])
+            
+            except httpx.HTTPError as e:
+                self.logger.error(f"Failed to get sites: {e}")
+                raise HTTPException(500, "Failed to get sites")
 
 
-# ============================================
-# Helper Functions
-# ============================================
+# ============================================================================
+# ROUTER EXAMPLE - ✅ CORRECT USAGE
+# ============================================================================
 
-def generate_state_token() -> str:
-    """
-    Generar token aleatorio para CSRF protection
-    """
-    import secrets
-    return secrets.token_urlsafe(32)
+"""
+from fastapi import APIRouter, Request, HTTPException
+
+router = APIRouter()
+
+integration = WordPressIntegration(
+    client_id=settings.WORDPRESS_OAUTH_CLIENT_ID,
+    client_secret=settings.WORDPRESS_OAUTH_CLIENT_SECRET,
+    redirect_uri=settings.WORDPRESS_OAUTH_REDIRECT_URI
+)
+
+@router.post("/webhooks/wordpress")
+async def wordpress_webhook(request: Request):
+    '''
+    ✅ CORRECT: Verify signature BEFORE parsing
+    '''
+    
+    # 1. Get raw body FIRST
+    raw_payload = await request.body()
+    
+    # 2. Get signature header
+    signature = request.headers.get('X-Signature')
+    
+    # 3. Verify signature BEFORE parsing
+    if not integration.verify_webhook_signature(raw_payload, signature):
+        logger.warning(
+            f"Invalid webhook signature from IP: {request.client.host}"
+        )
+        raise HTTPException(401, "Invalid signature")
+    
+    # 4. NOW safe to parse
+    try:
+        payload = await request.json()
+    except json.JSONDecodeError:
+        raise HTTPException(400, "Invalid JSON")
+    
+    # 5. Process webhook
+    event_type = payload.get('event')
+    
+    if event_type == 'post_published':
+        # Handle post published
+        pass
+    
+    return {"status": "ok"}
 
 
-async def verify_state_token(state: str, expected_state: str) -> bool:
-    """
-    Verificar que el state token coincide
-    """
-    return hmac.compare_digest(state, expected_state)
+@router.get("/auth/wordpress/callback")
+async def wordpress_callback(code: str, state: str):
+    '''
+    OAuth callback handler
+    '''
+    
+    # Verify state (CSRF protection)
+    # ... verify state ...
+    
+    # Exchange code for token
+    token_data = await integration.exchange_code_for_token(code)
+    
+    # Store token
+    # ... store token ...
+    
+    return {"status": "success"}
+"""
