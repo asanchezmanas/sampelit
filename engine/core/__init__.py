@@ -1,30 +1,78 @@
 # engine/core/__init__.py
-
 """
-Samplit Optimization Engine - Core Module
+Core Optimization Algorithms
 
-⚠️  CONFIDENTIAL - PROPRIETARY TECHNOLOGY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-This module contains Samplit's proprietary optimization algorithms.
-
-UNAUTHORIZED ACCESS, USE, OR DISTRIBUTION IS STRICTLY PROHIBITED.
-
-Copyright (c) 2024 Samplit Technologies. All rights reserved.
-
-Trade Secret Protection:
-- These algorithms are protected as trade secrets
-- Reverse engineering is prohibited
-- Implementation details are confidential
-
-For licensing: licensing@samplit.com
+This module provides the factory function for creating optimization allocators.
+Implementation details are kept internal and may change without notice.
 """
 
-from typing import Dict, Any
-from .allocators._registry import get_allocator as _get_allocator
+from .allocators import BayesianAllocator, AdaptiveBayesianAllocator
 
-__all__ = ['_get_allocator']
 
-# Prevent inspection
-def __dir__():
-    return []
+def _get_allocator(strategy_code: str, config: dict):
+    """
+    Factory function for creating optimization allocators
+    
+    This is an internal function used by OptimizerFactory.
+    Do not call directly from application code.
+    
+    Args:
+        strategy_code: Strategy identifier:
+            - 'adaptive': Adaptive Bayesian (Thompson Sampling)
+            - 'standard': Standard Bayesian
+            - 'fast_learning': Low-traffic optimized
+            - 'sequential': Multi-step optimization
+            - 'hybrid': Auto-select best method
+        config: Configuration dict with algorithm parameters
+            
+    Returns:
+        Allocator instance implementing IOptimizer interface
+        
+    Raises:
+        ValueError: If strategy_code is unknown
+        
+    Example:
+        >>> allocator = _get_allocator('adaptive', {'alpha_prior': 1.0})
+        >>> variants = [...]
+        >>> selected_idx = allocator.select_variant(variants)
+        
+    Note:
+        This function is used by OptimizerFactory and should not be called
+        directly. Use OptimizerFactory.create() instead.
+    """
+    
+    # Strategy mapping
+    strategy_map = {
+        'adaptive': AdaptiveBayesianAllocator,
+        'standard': BayesianAllocator,
+        'fast_learning': AdaptiveBayesianAllocator,  # With high exploration
+        'sequential': BayesianAllocator,  # TODO: Implement SequentialAllocator
+        'hybrid': AdaptiveBayesianAllocator,
+    }
+    
+    # Get allocator class
+    allocator_class = strategy_map.get(strategy_code)
+    
+    if allocator_class is None:
+        raise ValueError(
+            f"Unknown strategy: {strategy_code}. "
+            f"Available strategies: {list(strategy_map.keys())}"
+        )
+    
+    # Adjust config for fast_learning
+    if strategy_code == 'fast_learning':
+        config = {
+            **config,
+            'exploration_bonus': config.get('exploration_bonus', 0.5),
+            'min_samples': config.get('min_samples', 50),  # Lower threshold
+        }
+    
+    # Create and return allocator
+    return allocator_class(config)
+
+
+__all__ = [
+    'BayesianAllocator',
+    'AdaptiveBayesianAllocator',
+    '_get_allocator'
+]
