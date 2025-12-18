@@ -183,15 +183,113 @@ class DatabaseManager:
             """, campaign_id)
         return [dict(row) for row in rows]
 
-    async def record_email_performance(self, variant_id: str, action: str, reward: float, context: Dict):
-        """Record email performance"""
-        # Implementación simplificada
-        pass
+    # ========================================================================
+    # ✅ FIXED: Email/Notification Methods con NotImplementedError
+    # ========================================================================
+
+    async def record_email_performance(
+        self, 
+        variant_id: str, 
+        action: str, 
+        reward: float, 
+        context: Dict
+    ):
+        """
+        Record email performance
+        
+        ⚠️ NOT IMPLEMENTED - Email experiments en roadmap v1.1
+        
+        Esta funcionalidad está planificada para una versión futura.
+        Requiere:
+        - Schema adicional para email campaigns
+        - Integration con email service providers (SendGrid, Mailchimp, etc)
+        - Tracking de opens/clicks/conversions
+        
+        Args:
+            variant_id: Variant ID
+            action: 'open' | 'click' | 'convert'
+            reward: Reward value (1.0 for success, 0.0 for failure)
+            context: Additional context (email_id, campaign_id, etc)
+            
+        Raises:
+            NotImplementedError: Email experiments not available in MVP
+            
+        Workaround:
+            Usa experimentos web estándar para testear landing pages
+            que reciben tráfico de email campaigns.
+            
+        Example:
+            # En lugar de testear el email directamente:
+            # await db.record_email_performance(variant_id, 'click', 1.0, {...})
+            
+            # Testea la landing page:
+            # 1. Usuario hace click en email → landing page
+            # 2. Landing page tiene experimento A/B
+            # 3. Trackeas conversión en la landing page
+        """
+        raise NotImplementedError(
+            "❌ Email experiments no disponibles en MVP.\n\n"
+            "STATUS: Roadmap v1.1 (Q1 2026)\n\n"
+            "ALTERNATIVA:\n"
+            "- Usa experimentos web estándar en landing pages\n"
+            "- Trackea parámetro UTM en URL (?email_variant=A)\n"
+            "- Analiza conversiones por variante de email externamente\n\n"
+            "Si necesitas esta feature urgentemente, contacta con soporte:\n"
+            "support@samplit.com"
+        )
 
     async def get_notification_variants(self, campaign_id: str) -> List[Dict]:
-        """Get notification variants"""
-        # Placeholder - implementar según schema
-        return []
+        """
+        Get push notification campaign variants
+        
+        ⚠️ NOT IMPLEMENTED - Push notification experiments en roadmap v1.1
+        
+        Esta funcionalidad está planificada para una versión futura.
+        Requiere:
+        - Schema para notification campaigns
+        - Integration con push notification providers (Firebase, OneSignal, etc)
+        - Tracking de impressions/clicks/conversions
+        
+        Args:
+            campaign_id: Campaign ID
+            
+        Returns:
+            List of notification variants (empty - not implemented)
+            
+        Raises:
+            NotImplementedError: Push notification experiments not available in MVP
+            
+        Workaround:
+            Usa deep links con experimentos web:
+            1. Push notification con deep link
+            2. Deep link abre app/web con experiment
+            3. Trackeas conversión en destino
+            
+        Example:
+            # En lugar de testear la notificación directamente:
+            # variants = await db.get_notification_variants(campaign_id)
+            
+            # Testea el destino:
+            # 1. Notification → deep link → landing page/screen
+            # 2. Landing page/screen tiene experimento A/B
+            # 3. Trackeas conversión normal
+        """
+        raise NotImplementedError(
+            "❌ Push notification experiments no disponibles en MVP.\n\n"
+            "STATUS: Roadmap v1.1 (Q1 2026)\n\n"
+            "ALTERNATIVA:\n"
+            "- Usa experimentos web en destinos de notificaciones\n"
+            "- Trackea parámetro en deep link (?notification_variant=A)\n"
+            "- Analiza conversiones por variante externamente\n\n"
+            "INTEGRACIONES PLANIFICADAS:\n"
+            "- Firebase Cloud Messaging (FCM)\n"
+            "- OneSignal\n"
+            "- Apple Push Notification Service (APNS)\n"
+            "- Custom webhook integration\n\n"
+            "Si necesitas esta feature urgentemente, contacta con soporte:\n"
+            "support@samplit.com"
+        )
+
 
 # Global instance
 _db_manager: Optional[DatabaseManager] = None
