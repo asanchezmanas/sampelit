@@ -1,38 +1,230 @@
 # public-api/routers/installations.py
 
 """
-Sistema de Instalaciones
-Gestiona WordPress plugins, proxies, snippets manuales, etc.
+Sistema de Instalaciones - VERSIÓN COMPLETA
+Incluye instalación ultra-simplificada de 1 línea
 """
 
 from fastapi import APIRouter, HTTPException, status, Depends, Request
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, HttpUrl, Field, validator
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 import uuid
 import hashlib
+import secrets
+import logging
 
 from public_api.routers.auth import get_current_user
 from data_access.database import get_database, DatabaseManager
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 # ============================================
 # MODELS
 # ============================================
 
 class InstallationMethod(str):
+    SIMPLE_SNIPPET = "simple_snippet"  # ✅ NUEVO: 1 línea
     WORDPRESS_PLUGIN = "wordpress_plugin"
     MANUAL_SNIPPET = "manual_snippet"
     PROXY_MIDDLEWARE = "proxy_middleware"
     SHOPIFY_APP = "shopify_app"
     CUSTOM_API = "custom_api"
 
+
+# ════════════════════════════════════════════════════════════════════════════
+# ✅ NUEVO: INSTALACIÓN SIMPLE (1 LÍNEA)
+# ════════════════════════════════════════════════════════════════════════════
+
+class CreateSimpleInstallationRequest(BaseModel):
+    """Crear instalación simple de 1 línea"""
+    site_url: str = Field(..., min_length=1, description="Website URL")
+    site_name: Optional[str] = Field(None, description="Website name (optional)")
+    
+    @validator('site_url')
+    def validate_url(cls, v):
+        v = v.strip()
+        if not v.startswith(('http://', 'https://')):
+            v = f"https://{v}"
+        return v
+
+
+class SimpleInstallationResponse(BaseModel):
+    """Respuesta con código de 1 línea"""
+    installation_id: str
+    installation_token: str
+    site_url: str
+    site_name: str
+    tracking_code: str
+    instructions: List[str]
+    created_at: datetime
+    status: str
+
+
+@router.post("/simple", response_model=SimpleInstallationResponse, status_code=status.HTTP_201_CREATED)
+async def create_simple_installation(
+    request: CreateSimpleInstallationRequest,
+    user_id: str = Depends(get_current_user),
+    db: DatabaseManager = Depends(get_database)
+):
+    """
+    ✅ NUEVO: Crear instalación ultra-simple de 1 línea
+    
+    El usuario obtiene un código de 1 línea para copiar/pegar.
+    NO necesita configurar nada más.
+    
+    Returns:
+        {
+            "installation_id": "...",
+            "tracking_code": "<script src='...'></script>",
+            "instructions": [...]
+        }
+    """
+    
+    try:
+        site_url = request.site_url
+        site_name = request.site_name or site_url
+        
+        # Generar token único (24 caracteres)
+        installation_token = f"inst_{secrets.token_urlsafe(18)}"
+        
+        logger.info(
+            f"Creating simple installation for user {user_id}: "
+            f"{site_url} (token: {installation_token[:15]}...)"
+        )
+        
+        # Crear instalación en BD
+        async with db.pool.acquire() as conn:
+            installation_id = await conn.fetchval(
+                """
+                INSERT INTO platform_installations (
+                    user_id,
+                    platform,
+                    installation_method,
+                    site_url,
+                    site_name,
+                    installation_token,
+                    status,
+                    created_at,
+                    updated_at
+                )
+                VALUES ($1, 'web', 'simple_snippet', $2, $3, $4, 'pending', NOW(), NOW())
+                RETURNING id
+                """,
+                user_id,
+                site_url,
+                site_name,
+                installation_token
+            )
+            
+            # Log de creación
+            await conn.execute(
+                """
+                INSERT INTO installation_logs (
+                    installation_id,
+                    event_type,
+                    message,
+                    metadata
+                )
+                VALUES ($1, 'created', 'Simple installation created', $2)
+                """,
+                installation_id,
+                {
+                    "method": "simple_snippet",
+                    "user_id": user_id,
+                    "site_url": site_url
+                }
+            )
+        
+        # ✅ Generar código de 1 línea
+        tracking_code = f'<script src="https://cdn.samplit.com/t.js?token={installation_token}" async></script>'
+        
+        # Instrucciones simples
+        instructions = [
+            "1. Copy the code below",
+            "2. Open your website's HTML",
+            "3. Find the <head> section",
+            "4. Paste the code before </head>",
+            "5. Save and publish",
+            "6. That's it! 🎉"
+        ]
+        
+        logger.info(f"✅ Simple installation created: {installation_id} for {site_url}")
+        
+        return SimpleInstallationResponse(
+            installation_id=str(installation_id),
+            installation_token=installation_token,
+            site_url=site_url,
+            site_name=site_name,
+            tracking_code=tracking_code,
+            instructions=instructions,
+            created_at=datetime.utcnow(),
+            status="pending"
+        )
+    
+    except Exception as e:
+        logger.error(f"Failed to create simple installation: {e}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to create installation: {str(e)}"
+        )
+
+
+@router.get("/{installation_id}/code")
+async def get_installation_code(
+    installation_id: str,
+    user_id: str = Depends(get_current_user),
+    db: DatabaseManager = Depends(get_database)
+):
+    """
+    Obtener el código de instalación nuevamente
+    
+    Útil si el usuario perdió el código.
+    """
+    
+    try:
+        async with db.pool.acquire() as conn:
+            installation = await conn.fetchrow(
+                """
+                SELECT installation_token, site_url, site_name
+                FROM platform_installations
+                WHERE id = $1 AND user_id = $2
+                """,
+                installation_id,
+                user_id
+            )
+        
+        if not installation:
+            raise HTTPException(404, "Installation not found")
+        
+        token = installation['installation_token']
+        tracking_code = f'<script src="https://cdn.samplit.com/t.js?token={token}" async></script>'
+        
+        return {
+            "installation_id": installation_id,
+            "tracking_code": tracking_code,
+            "site_url": installation['site_url'],
+            "site_name": installation['site_name']
+        }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting code: {e}")
+        raise HTTPException(500, "Failed to get code")
+
+
+# ════════════════════════════════════════════════════════════════════════════
+# INSTALACIÓN MANUAL (LEGACY)
+# ════════════════════════════════════════════════════════════════════════════
+
 class CreateInstallationRequest(BaseModel):
     site_url: HttpUrl
     site_name: Optional[str] = None
     platform: str  # wordpress, shopify, custom, etc
     installation_method: str
+
 
 class InstallationResponse(BaseModel):
     installation_id: str
@@ -44,10 +236,9 @@ class InstallationResponse(BaseModel):
     installation_token: str
     api_token: str
     created_at: datetime
-    
-    # Instrucciones específicas según método
     instructions: Optional[Dict[str, Any]] = None
     tracking_code: Optional[str] = None
+
 
 class InstallationListResponse(BaseModel):
     id: str
@@ -59,9 +250,6 @@ class InstallationListResponse(BaseModel):
     last_activity: Optional[datetime]
     created_at: datetime
 
-# ============================================
-# CREAR INSTALACIÓN
-# ============================================
 
 @router.post("/", response_model=InstallationResponse, status_code=status.HTTP_201_CREATED)
 async def create_installation(
@@ -70,7 +258,7 @@ async def create_installation(
     db: DatabaseManager = Depends(get_database)
 ):
     """
-    Registrar nueva instalación
+    Registrar nueva instalación (método legacy con configuración)
     
     Genera tokens y devuelve instrucciones según el método elegido.
     """
@@ -127,7 +315,7 @@ async def create_installation(
                     "Install 'Samplit Optimizer' plugin from WordPress.org",
                     "Activate the plugin",
                     "Go to Samplit menu in WordPress admin",
-                    f"Enter your email and connect",
+                    "Enter your email and connect",
                     "Done! Your site is now optimizing automatically"
                 ]
             }
@@ -159,9 +347,10 @@ async def create_installation(
             detail=f"Failed to create installation: {str(e)}"
         )
 
-# ============================================
+
+# ════════════════════════════════════════════════════════════════════════════
 # LISTAR INSTALACIONES
-# ============================================
+# ════════════════════════════════════════════════════════════════════════════
 
 @router.get("/", response_model=List[InstallationListResponse])
 async def list_installations(
@@ -179,7 +368,7 @@ async def list_installations(
                     COUNT(DISTINCT e.id) FILTER (WHERE e.status = 'active') as active_experiments
                 FROM platform_installations pi
                 LEFT JOIN experiments e ON e.user_id = pi.user_id 
-                    AND e.url LIKE pi.site_url || '%'
+                    AND e.target_url LIKE pi.site_url || '%'
                 WHERE pi.user_id = $1 AND pi.status != 'archived'
                 GROUP BY pi.id
                 ORDER BY pi.created_at DESC
@@ -207,9 +396,10 @@ async def list_installations(
             detail=f"Failed to list installations: {str(e)}"
         )
 
-# ============================================
+
+# ════════════════════════════════════════════════════════════════════════════
 # VERIFICAR INSTALACIÓN
-# ============================================
+# ════════════════════════════════════════════════════════════════════════════
 
 @router.post("/{installation_id}/verify")
 async def verify_installation(
@@ -238,7 +428,7 @@ async def verify_installation(
                 detail="Installation not found"
             )
         
-        # Intentar verificar (simplificado - en producción hacer HTTP request real)
+        # Intentar verificar
         verified = await attempt_verification(
             installation['site_url'],
             installation['installation_token']
@@ -278,9 +468,10 @@ async def verify_installation(
             detail=f"Verification failed: {str(e)}"
         )
 
-# ============================================
+
+# ════════════════════════════════════════════════════════════════════════════
 # OBTENER DETALLES
-# ============================================
+# ════════════════════════════════════════════════════════════════════════════
 
 @router.get("/{installation_id}/details")
 async def get_installation_details(
@@ -313,7 +504,7 @@ async def get_installation_details(
                     COUNT(DISTINCT a.id) FILTER (WHERE a.converted_at IS NOT NULL) as conversions
                 FROM experiments e
                 LEFT JOIN assignments a ON e.id = a.experiment_id
-                WHERE e.user_id = $1 AND e.url LIKE $2
+                WHERE e.user_id = $1 AND e.target_url LIKE $2
                 """,
                 user_id, installation['site_url'] + '%'
             )
@@ -344,9 +535,10 @@ async def get_installation_details(
             detail=f"Failed to get details: {str(e)}"
         )
 
-# ============================================
+
+# ════════════════════════════════════════════════════════════════════════════
 # ACTUALIZAR/ELIMINAR
-# ============================================
+# ════════════════════════════════════════════════════════════════════════════
 
 @router.patch("/{installation_id}")
 async def update_installation(
@@ -392,6 +584,7 @@ async def update_installation(
             detail=f"Failed to update: {str(e)}"
         )
 
+
 @router.delete("/{installation_id}")
 async def delete_installation(
     installation_id: str,
@@ -426,9 +619,10 @@ async def delete_installation(
             detail=f"Failed to delete: {str(e)}"
         )
 
-# ============================================
+
+# ════════════════════════════════════════════════════════════════════════════
 # HELPER FUNCTIONS
-# ============================================
+# ════════════════════════════════════════════════════════════════════════════
 
 def generate_tracking_snippet(installation_token: str) -> str:
     """Generar código de tracking para instalación manual"""
@@ -436,11 +630,12 @@ def generate_tracking_snippet(installation_token: str) -> str:
 <script>
   window.SAMPLIT_CONFIG = {{
     installationToken: '{installation_token}',
-    apiEndpoint: 'https://api.samplit.com/v1'
+    apiEndpoint: 'https://api.samplit.com/api/v1'
   }};
 </script>
 <script src="https://cdn.samplit.com/tracker.js" async></script>
 <!-- End Samplit Tracking Code -->"""
+
 
 def generate_proxy_instructions(site_url: str, token: str, platform: str) -> Dict[str, Any]:
     """Generar instrucciones de proxy según plataforma"""
@@ -494,14 +689,40 @@ def generate_proxy_instructions(site_url: str, token: str, platform: str) -> Dic
             ]
         }
 
+
 async def attempt_verification(site_url: str, installation_token: str) -> bool:
     """
     Intentar verificar la instalación
     
-    En producción: hacer HTTP request al sitio y buscar el token.
-    Por ahora: simulado.
+    Hace HTTP request al sitio y busca el token.
     """
-    # TODO: Implementar verificación real con aiohttp
-    # Por ahora retornamos True para testing
-    import random
-    return random.choice([True, False])  # 50% éxito para testing
+    
+    try:
+        import aiohttp
+        import asyncio
+        
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                site_url,
+                timeout=aiohttp.ClientTimeout(total=10),
+                allow_redirects=True
+            ) as response:
+                
+                if response.status != 200:
+                    logger.warning(f"Site returned status {response.status}: {site_url}")
+                    return False
+                
+                # Leer HTML
+                html = await response.text()
+                
+                # Buscar el script con el token
+                if installation_token in html and 'cdn.samplit.com' in html:
+                    logger.info(f"✅ Tracker detected on {site_url}")
+                    return True
+                else:
+                    logger.warning(f"Tracker not found on {site_url}")
+                    return False
+    
+    except Exception as e:
+        logger.error(f"Error verifying {site_url}: {e}")
+        return False
