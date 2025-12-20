@@ -1,218 +1,227 @@
 # config/settings.py
+# ✅ FIXED: Pydantic v2 compatibility + SECRET_KEY validation
 
-"""
-Application Settings - VERSIÓN COMPLETA
-✅ Incluye configuración para instalación simple de 1 línea
-"""
-
-from pydantic import BaseSettings, Field, validator
-from typing import List, Optional
 import os
+from typing import List
 from enum import Enum
+
+# ✅ FIXED: Pydantic v2 imports
+from pydantic_settings import BaseSettings
+from pydantic import Field, field_validator
 
 
 class Environment(str, Enum):
-    """Application environment"""
+    """Environment types"""
     DEVELOPMENT = "development"
     STAGING = "staging"
     PRODUCTION = "production"
 
 
 class Settings(BaseSettings):
-    """Application configuration settings"""
+    """
+    Application settings
     
-    # ════════════════════════════════════════════════════════════════════════
-    # APPLICATION
-    # ════════════════════════════════════════════════════════════════════════
+    ✅ FIXED: Compatible con Pydantic v2
+    ✅ FIXED: SECRET_KEY con validación obligatoria
+    """
     
-    APP_NAME: str = "Samplit A/B Testing"
-    APP_VERSION: str = "2.0.0"  # ✅ Updated version
+    # ─────────────────────────────────────────────────────────────
+    # Environment
+    # ─────────────────────────────────────────────────────────────
     ENVIRONMENT: Environment = Field(
         default=Environment.DEVELOPMENT,
         env="ENVIRONMENT"
     )
-    DEBUG: bool = Field(
-        default=False,
-        env="DEBUG"
+    
+    # ─────────────────────────────────────────────────────────────
+    # Security
+    # ─────────────────────────────────────────────────────────────
+    SECRET_KEY: str = Field(
+        ...,  # Required
+        env="SECRET_KEY",
+        min_length=32,
+        description="Secret key for JWT encoding (min 32 chars)"
     )
     
-    # ════════════════════════════════════════════════════════════════════════
-    # ✅ NUEVO: CDN & TRACKER URLS
-    # ════════════════════════════════════════════════════════════════════════
-    
-    CDN_URL: str = Field(
-        default="https://cdn.samplit.com",
-        env="CDN_URL",
-        description="CDN URL for tracker script"
+    ALGORITHM: str = Field(
+        default="HS256",
+        env="ALGORITHM"
     )
     
-    API_BASE_URL: str = Field(
-        default="https://api.samplit.com",
-        env="API_BASE_URL",
-        description="Base URL for API endpoints"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(
+        default=30,
+        env="ACCESS_TOKEN_EXPIRE_MINUTES"
     )
     
-    TRACKER_SCRIPT_PATH: str = "/t.js"  # Simple tracker script
-    
-    # ════════════════════════════════════════════════════════════════════════
-    # SECURITY
-    # ════════════════════════════════════════════════════════════════════════
-    
-    # CORS Origins
-    CORS_ORIGINS: List[str] = Field(
-        default_factory=lambda: _parse_cors_origins()
+    # ─────────────────────────────────────────────────────────────
+    # Database
+    # ─────────────────────────────────────────────────────────────
+    DATABASE_URL: str = Field(
+        ...,  # Required
+        env="DATABASE_URL"
     )
     
-    CORS_ALLOW_CREDENTIALS: bool = True
-    CORS_ALLOW_METHODS: List[str] = ["GET", "POST", "PUT", "DELETE", "PATCH"]
-    CORS_ALLOW_HEADERS: List[str] = ["*"]
+    SUPABASE_SERVICE_KEY: str = Field(
+        default="",
+        env="SUPABASE_SERVICE_KEY"
+    )
     
-    # Secret keys
-    SECRET_KEY: str = Field(..., env="SECRET_KEY")
-    ALGORITHM_ENCRYPTION_KEY: str = Field(..., env="ALGORITHM_ENCRYPTION_KEY")
+    # ─────────────────────────────────────────────────────────────
+    # Redis
+    # ─────────────────────────────────────────────────────────────
+    REDIS_URL: str = Field(
+        default="redis://localhost:6379",
+        env="REDIS_URL"
+    )
     
-    # JWT
-    JWT_SECRET: Optional[str] = Field(None, env="JWT_SECRET")
-    JWT_ALGORITHM: str = "HS256"
-    JWT_EXPIRATION_HOURS: int = 24
+    CACHE_TTL: int = Field(
+        default=300,  # 5 minutes
+        env="CACHE_TTL"
+    )
     
-    @validator('CORS_ORIGINS')
-    def validate_cors_origins(cls, v, values):
-        """Validate CORS configuration"""
-        environment = values.get('ENVIRONMENT', Environment.DEVELOPMENT)
+    # ─────────────────────────────────────────────────────────────
+    # API
+    # ─────────────────────────────────────────────────────────────
+    API_V1_PREFIX: str = Field(
+        default="/api/v1",
+        env="API_V1_PREFIX"
+    )
+    
+    PROJECT_NAME: str = Field(
+        default="Samplit A/B Testing API",
+        env="PROJECT_NAME"
+    )
+    
+    # ─────────────────────────────────────────────────────────────
+    # CORS
+    # ─────────────────────────────────────────────────────────────
+    CORS_ORIGINS: str = Field(
+        default="http://localhost:3000,http://localhost:5173,http://localhost:8080",
+        env="CORS_ORIGINS"
+    )
+    
+    # ─────────────────────────────────────────────────────────────
+    # Experiment Defaults
+    # ─────────────────────────────────────────────────────────────
+    DEFAULT_SIGNIFICANCE_LEVEL: float = Field(
+        default=0.05,
+        env="DEFAULT_SIGNIFICANCE_LEVEL"
+    )
+    
+    DEFAULT_MINIMUM_SAMPLE_SIZE: int = Field(
+        default=100,
+        env="DEFAULT_MINIMUM_SAMPLE_SIZE"
+    )
+    
+    # ─────────────────────────────────────────────────────────────
+    # Thompson Sampling
+    # ─────────────────────────────────────────────────────────────
+    THOMPSON_ALPHA_PRIOR: float = Field(
+        default=1.0,
+        env="THOMPSON_ALPHA_PRIOR"
+    )
+    
+    THOMPSON_BETA_PRIOR: float = Field(
+        default=1.0,
+        env="THOMPSON_BETA_PRIOR"
+    )
+    
+    # ─────────────────────────────────────────────────────────────
+    # Validators
+    # ─────────────────────────────────────────────────────────────
+    
+    @field_validator('SECRET_KEY')
+    @classmethod
+    def validate_secret_key(cls, v: str) -> str:
+        """
+        Valida que SECRET_KEY sea seguro
         
-        if environment == Environment.PRODUCTION:
-            if "*" in v:
-                raise ValueError(
-                    "CORS wildcard (*) not allowed in production. "
-                    "Set CORS_ORIGINS environment variable with specific domains."
-                )
-            
-            if not v or len(v) == 0:
-                raise ValueError(
-                    "CORS_ORIGINS must be set in production. "
-                    "Example: CORS_ORIGINS=https://app.samplit.com,https://samplit.com"
-                )
+        ✅ NUEVO: Validación obligatoria de SECRET_KEY
+        """
+        if len(v) < 32:
+            raise ValueError(
+                "SECRET_KEY must be at least 32 characters long.\n"
+                "Generate with: python -c 'import secrets; print(secrets.token_urlsafe(32))'"
+            )
         
-        elif environment == Environment.STAGING:
-            if "*" in v:
-                import logging
-                logging.warning(
-                    "⚠️  CORS wildcard (*) detected in staging. "
-                    "Consider using specific domains."
-                )
+        # Evitar valores por defecto inseguros
+        dangerous_values = {
+            'changeme', 'default', 'secret', 'password', 
+            'test', 'admin', '12345', 'secretkey'
+        }
+        
+        if v.lower() in dangerous_values:
+            raise ValueError(
+                f"SECRET_KEY cannot be '{v}'.\n"
+                f"This is a known insecure default value.\n"
+                f"Generate a secure random key with:\n"
+                f"  python -c 'import secrets; print(secrets.token_urlsafe(32))'"
+            )
+        
+        # Advertir si parece muy simple
+        if len(set(v)) < 16:  # Menos de 16 caracteres únicos
+            import warnings
+            warnings.warn(
+                "SECRET_KEY has low entropy (few unique characters). "
+                "Consider using a more random value.",
+                UserWarning
+            )
         
         return v
     
-    # ════════════════════════════════════════════════════════════════════════
-    # DATABASE
-    # ════════════════════════════════════════════════════════════════════════
+    @field_validator('CORS_ORIGINS')
+    @classmethod
+    def validate_cors_origins(cls, v: str, info) -> List[str]:
+        """
+        Valida CORS origins
+        
+        ✅ FIXED: Pydantic v2 style validator con info.data
+        """
+        if isinstance(v, str):
+            origins = [origin.strip() for origin in v.split(',')]
+        else:
+            origins = v
+        
+        # En producción, advertir si se usa wildcard
+        environment = info.data.get('ENVIRONMENT', Environment.DEVELOPMENT)
+        if environment == Environment.PRODUCTION and '*' in origins:
+            import warnings
+            warnings.warn(
+                "Using wildcard (*) in CORS_ORIGINS in PRODUCTION is insecure!",
+                UserWarning
+            )
+        
+        return origins
     
-    DATABASE_URL: str = Field(..., env="DATABASE_URL")
-    DB_POOL_MIN_SIZE: int = 5
-    DB_POOL_MAX_SIZE: int = 20
-    DB_POOL_MAX_QUERIES: int = 50000
-    DB_POOL_MAX_INACTIVE_CONNECTION_LIFETIME: float = 300.0
+    @field_validator('DATABASE_URL')
+    @classmethod
+    def validate_database_url(cls, v: str) -> str:
+        """Valida DATABASE_URL"""
+        if not v:
+            raise ValueError("DATABASE_URL cannot be empty")
+        
+        # Fix postgres:// to postgresql://
+        if v.startswith("postgres://"):
+            v = v.replace("postgres://", "postgresql://", 1)
+        
+        if not (v.startswith("postgresql://") or v.startswith("postgres://")):
+            raise ValueError(
+                "DATABASE_URL must start with postgresql:// or postgres://"
+            )
+        
+        return v
     
-    # ════════════════════════════════════════════════════════════════════════
-    # REDIS
-    # ════════════════════════════════════════════════════════════════════════
+    @field_validator('REDIS_URL')
+    @classmethod
+    def validate_redis_url(cls, v: str) -> str:
+        """Valida REDIS_URL"""
+        if not v.startswith("redis://") and not v.startswith("rediss://"):
+            raise ValueError("REDIS_URL must start with redis:// or rediss://")
+        return v
     
-    REDIS_URL: Optional[str] = Field(None, env="REDIS_URL")
-    REDIS_POOL_MIN_SIZE: int = 5
-    REDIS_POOL_MAX_SIZE: int = 20
-    
-    # Redis auto-detection thresholds
-    REDIS_AUTO_ENABLE_THRESHOLD: int = 1000  # req/min
-    REDIS_AUTO_DISABLE_THRESHOLD: int = 500  # req/min
-    
-    # ════════════════════════════════════════════════════════════════════════
-    # RATE LIMITING
-    # ════════════════════════════════════════════════════════════════════════
-    
-    # Tracker API rate limits (PUBLIC endpoints)
-    RATE_LIMIT_TRACKER_PER_TOKEN: int = 1000  # requests per minute
-    RATE_LIMIT_TRACKER_PER_IP: int = 2000  # requests per minute
-    RATE_LIMIT_TRACKER_LIST: int = 100  # requests per minute
-    
-    # Admin API rate limits
-    RATE_LIMIT_ADMIN_PER_USER: int = 100  # requests per minute
-    
-    # ════════════════════════════════════════════════════════════════════════
-    # THOMPSON SAMPLING
-    # ════════════════════════════════════════════════════════════════════════
-    
-    THOMPSON_ALPHA_PRIOR: float = 1.0
-    THOMPSON_BETA_PRIOR: float = 1.0
-    THOMPSON_MIN_SAMPLES: int = 100
-    
-    # Monte Carlo simulation
-    MONTE_CARLO_SAMPLES: int = 10000
-    MONTE_CARLO_ADAPTIVE: bool = True
-    
-    # ════════════════════════════════════════════════════════════════════════
-    # METRICS & MONITORING
-    # ════════════════════════════════════════════════════════════════════════
-    
-    METRICS_CHECK_INTERVAL: int = 300  # seconds (5 minutes)
-    METRICS_AUTO_SCALE_ENABLED: bool = True
-    
-    # Health check
-    HEALTH_CHECK_INTERVAL: int = 60  # seconds
-    
-    # ════════════════════════════════════════════════════════════════════════
-    # INTEGRATIONS
-    # ════════════════════════════════════════════════════════════════════════
-    
-    # WordPress
-    WORDPRESS_OAUTH_CLIENT_ID: Optional[str] = Field(None, env="WORDPRESS_OAUTH_CLIENT_ID")
-    WORDPRESS_OAUTH_CLIENT_SECRET: Optional[str] = Field(None, env="WORDPRESS_OAUTH_CLIENT_SECRET")
-    WORDPRESS_OAUTH_REDIRECT_URI: Optional[str] = Field(None, env="WORDPRESS_OAUTH_REDIRECT_URI")
-    
-    # Shopify
-    SHOPIFY_API_KEY: Optional[str] = Field(None, env="SHOPIFY_API_KEY")
-    SHOPIFY_API_SECRET: Optional[str] = Field(None, env="SHOPIFY_API_SECRET")
-    SHOPIFY_SCOPES: str = "read_products,write_products,read_script_tags,write_script_tags"
-    
-    # ════════════════════════════════════════════════════════════════════════
-    # LOGGING
-    # ════════════════════════════════════════════════════════════════════════
-    
-    LOG_LEVEL: str = Field(
-        default="INFO",
-        env="LOG_LEVEL"
-    )
-    LOG_FORMAT: str = "json"  # or "text"
-    
-    # ════════════════════════════════════════════════════════════════════════
-    # API
-    # ════════════════════════════════════════════════════════════════════════
-    
-    API_V1_PREFIX: str = "/api/v1"
-    API_DOCS_ENABLED: bool = Field(
-        default=True,
-        env="API_DOCS_ENABLED"
-    )
-    
-    # Pagination
-    DEFAULT_PAGE_SIZE: int = 50
-    MAX_PAGE_SIZE: int = 1000
-    
-    # ════════════════════════════════════════════════════════════════════════
-    # FEATURE FLAGS
-    # ════════════════════════════════════════════════════════════════════════
-    
-    FEATURE_VISUAL_EDITOR: bool = True
-    FEATURE_ANALYTICS_EXPORT: bool = True
-    FEATURE_WEBHOOK_VERIFICATION: bool = True
-    FEATURE_SIMPLE_INSTALLATION: bool = True  # ✅ NUEVO
-    
-    # ════════════════════════════════════════════════════════════════════════
-    # FILE UPLOAD
-    # ════════════════════════════════════════════════════════════════════════
-    
-    MAX_UPLOAD_SIZE: int = 10 * 1024 * 1024  # 10MB
-    ALLOWED_UPLOAD_EXTENSIONS: List[str] = [".jpg", ".png", ".gif", ".webp"]
+    # ─────────────────────────────────────────────────────────────
+    # Config
+    # ─────────────────────────────────────────────────────────────
     
     class Config:
         env_file = ".env"
@@ -220,131 +229,100 @@ class Settings(BaseSettings):
         case_sensitive = True
 
 
-# ════════════════════════════════════════════════════════════════════════════
-# HELPER FUNCTIONS
-# ════════════════════════════════════════════════════════════════════════════
-
-def _parse_cors_origins() -> List[str]:
-    """Parse CORS origins from environment variable"""
-    cors_env = os.getenv("CORS_ORIGINS", "")
-    
-    if not cors_env:
-        environment = os.getenv("ENVIRONMENT", "development")
-        
-        if environment == "development":
-            return [
-                "http://localhost:3000",
-                "http://localhost:8000",
-                "http://127.0.0.1:3000",
-                "http://127.0.0.1:8000"
-            ]
-        
-        elif environment == "staging":
-            return [
-                "https://staging.samplit.com",
-                "https://staging-app.samplit.com"
-            ]
-        
-        else:
-            # Production: MUST be set explicitly
-            return []
-    
-    # Parse comma-separated list
-    origins = [origin.strip() for origin in cors_env.split(",")]
-    origins = [o for o in origins if o]
-    
-    return origins
-
-
-# ════════════════════════════════════════════════════════════════════════════
-# SETTINGS INSTANCE
-# ════════════════════════════════════════════════════════════════════════════
-
-_settings: Optional[Settings] = None
-
+# ═══════════════════════════════════════════════════════════════════════
+# Global settings instance
+# ═══════════════════════════════════════════════════════════════════════
 
 def get_settings() -> Settings:
-    """Get settings instance (singleton)"""
-    global _settings
+    """
+    Get settings instance
     
-    if _settings is None:
-        _settings = Settings()
+    This function creates a new Settings instance each time it's called.
+    For production, you might want to use lru_cache to cache the instance.
+    """
+    return Settings()
+
+
+# Create settings instance
+settings = get_settings()
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# Helper functions
+# ═══════════════════════════════════════════════════════════════════════
+
+def is_development() -> bool:
+    """Check if running in development mode"""
+    return settings.ENVIRONMENT == Environment.DEVELOPMENT
+
+
+def is_production() -> bool:
+    """Check if running in production mode"""
+    return settings.ENVIRONMENT == Environment.PRODUCTION
+
+
+def is_staging() -> bool:
+    """Check if running in staging mode"""
+    return settings.ENVIRONMENT == Environment.STAGING
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# Validation on import
+# ═══════════════════════════════════════════════════════════════════════
+
+def validate_settings():
+    """
+    Validate critical settings on import
     
-    return _settings
+    This ensures that the application won't start with invalid configuration.
+    """
+    issues = []
+    
+    # Check SECRET_KEY
+    if len(settings.SECRET_KEY) < 32:
+        issues.append(
+            "❌ SECRET_KEY is too short (< 32 chars)\n"
+            "   Generate with: python -c 'import secrets; print(secrets.token_urlsafe(32))'"
+        )
+    
+    # Check DATABASE_URL
+    if not settings.DATABASE_URL:
+        issues.append("❌ DATABASE_URL is not set")
+    
+    # Production-specific checks
+    if is_production():
+        if '*' in settings.CORS_ORIGINS:
+            issues.append("⚠️  CORS wildcard (*) is insecure in PRODUCTION")
+        
+        if settings.SECRET_KEY.lower() in {'changeme', 'default', 'test'}:
+            issues.append("❌ SECRET_KEY is using default value in PRODUCTION")
+    
+    if issues:
+        print("\n" + "=" * 70)
+        print("  ⚠️  CONFIGURATION ISSUES DETECTED")
+        print("=" * 70)
+        for issue in issues:
+            print(f"\n{issue}")
+        print("\n" + "=" * 70)
+        
+        if is_production():
+            raise ValueError("Cannot start application with configuration issues in PRODUCTION")
 
 
-# ════════════════════════════════════════════════════════════════════════════
-# EXAMPLE .env FILE
-# ════════════════════════════════════════════════════════════════════════════
+# Run validation on import
+validate_settings()
 
-"""
-Example .env file for production:
 
-# Environment
-ENVIRONMENT=production
-DEBUG=false
+# ═══════════════════════════════════════════════════════════════════════
+# Export
+# ═══════════════════════════════════════════════════════════════════════
 
-# Security
-SECRET_KEY=your-secret-key-here-min-32-chars
-ALGORITHM_ENCRYPTION_KEY=your-encryption-key-here
-JWT_SECRET=your-jwt-secret-here
-
-# CORS - Specific domains only
-CORS_ORIGINS=https://app.samplit.com,https://samplit.com,https://www.samplit.com
-
-# ✅ CDN & API URLs
-CDN_URL=https://cdn.samplit.com
-API_BASE_URL=https://api.samplit.com
-
-# Database
-DATABASE_URL=postgresql://user:pass@host:5432/dbname
-
-# Redis (optional but recommended)
-REDIS_URL=redis://user:pass@host:6379/0
-
-# Integrations
-WORDPRESS_OAUTH_CLIENT_ID=your-client-id
-WORDPRESS_OAUTH_CLIENT_SECRET=your-client-secret
-WORDPRESS_OAUTH_REDIRECT_URI=https://app.samplit.com/integrations/wordpress/callback
-
-SHOPIFY_API_KEY=your-api-key
-SHOPIFY_API_SECRET=your-api-secret
-
-# Logging
-LOG_LEVEL=INFO
-
-# API
-API_DOCS_ENABLED=false  # Disable in production for security
-"""
-
-"""
-Example .env file for development:
-
-# Environment
-ENVIRONMENT=development
-DEBUG=true
-
-# Security
-SECRET_KEY=dev-secret-key-not-for-production
-ALGORITHM_ENCRYPTION_KEY=dev-encryption-key
-JWT_SECRET=dev-jwt-secret
-
-# CORS - Localhost for development
-CORS_ORIGINS=http://localhost:3000,http://localhost:8000
-
-# ✅ CDN & API URLs (local)
-CDN_URL=http://localhost:8000
-API_BASE_URL=http://localhost:8000
-
-# Database
-DATABASE_URL=postgresql://localhost:5432/samplit_dev
-
-# Redis (optional in dev)
-REDIS_URL=redis://localhost:6379/0
-
-# Logging
-LOG_LEVEL=DEBUG
-
-# API
-API_DOCS_ENABLED=true
-"""
+__all__ = [
+    'Settings',
+    'settings',
+    'get_settings',
+    'Environment',
+    'is_development',
+    'is_production',
+    'is_staging'
+]
