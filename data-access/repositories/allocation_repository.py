@@ -1,28 +1,32 @@
-# data-access/repositories/allocation_repository.py
+# data-access/repositories/assignment_repository.py
+# ✅ RENAMED: allocation_repository.py → assignment_repository.py
+# ✅ REASON: Table is named 'assignments', should match repository name
 
 from typing import Optional, Dict, Any, List
 from .base_repository import BaseRepository
 import json
 from datetime import datetime, timezone
 
-class AllocationRepository(BaseRepository):
+class AssignmentRepository(BaseRepository):
     """
     Repository for user assignments
     
+    Manages the assignments table which tracks which variant
+    each user was assigned to in an experiment.
     """
     
-    async def get_allocation(
+    async def get_assignment(
         self, 
         experiment_id: str, 
         user_identifier: str
     ) -> Optional[Dict[str, Any]]:
-        """Get existing allocation for user"""
+        """Get existing assignment for user"""
         async with self.db.acquire() as conn:
             row = await conn.fetchrow(
                 """
                 SELECT 
                     id, experiment_id, variant_id, user_id as user_identifier,
-                    session_id, context, assigned_at as allocated_at, 
+                    session_id, context, assigned_at, 
                     converted_at, conversion_value, metadata
                 FROM assignments 
                 WHERE experiment_id = $1 AND user_id = $2
@@ -33,20 +37,20 @@ class AllocationRepository(BaseRepository):
         if not row:
             return None
         
-        allocation = dict(row)
+        assignment = dict(row)
         
         # Parse JSON fields
-        if allocation.get('context'):
-            if isinstance(allocation['context'], str):
-                allocation['context'] = json.loads(allocation['context'])
+        if assignment.get('context'):
+            if isinstance(assignment['context'], str):
+                assignment['context'] = json.loads(assignment['context'])
         
-        if allocation.get('metadata'):
-            if isinstance(allocation['metadata'], str):
-                allocation['metadata'] = json.loads(allocation['metadata'])
+        if assignment.get('metadata'):
+            if isinstance(assignment['metadata'], str):
+                assignment['metadata'] = json.loads(assignment['metadata'])
         
-        return allocation
+        return assignment
     
-    async def create_allocation(
+    async def create_assignment(
         self,
         experiment_id: str,
         variant_id: str,
@@ -54,9 +58,9 @@ class AllocationRepository(BaseRepository):
         session_id: Optional[str] = None,
         context: Optional[Dict[str, Any]] = None
     ) -> str:
-        """Create new allocation"""
+        """Create new assignment"""
         async with self.db.acquire() as conn:
-            allocation_id = await conn.fetchval(
+            assignment_id = await conn.fetchval(
                 """
                 INSERT INTO assignments 
                 (experiment_id, variant_id, user_id, session_id, context)
@@ -70,15 +74,15 @@ class AllocationRepository(BaseRepository):
                 json.dumps(context or {})
             )
         
-        return str(allocation_id)
+        return str(assignment_id)
     
     async def record_conversion(
         self,
-        allocation_id: str,
+        assignment_id: str,
         conversion_value: float = 1.0,
         metadata: Optional[Dict[str, Any]] = None
     ) -> bool:
-        """Record conversion for allocation"""
+        """Record conversion for assignment"""
         async with self.db.acquire() as conn:
             result = await conn.execute(
                 """
@@ -89,26 +93,26 @@ class AllocationRepository(BaseRepository):
                     metadata = COALESCE(metadata, '{}'::jsonb) || $3::jsonb
                 WHERE id = $1 AND converted_at IS NULL
                 """,
-                allocation_id,
+                assignment_id,
                 conversion_value,
                 json.dumps(metadata or {})
             )
         
         return result == 'UPDATE 1'
     
-    async def get_experiment_allocations(
+    async def get_experiment_assignments(
         self,
         experiment_id: str,
         limit: int = 100,
         offset: int = 0
     ) -> List[Dict[str, Any]]:
-        """Get recent allocations for experiment"""
+        """Get recent assignments for experiment"""
         async with self.db.acquire() as conn:
             rows = await conn.fetch(
                 """
                 SELECT 
                     a.id, a.variant_id, a.user_id as user_identifier,
-                    a.assigned_at as allocated_at, a.converted_at, a.conversion_value,
+                    a.assigned_at, a.converted_at, a.conversion_value,
                     v.name as variant_name
                 FROM assignments a
                 LEFT JOIN variants v ON a.variant_id = v.id
@@ -132,7 +136,7 @@ class AllocationRepository(BaseRepository):
                 """
                 SELECT 
                     DATE_TRUNC('hour', assigned_at) as hour,
-                    COUNT(*) as allocations,
+                    COUNT(*) as assignments,
                     COUNT(converted_at) as conversions,
                     CASE 
                         WHEN COUNT(*) > 0 
@@ -152,7 +156,7 @@ class AllocationRepository(BaseRepository):
         return [dict(row) for row in rows]
     
     async def find_by_id(self, id: str) -> Optional[Dict[str, Any]]:
-        """Get allocation by ID"""
+        """Get assignment by ID"""
         async with self.db.acquire() as conn:
             row = await conn.fetchrow(
                 "SELECT * FROM assignments WHERE id = $1",
@@ -163,7 +167,7 @@ class AllocationRepository(BaseRepository):
     
     async def create(self, data: Dict[str, Any]) -> str:
         """Generic create (for base class)"""
-        return await self.create_allocation(
+        return await self.create_assignment(
             experiment_id=data['experiment_id'],
             variant_id=data['variant_id'],
             user_identifier=data['user_identifier'],
@@ -172,10 +176,10 @@ class AllocationRepository(BaseRepository):
         )
     
     async def update(self, id: str, data: Dict[str, Any]) -> bool:
-        """Update allocation"""
+        """Update assignment"""
         if 'conversion_value' in data:
             return await self.record_conversion(
-                allocation_id=id,
+                assignment_id=id,
                 conversion_value=data['conversion_value'],
                 metadata=data.get('metadata')
             )
