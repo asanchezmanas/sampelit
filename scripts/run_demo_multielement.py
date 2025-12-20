@@ -1,5 +1,7 @@
 # scripts/run_demo_multielement.py
+# ✅ FIXED: Corrected imports from config.database and orchestration.repositories
 
+#!/usr/bin/env python3
 """
 Script para ejecutar demo completo de experimentos multi-elemento FACTORIAL.
 
@@ -33,8 +35,9 @@ from pathlib import Path
 # Add parent directory to path to import from orchestration
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from config.database import DatabaseManager
-from orchestration.repositories.experiment_repository import ExperimentRepository
+# ✅ FIXED: Corrected imports
+from data_access.database import DatabaseManager
+from data_access.repositories.experiment_repository import ExperimentRepository
 from orchestration.services.multi_element_service import (
     create_multi_element_experiment,
     allocate_user_multi_element,
@@ -156,7 +159,7 @@ class MultiElementDemo:
         
         return results
     
-    def simulate_with_samplit_factorial(self):
+    async def simulate_with_samplit_factorial(self):
         """
         Simula enfoque de Samplit con Thompson Sampling en modo FACTORIAL.
         
@@ -169,121 +172,122 @@ class MultiElementDemo:
         
         # Inicializar base de datos
         db = DatabaseManager()
-        db.ensure_schema()
+        await db.initialize()
         
-        repo = ExperimentRepository(db.get_session())
-        
-        # Crear experimento multi-elemento
-        print(f"\n🎯 Creando experimento multi-elemento...")
-        
-        elements_config = [
-            {
-                'name': name,
-                'variants': data['variants']
-            }
-            for name, data in self.metadata['elements'].items()
-        ]
-        
-        experiment = create_multi_element_experiment(
-            repo=repo,
-            name="Demo Multi-Element Factorial",
-            elements=elements_config,
-            combination_mode='factorial'  # MODO FACTORIAL
-        )
-        
-        print(f"  ✅ Experimento creado: ID {experiment.id}")
-        print(f"  Modo: FACTORIAL")
-        print(f"  Total combinaciones: {len(experiment.combinations)}")
-        
-        # Simular visitantes
-        print(f"\n🔄 Procesando {self.n_visitors:,} visitantes...")
-        print(f"  Thompson Sampling aprenderá la mejor combinación...")
-        
-        combination_allocations = {i: 0 for i in range(self.n_combinations)}
-        combination_conversions = {i: 0 for i in range(self.n_combinations)}
-        
-        # Procesar visitantes en batches (para mostrar progreso)
-        batch_size = 1000
-        for batch_start in range(0, self.n_visitors, batch_size):
-            batch_end = min(batch_start + batch_size, self.n_visitors)
+        try:
+            repo = ExperimentRepository(db.pool)
             
-            for visitor_idx in range(batch_start, batch_end):
-                user_id = f"demo_user_{visitor_idx}"
+            # Crear experimento multi-elemento
+            print(f"\n🎯 Creando experimento multi-elemento...")
+            
+            elements_config = [
+                {
+                    'name': name,
+                    'variants': data['variants']
+                }
+                for name, data in self.metadata['elements'].items()
+            ]
+            
+            experiment = await create_multi_element_experiment(
+                repo=repo,
+                name="Demo Multi-Element Factorial",
+                elements=elements_config,
+                combination_mode='factorial'  # MODO FACTORIAL
+            )
+            
+            print(f"  ✅ Experimento creado: ID {experiment.id}")
+            print(f"  Modo: FACTORIAL")
+            print(f"  Total combinaciones: {len(experiment.combinations)}")
+            
+            # Simular visitantes
+            print(f"\n🔄 Procesando {self.n_visitors:,} visitantes...")
+            print(f"  Thompson Sampling aprenderá la mejor combinación...")
+            
+            combination_allocations = {i: 0 for i in range(self.n_combinations)}
+            combination_conversions = {i: 0 for i in range(self.n_combinations)}
+            
+            # Procesar visitantes en batches (para mostrar progreso)
+            batch_size = 1000
+            for batch_start in range(0, self.n_visitors, batch_size):
+                batch_end = min(batch_start + batch_size, self.n_visitors)
                 
-                # Asignar combinación usando Thompson Sampling
-                result = allocate_user_multi_element(
-                    repo=repo,
-                    experiment_id=experiment.id,
-                    user_id=user_id
-                )
-                
-                combination_id = result['combination_id']
-                combination_allocations[combination_id] += 1
-                
-                # Verificar si hubo conversión (desde la matriz)
-                converted = bool(self.matrix.iloc[visitor_idx, combination_id])
-                
-                if converted:
-                    # Registrar conversión
-                    record_conversion_multi_element(
+                for visitor_idx in range(batch_start, batch_end):
+                    user_id = f"demo_user_{visitor_idx}"
+                    
+                    # Asignar combinación usando Thompson Sampling
+                    result = await allocate_user_multi_element(
                         repo=repo,
                         experiment_id=experiment.id,
-                        user_id=user_id,
-                        combination_id=combination_id
+                        user_id=user_id
                     )
-                    combination_conversions[combination_id] += 1
+                    
+                    combination_id = result['combination_id']
+                    combination_allocations[combination_id] += 1
+                    
+                    # Verificar si hubo conversión (desde la matriz)
+                    converted = bool(self.matrix.iloc[visitor_idx, combination_id])
+                    
+                    if converted:
+                        # Registrar conversión
+                        await record_conversion_multi_element(
+                            repo=repo,
+                            experiment_id=experiment.id,
+                            user_id=user_id,
+                            combination_id=combination_id
+                        )
+                        combination_conversions[combination_id] += 1
+                
+                # Mostrar progreso
+                if (batch_end % 2000) == 0 or batch_end == self.n_visitors:
+                    progress = (batch_end / self.n_visitors) * 100
+                    total_conv = sum(combination_conversions.values())
+                    print(f"  Progreso: {batch_end:,}/{self.n_visitors:,} ({progress:.0f}%) "
+                          f"- Conversiones: {total_conv:,}")
             
-            # Mostrar progreso
-            if (batch_end % 2000) == 0 or batch_end == self.n_visitors:
-                progress = (batch_end / self.n_visitors) * 100
-                total_conv = sum(combination_conversions.values())
-                print(f"  Progreso: {batch_end:,}/{self.n_visitors:,} ({progress:.0f}%) "
-                      f"- Conversiones: {total_conv:,}")
-        
-        # Calcular estadísticas finales
-        total_conversions = sum(combination_conversions.values())
-        
-        combination_stats = {}
-        for idx in range(self.n_combinations):
-            visitors = combination_allocations[idx]
-            conversions = combination_conversions[idx]
-            conversion_rate = conversions / visitors if visitors > 0 else 0
-            traffic_pct = (visitors / self.n_visitors) * 100
+            # Calcular estadísticas finales
+            total_conversions = sum(combination_conversions.values())
             
-            combination_stats[idx] = {
-                'visitors': visitors,
-                'conversions': conversions,
-                'conversion_rate': conversion_rate,
-                'traffic_percentage': traffic_pct
+            combination_stats = {}
+            for idx in range(self.n_combinations):
+                visitors = combination_allocations[idx]
+                conversions = combination_conversions[idx]
+                conversion_rate = conversions / visitors if visitors > 0 else 0
+                traffic_pct = (visitors / self.n_visitors) * 100
+                
+                combination_stats[idx] = {
+                    'visitors': visitors,
+                    'conversions': conversions,
+                    'conversion_rate': conversion_rate,
+                    'traffic_percentage': traffic_pct
+                }
+            
+            results = {
+                'approach': 'samplit_factorial_thompson_sampling',
+                'experiment_id': experiment.id,
+                'total_visitors': self.n_visitors,
+                'total_conversions': total_conversions,
+                'overall_conversion_rate': total_conversions / self.n_visitors,
+                'combination_stats': combination_stats
             }
-        
-        results = {
-            'approach': 'samplit_factorial_thompson_sampling',
-            'experiment_id': experiment.id,
-            'total_visitors': self.n_visitors,
-            'total_conversions': total_conversions,
-            'overall_conversion_rate': total_conversions / self.n_visitors,
-            'combination_stats': combination_stats
-        }
-        
-        # Encontrar combinación ganadora (la que más conversiones generó)
-        winner_id = max(combination_conversions.items(), key=lambda x: x[1])[0]
-        winner_stats = combination_stats[winner_id]
-        
-        print(f"\n✅ Resultados Samplit:")
-        print(f"  Total conversiones: {total_conversions:,}")
-        print(f"  CR promedio: {results['overall_conversion_rate']:.2%}")
-        print(f"\n🏆 Combinación ganadora detectada:")
-        print(f"  ID: {winner_id}")
-        print(f"  Elementos: {self.metadata['combinations'][winner_id]['element_values']}")
-        print(f"  Tráfico recibido: {winner_stats['traffic_percentage']:.1f}%")
-        print(f"  Conversiones: {winner_stats['conversions']:,}")
-        print(f"  CR: {winner_stats['conversion_rate']:.1%}")
-        
-        # Cleanup
-        db.close()
-        
-        return results
+            
+            # Encontrar combinación ganadora (la que más conversiones generó)
+            winner_id = max(combination_conversions.items(), key=lambda x: x[1])[0]
+            winner_stats = combination_stats[winner_id]
+            
+            print(f"\n✅ Resultados Samplit:")
+            print(f"  Total conversiones: {total_conversions:,}")
+            print(f"  CR promedio: {results['overall_conversion_rate']:.2%}")
+            print(f"\n🏆 Combinación ganadora detectada:")
+            print(f"  ID: {winner_id}")
+            print(f"  Elementos: {self.metadata['combinations'][winner_id]['element_values']}")
+            print(f"  Tráfico recibido: {winner_stats['traffic_percentage']:.1f}%")
+            print(f"  Conversiones: {winner_stats['conversions']:,}")
+            print(f"  CR: {winner_stats['conversion_rate']:.1%}")
+            
+            return results
+            
+        finally:
+            await db.close()
     
     def compare_results(self, traditional_results, samplit_results):
         """
@@ -352,7 +356,7 @@ class MultiElementDemo:
         
         print(f"\n💾 Resultados guardados en: {output_file}")
     
-    def run(self):
+    async def run(self):
         """Ejecuta el demo completo."""
         print("\n" + "=" * 70)
         print("  DEMO: MULTI-ELEMENTO FACTORIAL")
@@ -366,7 +370,7 @@ class MultiElementDemo:
             traditional_results = self.simulate_traditional_split()
             
             # Simular con Samplit
-            samplit_results = self.simulate_with_samplit_factorial()
+            samplit_results = await self.simulate_with_samplit_factorial()
             
             # Comparar
             self.compare_results(traditional_results, samplit_results)
@@ -387,8 +391,9 @@ class MultiElementDemo:
 
 def main():
     """Función principal."""
+    import asyncio
     demo = MultiElementDemo()
-    return demo.run()
+    return asyncio.run(demo.run())
 
 
 if __name__ == '__main__':
