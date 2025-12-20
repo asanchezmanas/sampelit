@@ -37,6 +37,7 @@ class DatabaseManager:
                 )
         
         # Create pool
+        # ✅ FIXED: Removed server_settings - not supported by asyncpg
         self.pool = await asyncpg.create_pool(
             self.database_url,
             min_size=2,
@@ -44,11 +45,7 @@ class DatabaseManager:
             max_queries=50000,
             max_inactive_connection_lifetime=300,
             command_timeout=60,
-            ssl='require' if 'supabase.co' in self.database_url else None,
-            server_settings={
-                # Use service role to bypass RLS for backend operations
-                'request.jwt.claims': '{"role":"service_role"}',
-            }
+            ssl='require' if 'supabase.co' in self.database_url else None
         )
         
         print("✅ Database pool initialized")
