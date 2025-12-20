@@ -1,305 +1,566 @@
-# public-api/routers/audit.py
+"""
+API ENDPOINTS - Sistema de Auditoría
 
-from fastapi import APIRouter, HTTPException, Query
-from pydantic import BaseModel
-from typing import List, Optional
-import pandas as pd
-import json
+Endpoints públicos para que los clientes auditen sus experimentos.
 
-router = APIRouter()
+Seguridad:
+- Solo pueden ver sus propios experimentos
+- No ven parámetros internos del algoritmo
+- Incluye verificación de integridad
+"""
+
+from fastapi import APIRouter, Depends, HTTPException, Query
+from typing import Optional, List
+from datetime import datetime
+from uuid import UUID
+from pydantic import BaseModel, Field
+
+from database.connection import DatabaseManager
+from services.audit_service import AuditService
+from auth.dependencies import get_current_user, get_db_manager
 
 
-class DecisionRecord(BaseModel):
-    """Registro de una decisión"""
+router = APIRouter(prefix="/api/v1/audit", tags=["Audit"])
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# MODELOS DE RESPUESTA
+# ═══════════════════════════════════════════════════════════════════════════
+
+class AuditRecord(BaseModel):
+    """
+    Un registro individual del audit trail.
+    
+    Qué incluye:
+    - Decisión tomada por el algoritmo
+    - Timestamp de la decisión
+    - Resultado observado (si ya se conoce)
+    - Prueba de integridad (hash)
+    
+    Qué NO incluye:
+    - Parámetros internos Thompson Sampling
+    - Probabilidades calculadas
+    - Estado interno del algoritmo
+    """
+    id: str
     visitor_id: str
-    visitor_index: int
-    timestamp: str
-    algorithm_decision: str
-    matrix_result: int
-    conversion_outcome: str
+    selected_variant_id: str
+    decision_timestamp: datetime
+    conversion_observed: Optional[bool]
+    conversion_timestamp: Optional[datetime]
+    conversion_value: Optional[float]
+    decision_hash: str  # Para verificación de integridad
+    sequence_number: int  # Orden en la cadena
+    algorithm_version: str  # Versión pública del algoritmo
+    decision_to_conversion_seconds: Optional[float]
     
-    # Proof
-    proof_algorithm_decided_first: bool
-    proof_matrix_consulted_after: bool
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "id": "a1b2c3d4-...",
+                "visitor_id": "user_12345",
+                "selected_variant_id": "variant_abc...",
+                "decision_timestamp": "2024-01-15T10:30:00Z",
+                "conversion_observed": True,
+                "conversion_timestamp": "2024-01-15T10:31:23Z",
+                "conversion_value": 49.99,
+                "decision_hash": "a4f2b9c1...",
+                "sequence_number": 1523,
+                "algorithm_version": "adaptive-thompson-v2.1",
+                "decision_to_conversion_seconds": 83.0
+            }
+        }
 
 
-class VerificationResult(BaseModel):
-    """Resultado de verificación"""
-    visitor_id: str
-    verified: bool
-    decision_details: DecisionRecord
-    matrix_verification: dict
-    transparency_proof: dict
-
-
-class TrafficDistribution(BaseModel):
-    """Distribución de tráfico en tiempo real"""
-    variant: str
-    assignments: int
-    conversions: int
-    conversion_rate: float
-    percentage_of_traffic: float
-
-
-@router.get("/verify-decision/{visitor_id}", response_model=VerificationResult)
-async def verify_single_decision(visitor_id: str):
+class AuditStats(BaseModel):
     """
-    Verificar una decisión específica
-    
-    Muestra:
-    1. Qué decidió el algoritmo
-    2. Qué resultado dio la matriz
-    3. Prueba de que no hubo trampa
+    Estadísticas agregadas del audit trail.
     """
+    total_decisions: int = Field(description="Total de decisiones registradas")
+    conversions: int = Field(description="Total de conversiones observadas")
+    pending_conversions: int = Field(
+        description="Decisiones sin resultado aún"
+    )
+    conversion_rate: Optional[float] = Field(
+        description="Tasa de conversión (%)"
+    )
+    avg_decision_to_conversion_seconds: Optional[float] = Field(
+        description="Tiempo promedio de decisión a conversión (segundos)"
+    )
+    chain_integrity: bool = Field(
+        description="Si la cadena de hashes es válida"
+    )
+    earliest_decision: Optional[datetime]
+    latest_decision: Optional[datetime]
+
+
+class IntegrityCheck(BaseModel):
+    """
+    Resultado de verificación de integridad.
+    """
+    is_valid: bool = Field(
+        description="Si la cadena de auditoría es válida"
+    )
+    total_checked: int = Field(
+        description="Total de registros verificados"
+    )
+    invalid_records: List[dict] = Field(
+        description="Registros con problemas de integridad"
+    )
     
-    try:
-        # Cargar decisiones
-        decisions_df = pd.read_csv('audit_decisions.csv')
-        
-        # Buscar visitante
-        decision_row = decisions_df[decisions_df['visitor_id'] == visitor_id]
-        
-        if decision_row.empty:
-            raise HTTPException(404, f"Visitor {visitor_id} not found in audit log")
-        
-        decision = decision_row.iloc[0]
-        
-        # Cargar matriz original
-        matrix_df = pd.read_csv('demo_single_element_matrix.csv', index_col='visitor_id')
-        
-        visitor_idx = int(decision['visitor_index'])
-        variant = decision['algorithm_decision']
-        
-        # Verificar contra matriz
-        matrix_value = int(matrix_df.iloc[visitor_idx][variant])
-        
-        # ¿Coincide?
-        matches = (matrix_value == int(decision['matrix_result']))
-        
-        decision_record = DecisionRecord(
-            visitor_id=visitor_id,
-            visitor_index=visitor_idx,
-            timestamp=decision['timestamp'],
-            algorithm_decision=variant,
-            matrix_result=int(decision['matrix_result']),
-            conversion_outcome=decision['conversion_outcome'],
-            proof_algorithm_decided_first=True,  # Logged before lookup
-            proof_matrix_consulted_after=True    # Then checked
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "is_valid": True,
+                "total_checked": 1523,
+                "invalid_records": []
+            }
+        }
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# ENDPOINTS
+# ═══════════════════════════════════════════════════════════════════════════
+
+@router.get(
+    "/experiments/{experiment_id}/trail",
+    response_model=List[AuditRecord],
+    summary="Get Audit Trail",
+    description="""
+    Obtiene el audit trail completo de un experimento.
+    
+    **Qué puedes ver:**
+    - Todas las decisiones que tomó el algoritmo
+    - Timestamps exactos de cada decisión
+    - Resultados observados (conversiones)
+    - Pruebas de integridad (hashes)
+    
+    **Qué NO puedes ver:**
+    - Cómo funciona el algoritmo internamente
+    - Parámetros Thompson Sampling (alpha, beta)
+    - Probabilidades calculadas
+    
+    **Para auditoría:**
+    - Verifica que decision_timestamp < conversion_timestamp (siempre)
+    - Verifica que sequence_number es continuo (sin huecos)
+    - Verifica integridad con /integrity endpoint
+    
+    **Límites:**
+    - Por defecto: últimos 1000 registros
+    - Puedes filtrar por fechas
+    - Para más registros, usa el endpoint de exportación
+    """
+)
+async def get_audit_trail(
+    experiment_id: UUID,
+    start_date: Optional[datetime] = Query(
+        None,
+        description="Fecha de inicio (ISO 8601)"
+    ),
+    end_date: Optional[datetime] = Query(
+        None,
+        description="Fecha de fin (ISO 8601)"
+    ),
+    limit: int = Query(
+        1000,
+        ge=1,
+        le=10000,
+        description="Número máximo de registros"
+    ),
+    db: DatabaseManager = Depends(get_db_manager),
+    current_user = Depends(get_current_user)
+):
+    """
+    Obtiene el audit trail de un experimento.
+    """
+    # Verificar que el experimento pertenece al usuario
+    _verify_experiment_ownership(db, experiment_id, current_user['id'])
+    
+    audit_service = AuditService(db)
+    
+    records = audit_service.get_audit_trail(
+        experiment_id=experiment_id,
+        start_date=start_date,
+        end_date=end_date,
+        limit=limit
+    )
+    
+    return records
+
+
+@router.get(
+    "/experiments/{experiment_id}/stats",
+    response_model=AuditStats,
+    summary="Get Audit Statistics",
+    description="""
+    Obtiene estadísticas agregadas del audit trail.
+    
+    Incluye:
+    - Total de decisiones y conversiones
+    - Tasa de conversión
+    - Tiempo promedio a conversión
+    - Verificación de integridad de la cadena
+    
+    Útil para:
+    - Dashboards de resumen
+    - Verificación rápida de estado
+    - Monitoreo de integridad
+    """
+)
+async def get_audit_stats(
+    experiment_id: UUID,
+    db: DatabaseManager = Depends(get_db_manager),
+    current_user = Depends(get_current_user)
+):
+    """
+    Obtiene estadísticas de auditoría de un experimento.
+    """
+    _verify_experiment_ownership(db, experiment_id, current_user['id'])
+    
+    audit_service = AuditService(db)
+    stats = audit_service.get_audit_stats(experiment_id)
+    
+    return stats
+
+
+@router.get(
+    "/experiments/{experiment_id}/integrity",
+    response_model=IntegrityCheck,
+    summary="Verify Chain Integrity",
+    description="""
+    Verifica la integridad de la cadena de auditoría.
+    
+    **Cómo funciona:**
+    El sistema usa una "blockchain" donde cada registro incluye el hash
+    del registro anterior. Si alguien modifica un registro histórico,
+    todos los hashes subsecuentes dejan de coincidir.
+    
+    **Qué verifica:**
+    - Que cada registro tiene el hash correcto
+    - Que la cadena es continua (sin registros eliminados)
+    - Que no hay alteraciones en datos históricos
+    
+    **Respuesta:**
+    - is_valid: true si todo está bien
+    - invalid_records: lista de registros con problemas (vacía si is_valid=true)
+    
+    **Nota:** Este check es muy rápido porque la DB tiene función nativa.
+    """
+)
+async def verify_integrity(
+    experiment_id: UUID,
+    start_sequence: int = Query(
+        1,
+        description="Número de secuencia inicial"
+    ),
+    end_sequence: Optional[int] = Query(
+        None,
+        description="Número de secuencia final (null = hasta el final)"
+    ),
+    db: DatabaseManager = Depends(get_db_manager),
+    current_user = Depends(get_current_user)
+):
+    """
+    Verifica integridad de la cadena de auditoría.
+    """
+    _verify_experiment_ownership(db, experiment_id, current_user['id'])
+    
+    audit_service = AuditService(db)
+    integrity = audit_service.verify_chain_integrity(
+        experiment_id=experiment_id,
+        start_sequence=start_sequence,
+        end_sequence=end_sequence
+    )
+    
+    return integrity
+
+
+@router.get(
+    "/experiments/{experiment_id}/export",
+    summary="Export Audit Trail (CSV)",
+    description="""
+    Exporta el audit trail completo a CSV.
+    
+    **Uso:**
+    Para auditoría externa o análisis detallado.
+    
+    **Contenido:**
+    - Todos los registros de auditoría
+    - Formato CSV estándar
+    - Incluye hashes para verificación
+    
+    **Límite:**
+    - Hasta 1,000,000 de registros
+    - Para experimentos más grandes, contactar soporte
+    
+    **Privacidad:**
+    - NO incluye IPs o user agents
+    - Solo incluye visitor_id (ya hasheado por el cliente)
+    """
+)
+async def export_audit_trail(
+    experiment_id: UUID,
+    db: DatabaseManager = Depends(get_db_manager),
+    current_user = Depends(get_current_user)
+):
+    """
+    Exporta el audit trail a CSV.
+    """
+    from fastapi.responses import FileResponse
+    import tempfile
+    import os
+    
+    _verify_experiment_ownership(db, experiment_id, current_user['id'])
+    
+    audit_service = AuditService(db)
+    
+    # Crear archivo temporal
+    temp_file = tempfile.NamedTemporaryFile(
+        mode='w',
+        suffix='.csv',
+        delete=False
+    )
+    temp_file.close()
+    
+    # Exportar
+    count = audit_service.export_audit_trail_csv(
+        experiment_id=experiment_id,
+        filepath=temp_file.name
+    )
+    
+    if count == 0:
+        os.unlink(temp_file.name)
+        raise HTTPException(
+            status_code=404,
+            detail="No audit records found"
         )
+    
+    # Retornar archivo
+    return FileResponse(
+        path=temp_file.name,
+        filename=f"audit_trail_{experiment_id}.csv",
+        media_type="text/csv",
+        background=lambda: os.unlink(temp_file.name)  # Borrar después
+    )
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# ENDPOINT ESPECIAL: Prueba de "No Trampa"
+# ═══════════════════════════════════════════════════════════════════════════
+
+@router.get(
+    "/experiments/{experiment_id}/proof-of-fairness",
+    summary="Proof of Fairness",
+    description="""
+    Genera una prueba de que el algoritmo NO hace trampa.
+    
+    **Qué verifica:**
+    1. Todas las decisiones fueron registradas ANTES de ver conversiones
+    2. No hay registros con decision_timestamp >= conversion_timestamp
+    3. La cadena de hashes es válida (sin alteraciones)
+    4. No hay decisiones duplicadas
+    5. Los sequence_numbers son continuos
+    
+    **Para qué sirve:**
+    - Demostrar transparencia a clientes
+    - Auditoría regulatoria
+    - Compliance (SOC2, ISO)
+    
+    **Respuesta:**
+    - is_fair: true si pasa todas las verificaciones
+    - checks: detalles de cada verificación
+    - evidence: datos que soportan la conclusión
+    """
+)
+async def proof_of_fairness(
+    experiment_id: UUID,
+    db: DatabaseManager = Depends(get_db_manager),
+    current_user = Depends(get_current_user)
+):
+    """
+    Genera prueba de que el algoritmo no hace trampa.
+    """
+    _verify_experiment_ownership(db, experiment_id, current_user['id'])
+    
+    audit_service = AuditService(db)
+    
+    # 1. Verificar integridad de cadena
+    integrity = audit_service.verify_chain_integrity(experiment_id)
+    
+    # 2. Verificar timestamps
+    with db.get_cursor() as cursor:
+        cursor.execute("""
+            SELECT COUNT(*)
+            FROM algorithm_audit_trail
+            WHERE experiment_id = %s
+            AND conversion_timestamp IS NOT NULL
+            AND decision_timestamp >= conversion_timestamp
+        """, (str(experiment_id),))
         
-        matrix_verification = {
-            'matrix_row': visitor_idx,
-            'matrix_column': variant,
-            'matrix_value': matrix_value,
-            'matches_logged_result': matches,
-            'verification': 'PASS' if matches else 'FAIL'
+        invalid_timestamps = cursor.fetchone()[0]
+        
+        # 3. Verificar secuencia continua
+        cursor.execute("""
+            WITH sequences AS (
+                SELECT 
+                    sequence_number,
+                    sequence_number - LAG(sequence_number) 
+                        OVER (ORDER BY sequence_number) as gap
+                FROM algorithm_audit_trail
+                WHERE experiment_id = %s
+            )
+            SELECT COUNT(*)
+            FROM sequences
+            WHERE gap > 1
+        """, (str(experiment_id),))
+        
+        sequence_gaps = cursor.fetchone()[0]
+        
+        # 4. Verificar decisiones duplicadas
+        cursor.execute("""
+            SELECT COUNT(*)
+            FROM (
+                SELECT visitor_id, COUNT(*) as cnt
+                FROM algorithm_audit_trail
+                WHERE experiment_id = %s
+                GROUP BY visitor_id
+                HAVING COUNT(*) > 1
+            ) duplicates
+        """, (str(experiment_id),))
+        
+        duplicate_decisions = cursor.fetchone()[0]
+    
+    # Resultado
+    is_fair = (
+        integrity['is_valid'] and
+        invalid_timestamps == 0 and
+        sequence_gaps == 0 and
+        duplicate_decisions == 0
+    )
+    
+    return {
+        "is_fair": is_fair,
+        "checks": {
+            "chain_integrity": {
+                "passed": integrity['is_valid'],
+                "details": f"Verified {integrity['total_checked']} records"
+            },
+            "timestamp_order": {
+                "passed": invalid_timestamps == 0,
+                "details": f"Found {invalid_timestamps} violations"
+            },
+            "sequence_continuity": {
+                "passed": sequence_gaps == 0,
+                "details": f"Found {sequence_gaps} gaps"
+            },
+            "no_duplicates": {
+                "passed": duplicate_decisions == 0,
+                "details": f"Found {duplicate_decisions} duplicates"
+            }
+        },
+        "evidence": {
+            "total_records": integrity['total_checked'],
+            "algorithm_version": "adaptive-thompson-v2.1",
+            "verification_timestamp": datetime.utcnow().isoformat()
         }
-        
-        transparency_proof = {
-            'decision_timestamp': decision['timestamp'],
-            'decision_logged_first': True,
-            'matrix_is_readonly': True,
-            'no_manipulation_possible': True,
-            'process': [
-                '1. Algorithm chose variant (logged)',
-                '2. Matrix consulted (after decision)',
-                '3. Result recorded (verifiable)'
-            ]
-        }
-        
-        return VerificationResult(
-            visitor_id=visitor_id,
-            verified=matches,
-            decision_details=decision_record,
-            matrix_verification=matrix_verification,
-            transparency_proof=transparency_proof
-        )
-        
-    except FileNotFoundError:
-        raise HTTPException(404, "Audit log not found. Run experiment first.")
-    except Exception as e:
-        raise HTTPException(500, f"Verification failed: {str(e)}")
+    }
 
 
-@router.get("/traffic-distribution", response_model=List[TrafficDistribution])
-async def get_traffic_distribution():
+# ═══════════════════════════════════════════════════════════════════════════
+# UTILIDADES
+# ═══════════════════════════════════════════════════════════════════════════
+
+def _verify_experiment_ownership(
+    db: DatabaseManager,
+    experiment_id: UUID,
+    user_id: str
+):
     """
-    Ver cómo el algoritmo distribuyó el tráfico
-    
-    Demuestra que NO es uniforme - aprendió
+    Verifica que el experimento pertenece al usuario.
     """
-    
-    try:
-        decisions_df = pd.read_csv('audit_decisions.csv')
+    with db.get_cursor() as cursor:
+        cursor.execute("""
+            SELECT user_id
+            FROM experiments
+            WHERE id = %s
+        """, (str(experiment_id),))
         
-        # Agrupar por variante
-        variant_stats = decisions_df.groupby('algorithm_decision').agg({
-            'visitor_id': 'count',
-            'matrix_result': 'sum'
-        }).reset_index()
+        result = cursor.fetchone()
         
-        variant_stats.columns = ['variant', 'assignments', 'conversions']
+        if not result:
+            raise HTTPException(
+                status_code=404,
+                detail="Experiment not found"
+            )
         
-        total_assignments = variant_stats['assignments'].sum()
-        
-        distribution = []
-        for _, row in variant_stats.iterrows():
-            cr = row['conversions'] / row['assignments'] if row['assignments'] > 0 else 0
-            pct = row['assignments'] / total_assignments * 100
-            
-            distribution.append(TrafficDistribution(
-                variant=row['variant'],
-                assignments=int(row['assignments']),
-                conversions=int(row['conversions']),
-                conversion_rate=float(cr),
-                percentage_of_traffic=float(pct)
-            ))
-        
-        # Ordenar por tráfico (mayor primero)
-        distribution.sort(key=lambda x: x.assignments, reverse=True)
-        
-        return distribution
-        
-    except Exception as e:
-        raise HTTPException(500, f"Failed to get distribution: {str(e)}")
+        if result[0] != user_id:
+            raise HTTPException(
+                status_code=403,
+                detail="Not authorized to access this experiment"
+            )
 
 
-@router.get("/random-sample")
-async def get_random_verification_sample(n: int = Query(10, ge=1, le=100)):
-    """
-    Obtener N decisiones aleatorias para verificar
-    
-    Cliente puede spot-check cualquier decisión
-    """
-    
-    try:
-        decisions_df = pd.read_csv('audit_decisions.csv')
-        
-        # Sample aleatorio
-        sample = decisions_df.sample(n=min(n, len(decisions_df)))
-        
-        # Cargar matriz
-        matrix_df = pd.read_csv('demo_single_element_matrix.csv', index_col='visitor_id')
-        
-        verified_sample = []
-        
-        for _, decision in sample.iterrows():
-            visitor_idx = int(decision['visitor_index'])
-            variant = decision['algorithm_decision']
-            logged_result = int(decision['matrix_result'])
-            
-            # Verificar contra matriz
-            matrix_value = int(matrix_df.iloc[visitor_idx][variant])
-            
-            verified_sample.append({
-                'visitor_id': decision['visitor_id'],
-                'algorithm_chose': variant,
-                'logged_result': logged_result,
-                'matrix_value': matrix_value,
-                'verified': (logged_result == matrix_value),
-                'outcome': decision['conversion_outcome']
-            })
-        
-        verification_rate = sum(1 for v in verified_sample if v['verified']) / len(verified_sample)
-        
-        return {
-            'sample_size': len(verified_sample),
-            'verification_rate': verification_rate,
-            'all_verified': verification_rate == 1.0,
-            'sample': verified_sample
-        }
-        
-    except Exception as e:
-        raise HTTPException(500, f"Sampling failed: {str(e)}")
+# ═══════════════════════════════════════════════════════════════════════════
+# DOCUMENTACIÓN ADICIONAL
+# ═══════════════════════════════════════════════════════════════════════════
+
+"""
+CÓMO USAR ESTOS ENDPOINTS
+
+1. Ver audit trail básico:
+   GET /api/v1/audit/experiments/{id}/trail
+
+2. Ver estadísticas:
+   GET /api/v1/audit/experiments/{id}/stats
+
+3. Verificar integridad:
+   GET /api/v1/audit/experiments/{id}/integrity
+
+4. Exportar todo:
+   GET /api/v1/audit/experiments/{id}/export
+
+5. Prueba de fairness (para auditoría):
+   GET /api/v1/audit/experiments/{id}/proof-of-fairness
 
 
-@router.get("/learning-timeline")
-async def get_learning_timeline(interval: int = Query(500, ge=100, le=2000)):
-    """
-    Ver cómo el algoritmo aprendió con el tiempo
-    
-    Muestra que distribución cambió (no fue aleatoria)
-    """
-    
-    try:
-        decisions_df = pd.read_csv('audit_decisions.csv')
-        
-        # Dividir en intervalos
-        decisions_df['interval'] = decisions_df.index // interval
-        
-        timeline = []
-        
-        for interval_num, group in decisions_df.groupby('interval'):
-            variant_dist = group['algorithm_decision'].value_counts()
-            conversions = group['matrix_result'].sum()
-            
-            timeline.append({
-                'interval': int(interval_num),
-                'visitors': f"{interval_num * interval} - {(interval_num + 1) * interval}",
-                'total_assignments': len(group),
-                'conversions': int(conversions),
-                'conversion_rate': float(conversions / len(group)),
-                'distribution': variant_dist.to_dict()
-            })
-        
-        return {
-            'intervals': len(timeline),
-            'interval_size': interval,
-            'timeline': timeline,
-            'observation': 'Notice how distribution changes over time - algorithm learns'
-        }
-        
-    except Exception as e:
-        raise HTTPException(500, f"Timeline failed: {str(e)}")
+EJEMPLOS DE RESPUESTA
 
+1. Audit Trail:
+[
+  {
+    "id": "abc123",
+    "visitor_id": "user_456",
+    "selected_variant_id": "var_789",
+    "decision_timestamp": "2024-01-15T10:30:00Z",
+    "conversion_observed": true,
+    "conversion_timestamp": "2024-01-15T10:31:23Z",
+    "decision_to_conversion_seconds": 83.0
+  }
+]
 
-@router.post("/verify-batch")
-async def verify_batch_decisions(visitor_ids: List[str]):
-    """
-    Verificar múltiples decisiones de una vez
-    """
-    
-    if len(visitor_ids) > 100:
-        raise HTTPException(400, "Maximum 100 visitors per batch")
-    
-    try:
-        decisions_df = pd.read_csv('audit_decisions.csv')
-        matrix_df = pd.read_csv('demo_single_element_matrix.csv', index_col='visitor_id')
-        
-        results = []
-        
-        for visitor_id in visitor_ids:
-            decision_row = decisions_df[decisions_df['visitor_id'] == visitor_id]
-            
-            if not decision_row.empty:
-                decision = decision_row.iloc[0]
-                visitor_idx = int(decision['visitor_index'])
-                variant = decision['algorithm_decision']
-                
-                matrix_value = int(matrix_df.iloc[visitor_idx][variant])
-                logged_value = int(decision['matrix_result'])
-                
-                results.append({
-                    'visitor_id': visitor_id,
-                    'verified': (matrix_value == logged_value),
-                    'algorithm_decision': variant,
-                    'outcome': decision['conversion_outcome']
-                })
-            else:
-                results.append({
-                    'visitor_id': visitor_id,
-                    'verified': False,
-                    'error': 'Not found'
-                })
-        
-        verified_count = sum(1 for r in results if r['verified'])
-        
-        return {
-            'total_checked': len(results),
-            'verified': verified_count,
-            'verification_rate': verified_count / len(results),
-            'results': results
-        }
-        
-    except Exception as e:
-        raise HTTPException(500, f"Batch verification failed: {str(e)}")
+2. Stats:
+{
+  "total_decisions": 10000,
+  "conversions": 350,
+  "conversion_rate": 3.5,
+  "chain_integrity": true
+}
+
+3. Integrity:
+{
+  "is_valid": true,
+  "total_checked": 10000,
+  "invalid_records": []
+}
+
+4. Proof of Fairness:
+{
+  "is_fair": true,
+  "checks": {
+    "chain_integrity": {"passed": true},
+    "timestamp_order": {"passed": true},
+    "sequence_continuity": {"passed": true},
+    "no_duplicates": {"passed": true}
+  }
+}
+"""
