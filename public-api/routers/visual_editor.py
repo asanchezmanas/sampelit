@@ -284,11 +284,72 @@ async def validate_selector(selector_data: SelectorConfig):
             "message": "Selector is valid"
         }
     
-    except ValueError as e:
-        return {
             "valid": False,
             "error": str(e)
         }
+
+
+@router.get("/proxy")
+async def proxy_target_site(url: str):
+    """
+    Title: Visual Editor Proxy
+    
+    Acts as a proxy to load the target site within an iframe.
+    Injects:
+    1. <base> tag so relative assets load
+    2. visual-editor-injector.js to facilitate selection
+    """
+    import httpx
+    from fastapi.responses import HTMLResponse
+    
+    if not url:
+        raise HTTPException(400, "URL is required")
+    
+    # Ensure URL has schema
+    if not url.startswith(('http://', 'https://')):
+        url = 'https://' + url
+        
+    try:
+        async with httpx.AsyncClient(verify=False, follow_redirects=True) as client:
+            resp = await client.get(url)
+            
+            # Basic content type check
+            ct = resp.headers.get("content-type", "").lower()
+            if "text/html" not in ct:
+                return Response(
+                    content=resp.content, 
+                    status_code=resp.status_code, 
+                    media_type=ct
+                )
+
+            html = resp.text
+            
+            # Inject BASE tag for assets
+            base_tag = f'<base href="{url}">'
+            if "<head>" in html:
+                html = html.replace("<head>", f"<head>{base_tag}", 1)
+            else:
+                html = f"{base_tag}{html}"
+                
+            # Inject Editor Script
+            script = """
+            <script src="/static/js/visual-editor-injector.js"></script>
+            <style>
+                .samplit-highlight { outline: 2px dashed #3b82f6 !important; cursor: pointer !important; }
+                .samplit-selected { outline: 2px solid #2563eb !important; }
+            </style>
+            """
+            
+            if "</body>" in html:
+                html = html.replace("</body>", f"{script}</body>", 1)
+            else:
+                html += script
+                
+            return HTMLResponse(content=html)
+            
+    except Exception as e:
+        logger.error(f"Proxy error: {e}")
+        raise HTTPException(502, f"Failed to fetch target URL: {str(e)}")
 
 
 # ============================================================================

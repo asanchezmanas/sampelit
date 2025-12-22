@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Visual Editor | Samplit</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                extend: { colors: { primary: { "50": "#eff6ff", "100": "#dbeafe", "200": "#bfdbfe", "300": "#93c5fd", "400": "#60a5fa", "500": "#3b82f6", "600": "#2563eb", "700": "#1d4ed8", "800": "#1e40af", "900": "#1e3a8a" } } }
+            }
+        }
+    </script>
+
+    <!-- Alpine JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 h-screen flex flex-col overflow-hidden" x-data="visualEditor()">
+
+    <!-- Header -->
+    <header
+        class="h-16 border-b border-gray-200 bg-white flex items-center px-6 justify-between z-20 shadow-sm relative">
+        <div class="flex items-center gap-4">
+            <a href="/dashboard" class="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                <span class="font-medium">Exit</span>
+            </a>
+            <div class="h-6 w-px bg-gray-200 mx-2"></div>
+            <div class="flex items-center gap-2">
+                <input type="text" x-model="url" @keydown.enter="loadUrl()" placeholder="Enter URL (e.g. samplit.com)"
+                    class="w-96 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <button @click="loadUrl()"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+                    Load Site
+                </button>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <button @click="saveExperiment()" :disabled="elements.length === 0"
+                class="px-5 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Save Experiment
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex overflow-hidden">
+        <!-- Iframe Area -->
+        <div class="flex-1 bg-gray-100 relative">
+            <div x-show="!iframeLoaded" class="absolute inset-0 flex items-center justify-center text-gray-400">
+                <div class="text-center">
+                    <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9">
+                        </path>
+                    </svg>
+                    <p>Enter a URL to begin editing</p>
+                </div>
+            </div>
+            <iframe x-ref="siteFrame" id="siteFrame" class="w-full h-full border-none bg-white shadow-inner"
+                sandbox="allow-same-origin allow-scripts allow-forms allow-popups" :src="proxyUrl">
+            </iframe>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="w-96 bg-white border-l border-gray-200 overflow-y-auto z-10 flex flex-col shadow-xl">
+            <div class="p-4 border-b border-gray-100 bg-gray-50">
+                <h2 class="font-semibold text-gray-800">Experiment Settings</h2>
+                <input type="text" x-model="experimentName" placeholder="Experiment Name"
+                    class="mt-2 w-full px-3 py-2 border border-gray-300 rounded text-sm mb-2">
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-4 space-y-6">
+                <!-- Selected Element -->
+                <div x-show="currentSelection" x-transition.opacity>
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-sm font-semibold text-blue-600 uppercase tracking-wider">Selected Element</h3>
+                        <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded font-mono"
+                            x-text="currentSelection?.tagName"></span>
+                    </div>
+
+                    <div class="bg-blue-50 border border-blue-100 rounded-lg p-3 mb-4 text-xs font-mono text-gray-600 break-all select-all"
+                        x-text="currentSelection?.selector"></div>
+
+                    <!-- Variants Editor -->
+                    <div class="space-y-4">
+                        <label class="block text-sm font-medium text-gray-700">Variant A (Original)</label>
+                        <div class="p-3 bg-gray-50 rounded border border-gray-200 text-sm text-gray-500 italic truncate"
+                            x-text="truncate(currentSelection?.innerText, 50)"></div>
+
+                        <label class="block text-sm font-medium text-gray-700 mt-4">Variant B (New Content)</label>
+                        <textarea x-model="variantText" rows="4"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"></textarea>
+
+                        <button @click="addElementToExperiment()"
+                            class="w-full py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+                            Add to Experiment
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Elements List -->
+                <div x-show="!currentSelection && elements.length > 0">
+                    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Tracked Elements</h3>
+                    <ul class="space-y-3">
+                        <template x-for="(el, index) in elements" :key="index">
+                            <li
+                                class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm group hover:border-blue-300 transition-colors">
+                                <div class="flex justify-between items-start">
+                                    <span class="font-medium text-gray-800 text-sm"
+                                        x-text="el.name || 'Element ' + (index+1)"></span>
+                                    <button @click="removeElement(index)" class="text-gray-400 hover:text-red-500">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="text-xs text-gray-500 font-mono mt-1 w-full truncate"
+                                    x-text="el.selector.selector"></div>
+                                <div
+                                    class="mt-2 text-xs text-blue-600 font-medium bg-blue-50 inline-block px-2 py-1 rounded">
+                                    Variant B: <span x-text="truncate(el.variants[0].text, 20)"></span>
+                                </div>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+
+                <!-- Empty State -->
+                <div x-show="!currentSelection && elements.length === 0" class="text-center py-10">
+                    <p class="text-sm text-gray-500">Click an element on the site to create a variant.</p>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        function visualEditor() {
+            return {
+                url: '',
+                proxyUrl: '',
+                iframeLoaded: false,
+                currentSelection: null,
+                variantText: '',
+                elements: [],
+                experimentName: 'New Experiment',
+
+                init() {
+                    window.addEventListener('message', (event) => {
+                        if (event.data.type === 'SAMPLIT_ELEMENT_SELECTED') {
+                            this.currentSelection = event.data.payload;
+                            this.variantText = event.data.payload.innerHTML; // Default to HTML editing
+                        }
+                    });
+                },
+
+                loadUrl() {
+                    if (!this.url) return;
+                    // Ensure protocol
+                    let target = this.url;
+                    if (!target.startsWith('http')) target = 'https://' + target;
+
+                    this.proxyUrl = `/api/v1/visual-editor/proxy?url=${encodeURIComponent(target)}`;
+                    this.iframeLoaded = true;
+                    this.currentSelection = null;
+                },
+
+                addElementToExperiment() {
+                    if (!this.currentSelection) return;
+
+                    this.elements.push({
+                        name: `Element ${this.elements.length + 1}`,
+                        selector: {
+                            selector: this.currentSelection.selector,
+                            type: 'css'
+                        },
+                        element_type: 'other', // Simplified
+                        original_content: { html: this.currentSelection.innerHTML },
+                        variants: [
+                            { html: this.variantText }
+                        ]
+                    });
+
+                    this.currentSelection = null; // Clear selection to show list
+                    this.variantText = '';
+                },
+
+                removeElement(index) {
+                    this.elements.splice(index, 1);
+                },
+
+                async saveExperiment() {
+                    const payload = {
+                        experiment_name: this.experimentName,
+                        page_url: this.url.startsWith('http') ? this.url : 'https://' + this.url,
+                        elements: this.elements,
+                        traffic_allocation: 1.0
+                    };
+
+                    try {
+                        const res = await fetch('/api/v1/visual-editor/save-elements', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        if (res.ok) {
+                            alert('Experiment saved successfully!');
+                            window.location.href = '/dashboard';
+                        } else {
+                            const err = await res.json();
+                            alert('Error saving: ' + (err.detail || 'Unknown error'));
+                        }
+                    } catch (e) {
+                        alert('Network error: ' + e);
+                    }
+                },
+
+                truncate(str, n) {
+                    return (str && str.length > n) ? str.substr(0, n - 1) + '...' : str;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

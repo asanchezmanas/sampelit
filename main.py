@@ -280,6 +280,18 @@ else:
 # ROOT ENDPOINTS
 # ════════════════════════════════════════════════════════════════════════════
 
+@app.get("/dashboard", include_in_schema=False)
+async def dashboard_ui():
+    """Serve the dashboard UI"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "marketing-dashboard.html"))
+
+@app.get("/editor", include_in_schema=False)
+async def visual_editor_ui():
+    """Serve the Visual Editor UI"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "visual-editor.html"))
+
 @app.get("/")
 async def root():
     """Root endpoint - public info"""
