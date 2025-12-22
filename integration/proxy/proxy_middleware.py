@@ -184,7 +184,7 @@ class ProxyMiddleware(BaseHTTPMiddleware):
     }};
 }})();
 </script>
-<script src="{self.api_url}/static/tracker/tracker.js" async></script>
+<script src="{self.api_url}/static/tracker/t.js?token={installation_token}" async></script>
 <!-- End Samplit Tracker -->
 """
     

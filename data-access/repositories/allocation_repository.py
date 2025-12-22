@@ -25,7 +25,7 @@ class AssignmentRepository(BaseRepository):
             row = await conn.fetchrow(
                 """
                 SELECT 
-                    id, experiment_id, variant_id, user_id as user_identifier,
+                    id, experiment_id, variant_id, variant_assignments, user_id as user_identifier,
                     session_id, context, assigned_at, 
                     converted_at, conversion_value, metadata
                 FROM assignments 

@@ -30,7 +30,9 @@ from public_api.routers import (
     analytics,
     installations,  # ✅ Incluye instalación simple
     tracker,  # ✅ Incluye endpoint /experiments/active
-    system
+    system,
+    experiments_multi_element,  # ✅ EXPERIMENTS MULTI-ELEMENT
+    audit  # ✅ AUDIT SYSTEM
 )
 
 # ════════════════════════════════════════════════════════════════════════════
@@ -242,6 +244,16 @@ app.include_router(
     tags=["Installations"]
 )
 
+# ✅ Multi-element Factorial Experiments
+app.include_router(
+    experiments_multi_element.router
+)
+
+# ✅ Audit System
+app.include_router(
+    audit.router
+)
+
 # ════════════════════════════════════════════════════════════════════════════
 # PUBLIC ENDPOINTS (No Auth Required)
 # ════════════════════════════════════════════════════════════════════════════
@@ -253,6 +265,16 @@ app.include_router(
     prefix=f"{settings.API_V1_PREFIX}/tracker",
     tags=["Tracker (Public)"]
 )
+
+# ✅ Static Files (Tracker JS, Dashboard Assets)
+from fastapi.staticfiles import StaticFiles
+import os
+
+static_dir = os.path.join(os.path.dirname(__file__), "static")
+if os.path.exists(static_dir):
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
+else:
+    logger.warning(f"Static directory not found: {static_dir}")
 
 # ════════════════════════════════════════════════════════════════════════════
 # ROOT ENDPOINTS
