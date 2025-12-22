@@ -33,7 +33,8 @@ from public_api.routers import (
     system,
     experiments_multi_element,  # ✅ EXPERIMENTS MULTI-ELEMENT
     audit,  # ✅ AUDIT SYSTEM
-    simulator  # ✅ SIMULATOR
+    simulator,  # ✅ SIMULATOR
+    leads  # ✅ EMAIL LEAD CAPTURE
 )
 
 # ════════════════════════════════════════════════════════════════════════════
@@ -261,6 +262,13 @@ app.include_router(
     simulator.router,
     prefix=f"{settings.API_V1_PREFIX}/simulate",
     tags=["Simulator"]
+)
+
+# ✅ Lead Capture (Email Collection)
+app.include_router(
+    leads.router,
+    prefix=f"{settings.API_V1_PREFIX}/leads",
+    tags=["Leads"]
 )
 
 # ════════════════════════════════════════════════════════════════════════════

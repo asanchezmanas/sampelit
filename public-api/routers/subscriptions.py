@@ -31,81 +31,81 @@ PLANS_CONFIG = {
         "name": "Free",
         "price": 0,
         "limits": {
-            "experiments": 2,
-            "monthly_visitors": 1000,
+            "experiments": 1,
+            "monthly_visitors": 500,
             "email_campaigns": 0,
             "team_members": 1,
-            "api_calls_per_month": 10000
+            "api_calls_per_month": 5000
         },
         "features": [
-            "2 Active Experiments",
-            "1,000 Monthly Visitors",
+            "1 Active Experiment",
+            "500 Monthly Visitors",
             "Basic Analytics",
             "Community Support"
         ]
     },
     "starter": {
         "name": "Starter",
-        "price": 99,
+        "price": 149,  # Europa Rica: €200 is cheap
         "stripe_price_id": os.getenv("STRIPE_STARTER_PRICE_ID", "price_starter"),
         "limits": {
             "experiments": 5,
-            "monthly_visitors": 50000,
-            "email_campaigns": 5,
-            "team_members": 3,
-            "api_calls_per_month": 100000
+            "monthly_visitors": 25000,
+            "email_campaigns": 3,
+            "team_members": 2,
+            "api_calls_per_month": 50000
         },
         "features": [
             "5 Active Experiments",
-            "50,000 Monthly Visitors",
-            "5 Email Campaigns",
-            "Advanced Analytics",
-            "Email Support"
+            "25,000 Monthly Visitors",
+            "3 Email Campaigns",
+            "Visual Editor",
+            "Email Support (48h)"
         ]
     },
     "professional": {
         "name": "Professional",
-        "price": 299,
+        "price": 399,  # Most popular tier
         "stripe_price_id": os.getenv("STRIPE_PRO_PRICE_ID", "price_pro"),
         "limits": {
             "experiments": 25,
-            "monthly_visitors": 250000,
-            "email_campaigns": 50,
-            "team_members": 10,
-            "api_calls_per_month": 1000000
+            "monthly_visitors": 100000,
+            "email_campaigns": 25,
+            "team_members": 5,
+            "api_calls_per_month": 500000
         },
         "features": [
             "25 Active Experiments",
-            "250,000 Monthly Visitors",
-            "50 Email Campaigns",
-            "Advanced Analytics + Heatmaps",
-            "Priority Support",
-            "Custom Integrations"
+            "100,000 Monthly Visitors",
+            "25 Email Campaigns",
+            "Visual Editor + Audit Trail",
+            "Priority Email Support (24h)",
+            "API Access"
         ]
     },
     "scale": {
         "name": "Scale",
         "price": 999,
-        "stripe_price_id": os.getenv("STRIPE_PRO_PRICE_ID", "price_pro"),
+        "stripe_price_id": os.getenv("STRIPE_SCALE_PRICE_ID", "price_scale"),
         "limits": {
             "experiments": 100,
-            "monthly_visitors": 1000000,
-            "email_campaigns": 50,
-            "team_members": 10,
-            "api_calls_per_month": 1000000
+            "monthly_visitors": 500000,
+            "email_campaigns": 100,
+            "team_members": 15,
+            "api_calls_per_month": 2000000
         },
         "features": [
             "100 Active Experiments",
-            "1M Monthly Visitors",
-            "50 Email Campaigns",
-            "Advanced Analytics + Heatmaps",
-            "Priority Support",
+            "500,000 Monthly Visitors",
+            "100 Email Campaigns",
+            "Full Feature Set",
+            "Dedicated Support",
             "Custom Integrations"
         ]
     },
     "enterprise": {
         "name": "Enterprise",
-        "price": 2000,
+        "price": 2499,  # Custom pricing starts here
         "stripe_price_id": os.getenv("STRIPE_ENTERPRISE_PRICE_ID", "price_enterprise"),
         "limits": {
             "experiments": -1,  # Unlimited
@@ -116,10 +116,11 @@ PLANS_CONFIG = {
         },
         "features": [
             "Unlimited Everything",
-            "Dedicated Support",
+            "Dedicated Account Manager",
             "Custom Onboarding",
-            "SLA Guarantee",
-            "White Label Option"
+            "SLA Guarantee (99.9%)",
+            "White Label Option",
+            "On-Premise Deployment"
         ]
     }
 }
