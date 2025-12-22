@@ -7,6 +7,7 @@ Implementation details are kept internal and may change without notice.
 """
 
 from .allocators import BayesianAllocator, AdaptiveBayesianAllocator
+from .allocators.sequential import SequentialAllocator
 
 
 def _get_allocator(strategy_code: str, config: dict):
@@ -46,7 +47,7 @@ def _get_allocator(strategy_code: str, config: dict):
         'adaptive': AdaptiveBayesianAllocator,
         'standard': BayesianAllocator,
         'fast_learning': AdaptiveBayesianAllocator,  # With high exploration
-        'sequential': BayesianAllocator,  # TODO: Implement SequentialAllocator
+        'sequential': SequentialAllocator,
         'hybrid': AdaptiveBayesianAllocator,
     }
     
@@ -74,5 +75,6 @@ def _get_allocator(strategy_code: str, config: dict):
 __all__ = [
     'BayesianAllocator',
     'AdaptiveBayesianAllocator',
+    'SequentialAllocator',
     '_get_allocator'
 ]

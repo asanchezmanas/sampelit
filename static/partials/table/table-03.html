@@ -1,0 +1,72 @@
+<div class="col-span-12 xl:col-span-8 rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-sm sm:px-7.5 xl:pb-1 dark:border-strokedark dark:bg-boxdark"
+    x-data="{ 
+        experiments: [
+            { name: 'Homepage Hero v2', type: 'Factorial', variants: 4, visitors: 12450, conversions: 2450, status: 'Active' },
+            { name: 'Pricing Table Test', type: 'A/B', variants: 2, visitors: 5600, conversions: 890, status: 'Active' },
+            { name: 'Checkout Button Color', type: 'A/B', variants: 3, visitors: 3400, conversions: 120, status: 'Paused' },
+            { name: 'Signup Form Modal', type: 'Factorial', variants: 6, visitors: 1200, conversions: 45, status: 'Draft' },
+            { name: 'Q4 Promotion Banner', type: 'A/B', variants: 2, visitors: 8900, conversions: 1100, status: 'Active' },
+        ] 
+     }">
+    <div class="mb-6 flex items-center justify-between gap-4">
+        <h4 class="text-xl font-bold text-black dark:text-white">
+            Recent Experiments
+        </h4>
+        <a href="#" class="text-sm font-medium text-primary hover:underline">View All</a>
+    </div>
+
+    <div class="flex flex-col">
+        <div class="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5">
+            <div class="p-2.5 xl:p-5">
+                <h5 class="text-sm font-medium uppercase xsm:text-base">Experiment Name</h5>
+            </div>
+            <div class="p-2.5 text-center xl:p-5">
+                <h5 class="text-sm font-medium uppercase xsm:text-base">Type</h5>
+            </div>
+            <div class="p-2.5 text-center xl:p-5">
+                <h5 class="text-sm font-medium uppercase xsm:text-base">Visitors</h5>
+            </div>
+            <div class="hidden p-2.5 text-center sm:block xl:p-5">
+                <h5 class="text-sm font-medium uppercase xsm:text-base">Reference Revenue</h5>
+            </div>
+            <div class="hidden p-2.5 text-center sm:block xl:p-5">
+                <h5 class="text-sm font-medium uppercase xsm:text-base">Status</h5>
+            </div>
+        </div>
+
+        <template x-for="exp in experiments" :key="exp.name">
+            <div
+                class="grid grid-cols-3 border-b border-stroke dark:border-strokedark sm:grid-cols-5 hover:bg-gray-50 dark:hover:bg-boxdark-2 transition-colors">
+                <div class="flex items-center gap-3 p-2.5 xl:p-5">
+                    <div class="flex-shrink-0">
+                        <!-- Icon based on type -->
+                        <div class="h-8 w-8 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-xs"
+                            x-text="exp.type[0]"></div>
+                    </div>
+                    <p class="hidden text-black dark:text-white sm:block" x-text="exp.name"></p>
+                </div>
+
+                <div class="flex items-center justify-center p-2.5 xl:p-5">
+                    <p class="text-black dark:text-white" x-text="exp.type"></p>
+                </div>
+
+                <div class="flex items-center justify-center p-2.5 xl:p-5">
+                    <p class="text-meta-3" x-text="exp.visitors.toLocaleString()"></p>
+                </div>
+
+                <div class="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                    <p class="text-black dark:text-white" x-text="'$' + (exp.conversions * 25).toLocaleString()"></p>
+                </div>
+
+                <div class="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                    <span class="inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium" :class="{
+                    'bg-success text-success': exp.status === 'Active',
+                    'bg-warning text-warning': exp.status === 'Paused',
+                    'bg-gray text-gray-500': exp.status === 'Draft'
+                  }" x-text="exp.status">
+                    </span>
+                </div>
+            </div>
+        </template>
+    </div>
+</div>

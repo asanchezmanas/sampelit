@@ -37,6 +37,16 @@ class ServiceFactory:
         return cls._instance
     
     @classmethod
+    async def get_funnel_service(cls, db_manager) -> 'FunnelService':
+        """
+        Get Funnel Service instance
+        """
+        if not cls._funnel_service:
+            from orchestration.services.funnel_service import FunnelService
+            cls._funnel_service = FunnelService(db_manager)
+        return cls._funnel_service
+
+    @classmethod
     async def create_experiment_service(cls, db_manager):
         """
         Crear servicio de experimentos

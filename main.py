@@ -32,7 +32,8 @@ from public_api.routers import (
     tracker,  # ✅ Incluye endpoint /experiments/active
     system,
     experiments_multi_element,  # ✅ EXPERIMENTS MULTI-ELEMENT
-    audit  # ✅ AUDIT SYSTEM
+    audit,  # ✅ AUDIT SYSTEM
+    simulator  # ✅ SIMULATOR
 )
 
 # ════════════════════════════════════════════════════════════════════════════
@@ -249,9 +250,17 @@ app.include_router(
     experiments_multi_element.router
 )
 
+
 # ✅ Audit System
 app.include_router(
     audit.router
+)
+
+# ✅ Simulator (Public Demo)
+app.include_router(
+    simulator.router,
+    prefix=f"{settings.API_V1_PREFIX}/simulate",
+    tags=["Simulator"]
 )
 
 # ════════════════════════════════════════════════════════════════════════════
@@ -291,6 +300,18 @@ async def visual_editor_ui():
     """Serve the Visual Editor UI"""
     from fastapi.responses import FileResponse
     return FileResponse(os.path.join(static_dir, "visual-editor.html"))
+
+@app.get("/funnel-builder", include_in_schema=False)
+async def funnel_builder_ui():
+    """Serve the Funnel Builder UI"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "funnel-builder.html"))
+
+@app.get("/simulator", include_in_schema=False)
+async def simulator_landing_ui():
+    """Serve the Simulator Landing Page"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "simulator-landing.html"))
 
 @app.get("/")
 async def root():

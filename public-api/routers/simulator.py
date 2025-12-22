@@ -1,244 +1,137 @@
 # public-api/routers/simulator.py
 
-from fastapi import APIRouter, File, UploadFile, HTTPException
-from pydantic import BaseModel, Field
-from typing import List, Dict, Optional
-import pandas as pd
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from typing import List, Dict, Any
 import numpy as np
-from io import StringIO
+import random
+import asyncio
 
 router = APIRouter()
 
-class SimulatorConfig(BaseModel):
-    """Config del simulador"""
-    total_visitors: int = Field(default=10000, ge=100, le=100000)
-    variants: List[Dict[str, float]] = Field(
-        ...,
-        description="Lista de variantes con conversion_rate"
-    )
-    daily_visitors: int = Field(default=1000, ge=10, le=10000)
-    confidence_threshold: float = Field(default=0.95, ge=0.80, le=0.99)
+# ══════════════════════════════════════
+# SIMULATION LOGIC (Ported from scripts)
+# ══════════════════════════════════════
 
-class SimulationResult(BaseModel):
-    """Resultado de la simulación"""
-    total_visitors: int
-    days_run: int
-    winner_detected_at_day: Optional[int]
-    winner_variant: Optional[str]
-    
-    # Por variante
-    variants_data: List[Dict]
-    
-    # Beneficio calculado
-    benefit_analysis: Dict[str, float]
-    
-    # Timeline
-    daily_stats: List[Dict]
-
-@router.post("/simulate", response_model=SimulationResult)
-async def run_simulation(config: SimulatorConfig):
+class SimulationEngine:
     """
-    Simular experimento con Thompson Sampling
-    
-    Endpoint PÚBLICO - no requiere auth
+    Real-time version of MultiElementDemoGenerator
     """
-    
-    # Validar variantes
-    if len(config.variants) < 2:
-        raise HTTPException(400, "Necesitas al menos 2 variantes")
-    
-    if len(config.variants) > 10:
-        raise HTTPException(400, "Máximo 10 variantes")
-    
-    # Validar conversion rates
-    for v in config.variants:
-        if not (0 <= v['conversion_rate'] <= 1):
-            raise HTTPException(400, "Conversion rate debe estar entre 0 y 1")
-    
-    # Inicializar Thompson Sampling
-    variants_state = {
-        v['name']: {
-            'successes': 1,  # Prior
-            'failures': 1,
-            'allocations': 0,
-            'conversions': 0,
-            'true_cr': v['conversion_rate']  # Para simular
-        }
-        for v in config.variants
-    }
-    
-    # Simular día por día
-    daily_stats = []
-    winner_detected_at = None
-    winner_variant = None
-    
-    days = config.total_visitors // config.daily_visitors
-    
-    for day in range(1, days + 1):
-        # Stats del día
-        day_allocations = {v: 0 for v in variants_state.keys()}
-        day_conversions = {v: 0 for v in variants_state.keys()}
-        
-        # Procesar visitantes del día
-        for _ in range(config.daily_visitors):
-            # Thompson Sampling: sample from Beta
-            samples = {
-                name: np.random.beta(
-                    state['successes'], 
-                    state['failures']
-                )
-                for name, state in variants_state.items()
-            }
-            
-            # Seleccionar mejor sample
-            selected = max(samples, key=samples.get)
-            
-            # Simular conversión (basado en true_cr)
-            converted = np.random.random() < variants_state[selected]['true_cr']
-            
-            # Update state
-            variants_state[selected]['allocations'] += 1
-            day_allocations[selected] += 1
-            
-            if converted:
-                variants_state[selected]['conversions'] += 1
-                variants_state[selected]['successes'] += 1
-                day_conversions[selected] += 1
-            else:
-                variants_state[selected]['failures'] += 1
-        
-        # Calcular probabilidad de ser mejor (Monte Carlo)
-        if day >= 3:  # Mínimo 3 días
-            prob_best = calculate_probability_best(variants_state)
-            best_variant = max(prob_best, key=prob_best.get)
-            
-            if prob_best[best_variant] >= config.confidence_threshold:
-                if winner_detected_at is None:
-                    winner_detected_at = day
-                    winner_variant = best_variant
-        
-        # Guardar stats del día
-        daily_stats.append({
-            'day': day,
-            'allocations': day_allocations.copy(),
-            'conversions': day_conversions.copy(),
-            'cumulative_allocations': {
-                name: state['allocations'] 
-                for name, state in variants_state.items()
+    def __init__(self):
+        self.elements = {
+            'cta_button': {
+                'name': 'CTA Button',
+                'variants': {
+                    'A': {'text': 'Sign Up', 'color': '#0066FF'},
+                    'B': {'text': 'Get Started', 'color': '#00C853'},
+                    'C': {'text': 'Try Free', 'color': '#FF6B35'}
+                }
             },
-            'cumulative_conversions': {
-                name: state['conversions'] 
-                for name, state in variants_state.items()
+            'hero_copy': {
+                'name': 'Hero Copy',
+                'variants': {
+                    'X': {'text': 'Grow Your Business Fast'},
+                    'Y': {'text': '10x Your Conversions Today'},
+                    'Z': {'text': 'Join 10,000+ Companies'}
+                }
             }
-        })
-    
-    # Calcular beneficio
-    # Asumiendo que sin optimización = split uniforme
-    uniform_conversions = sum(
-        (config.total_visitors / len(config.variants)) * v['conversion_rate']
-        for v in config.variants
-    )
-    
-    optimized_conversions = sum(
-        state['conversions'] 
-        for state in variants_state.values()
-    )
-    
-    benefit = optimized_conversions - uniform_conversions
-    
-    # Formatear resultado
-    return SimulationResult(
-        total_visitors=config.total_visitors,
-        days_run=days,
-        winner_detected_at_day=winner_detected_at,
-        winner_variant=winner_variant,
-        variants_data=[
-            {
-                'name': name,
-                'allocations': state['allocations'],
-                'conversions': state['conversions'],
-                'observed_cr': state['conversions'] / max(state['allocations'], 1),
-                'true_cr': state['true_cr'],
-                'final_probability': calculate_probability_best(variants_state)[name]
-            }
-            for name, state in variants_state.items()
-        ],
-        benefit_analysis={
-            'uniform_split_conversions': round(uniform_conversions, 2),
-            'optimized_conversions': optimized_conversions,
-            'additional_conversions': round(benefit, 2),
-            'improvement_percentage': round((benefit / uniform_conversions) * 100, 2) if uniform_conversions > 0 else 0
-        },
-        daily_stats=daily_stats
-    )
-
-def calculate_probability_best(variants_state: Dict, samples: int = 10000) -> Dict[str, float]:
-    """Calcular probabilidad de ser mejor (Monte Carlo)"""
-    
-    # Sample from Beta distribution
-    variant_samples = {
-        name: np.random.beta(
-            state['successes'], 
-            state['failures'], 
-            samples
-        )
-        for name, state in variants_state.items()
-    }
-    
-    # Count how often each is best
-    prob_best = {}
-    for name in variants_state.keys():
-        is_best_count = sum(
-            variant_samples[name][i] == max(
-                variant_samples[v][i] for v in variants_state.keys()
-            )
-            for i in range(samples)
-        )
-        prob_best[name] = is_best_count / samples
-    
-    return prob_best
-
-@router.post("/simulate-csv")
-async def simulate_from_csv(
-    file: UploadFile = File(...),
-    total_visitors: int = 10000,
-    daily_visitors: int = 1000
-):
-    """
-    Simular desde CSV
-    
-    CSV format:
-    variant_name,conversion_rate
-    Control,0.05
-    Variant A,0.07
-    Variant B,0.06
-    """
-    
-    # Leer CSV
-    contents = await file.read()
-    df = pd.read_csv(StringIO(contents.decode('utf-8')))
-    
-    # Validar formato
-    if 'variant_name' not in df.columns or 'conversion_rate' not in df.columns:
-        raise HTTPException(
-            400, 
-            "CSV debe tener columnas: variant_name, conversion_rate"
-        )
-    
-    # Convertir a formato de config
-    variants = [
-        {
-            'name': row['variant_name'],
-            'conversion_rate': float(row['conversion_rate'])
         }
-        for _, row in df.iterrows()
-    ]
-    
-    # Ejecutar simulación
-    config = SimulatorConfig(
-        total_visitors=total_visitors,
-        variants=variants,
-        daily_visitors=daily_visitors
-    )
-    
-    return await run_simulation(config)
+        
+        # True Conversion Rates (Hidden from user initially)
+        self.probabilities = {
+            ('A', 'X'): 0.025, ('A', 'Y'): 0.032, ('A', 'Z'): 0.028,
+            ('B', 'X'): 0.038, ('B', 'Y'): 0.045, ('B', 'Z'): 0.041,
+            ('C', 'X'): 0.021, ('C', 'Y'): 0.029, ('C', 'Z'): 0.036,
+        }
+        
+    def generate_batch(self, batch_size=50):
+        """Generate a batch of simulated traffic events"""
+        events = []
+        
+        combinations = list(self.probabilities.keys())
+        
+        for _ in range(batch_size):
+            # For the demo visualizer, we want to show distribution.
+            combo = random.choice(combinations)
+            cr = self.probabilities[combo]
+            converted = random.random() <= cr
+            
+            events.append({
+                "combination": f"{combo[0]}-{combo[1]}", # e.g. A-X
+                "elements": {
+                    "cta": self.elements['cta_button']['variants'][combo[0]],
+                    "copy": self.elements['hero_copy']['variants'][combo[1]]
+                },
+                "converted": converted
+            })
+            
+        return events
+
+    def run_full_simulation(self, n_visitors=10000):
+        """Run a full simulation of N visitors and return stats"""
+        stats = {}
+        combinations = list(self.probabilities.keys())
+        
+        total_conversions = 0
+        
+        for combo in combinations:
+            stats[combo] = {"visits": 0, "conversions": 0}
+            
+        # Simulate N visitors
+        # We assume uniform traffic distribution for the A/B test phase
+        visits_per_variant = n_visitors // len(combinations)
+        
+        for combo in combinations:
+            cr = self.probabilities[combo]
+            # Binomial distribution for speed
+            convs = np.random.binomial(visits_per_variant, cr)
+            
+            stats[combo]["visits"] = visits_per_variant
+            stats[combo]["conversions"] = int(convs)
+            total_conversions += int(convs)
+            
+        # Format for API
+        results = []
+        for combo, data in stats.items():
+            results.append({
+                "name": f"{self.elements['cta_button']['variants'][combo[0]]['text']} + {self.elements['hero_copy']['variants'][combo[1]]['text']}",
+                "combination": f"{combo[0]}-{combo[1]}",
+                "visits": data["visits"],
+                "conversions": data["conversions"],
+                "cr": data["conversions"] / data["visits"] if data["visits"] > 0 else 0
+            })
+            
+        # Sort by CR desc
+        results.sort(key=lambda x: x['cr'], reverse=True)
+        
+        winner = results[0]
+        loser = results[-1]
+        improvement = (winner['cr'] - loser['cr']) / loser['cr'] if loser['cr'] > 0 else 0
+        
+        return {
+            "total_visitors": n_visitors,
+            "total_conversions": total_conversions,
+            "variants": results,
+            "winner": winner,
+            "improvement": improvement
+        }
+
+engine = SimulationEngine()
+
+@router.get("/summary")
+async def simulate_summary():
+    """Returns the result of a 10,000 visitor simulation"""
+    return engine.run_full_simulation(10000)
+
+@router.get("/stream")
+async def simulate_stream():
+    """
+    Returns a batch of simulated events.
+    Frontend calls this repeatedly to 'animate' the chart.
+    """
+    return {
+        "batch": engine.generate_batch(batch_size=20),
+        "metadata": {
+            "elements": engine.elements
+        }
+    }
