@@ -4,176 +4,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us | Samplit</title>
+    <title>About | Samplit</title>
     <meta name="description"
-        content="We test copy so you don't have to guess. A system for running controlled experiments on landing page copy.">
+        content="Copy testing infrastructure for companies that care about data. Built in Barcelona.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
         }
-
-        .glass {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-        }
     </style>
 </head>
 
-<body class="bg-slate-50 text-slate-800">
+<body class="bg-white text-slate-900">
 
     <!-- Header -->
-    <header class="border-b border-slate-200 bg-white/80 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-            <a href="/" class="text-xl font-bold text-slate-900">Samplit</a>
-            <nav class="hidden md:flex items-center gap-6 text-sm text-slate-600">
-                <a href="/about" class="text-blue-600 font-medium">About</a>
+    <header class="border-b border-slate-100 sticky top-0 z-50 bg-white">
+        <div class="max-w-4xl mx-auto px-6 py-5 flex items-center justify-between">
+            <a href="/" class="text-lg font-semibold tracking-tight">Samplit</a>
+            <nav class="flex items-center gap-8 text-sm text-slate-600">
+                <a href="/about" class="text-slate-900 font-medium">About</a>
                 <a href="/faq" class="hover:text-slate-900">FAQ</a>
                 <a href="/contact" class="hover:text-slate-900">Contact</a>
-                <a href="/simulator"
-                    class="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700">Try Simulator</a>
+                <a href="/simulator" class="text-blue-600 font-medium hover:text-blue-700">Live Demo →</a>
             </nav>
         </div>
     </header>
 
     <!-- Hero -->
-    <section class="py-20 px-6">
-        <div class="max-w-3xl mx-auto text-center">
-            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6">We test copy so you don't have to guess.</h1>
-            <p class="text-lg text-slate-600">A system for running controlled experiments on landing page copy.<br>Built
-                by people who got tired of choosing headlines based on opinions.</p>
+    <section class="py-24 px-6">
+        <div class="max-w-2xl mx-auto">
+            <h1 class="text-3xl font-semibold text-slate-900 mb-6 leading-tight">
+                Copy testing infrastructure for teams that prefer data over opinions.
+            </h1>
+            <p class="text-lg text-slate-600 leading-relaxed">
+                Most landing page decisions are made in meetings. We built a system that lets the data decide instead.
+            </p>
         </div>
     </section>
 
-    <!-- What We Do -->
-    <section class="py-16 px-6 bg-white border-y border-slate-200">
-        <div class="max-w-3xl mx-auto">
-            <h2 class="text-2xl font-bold text-slate-900 mb-6">What we're building</h2>
-            <p class="text-slate-600 mb-4">We're building a testing system for copy optimization.</p>
-            <p class="text-slate-600 mb-4"><strong>The problem it solves:</strong></p>
-            <ul class="list-disc list-inside text-slate-600 mb-4 space-y-1">
-                <li>Internal opinions</li>
-                <li>Founder preferences</li>
-                <li>What "feels right"</li>
-                <li>Copying competitors</li>
-            </ul>
-            <p class="text-slate-600 mb-4"><strong>The result:</strong> Revenue left unrealized because you don't know
-                which version performs better.</p>
-            <p class="text-slate-600"><strong>What we provide:</strong> A way to measure which copy actually converts,
-                using controlled experiments on real traffic. Not guesswork. Not intuition. <em>Measurement.</em></p>
+    <!-- What we built -->
+    <section class="py-16 px-6 border-t border-slate-100">
+        <div class="max-w-2xl mx-auto">
+            <h2 class="text-sm font-medium text-slate-400 uppercase tracking-wider mb-6">What we built</h2>
+
+            <p class="text-slate-700 mb-6">
+                A testing system specifically designed for copy optimization. Not a full-stack A/B testing platform. Not
+                a visual editor for layouts. Just copy.
+            </p>
+
+            <p class="text-slate-700 mb-6">
+                You define variants. We distribute traffic intelligently. Results are evaluated only when statistically
+                meaningful.
+            </p>
+
+            <p class="text-slate-700">
+                The methodology is based on adaptive allocation—variants that perform well receive more traffic
+                automatically. This reduces the cost of testing by minimizing exposure to underperforming copy.
+            </p>
         </div>
     </section>
 
-    <!-- Why We Built This -->
-    <section class="py-16 px-6">
-        <div class="max-w-3xl mx-auto">
-            <h2 class="text-2xl font-bold text-slate-900 mb-6">Why we built this</h2>
-            <p class="text-slate-600 mb-4">We were running a SaaS company. Every landing page decision was a debate:</p>
-            <ul class="list-disc list-inside text-slate-600 mb-4 space-y-1">
-                <li>Should the headline be emotional or rational?</li>
-                <li>Should the CTA say "Start Trial" or "Get Started"?</li>
-                <li>Should we explain features or benefits?</li>
-            </ul>
-            <p class="text-slate-600 mb-4">We had opinions. No data.</p>
-            <p class="text-slate-600 mb-4"><strong>Traditional A/B testing tools were:</strong></p>
-            <ul class="list-disc list-inside text-slate-600 mb-4 space-y-1">
-                <li>Expensive (€300+/month)</li>
-                <li>Complex (needed dedicated resources)</li>
-                <li>Slow (manual traffic allocation, weeks to results)</li>
-            </ul>
-            <p class="text-slate-600">We wanted something simpler, faster, and designed specifically for copy testing.
-                So we built it.</p>
-        </div>
-    </section>
+    <!-- How we work -->
+    <section class="py-16 px-6 border-t border-slate-100">
+        <div class="max-w-2xl mx-auto">
+            <h2 class="text-sm font-medium text-slate-400 uppercase tracking-wider mb-8">How we work</h2>
 
-    <!-- Our Approach -->
-    <section class="py-16 px-6 bg-white border-y border-slate-200">
-        <div class="max-w-3xl mx-auto">
-            <h2 class="text-2xl font-bold text-slate-900 mb-6">How we work</h2>
-            <div class="space-y-6">
+            <div class="space-y-8">
                 <div>
-                    <h3 class="font-semibold text-slate-900 mb-2">1. We use our own product</h3>
-                    <p class="text-slate-600">This landing page is currently running experiments. You're seeing one of
-                        multiple variants. We test our own copy before asking you to test yours.</p>
+                    <h3 class="font-medium text-slate-900 mb-2">We use our own product</h3>
+                    <p class="text-slate-600">This page is part of an active experiment. You're seeing one of several
+                        variants. We test our own copy before asking you to test yours.</p>
                 </div>
+
                 <div>
-                    <h3 class="font-semibold text-slate-900 mb-2">2. We publish our results publicly</h3>
-                    <p class="text-slate-600">All experiments are documented. Including inconclusive tests and failures.
-                        Transparency > marketing.</p>
+                    <h3 class="font-medium text-slate-900 mb-2">Every decision is auditable</h3>
+                    <p class="text-slate-600">Allocation decisions are logged with cryptographic hashes. You can verify
+                        that results were not manipulated after the fact.</p>
                 </div>
+
                 <div>
-                    <h3 class="font-semibold text-slate-900 mb-2">3. Every decision is auditable</h3>
-                    <p class="text-slate-600">Our system logs every allocation decision with cryptographic hashes. You
-                        can verify that results weren't manipulated. Full transparency, mathematically provable.</p>
+                    <h3 class="font-medium text-slate-900 mb-2">We publish our methodology</h3>
+                    <p class="text-slate-600">Statistical confidence thresholds, minimum sample sizes, allocation
+                        algorithms. The approach is documented. The implementation is proprietary.</p>
                 </div>
+
                 <div>
-                    <h3 class="font-semibold text-slate-900 mb-2">4. We don't promise miracles</h3>
-                    <p class="text-slate-600">Testing doesn't create demand. It removes uncertainty about which copy
-                        works better. Not every test produces a winner. That's normal.</p>
+                    <h3 class="font-medium text-slate-900 mb-2">We don't promise improvements</h3>
+                    <p class="text-slate-600">Testing reveals which copy performs better. Sometimes the difference is
+                        negligible. That's a valid result. We won't sell you on guaranteed uplift.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- What We're Not -->
-    <section class="py-16 px-6">
-        <div class="max-w-3xl mx-auto">
-            <h2 class="text-2xl font-bold text-slate-900 mb-6">What this isn't</h2>
-            <div class="space-y-3 text-slate-600">
-                <p>❌ <strong>Not a full-stack A/B testing platform</strong> — We focus on copy, not layouts or complex
-                    UI changes.</p>
-                <p>❌ <strong>Not a marketing agency</strong> — We provide the tool. You run the tests.</p>
-                <p>❌ <strong>Not for everyone</strong> — If you have <2,000 monthly visits, traditional testing isn't
-                        viable yet.</p>
-                        <p>❌ <strong>Not magic</strong> — Won't fix poor product-market fit or bad positioning. Only
-                            optimizes what's already working.</p>
+    <!-- What this isn't -->
+    <section class="py-16 px-6 border-t border-slate-100">
+        <div class="max-w-2xl mx-auto">
+            <h2 class="text-sm font-medium text-slate-400 uppercase tracking-wider mb-6">What this isn't</h2>
+
+            <div class="text-slate-600 space-y-3">
+                <p><strong class="text-slate-900">Not a full A/B testing suite.</strong> We don't test layouts, colors,
+                    or complex UI changes. Only text.</p>
+                <p><strong class="text-slate-900">Not for low-traffic sites.</strong> Reliable results require at least
+                    2,000 monthly visitors.</p>
+                <p><strong class="text-slate-900">Not a marketing agency.</strong> We provide infrastructure. You bring
+                    the copy and the hypotheses.</p>
+                <p><strong class="text-slate-900">Not enterprise-priced.</strong> €49/month. No sales calls. No custom
+                    contracts.</p>
             </div>
         </div>
     </section>
 
-    <!-- Who It's For -->
-    <section class="py-16 px-6 bg-white border-y border-slate-200">
-        <div class="max-w-3xl mx-auto">
-            <h2 class="text-2xl font-bold text-slate-900 mb-6">Who we're building for</h2>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div>
-                    <h3 class="font-semibold text-slate-900 mb-3">✓ Good fit</h3>
-                    <ul class="space-y-2 text-slate-600">
-                        <li>✓ SaaS companies with steady traffic</li>
-                        <li>✓ eCommerce sites testing product copy</li>
-                        <li>✓ B2B services optimizing landing pages</li>
-                        <li>✓ Founders who prefer data over opinions</li>
-                        <li>✓ Teams tired of endless debates about wording</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-slate-900 mb-3">✗ Not for</h3>
-                    <ul class="space-y-2 text-slate-600">
-                        <li>✗ Sites with <2,000 monthly visits</li>
-                        <li>✗ Teams wanting to test visual design</li>
-                        <li>✗ Companies needing enterprise sales process</li>
-                    </ul>
-                </div>
-            </div>
+    <!-- Who it's for -->
+    <section class="py-16 px-6 border-t border-slate-100">
+        <div class="max-w-2xl mx-auto">
+            <h2 class="text-sm font-medium text-slate-400 uppercase tracking-wider mb-6">Built for</h2>
+
+            <p class="text-slate-700 mb-6">
+                SaaS companies, e-commerce teams, and B2B services with enough traffic to test and enough discipline to
+                wait for results.
+            </p>
+
+            <p class="text-slate-700">
+                Teams that understand that optimization is incremental, not transformational. That most tests are
+                inconclusive. That the value is in the process, not just the wins.
+            </p>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="py-16 px-6 border-t border-slate-100">
+        <div class="max-w-2xl mx-auto">
+            <h2 class="text-sm font-medium text-slate-400 uppercase tracking-wider mb-6">Pricing</h2>
+
+            <p class="text-slate-700 mb-4">
+                <span class="text-2xl font-semibold text-slate-900">€49</span><span class="text-slate-500">/month</span>
+            </p>
+
+            <p class="text-slate-600 mb-6">
+                Traditional A/B testing tools charge €300+/month and require dedicated resources to operate. We believe
+                the methodology should be accessible to teams of any size.
+            </p>
+
+            <p class="text-slate-600">
+                Early adopters receive 50% off the first year.
+            </p>
+        </div>
+    </section>
+
+    <!-- Location -->
+    <section class="py-16 px-6 border-t border-slate-100">
+        <div class="max-w-2xl mx-auto">
+            <h2 class="text-sm font-medium text-slate-400 uppercase tracking-wider mb-6">Location</h2>
+
+            <p class="text-slate-700">
+                Built in Barcelona. Serving teams globally.
+            </p>
         </div>
     </section>
 
     <!-- CTA -->
-    <section class="py-20 px-6 text-center">
-        <div class="max-w-xl mx-auto">
-            <h2 class="text-2xl font-bold text-slate-900 mb-4">Interested?</h2>
-            <p class="text-slate-600 mb-6">We're currently in private testing. Join the waitlist for early access.</p>
-            <a href="/simulator"
-                class="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700">Join
-                waitlist</a>
+    <section class="py-20 px-6 border-t border-slate-100">
+        <div class="max-w-2xl mx-auto">
+            <p class="text-slate-600 mb-6">Currently in private beta. Join the waitlist for early access.</p>
+            <a href="/simulator" class="inline-flex items-center text-blue-600 font-medium hover:text-blue-700">
+                See the live demo <span class="ml-1">→</span>
+            </a>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="border-t border-slate-200 py-8 px-6 text-center text-sm text-slate-500">
-        <p>© 2025 Samplit. <a href="/privacy" class="hover:underline">Privacy</a> · <a href="/terms"
-                class="hover:underline">Terms</a> · <a href="/contact" class="hover:underline">Contact</a></p>
+    <footer class="border-t border-slate-100 py-8 px-6">
+        <div class="max-w-2xl mx-auto flex justify-between text-sm text-slate-500">
+            <span>© 2025 Samplit</span>
+            <div class="flex gap-6">
+                <a href="/privacy" class="hover:text-slate-700">Privacy</a>
+                <a href="/terms" class="hover:text-slate-700">Terms</a>
+                <a href="/contact" class="hover:text-slate-700">Contact</a>
+            </div>
+        </div>
     </footer>
 </body>
 
