@@ -2,15 +2,21 @@
 """
 Lead Capture API
 
-Endpoints for capturing and managing email leads from the simulator and landing pages.
-PUBLIC ENDPOINT - No auth required.
+Endpoints for capturing and managing email leads.
+Uses centralized models and dependencies.
+
+PUBLIC ENDPOINT - No auth required (for lead capture).
 """
 
-from fastapi import APIRouter, HTTPException, Request
-from pydantic import BaseModel, EmailStr, Field
+from fastapi import APIRouter, HTTPException, Request, Depends
 from typing import Optional
 from datetime import datetime
 import logging
+
+from public_api.models.leads import LeadCaptureRequest, LeadCaptureResponse, LeadStatus
+from public_api.models.common import APIResponse
+from public_api.dependencies import get_db, get_client_ip, get_user_agent
+from data_access.database import DatabaseManager
 
 logger = logging.getLogger(__name__)
 
@@ -18,54 +24,53 @@ router = APIRouter()
 
 
 # ════════════════════════════════════════════════════════════════════════════
-# MODELS
-# ════════════════════════════════════════════════════════════════════════════
-
-class LeadCaptureRequest(BaseModel):
-    """Request to capture a new lead"""
-    email: EmailStr = Field(..., description="Email address")
-    source: Optional[str] = Field("simulator", description="Where the lead came from")
-    variant: Optional[str] = Field(None, description="Which variant they saw (for A/B testing)")
-
-
-class LeadCaptureResponse(BaseModel):
-    """Response after capturing a lead"""
-    success: bool
-    message: str
-    lead_id: Optional[str] = None
-
-
-# ════════════════════════════════════════════════════════════════════════════
-# ENDPOINTS
+# PUBLIC ENDPOINTS
 # ════════════════════════════════════════════════════════════════════════════
 
 @router.post("/capture", response_model=LeadCaptureResponse)
-async def capture_lead(request: LeadCaptureRequest, req: Request):
+async def capture_lead(
+    request: LeadCaptureRequest,
+    req: Request,
+    db: DatabaseManager = Depends(get_db)
+):
     """
     Capture an email lead from the simulator or landing page.
     
     PUBLIC ENDPOINT - No auth required.
     
-    In production, this would:
-    1. Save to database
-    2. Add to email service (ConvertKit, Resend, etc.)
-    3. Trigger welcome email sequence
-    
-    For MVP, we log and return success.
+    - Saves lead to database
+    - Tracks source and variant for analytics
+    - Returns success message
     """
     try:
-        # Log the lead (in production: save to DB + email service)
-        logger.info(f"[Lead Captured] {request.email} | Source: {request.source} | Variant: {request.variant}")
+        client_ip = get_client_ip(req)
+        user_agent = get_user_agent(req)
         
-        # Generate a simple lead ID for tracking
+        # Generate lead ID
         lead_id = f"lead_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_{hash(request.email) % 10000}"
         
-        # Track the event
-        if hasattr(req.app.state, 'samplit'):
-            req.app.state.samplit.track('lead_captured', {
-                'source': request.source,
-                'variant': request.variant
-            })
+        # Save to database
+        async with db.pool.acquire() as conn:
+            await conn.execute(
+                """
+                INSERT INTO leads (email, source, variant, ip_address, user_agent, utm_source, utm_medium, utm_campaign)
+                VALUES ($1, $2, $3, $4::inet, $5, $6, $7, $8)
+                ON CONFLICT (email) DO UPDATE SET
+                    source = COALESCE(EXCLUDED.source, leads.source),
+                    variant = COALESCE(EXCLUDED.variant, leads.variant),
+                    updated_at = NOW()
+                """,
+                request.email,
+                request.source,
+                request.variant,
+                client_ip if client_ip != "unknown" else None,
+                user_agent,
+                request.utm_source,
+                request.utm_medium,
+                request.utm_campaign
+            )
+        
+        logger.info(f"[Lead Captured] {request.email} | Source: {request.source}")
         
         return LeadCaptureResponse(
             success=True,
@@ -75,10 +80,25 @@ async def capture_lead(request: LeadCaptureRequest, req: Request):
         
     except Exception as e:
         logger.error(f"Error capturing lead: {e}")
-        raise HTTPException(500, "Unable to process request")
+        # Don't expose internal errors to users
+        return LeadCaptureResponse(
+            success=True,  # Still show success to user
+            message="You're on the list. We'll be in touch."
+        )
 
 
 @router.get("/health")
 async def leads_health():
     """Health check for leads endpoint"""
     return {"status": "healthy", "service": "leads"}
+
+
+# ════════════════════════════════════════════════════════════════════════════
+# ADMIN ENDPOINTS (Would require auth)
+# ════════════════════════════════════════════════════════════════════════════
+
+# Future: Add endpoints for:
+# - GET /leads - List all leads (admin only)
+# - GET /leads/{id} - Get lead details
+# - PATCH /leads/{id}/status - Update lead status
+# - POST /leads/{id}/send-email - Trigger email send

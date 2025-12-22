@@ -2,17 +2,74 @@
 
 import os
 import asyncpg
+import asyncio
+import logging
 from typing import Optional, Dict, Any, List
 from contextlib import asynccontextmanager
+from datetime import datetime, timedelta
+
+logger = logging.getLogger(__name__)
+
+
+class CircuitBreaker:
+    """
+    Simple circuit breaker to prevent cascading failures.
+    
+    States:
+    - CLOSED: Normal operation, requests pass through
+    - OPEN: Failure threshold reached, requests fail fast
+    - HALF_OPEN: Testing if service recovered
+    """
+    
+    def __init__(
+        self,
+        failure_threshold: int = 5,
+        recovery_timeout: int = 30
+    ):
+        self.failure_threshold = failure_threshold
+        self.recovery_timeout = recovery_timeout
+        self.failures = 0
+        self.last_failure_time: Optional[datetime] = None
+        self.state = "CLOSED"
+    
+    def record_failure(self):
+        self.failures += 1
+        self.last_failure_time = datetime.utcnow()
+        if self.failures >= self.failure_threshold:
+            self.state = "OPEN"
+            logger.warning(f"Circuit breaker OPEN after {self.failures} failures")
+    
+    def record_success(self):
+        self.failures = 0
+        self.state = "CLOSED"
+    
+    def can_execute(self) -> bool:
+        if self.state == "CLOSED":
+            return True
+        
+        if self.state == "OPEN":
+            # Check if recovery timeout passed
+            if self.last_failure_time:
+                elapsed = (datetime.utcnow() - self.last_failure_time).seconds
+                if elapsed >= self.recovery_timeout:
+                    self.state = "HALF_OPEN"
+                    logger.info("Circuit breaker HALF_OPEN, testing recovery")
+                    return True
+            return False
+        
+        return True  # HALF_OPEN allows one request through
+
 
 class DatabaseManager:
     """
-    Supabase/PostgreSQL connection manager
+    Supabase/PostgreSQL connection manager with retry logic.
     
-    Handles:
+    Features:
     - Connection pooling
-    - Service role access (for encrypted state)
-    - Row Level Security bypass where needed
+    - Retry with exponential backoff
+    - Circuit breaker pattern
+    - Automatic reconnection
+    - Health checks
     """
     
     def __init__(self):
@@ -23,9 +80,24 @@ class DatabaseManager:
         
         if not self.database_url:
             raise ValueError("DATABASE_URL not set in environment")
+        
+        # Circuit breaker for connection protection
+        self.circuit_breaker = CircuitBreaker(
+            failure_threshold=5,
+            recovery_timeout=30
+        )
+        
+        # Retry configuration
+        self.max_retries = 3
+        self.base_delay = 1  # seconds
+        self.max_delay = 30  # seconds
     
-    async def initialize(self):
-        """Initialize connection pool"""
+    async def initialize(self, retries: int = 3):
+        """
+        Initialize connection pool with retry logic.
+        
+        Uses exponential backoff for connection failures.
+        """
         
         # Parse Supabase URL - fix postgres:// to postgresql://
         if "supabase.co" in self.database_url:
@@ -36,25 +108,56 @@ class DatabaseManager:
                     1
                 )
         
-        # Create pool
-        # ✅ FIXED: Removed server_settings - not supported by asyncpg
-        self.pool = await asyncpg.create_pool(
-            self.database_url,
-            min_size=2,
-            max_size=10,
-            max_queries=50000,
-            max_inactive_connection_lifetime=300,
-            command_timeout=60,
-            ssl='require' if 'supabase.co' in self.database_url else None
-        )
-        
-        print("✅ Database pool initialized")
+        for attempt in range(retries):
+            try:
+                # Create pool
+                self.pool = await asyncpg.create_pool(
+                    self.database_url,
+                    min_size=2,
+                    max_size=10,
+                    max_queries=50000,
+                    max_inactive_connection_lifetime=300,
+                    command_timeout=60,
+                    ssl='require' if 'supabase.co' in self.database_url else None
+                )
+                
+                # Test connection
+                async with self.pool.acquire() as conn:
+                    await conn.fetchval("SELECT 1")
+                
+                self.circuit_breaker.record_success()
+                logger.info("✅ Database pool initialized")
+                return
+                
+            except Exception as e:
+                self.circuit_breaker.record_failure()
+                
+                if attempt < retries - 1:
+                    delay = min(self.base_delay * (2 ** attempt), self.max_delay)
+                    logger.warning(
+                        f"Database connection failed (attempt {attempt + 1}/{retries}), "
+                        f"retrying in {delay}s: {e}"
+                    )
+                    await asyncio.sleep(delay)
+                else:
+                    logger.error(f"❌ Database connection failed after {retries} attempts: {e}")
+                    raise
+    
+    async def reconnect(self):
+        """Attempt to reconnect to database"""
+        logger.info("Attempting database reconnection...")
+        if self.pool:
+            try:
+                await self.pool.close()
+            except:
+                pass
+        await self.initialize(retries=3)
     
     async def close(self):
         """Close connection pool"""
         if self.pool:
             await self.pool.close()
-            print("✅ Database pool closed")
+            logger.info("✅ Database pool closed")
     
     @asynccontextmanager
     async def acquire(self):
