@@ -313,6 +313,35 @@ async def simulator_landing_ui():
     from fastapi.responses import FileResponse
     return FileResponse(os.path.join(static_dir, "simulator-landing.html"))
 
+# ════════════════════════════════════════════════════════════════════════════
+# PUBLIC MARKETING PAGES
+# ════════════════════════════════════════════════════════════════════════════
+
+@app.get("/about", include_in_schema=False)
+async def about_page():
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "about.html"))
+
+@app.get("/contact", include_in_schema=False)
+async def contact_page():
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "contact.html"))
+
+@app.get("/privacy", include_in_schema=False)
+async def privacy_page():
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "privacy.html"))
+
+@app.get("/terms", include_in_schema=False)
+async def terms_page():
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "terms.html"))
+
+@app.get("/faq", include_in_schema=False)
+async def faq_page():
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "faq.html"))
+
 @app.get("/")
 async def root():
     """Root endpoint - public info"""

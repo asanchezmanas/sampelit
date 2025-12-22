@@ -421,3 +421,36 @@ async def health_check():
 async def ping():
     """Simple ping endpoint for connectivity tests"""
     return {"pong": True}
+
+
+# ════════════════════════════════════════════════════════════════════════════
+# ✅ GENERIC EVENT TRACKING (For Self-Tracking & Custom Events)
+# ════════════════════════════════════════════════════════════════════════════
+
+from pydantic import BaseModel
+
+class GenericEventRequest(BaseModel):
+    """Request to track a generic event (landing_view, email_submit, etc.)"""
+    event: str
+    data: Optional[Dict[str, Any]] = None
+    timestamp: Optional[int] = None
+
+@router.post("/event")
+async def track_event(request: GenericEventRequest):
+    """
+    Track a generic event (pageview, click, custom)
+    
+    PUBLIC ENDPOINT - No auth required.
+    Used by Samplit's own landing pages for self-tracking (conv_track.md).
+    """
+    logger.info(f"[Event] {request.event}: {request.data}")
+    
+    # In production, this would save to an events table
+    # For MVP, we just log it (can be picked up by log aggregators)
+    
+    return {
+        "success": True,
+        "event": request.event,
+        "message": "Event tracked"
+    }
+

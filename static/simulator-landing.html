@@ -19,6 +19,28 @@
             background-size: 20px 20px;
         }
     </style>
+
+    <!-- ✅ Self-Tracking: Samplit uses Samplit -->
+    <script>
+        // Minimal tracking stub for the simulator landing
+        // In production, this would be the full t.js from CDN
+        window.samplit = window.samplit || {
+            track: function (event, data) {
+                console.log('[Samplit Track]', event, data);
+                // POST to our own tracker endpoint
+                fetch('/api/v1/tracker/event', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ event, data, timestamp: Date.now() })
+                }).catch(() => { });
+            }
+        };
+
+        // Fire landing_view on load
+        document.addEventListener('DOMContentLoaded', () => {
+            window.samplit.track('landing_view', { page: 'simulator' });
+        });
+    </script>
 </head>
 
 <body class="bg-slate-50 text-slate-900 overflow-x-hidden" x-data="simulator()">
@@ -254,7 +276,11 @@
 
                 submitEmail() {
                     this.submitted = true;
-                    // Here we would actually POST to the API
+                    // Track the email submission event
+                    if (window.samplit && window.samplit.track) {
+                        window.samplit.track('email_submit', { page: 'simulator' });
+                    }
+                    // Here we would actually POST to the API to save the lead
                     setTimeout(() => this.submitted = false, 5000);
                 }
             }

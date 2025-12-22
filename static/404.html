@@ -1,71 +1,64 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-    />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>
-      404 Error Page | TailAdmin - Tailwind CSS Admin Dashboard Template
-    </title>
-  </head>
-  <body
-    x-data="{ page: 'page404', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
-    x-init="
-         darkMode = JSON.parse(localStorage.getItem('darkMode'));
-         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
-    :class="{'dark bg-gray-900': darkMode === true}"
-  >
-    <!-- ===== Preloader Start ===== -->
-    <include src="./partials/preloader.html"></include>
-    <!-- ===== Preloader End ===== -->
 
-    <!-- ===== Page Wrapper Start ===== -->
-    <div
-      class="relative z-1 flex min-h-screen flex-col items-center justify-center overflow-hidden p-6"
-    >
-      <!-- ===== Common Grid Shape Start ===== -->
-      <include src="./partials/common-grid-shape.html"></include>
-      <!-- ===== Common Grid Shape End ===== -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found | Samplit</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
 
-      <!-- Centered Content -->
-      <div class="mx-auto w-full max-w-[242px] text-center sm:max-w-[472px]">
-        <h1
-          class="mb-8 text-title-md font-bold text-gray-800 dark:text-white/90 xl:text-title-2xl"
-        >
-          ERROR
-        </h1>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-        <img src="./images/error/404.svg" alt="404" class="dark:hidden" />
-        <img
-          src="./images/error/404-dark.svg"
-          alt="404"
-          class="hidden dark:block"
-        />
-
-        <p
-          class="mb-6 mt-10 text-base text-gray-700 dark:text-gray-400 sm:text-lg"
-        >
-          We can’t seem to find the page you are looking for!
-        </p>
-
-        <a
-          href="index.html"
-          class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-5 py-3.5 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
-        >
-          Back to Home Page
-        </a>
-      </div>
-      <!-- Footer -->
-      <p
-        class="absolute bottom-6 left-1/2 -translate-x-1/2 text-center text-sm text-gray-500 dark:text-gray-400"
-      >
-        &copy; <span id="year"></span> - TailAdmin
-      </p>
+  <!-- Header -->
+  <header class="border-b border-slate-200 bg-white/80 backdrop-blur-md">
+    <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold text-slate-900">Samplit</a>
+      <nav class="hidden md:flex items-center gap-6 text-sm text-slate-600">
+        <a href="/about" class="hover:text-slate-900">About</a>
+        <a href="/faq" class="hover:text-slate-900">FAQ</a>
+        <a href="/contact" class="hover:text-slate-900">Contact</a>
+      </nav>
     </div>
+  </header>
 
-    <!-- ===== Page Wrapper End ===== -->
-  </body>
+  <!-- Content -->
+  <main class="flex-1 flex items-center justify-center px-6 py-20">
+    <div class="text-center max-w-md">
+      <div class="text-8xl font-bold text-slate-200 mb-4">404</div>
+      <h1 class="text-2xl font-bold text-slate-900 mb-4">Page not found</h1>
+      <p class="text-slate-600 mb-8">This page doesn't exist.</p>
+
+      <div class="space-y-2 mb-8">
+        <p class="text-sm text-slate-500 font-medium">Common pages:</p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <a href="/"
+            class="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm hover:border-blue-500 hover:text-blue-600 transition-colors">Home</a>
+          <a href="/about"
+            class="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm hover:border-blue-500 hover:text-blue-600 transition-colors">About</a>
+          <a href="/faq"
+            class="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm hover:border-blue-500 hover:text-blue-600 transition-colors">FAQ</a>
+          <a href="/simulator"
+            class="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm hover:border-blue-500 hover:text-blue-600 transition-colors">Simulator</a>
+        </div>
+      </div>
+
+      <p class="text-sm text-slate-500">Or <a href="/contact" class="text-blue-600 hover:underline">contact us</a> if
+        you think something's broken.</p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 py-8 px-6 text-center text-sm text-slate-500">
+    <p>© 2025 Samplit. <a href="/privacy" class="hover:underline">Privacy</a> · <a href="/terms"
+        class="hover:underline">Terms</a> · <a href="/contact" class="hover:underline">Contact</a></p>
+  </footer>
+</body>
+
 </html>
