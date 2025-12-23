@@ -1,0 +1,75 @@
+# Default .gitignore for Python / FastAPI / Render project (Samplit)
+
+# 🐍 Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+
+# 📦 Python Cache & Build
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# 🔐 Secrets & Configuration
+.env
+.env.local
+.env.dev
+.env.prod
+.secrets
+*.pem
+*.key
+
+# 🏠 Editor & IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.project
+.pydevproject
+.settings/
+
+# 🖥️ OS Specific
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 📊 Models & Local Data (if any)
+*.pkl
+*.joblib
+.ipynb_checkpoints/
+
+# 🧪 Coverage & Tests
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# 🌐 Static / Build output (optional - depends if you pre-build)
+# node_modules/
+# static/build/
