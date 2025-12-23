@@ -12,8 +12,12 @@ import logging
 from typing import Optional
 from .experiment_service import ExperimentService
 from .experiment_service_redis import ExperimentServiceWithRedis
+from .segmented_experiment_service import SegmentedExperimentService
 from .metrics_service import MetricsService
 from .audit_service import AuditService
+from data_access.repositories.experiment_repository import ExperimentRepository
+from data_access.repositories.variant_repository import VariantRepository
+from data_access.repositories.assignment_repository import AssignmentRepository
 
 logger = logging.getLogger(__name__)
 
@@ -115,7 +119,13 @@ class ServiceFactory:
         else:
             logger.info("📦 Using PostgreSQL implementation (Redis not configured)")
         
-        cls._service = ExperimentService(db_manager, audit_service=cls._audit)
+        cls._service = SegmentedExperimentService(
+            db_manager,
+            experiment_repo=ExperimentRepository(db_manager.pool),
+            variant_repo=VariantRepository(db_manager.pool),
+            assignment_repo=AssignmentRepository(db_manager.pool),
+            audit_service=cls._audit
+        )
         return cls._service
     
     @classmethod

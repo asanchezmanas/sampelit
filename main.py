@@ -42,7 +42,8 @@ from public_api.routers import (
     downloads,
     proxy,
     traffic_filters,
-    demo
+    demo,
+    segmentation
 )
 
 # ════════════════════════════════════════════════════════════════════════════
@@ -319,6 +320,13 @@ app.include_router(
     traffic_filters.router,
     prefix=f"{settings.API_V1_PREFIX}/traffic",
     tags=["Traffic Control"]
+)
+
+# ✅ Segmentation Control
+app.include_router(
+    segmentation.router,
+    prefix=f"{settings.API_V1_PREFIX}/segmentation",
+    tags=["Segmentation"]
 )
 
 # ✅ Simulator (Public Demo)
