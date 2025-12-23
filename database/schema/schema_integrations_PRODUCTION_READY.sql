@@ -17,8 +17,7 @@ CREATE TABLE IF NOT EXISTS oauth_states (
     return_url TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     
-    -- ✅ Auto-delete después de 10 minutos (seguridad)
-    CONSTRAINT expired_check CHECK (created_at > NOW() - INTERVAL '10 minutes'),
+    -- (El cleanup se maneja vía función cleanup_expired_oauth_states)
     CONSTRAINT valid_platform CHECK (platform IN ('wordpress', 'shopify', 'woocommerce', 'magento'))
 );
 
@@ -186,9 +185,8 @@ CREATE INDEX idx_api_calls_platform ON integration_api_calls(platform);
 CREATE INDEX idx_api_calls_created ON integration_api_calls(created_at DESC);
 CREATE INDEX idx_api_calls_status ON integration_api_calls(status_code);
 
--- ✅ Índice para rate limiting (calls en última hora)
-CREATE INDEX idx_api_calls_rate_limit ON integration_api_calls(installation_id, created_at)
-    WHERE created_at > NOW() - INTERVAL '1 hour';
+-- ✅ Índice para rate limiting (Optimizado para queries recientes)
+CREATE INDEX idx_api_calls_rate_limit ON integration_api_calls(installation_id, created_at DESC);
 
 -- ✅ Función para limpiar llamadas API viejas (retener solo últimos 7 días)
 CREATE OR REPLACE FUNCTION cleanup_old_api_calls()
@@ -472,34 +470,30 @@ COMMENT ON VIEW v_integration_health IS 'Health check dashboard for integrations
 -- CRON JOBS (Configurar en servidor)
 -- ============================================
 
--- Ejemplo de configuración de cron jobs:
-/*
--- Limpiar OAuth states expirados (cada 10 minutos)
-*/10 * * * * psql -d samplit -c "SELECT cleanup_expired_oauth_states();"
+-- Ejemplo de configuración de cron jobs (fuera de SQL):
+-- # Limpiar OAuth states expirados (cada 10 minutos)
+-- */10 * * * * psql -h localhost -U postgres -d samplit -c "SELECT cleanup_expired_oauth_states();"
+-- (Nota: El formato */10 indica frecuencia en cron)
 
--- Limpiar eventos viejos (diario a las 2 AM)
-0 2 * * * psql -d samplit -c "SELECT cleanup_old_integration_events();"
-
--- Limpiar API calls viejos (diario a las 3 AM)
-0 3 * * * psql -d samplit -c "SELECT cleanup_old_api_calls();"
-*/
-
-RAISE NOTICE '';
-RAISE NOTICE '================================================';
-RAISE NOTICE '✅ Schema Integraciones creado exitosamente';
-RAISE NOTICE '================================================';
-RAISE NOTICE '';
-RAISE NOTICE 'Tablas creadas:';
-RAISE NOTICE '- oauth_states (OAuth flow)';
-RAISE NOTICE '- integration_webhooks (Webhook registry)';
-RAISE NOTICE '- integration_events (Event logging)';
-RAISE NOTICE '- integration_api_calls (API monitoring)';
-RAISE NOTICE '- platform_sync_jobs (Sync tracking)';
-RAISE NOTICE '';
-RAISE NOTICE 'Vistas creadas:';
-RAISE NOTICE '- v_active_integrations';
-RAISE NOTICE '- v_recent_integration_events';
-RAISE NOTICE '- v_integration_health';
-RAISE NOTICE '';
-RAISE NOTICE '⚠️  IMPORTANTE: Configurar cron jobs para cleanup';
-RAISE NOTICE '';
+DO $$
+BEGIN
+    RAISE NOTICE '';
+    RAISE NOTICE '================================================';
+    RAISE NOTICE '✅ Schema Integraciones creado exitosamente';
+    RAISE NOTICE '================================================';
+    RAISE NOTICE '';
+    RAISE NOTICE 'Tablas creadas:';
+    RAISE NOTICE '- oauth_states (OAuth flow)';
+    RAISE NOTICE '- integration_webhooks (Webhook registry)';
+    RAISE NOTICE '- integration_events (Event logging)';
+    RAISE NOTICE '- integration_api_calls (API monitoring)';
+    RAISE NOTICE '- platform_sync_jobs (Sync tracking)';
+    RAISE NOTICE '';
+    RAISE NOTICE 'Vistas creadas:';
+    RAISE NOTICE '- v_active_integrations';
+    RAISE NOTICE '- v_recent_integration_events';
+    RAISE NOTICE '- v_integration_health';
+    RAISE NOTICE '';
+    RAISE NOTICE '⚠️  IMPORTANTE: Configurar cron jobs para cleanup';
+    RAISE NOTICE '';
+END $$;

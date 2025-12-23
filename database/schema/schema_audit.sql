@@ -103,4 +103,7 @@ $$ LANGUAGE plpgsql;
 COMMENT ON TABLE algorithm_audit_trail IS 'Immutable log of algorithm decisions with hash chaining for integrity';
 COMMENT ON FUNCTION verify_audit_chain IS 'Verifies the integrity of the audit hash chain for an experiment';
 
-RAISE NOTICE '✅ Created algorithm_audit_trail table and verify_audit_chain function';
+DO $$
+BEGIN
+    RAISE NOTICE '✅ Created algorithm_audit_trail table and verify_audit_chain function';
+END $$;

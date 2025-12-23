@@ -14,11 +14,11 @@ in plaintext in the database.
 
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 import json
 import os
 import base64
-from typing import Dict, Any
+from typing import Dict, Any, List
 
 class StateEncryption:
     """
@@ -48,7 +48,7 @@ class StateEncryption:
         
         # Derive key using PBKDF2
         salt = b'samplit_algorithm_state_v1'  # Fixed salt OK here
-        kdf = PBKDF2(
+        kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
             length=32,
             salt=salt,

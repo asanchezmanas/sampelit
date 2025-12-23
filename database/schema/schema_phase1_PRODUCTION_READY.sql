@@ -579,15 +579,14 @@ BEGIN
     END IF;
     
     RAISE NOTICE '✅ Todos los índices críticos presentes';
+    RAISE NOTICE '';
+    RAISE NOTICE '================================================';
+    RAISE NOTICE '✅ Schema Phase 1 creado exitosamente';
+    RAISE NOTICE '================================================';
+    RAISE NOTICE '';
+    RAISE NOTICE 'Próximos pasos:';
+    RAISE NOTICE '1. Ejecutar schema_integrations.sql';
+    RAISE NOTICE '2. Configurar variables de entorno';
+    RAISE NOTICE '3. Inicializar aplicación';
+    RAISE NOTICE '';
 END $$;
-
-RAISE NOTICE '';
-RAISE NOTICE '================================================';
-RAISE NOTICE '✅ Schema Phase 1 creado exitosamente';
-RAISE NOTICE '================================================';
-RAISE NOTICE '';
-RAISE NOTICE 'Próximos pasos:';
-RAISE NOTICE '1. Ejecutar schema_integrations.sql';
-RAISE NOTICE '2. Configurar variables de entorno';
-RAISE NOTICE '3. Inicializar aplicación';
-RAISE NOTICE '';

@@ -11,10 +11,10 @@ import logging
 from datetime import datetime
 from uuid import uuid4
 
-from ..repositories.experiment_repository import ExperimentRepository
-from ..repositories.variant_repository import VariantRepository
-from ..repositories.assignment_repository import AssignmentRepository
-from ..engine.core.allocators._bayesian import BayesianAllocator
+from data_access.repositories.experiment_repository import ExperimentRepository
+from data_access.repositories.variant_repository import VariantRepository
+from data_access.repositories.assignment_repository import AssignmentRepository
+from engine.core.allocators.bayesian import BayesianAllocator
 
 logger = logging.getLogger(__name__)
 

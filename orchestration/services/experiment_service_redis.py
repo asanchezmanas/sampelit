@@ -13,9 +13,9 @@ from datetime import datetime
 import redis.asyncio as redis
 
 from .experiment_service import ExperimentService
-from ..repositories.experiment_repository import ExperimentRepository
-from ..repositories.variant_repository import VariantRepository
-from ..repositories.assignment_repository import AssignmentRepository
+from data_access.repositories.experiment_repository import ExperimentRepository
+from data_access.repositories.variant_repository import VariantRepository
+from data_access.repositories.assignment_repository import AssignmentRepository
 
 logger = logging.getLogger(__name__)
 

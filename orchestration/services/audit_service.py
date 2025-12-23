@@ -24,8 +24,7 @@ from datetime import datetime
 from typing import Optional, Dict, Any, List
 from uuid import UUID
 
-from database.connection import DatabaseManager
-from models.experiments import Assignment
+from data_access.database import DatabaseManager
 
 
 class AuditService:

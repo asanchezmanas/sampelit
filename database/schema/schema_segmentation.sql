@@ -333,3 +333,8 @@ INSERT INTO experiment_traffic_stats (experiment_id)
 SELECT id
 FROM experiments
 ON CONFLICT (experiment_id) DO NOTHING;
+
+DO $$
+BEGIN
+    RAISE NOTICE '✅ Schema Segmentation creado exitosamente';
+END $$;

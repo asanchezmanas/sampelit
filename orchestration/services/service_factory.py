@@ -11,7 +11,7 @@ import os
 import logging
 from typing import Optional
 from .experiment_service import ExperimentService
-from .experiment_service_redis import ExperimentServiceWithRedis
+from .experiment_service_redis import ExperimentServiceRedis
 from .segmented_experiment_service import SegmentedExperimentService
 from .metrics_service import MetricsService
 from .audit_service import AuditService
@@ -86,7 +86,7 @@ class ServiceFactory:
         # Caso 1: Redis forzado manualmente
         if force_redis and redis_url:
             logger.info("🔴 FORCE_REDIS=true → Using Redis implementation")
-            cls._service = ExperimentServiceWithRedis(db_manager, redis_url, audit_service=cls._audit)
+            cls._service = ExperimentServiceRedis(db_manager, redis_url, audit_service=cls._audit)
             return cls._service
         
         # Caso 2: Redis disponible Y threshold alcanzado
@@ -99,7 +99,7 @@ class ServiceFactory:
                 )
                 
                 # Crear servicio con Redis
-                cls._service = ExperimentServiceWithRedis(db_manager, redis_url, audit_service=cls._audit)
+                cls._service = ExperimentServiceRedis(db_manager, redis_url, audit_service=cls._audit)
                 
                 # Migrar estado actual a Redis
                 await cls._migrate_to_redis(db_manager, cls._service)
