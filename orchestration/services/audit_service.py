@@ -36,18 +36,19 @@ class AuditService:
     
     def __init__(self, db_manager: DatabaseManager):
         self.db = db_manager
-        self.algorithm_version = "adaptive-thompson-v2.1"  # Versión pública
+        self.algorithm_version = "adaptive-thompson-v3.0-enterprise"  # Versión profesional
     
     # ═══════════════════════════════════════════════════════════════════════
     # REGISTRO DE DECISIÓN (ANTES de ver el resultado)
     # ═══════════════════════════════════════════════════════════════════════
     
-    def log_decision(
+    async def log_decision(
         self,
         experiment_id: UUID,
         visitor_id: str,
         selected_variant_id: UUID,
         assignment_id: UUID,
+        segment_key: str = 'default',
         context: Optional[Dict[str, Any]] = None
     ) -> UUID:
         """
@@ -66,10 +67,10 @@ class AuditService:
         Returns:
             UUID del registro de auditoría creado
         """
-        with self.db.get_cursor() as cursor:
+        async with self.db.pool.acquire() as conn:
             # Obtener el último hash y sequence number
-            previous_hash, sequence_number = self._get_chain_state(
-                cursor, experiment_id
+            previous_hash, sequence_number = await self._get_chain_state(
+                conn, experiment_id
             )
             
             # Timestamp de decisión
@@ -87,13 +88,14 @@ class AuditService:
             decision_hash = self._calculate_decision_hash(
                 visitor_id=visitor_id,
                 variant_id=selected_variant_id,
+                segment_key=segment_key,
                 timestamp=decision_timestamp,
                 previous_hash=previous_hash,
                 sequence_number=sequence_number
             )
             
             # Insertar registro
-            cursor.execute("""
+            audit_id = await conn.fetchval("""
                 INSERT INTO algorithm_audit_trail (
                     experiment_id,
                     visitor_id,
@@ -105,33 +107,33 @@ class AuditService:
                     context_hash,
                     user_agent_hash,
                     assignment_id,
+                    segment_key,
                     algorithm_version
                 )
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
                 RETURNING id
-            """, (
-                str(experiment_id),
+            """, 
+                experiment_id,
                 visitor_id,
-                str(selected_variant_id),
+                selected_variant_id,
                 decision_timestamp,
                 decision_hash,
                 previous_hash,
                 sequence_number,
                 context_hash,
                 user_agent_hash,
-                str(assignment_id),
+                assignment_id,
+                segment_key,
                 self.algorithm_version
-            ))
+            )
             
-            audit_id = cursor.fetchone()[0]
-            
-            return UUID(audit_id)
+            return audit_id
     
     # ═══════════════════════════════════════════════════════════════════════
     # REGISTRO DE CONVERSIÓN (DESPUÉS de la decisión)
     # ═══════════════════════════════════════════════════════════════════════
     
-    def log_conversion(
+    async def log_conversion(
         self,
         assignment_id: UUID,
         conversion_value: Optional[float] = None
@@ -149,30 +151,25 @@ class AuditService:
         Returns:
             True si se actualizó correctamente
         """
-        with self.db.get_cursor() as cursor:
+        async with self.db.pool.acquire() as conn:
             conversion_timestamp = datetime.utcnow()
             
-            cursor.execute("""
+            result = await conn.fetchrow("""
                 UPDATE algorithm_audit_trail
                 SET 
                     conversion_observed = TRUE,
-                    conversion_timestamp = %s,
-                    conversion_value = %s
-                WHERE assignment_id = %s
-                AND conversion_observed IS NULL  -- Solo primera conversión
+                    conversion_timestamp = $1,
+                    conversion_value = $2
+                WHERE assignment_id = $3
+                AND (conversion_observed IS NULL OR conversion_observed = FALSE)
                 RETURNING id, decision_timestamp
-            """, (
-                conversion_timestamp,
-                conversion_value,
-                str(assignment_id)
-            ))
-            
-            result = cursor.fetchone()
+            """, conversion_timestamp, conversion_value, assignment_id)
             
             if not result:
                 return False
             
-            audit_id, decision_timestamp = result
+            audit_id = result['id']
+            decision_timestamp = result['decision_timestamp']
             
             # VERIFICACIÓN: decision_timestamp < conversion_timestamp
             if decision_timestamp >= conversion_timestamp:
@@ -188,7 +185,7 @@ class AuditService:
     # CONSULTAS PÚBLICAS (para clientes)
     # ═══════════════════════════════════════════════════════════════════════
     
-    def get_audit_trail(
+    async def get_audit_trail(
         self,
         experiment_id: UUID,
         start_date: Optional[datetime] = None,
@@ -209,12 +206,13 @@ class AuditService:
         - Conversiones observadas
         - Pruebas de integridad
         """
-        with self.db.get_cursor() as cursor:
+        async with self.db.pool.acquire() as conn:
             query = """
                 SELECT 
                     id,
                     visitor_id,
                     selected_variant_id,
+                    segment_key,
                     decision_timestamp,
                     conversion_observed,
                     conversion_timestamp,
@@ -226,29 +224,30 @@ class AuditService:
                         conversion_timestamp - decision_timestamp
                     )) as decision_to_conversion_seconds
                 FROM algorithm_audit_trail
-                WHERE experiment_id = %s
+                WHERE experiment_id = $1
             """
             
-            params = [str(experiment_id)]
+            params = [experiment_id]
+            i = 2
             
             if start_date:
-                query += " AND decision_timestamp >= %s"
+                query += f" AND decision_timestamp >= ${i}"
                 params.append(start_date)
+                i += 1
             
             if end_date:
-                query += " AND decision_timestamp <= %s"
+                query += f" AND decision_timestamp <= ${i}"
                 params.append(end_date)
+                i += 1
             
-            query += " ORDER BY sequence_number DESC LIMIT %s"
+            query += f" ORDER BY sequence_number DESC LIMIT ${i}"
             params.append(limit)
             
-            cursor.execute(query, params)
+            rows = await conn.fetch(query, *params)
             
-            columns = [desc[0] for desc in cursor.description]
             results = []
-            
-            for row in cursor.fetchall():
-                record = dict(zip(columns, row))
+            for row in rows:
+                record = dict(row)
                 # Convertir UUIDs a strings para JSON
                 record['id'] = str(record['id'])
                 record['selected_variant_id'] = str(record['selected_variant_id'])
@@ -266,16 +265,21 @@ class AuditService:
         - Tiempo promedio a conversión
         - Integridad de la cadena de hashes
         """
-        with self.db.get_cursor() as cursor:
-            cursor.execute(
-                "SELECT get_audit_stats(%s)",
-                (str(experiment_id),)
-            )
+        async with self.db.pool.acquire() as conn:
+            # Stats básicas si no queremos usar el stored procedure
+            row = await conn.fetchrow("""
+                SELECT 
+                    COUNT(*) as total_decisions,
+                    COUNT(*) FILTER (WHERE conversion_observed) as conversions,
+                    COUNT(*) FILTER (WHERE NOT conversion_observed) as pending_conversions,
+                    AVG(EXTRACT(EPOCH FROM (conversion_timestamp - decision_timestamp))) FILTER (WHERE conversion_observed) as avg_time_to_conversion
+                FROM algorithm_audit_trail
+                WHERE experiment_id = $1
+            """, experiment_id)
             
-            stats = cursor.fetchone()[0]
-            return stats
+            return dict(row) if row else {}
     
-    def verify_chain_integrity(
+    async def verify_chain_integrity(
         self,
         experiment_id: UUID,
         start_sequence: int = 1,
@@ -294,24 +298,19 @@ class AuditService:
                 'invalid_records': [...]
             }
         """
-        with self.db.get_cursor() as cursor:
-            cursor.execute("""
-                SELECT * FROM verify_audit_chain(%s, %s, %s)
-            """, (
-                str(experiment_id),
-                start_sequence,
-                end_sequence
-            ))
+        async with self.db.pool.acquire() as conn:
+            results = await conn.fetch("""
+                SELECT * FROM verify_audit_chain($1, $2, $3)
+            """, experiment_id, start_sequence, end_sequence)
             
-            results = cursor.fetchall()
             invalid_records = [
                 {
-                    'sequence_number': row[0],
-                    'expected_hash': row[2],
-                    'actual_hash': row[3]
+                    'sequence_number': row['sequence_number'],
+                    'expected_hash': row['expected_hash'],
+                    'actual_hash': row['actual_hash']
                 }
                 for row in results
-                if not row[1]  # is_valid = False
+                if not row['is_valid']
             ]
             
             return {
@@ -324,7 +323,7 @@ class AuditService:
     # EXPORTACIÓN (para auditoría externa)
     # ═══════════════════════════════════════════════════════════════════════
     
-    def export_audit_trail_csv(
+    async def export_audit_trail_csv(
         self,
         experiment_id: UUID,
         filepath: str
@@ -340,7 +339,7 @@ class AuditService:
         """
         import csv
         
-        records = self.get_audit_trail(
+        records = await self.get_audit_trail(
             experiment_id=experiment_id,
             limit=1000000  # Todos los registros
         )
@@ -359,25 +358,23 @@ class AuditService:
     # UTILIDADES PRIVADAS
     # ═══════════════════════════════════════════════════════════════════════
     
-    def _get_chain_state(self, cursor, experiment_id: UUID) -> tuple:
+    async def _get_chain_state(self, conn, experiment_id: UUID) -> tuple:
         """
         Obtiene el estado actual de la cadena de hashes.
         
         Returns:
             (previous_hash, next_sequence_number)
         """
-        cursor.execute("""
+        row = await conn.fetchrow("""
             SELECT decision_hash, sequence_number
             FROM algorithm_audit_trail
-            WHERE experiment_id = %s
+            WHERE experiment_id = $1
             ORDER BY sequence_number DESC
             LIMIT 1
-        """, (str(experiment_id),))
+        """, experiment_id)
         
-        result = cursor.fetchone()
-        
-        if result:
-            return result[0], result[1] + 1
+        if row:
+            return row['decision_hash'], row['sequence_number'] + 1
         else:
             return None, 1  # Primera entrada
     
@@ -385,6 +382,7 @@ class AuditService:
         self,
         visitor_id: str,
         variant_id: UUID,
+        segment_key: str,
         timestamp: datetime,
         previous_hash: Optional[str],
         sequence_number: int
@@ -404,6 +402,7 @@ class AuditService:
         data = {
             'visitor_id': visitor_id,
             'variant_id': str(variant_id),
+            'segment_key': segment_key,
             'timestamp': timestamp.isoformat(),
             'previous_hash': previous_hash or '',
             'sequence_number': sequence_number
@@ -428,101 +427,8 @@ class AuditService:
 # INTEGRACIÓN CON ExperimentService
 # ═══════════════════════════════════════════════════════════════════════════
 
-class AuditableExperimentService:
-    """
-    Wrapper del ExperimentService que agrega auditoría automática.
-    
-    Uso:
-        # En lugar de:
-        service = ExperimentService(db_manager)
-        
-        # Usar:
-        service = AuditableExperimentService(db_manager)
-        
-    Todas las operaciones se auditan automáticamente.
-    """
-    
-    def __init__(self, db_manager: DatabaseManager):
-        from services.experiment_service import ExperimentService
-        
-        self.service = ExperimentService(db_manager)
-        self.audit = AuditService(db_manager)
-        self.db = db_manager
-    
-    def allocate_user(
-        self,
-        experiment_id: UUID,
-        visitor_id: str,
-        context: Optional[Dict[str, Any]] = None
-    ) -> Assignment:
-        """
-        Asigna usuario a variante CON auditoría.
-        
-        Flujo:
-        1. Algoritmo decide variante
-        2. Se registra la decisión (ANTES de que el usuario la vea)
-        3. Se retorna el assignment
-        """
-        # El algoritmo toma la decisión
-        assignment = self.service.allocate_user(
-            experiment_id=experiment_id,
-            visitor_id=visitor_id
-        )
-        
-        # Registramos la decisión INMEDIATAMENTE
-        # (antes de que el usuario vea la variante)
-        self.audit.log_decision(
-            experiment_id=experiment_id,
-            visitor_id=visitor_id,
-            selected_variant_id=assignment.variant_id,
-            assignment_id=assignment.id,
-            context=context
-        )
-        
-        return assignment
-    
-    def record_conversion(
-        self,
-        assignment_id: UUID,
-        conversion_value: Optional[float] = None
-    ) -> bool:
-        """
-        Registra conversión CON auditoría.
-        
-        Flujo:
-        1. Se registra conversión en sistema principal
-        2. Se actualiza audit trail con el resultado observado
-        """
-        # Registrar en sistema principal
-        success = self.service.record_conversion(
-            assignment_id=assignment_id,
-            conversion_value=conversion_value
-        )
-        
-        if success:
-            # Actualizar audit trail
-            self.audit.log_conversion(
-                assignment_id=assignment_id,
-                conversion_value=conversion_value
-            )
-        
-        return success
-    
-    def get_results(self, experiment_id: UUID) -> Dict[str, Any]:
-        """Obtiene resultados del experimento."""
-        return self.service.get_results(experiment_id)
-    
-    def get_audit_trail(self, experiment_id: UUID) -> List[Dict[str, Any]]:
-        """Obtiene audit trail del experimento."""
-        return self.audit.get_audit_trail(experiment_id)
-    
-    def get_audit_stats(self, experiment_id: UUID) -> Dict[str, Any]:
-        """Obtiene estadísticas de auditoría."""
-        return self.audit.get_audit_stats(experiment_id)
-    
-    def verify_integrity(self, experiment_id: UUID) -> Dict[str, Any]:
-        """Verifica integridad de la cadena de auditoría."""
-        return self.audit.verify_chain_integrity(experiment_id)
+# Auditoría automática integrada en ExperimentService.
+# No se requiere AuditableExperimentService.
 
 
 # ═══════════════════════════════════════════════════════════════════════════

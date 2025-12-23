@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS algorithm_audit_trail (
     
     -- Decision Context
     decision_timestamp TIMESTAMPTZ NOT NULL,
+    segment_key VARCHAR(255) DEFAULT 'default',
     algorithm_version VARCHAR(50),
     context_hash VARCHAR(64), -- SHA256 of context dict
     user_agent_hash VARCHAR(64), -- SHA256 of user agent
@@ -41,6 +42,7 @@ CREATE INDEX idx_audit_experiment ON algorithm_audit_trail(experiment_id);
 CREATE INDEX idx_audit_visitor ON algorithm_audit_trail(visitor_id);
 CREATE INDEX idx_audit_sequence ON algorithm_audit_trail(experiment_id, sequence_number DESC);
 CREATE INDEX idx_audit_decision_time ON algorithm_audit_trail(decision_timestamp);
+CREATE INDEX idx_audit_segment ON algorithm_audit_trail(segment_key);
 
 -- ============================================
 -- FUNCTION: VERIFY_AUDIT_CHAIN

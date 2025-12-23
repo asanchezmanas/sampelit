@@ -34,12 +34,14 @@ class ExperimentService:
         db_pool,
         experiment_repo: ExperimentRepository,
         variant_repo: VariantRepository,
-        assignment_repo: AssignmentRepository
+        assignment_repo: AssignmentRepository,
+        audit_service: Optional['AuditService'] = None
     ):
         self.db = db_pool
         self.experiment_repo = experiment_repo
         self.variant_repo = variant_repo
         self.assignment_repo = assignment_repo
+        self.audit = audit_service
         self.logger = logging.getLogger(f"{__name__}.ExperimentService")
     
     # ========================================================================
@@ -407,6 +409,18 @@ class ExperimentService:
             f"in experiment {experiment_id}"
         )
         
+        # ✅ AUTOMATIC AUDIT
+        if self.audit:
+            segment_key = (context or {}).get('segment_key', 'default')
+            await self.audit.log_decision(
+                experiment_id=experiment_id,
+                visitor_id=user_identifier,
+                selected_variant_id=selected_variant['id'],
+                assignment_id=assignment_id,
+                segment_key=segment_key,
+                context=context
+            )
+        
         return {
             'variant_id': selected_variant['id'],
             'variant_name': selected_variant['name'],
@@ -494,6 +508,13 @@ class ExperimentService:
             f"🎯 Recorded conversion for user {user_identifier} "
             f"in experiment {experiment_id}"
         )
+        
+        # ✅ AUTOMATIC AUDIT
+        if self.audit:
+            await self.audit.log_conversion(
+                assignment_id=assignment['id'],
+                conversion_value=conversion_value
+            )
         
         return conversion_id
     

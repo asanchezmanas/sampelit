@@ -31,6 +31,7 @@ class AuditRecord(BaseModel):
     id: str
     visitor_id: str
     selected_variant_id: str
+    segment_key: str = "default"
     decision_timestamp: datetime
     conversion_observed: Optional[bool] = None
     conversion_timestamp: Optional[datetime] = None
@@ -147,6 +148,69 @@ async def get_fairness_proof(
     except Exception as e:
         logger.error(f"Fairness proof generation failed: {e}")
         raise APIError("Proof generation interrupted", code=ErrorCodes.INTERNAL_ERROR, status=500)
+    
+@router.get("/experiments/{experiment_id}/export/csv")
+async def download_audit_trail_csv(
+    experiment_id: uuid.UUID,
+    user_id: str = Depends(get_current_user),
+    db: DatabaseManager = Depends(get_db)
+):
+    """Downloads the complete audit trail as a signed CSV file"""
+    from fastapi.responses import StreamingResponse
+    import io
+    import csv
+    
+    await _verify_ownership(db, experiment_id, user_id)
+    
+    service = AuditService(db)
+    records = await service.get_audit_trail(experiment_id=experiment_id, limit=1000000)
+    
+    if not records:
+        raise APIError("No audit data to export", code=ErrorCodes.NOT_FOUND, status=404)
+    
+    output = io.StringIO()
+    writer = csv.DictWriter(output, fieldnames=records[0].keys())
+    writer.writeheader()
+    writer.writerows(records)
+    output.seek(0)
+    
+    filename = f"audit_trail_{experiment_id}_{datetime.now().strftime('%Y%m%d')}.csv"
+    
+    return StreamingResponse(
+        iter([output.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )
+
+@router.get("/experiments/{experiment_id}/export/json")
+async def download_audit_trail_json(
+    experiment_id: uuid.UUID,
+    user_id: str = Depends(get_current_user),
+    db: DatabaseManager = Depends(get_db)
+):
+    """Downloads the complete audit trail as a machine-readable JSON file"""
+    import json
+    from fastapi.responses import Response
+    
+    await _verify_ownership(db, experiment_id, user_id)
+    
+    service = AuditService(db)
+    records = await service.get_audit_trail(experiment_id=experiment_id, limit=1000000)
+    
+    # Custom encoder for datetimes
+    def json_serial(obj):
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        raise TypeError(f"Type {type(obj)} not serializable")
+    
+    content = json.dumps(records, default=json_serial, indent=2)
+    filename = f"audit_trail_{experiment_id}_{datetime.now().strftime('%Y%m%d')}.json"
+    
+    return Response(
+        content=content,
+        media_type="application/json",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )
 
 # ════════════════════════════════════════════════════════════════════════════
 # HELPERS

@@ -13,6 +13,7 @@ from typing import Optional
 from .experiment_service import ExperimentService
 from .experiment_service_redis import ExperimentServiceWithRedis
 from .metrics_service import MetricsService
+from .audit_service import AuditService
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +31,7 @@ class ServiceFactory:
     _instance: Optional['ServiceFactory'] = None
     _service: Optional[ExperimentService] = None
     _metrics: Optional[MetricsService] = None
+    _audit: Optional[AuditService] = None
     
     def __new__(cls):
         if cls._instance is None:
@@ -68,13 +70,19 @@ class ServiceFactory:
             await cls._metrics.start_monitoring()
         
         # ──────────────────────────────────────────
+        # PASO 2.5: Inicializar auditoría
+        # ──────────────────────────────────────────
+        if cls._audit is None:
+            cls._audit = AuditService(db_manager)
+        
+        # ──────────────────────────────────────────
         # PASO 3: Decidir implementación
         # ──────────────────────────────────────────
         
         # Caso 1: Redis forzado manualmente
         if force_redis and redis_url:
             logger.info("🔴 FORCE_REDIS=true → Using Redis implementation")
-            cls._service = ExperimentServiceWithRedis(db_manager, redis_url)
+            cls._service = ExperimentServiceWithRedis(db_manager, redis_url, audit_service=cls._audit)
             return cls._service
         
         # Caso 2: Redis disponible Y threshold alcanzado
@@ -87,7 +95,7 @@ class ServiceFactory:
                 )
                 
                 # Crear servicio con Redis
-                cls._service = ExperimentServiceWithRedis(db_manager, redis_url)
+                cls._service = ExperimentServiceWithRedis(db_manager, redis_url, audit_service=cls._audit)
                 
                 # Migrar estado actual a Redis
                 await cls._migrate_to_redis(db_manager, cls._service)
@@ -107,7 +115,7 @@ class ServiceFactory:
         else:
             logger.info("📦 Using PostgreSQL implementation (Redis not configured)")
         
-        cls._service = ExperimentService(db_manager)
+        cls._service = ExperimentService(db_manager, audit_service=cls._audit)
         return cls._service
     
     @classmethod

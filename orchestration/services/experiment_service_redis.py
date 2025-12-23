@@ -37,9 +37,10 @@ class ExperimentServiceRedis(ExperimentService):
         redis_client: redis.Redis,
         experiment_repo: ExperimentRepository,
         variant_repo: VariantRepository,
-        assignment_repo: AssignmentRepository
+        assignment_repo: AssignmentRepository,
+        audit_service: Optional['AuditService'] = None
     ):
-        super().__init__(db_pool, experiment_repo, variant_repo, assignment_repo)
+        super().__init__(db_pool, experiment_repo, variant_repo, assignment_repo, audit_service)
         self.redis = redis_client
         self.logger = logging.getLogger(f"{__name__}.ExperimentServiceRedis")
     
@@ -271,6 +272,18 @@ class ExperimentServiceRedis(ExperimentService):
             redis_key = f"exp:{experiment_id}:var:{selected_variant['id']}:allocations"
             await self._safe_redis_incr(redis_key)
             
+            # ✅ AUTOMATIC AUDIT
+            if self.audit:
+                segment_key = (context or {}).get('segment_key', 'default')
+                await self.audit.log_decision(
+                    experiment_id=experiment_id,
+                    visitor_id=user_identifier,
+                    selected_variant_id=selected_variant['id'],
+                    assignment_id=assignment_id,
+                    segment_key=segment_key,
+                    context=context
+                )
+            
             return {
                 'variant_id': selected_variant['id'],
                 'variant_name': selected_variant['name'],
@@ -338,6 +351,13 @@ class ExperimentServiceRedis(ExperimentService):
             # Try to increment in Redis (non-blocking)
             redis_key = f"exp:{experiment_id}:var:{assignment['variant_id']}:conversions"
             await self._safe_redis_incr(redis_key)
+            
+            # ✅ AUTOMATIC AUDIT
+            if self.audit:
+                await self.audit.log_conversion(
+                    assignment_id=assignment['id'],
+                    conversion_value=conversion_value
+                )
             
             return conversion_id
         
