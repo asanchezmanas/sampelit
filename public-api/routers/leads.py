@@ -8,14 +8,13 @@ Uses centralized models and dependencies.
 PUBLIC ENDPOINT - No auth required (for lead capture).
 """
 
-from fastapi import APIRouter, HTTPException, Request, Depends
+from fastapi import APIRouter, Request, Depends
+from public_api.dependencies import get_db, get_client_ip, get_user_agent, check_rate_limit
+from public_api.middleware.error_handler import APIError, ErrorCodes
 from typing import Optional
 from datetime import datetime
 import logging
 
-from public_api.models.leads import LeadCaptureRequest, LeadCaptureResponse, LeadStatus
-from public_api.models.common import APIResponse
-from public_api.dependencies import get_db, get_client_ip, get_user_agent
 from data_access.database import DatabaseManager
 
 logger = logging.getLogger(__name__)
@@ -27,7 +26,7 @@ router = APIRouter()
 # PUBLIC ENDPOINTS
 # ════════════════════════════════════════════════════════════════════════════
 
-@router.post("/capture", response_model=LeadCaptureResponse)
+@router.post("/capture", response_model=LeadCaptureResponse, dependencies=[Depends(check_rate_limit)])
 async def capture_lead(
     request: LeadCaptureRequest,
     req: Request,
@@ -79,10 +78,10 @@ async def capture_lead(
         )
         
     except Exception as e:
-        logger.error(f"Error capturing lead: {e}")
-        # Don't expose internal errors to users
+        logger.error(f"Error capturing lead: {e}", exc_info=True)
+        # Still return success to user for UX, but log it
         return LeadCaptureResponse(
-            success=True,  # Still show success to user
+            success=True,
             message="You're on the list. We'll be in touch."
         )
 

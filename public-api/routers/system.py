@@ -1,49 +1,42 @@
 # public-api/routers/system.py
+
 """
-System metrics endpoint
+System Diagnostics API
+Monitors platform health, resource utilization (Redis), and operational metrics.
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends
+import logging
+
+from public_api.dependencies import get_current_user
+from public_api.middleware.error_handler import APIError, ErrorCodes
 from orchestration.services.service_factory import ServiceFactory
-from public_api.routers.auth import get_current_user
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-
 @router.get("/metrics")
-async def get_system_metrics(
-    user_id: str = Depends(get_current_user)
-):
-    """
-    Get system metrics
-    
-    Shows:
-    - Current request volume
-    - Redis status
-    - Threshold progress
-    """
-    
-    metrics = await ServiceFactory.get_metrics()
-    
-    if not metrics:
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Metrics service not available"
-        )
-    
-    return {
-        "requests": {
-            "last_24h": metrics['last_24h'],
-            "last_hour": metrics['last_hour'],
-            "projected_daily": metrics['projected_daily']
-        },
-        "threshold": {
-            "value": metrics['threshold'],
-            "percentage": metrics['threshold_percentage'],
-            "reached": metrics['redis_recommended']
-        },
-        "redis": {
-            "recommended": metrics['redis_recommended'],
-            "activated": metrics['redis_activated']
+async def get_operational_metrics(user_id: str = Depends(get_current_user)):
+    """Retrieves high-level platform health and throughput indicators"""
+    try:
+        metrics = await ServiceFactory.get_metrics()
+        if not metrics:
+            raise APIError("Operational data unavailable", code=ErrorCodes.INTERNAL_ERROR, status=503)
+            
+        return {
+            "throughput": {
+                "day": metrics['last_24h'],
+                "hour": metrics['last_hour'],
+                "projected": metrics['projected_daily']
+            },
+            "buffer_tier": {
+                "active": metrics['redis_activated'],
+                "usage_pct": metrics['threshold_percentage']
+            },
+            "status": "operational"
         }
-    }
+    except Exception as e:
+        if isinstance(e, APIError): raise
+        logger.error(f"System metrics check failed: {e}")
+        raise APIError("Health check failed", code=ErrorCodes.INTERNAL_ERROR, status=503)

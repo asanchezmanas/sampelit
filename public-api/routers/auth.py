@@ -1,17 +1,23 @@
 # public-api/routers/auth.py
 
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, Depends, Request
 from pydantic import BaseModel, Field, EmailStr
 from typing import Optional
-from data_access.database import get_database, DatabaseManager
-from config.settings import settings
 import jwt
 import bcrypt
 from datetime import datetime, timedelta, timezone
 
+from data_access.database import DatabaseManager
+from public_api.dependencies import get_db, check_rate_limit, get_current_user
+from public_api.middleware.error_handler import APIError, ErrorCodes
+from config.settings import settings
+
 router = APIRouter()
 
-# Models
+# ════════════════════════════════════════════════════════════════════════════
+# MODELS
+# ════════════════════════════════════════════════════════════════════════════
+
 class RegisterRequest(BaseModel):
     email: EmailStr
     password: str = Field(..., min_length=8, max_length=100)
@@ -28,7 +34,10 @@ class AuthResponse(BaseModel):
     email: str
     name: str
 
-# Helper functions
+# ════════════════════════════════════════════════════════════════════════════
+# HELPERS
+# ════════════════════════════════════════════════════════════════════════════
+
 def hash_password(password: str) -> str:
     """Hash password using bcrypt"""
     salt = bcrypt.gensalt()
@@ -61,11 +70,14 @@ def create_token(user_id: str) -> str:
     
     return token
 
-# Endpoints
-@router.post("/register", response_model=AuthResponse)
+# ════════════════════════════════════════════════════════════════════════════
+# ENDPOINTS
+# ════════════════════════════════════════════════════════════════════════════
+
+@router.post("/register", response_model=AuthResponse, dependencies=[Depends(check_rate_limit)])
 async def register(
     request: RegisterRequest,
-    db: DatabaseManager = Depends(get_database)
+    db: DatabaseManager = Depends(get_db)
 ):
     """Register new user"""
     
@@ -77,26 +89,34 @@ async def register(
         )
     
     if existing:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email already registered"
+        raise APIError(
+            message="Email already registered",
+            code=ErrorCodes.VALIDATION_ERROR,
+            status=400
         )
     
     # Hash password
     password_hash = hash_password(request.password)
     
     # Create user
-    async with db.pool.acquire() as conn:
-        user_id = await conn.fetchval(
-            """
-            INSERT INTO users (email, password_hash, name, company)
-            VALUES ($1, $2, $3, $4)
-            RETURNING id
-            """,
-            request.email.lower(),
-            password_hash,
-            request.name,
-            request.company
+    try:
+        async with db.pool.acquire() as conn:
+            user_id = await conn.fetchval(
+                """
+                INSERT INTO users (email, password_hash, name, company)
+                VALUES ($1, $2, $3, $4)
+                RETURNING id
+                """,
+                request.email.lower(),
+                password_hash,
+                request.name,
+                request.company
+            )
+    except Exception as e:
+        raise APIError(
+            message=f"Failed to create user: {str(e)}",
+            code=ErrorCodes.DATABASE_ERROR,
+            status=500
         )
     
     # Generate token
@@ -109,10 +129,10 @@ async def register(
         name=request.name
     )
 
-@router.post("/login", response_model=AuthResponse)
+@router.post("/login", response_model=AuthResponse, dependencies=[Depends(check_rate_limit)])
 async def login(
     request: LoginRequest,
-    db: DatabaseManager = Depends(get_database)
+    db: DatabaseManager = Depends(get_db)
 ):
     """Login user"""
     
@@ -128,16 +148,18 @@ async def login(
         )
     
     if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid email or password"
+        raise APIError(
+            message="Invalid email or password",
+            code=ErrorCodes.UNAUTHORIZED,
+            status=401
         )
     
     # Verify password
     if not verify_password(request.password, user['password_hash']):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid email or password"
+        raise APIError(
+            message="Invalid email or password",
+            code=ErrorCodes.UNAUTHORIZED,
+            status=401
         )
     
     # Generate token
@@ -152,11 +174,28 @@ async def login(
 
 @router.get("/me")
 async def get_current_user_info(
-    user_id: str = Depends(get_current_user),
-    db: DatabaseManager = Depends(get_database)
+    request: Request,
+    db: DatabaseManager = Depends(get_db)
 ):
     """Get current user info"""
     
+    # Auth is handled by dependencies or middleware in production
+    # For now, we manually verify the token to provide a robust example
+    
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        raise APIError("Missing or invalid authorization header", code=ErrorCodes.UNAUTHORIZED, status=401)
+    
+    token = auth_header.split(" ")[1]
+    
+    try:
+        payload = jwt.decode(token, settings.SUPABASE_JWT_SECRET, algorithms=['HS256'])
+        user_id = payload.get('sub')
+    except jwt.ExpiredSignatureError:
+        raise APIError("Token expired", code=ErrorCodes.TOKEN_EXPIRED, status=401)
+    except jwt.InvalidTokenError:
+        raise APIError("Invalid token", code=ErrorCodes.INVALID_TOKEN, status=401)
+        
     async with db.pool.acquire() as conn:
         user = await conn.fetchrow(
             """
@@ -168,49 +207,8 @@ async def get_current_user_info(
         )
     
     if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found"
-        )
+        raise APIError("User not found", code=ErrorCodes.USER_NOT_FOUND, status=404)
     
     return dict(user)
 
-
-# Dependency for protected routes (moved from middleware/auth.py)
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-
-security = HTTPBearer()
-
-async def get_current_user(
-    credentials: HTTPAuthorizationCredentials = Depends(security)
-) -> str:
-    """Verify JWT and return user_id"""
-    
-    token = credentials.credentials
-    
-    try:
-        payload = jwt.decode(
-            token,
-            settings.SUPABASE_JWT_SECRET,
-            algorithms=['HS256']
-        )
-        
-        user_id = payload.get('sub')
-        if not user_id:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid token"
-            )
-        
-        return user_id
-        
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token expired"
-        )
-    except jwt.InvalidTokenError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid token"
-        )
+    return dict(user)

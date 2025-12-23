@@ -7,6 +7,7 @@ Import these in routers instead of duplicating code.
 """
 
 from fastapi import Depends, HTTPException, Header, Request
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from typing import Optional
 import os
 import logging
@@ -33,11 +34,31 @@ async def get_db() -> DatabaseManager:
 # AUTHENTICATION
 # ════════════════════════════════════════════════════════════════════════════
 
-async def get_optional_api_key(
-    x_api_key: Optional[str] = Header(None, alias="X-API-Key")
-) -> Optional[str]:
-    """Get API key if provided (optional auth)"""
-    return x_api_key
+import jwt
+from config.settings import settings
+from public_api.middleware.error_handler import APIError, ErrorCodes
+
+security = HTTPBearer()
+
+async def get_current_user(
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+) -> str:
+    """Verify JWT and return user_id"""
+    token = credentials.credentials
+    try:
+        payload = jwt.decode(
+            token,
+            settings.SUPABASE_JWT_SECRET,
+            algorithms=['HS256']
+        )
+        user_id = payload.get('sub')
+        if not user_id:
+            raise APIError("Invalid token: sub claim missing", code=ErrorCodes.INVALID_TOKEN, status=401)
+        return user_id
+    except jwt.ExpiredSignatureError:
+        raise APIError("Token expired", code=ErrorCodes.TOKEN_EXPIRED, status=401)
+    except jwt.InvalidTokenError:
+        raise APIError("Invalid token", code=ErrorCodes.INVALID_TOKEN, status=401)
 
 
 async def require_api_key(
@@ -45,18 +66,11 @@ async def require_api_key(
 ) -> str:
     """Require valid API key"""
     if not x_api_key:
-        raise HTTPException(
-            status_code=401,
-            detail={"error": "API key required", "code": "UNAUTHORIZED"}
-        )
+        raise APIError("API key required", code=ErrorCodes.UNAUTHORIZED, status=401)
     
     # TODO: Validate API key against database
-    # For now, just check it exists and has correct format
     if len(x_api_key) < 20:
-        raise HTTPException(
-            status_code=401,
-            detail={"error": "Invalid API key format", "code": "INVALID_TOKEN"}
-        )
+        raise APIError("Invalid API key format", code=ErrorCodes.INVALID_TOKEN, status=401)
     
     return x_api_key
 

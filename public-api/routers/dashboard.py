@@ -2,26 +2,29 @@
 
 """
 Dashboard Data Aggregation
-
-Provee los datos para la página principal del dashboard
+Provides unified data for the main dashboard overview.
 """
 
-from fastapi import APIRouter, HTTPException, status, Depends
-from pydantic import BaseModel
+from fastapi import APIRouter, Depends, Request, Query
+from pydantic import BaseModel, Field
 from typing import List, Dict, Any, Optional
-from datetime import datetime, timedelta
+from datetime import datetime
+import logging
 
-from public_api.routers.auth import get_current_user
-from data_access.database import get_database, DatabaseManager
+from data_access.database import DatabaseManager
+from public_api.dependencies import get_db, get_current_user
+from public_api.middleware.error_handler import APIError, ErrorCodes
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-# ============================================
+# ════════════════════════════════════════════════════════════════════════════
 # MODELS
-# ============================================
+# ════════════════════════════════════════════════════════════════════════════
 
 class DashboardStats(BaseModel):
-    """Overall stats"""
+    """Overall performance statistics"""
     total_experiments: int
     active_experiments: int
     total_visitors: int
@@ -29,7 +32,7 @@ class DashboardStats(BaseModel):
     avg_conversion_rate: float
 
 class RecentExperiment(BaseModel):
-    """Recent experiment summary"""
+    """Experiment summary for recent list"""
     id: str
     name: str
     status: str
@@ -39,35 +42,40 @@ class RecentExperiment(BaseModel):
     conversion_rate: float
 
 class QuickAction(BaseModel):
-    """Quick action button"""
+    """Action shortcut for dashboard UI"""
     title: str
     description: str
     action_url: str
     icon: str
 
 class DashboardData(BaseModel):
-    """Complete dashboard data"""
+    """Comprehensive dashboard state"""
     stats: DashboardStats
     recent_experiments: List[RecentExperiment]
     quick_actions: List[QuickAction]
     has_active_experiments: bool
     onboarding_completed: bool
 
-# ============================================
-# GET DASHBOARD DATA
-# ============================================
+class ActivityItem(BaseModel):
+    """Unified activity log entry"""
+    type: str
+    title: str
+    description: str
+    timestamp: datetime
+
+# ════════════════════════════════════════════════════════════════════════════
+# ENDPOINTS
+# ════════════════════════════════════════════════════════════════════════════
 
 @router.get("/", response_model=DashboardData)
 async def get_dashboard_data(
     user_id: str = Depends(get_current_user),
-    db: DatabaseManager = Depends(get_database)
+    db: DatabaseManager = Depends(get_db)
 ):
-    """
-    Get aggregated dashboard data
-    """
+    """Returns aggregated dashboard stats, recent experiments, and actions"""
     try:
         async with db.pool.acquire() as conn:
-            # Overall stats
+            # Aggregated stats across all experiments
             stats_row = await conn.fetchrow(
                 """
                 SELECT 
@@ -88,15 +96,7 @@ async def get_dashboard_data(
                 user_id
             )
             
-            stats = DashboardStats(
-                total_experiments=stats_row['total_experiments'] or 0,
-                active_experiments=stats_row['active_experiments'] or 0,
-                total_visitors=stats_row['total_visitors'] or 0,
-                total_conversions=stats_row['total_conversions'] or 0,
-                avg_conversion_rate=float(stats_row['avg_conversion_rate'] or 0)
-            )
-            
-            # Recent experiments
+            # Top 5 most recent experiments
             recent_rows = await conn.fetch(
                 """
                 SELECT 
@@ -119,47 +119,38 @@ async def get_dashboard_data(
                 user_id
             )
             
-            recent_experiments = [
-                RecentExperiment(
-                    id=str(row['id']),
-                    name=row['name'],
-                    status=row['status'],
-                    started_at=row['started_at'],
-                    visitors=row['visitors'],
-                    conversions=row['conversions'],
-                    conversion_rate=float(row['conversion_rate'])
-                )
-                for row in recent_rows
-            ]
-            
-            # Check onboarding
-            onboarding_row = await conn.fetchrow(
+            # Verification of onboarding state
+            onboarding_completed = await conn.fetchval(
                 "SELECT completed FROM user_onboarding WHERE user_id = $1",
                 user_id
-            )
-            onboarding_completed = onboarding_row['completed'] if onboarding_row else False
+            ) or False
             
-            # Quick actions
-            quick_actions = [
-                QuickAction(
-                    title="Create Experiment",
-                    description="Start a new A/B test",
-                    action_url="/experiments/new/step1",
-                    icon="beaker"
-                ),
-                QuickAction(
-                    title="View Analytics",
-                    description="See detailed performance",
-                    action_url="/analytics",
-                    icon="chart-bar"
-                ),
-                QuickAction(
-                    title="Manage Installations",
-                    description="Configure your sites",
-                    action_url="/settings/installations",
-                    icon="cog"
-                )
-            ]
+        stats = DashboardStats(
+            total_experiments=stats_row['total_experiments'] or 0,
+            active_experiments=stats_row['active_experiments'] or 0,
+            total_visitors=stats_row['total_visitors'] or 0,
+            total_conversions=stats_row['total_conversions'] or 0,
+            avg_conversion_rate=float(stats_row['avg_conversion_rate'] or 0)
+        )
+        
+        recent_experiments = [
+            RecentExperiment(
+                id=str(row['id']),
+                name=row['name'],
+                status=row['status'],
+                started_at=row['started_at'],
+                visitors=row['visitors'],
+                conversions=row['conversions'],
+                conversion_rate=float(row['conversion_rate'])
+            )
+            for row in recent_rows
+        ]
+        
+        quick_actions = [
+            QuickAction(title="Create Experiment", description="Start a new A/B test", action_url="/experiments/new", icon="beaker"),
+            QuickAction(title="View Analytics", description="See detailed performance", action_url="/analytics", icon="chart-bar"),
+            QuickAction(title="Manage Setup", description="Configure your sites", action_url="/settings/installations", icon="cog")
+        ]
         
         return DashboardData(
             stats=stats,
@@ -170,60 +161,43 @@ async def get_dashboard_data(
         )
         
     except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to get dashboard data: {str(e)}"
-        )
+        logger.error(f"Dashboard data fetch failed for {user_id}: {e}", exc_info=True)
+        raise APIError("Failed to aggregate dashboard data", code=ErrorCodes.DATABASE_ERROR, status=500)
 
-# ============================================
-# GET ACTIVITY FEED
-# ============================================
 
-@router.get("/activity")
+@router.get("/activity", response_model=Dict[str, List[ActivityItem]])
 async def get_activity_feed(
-    limit: int = 10,
+    limit: int = Query(10, ge=1, le=50),
     user_id: str = Depends(get_current_user),
-    db: DatabaseManager = Depends(get_database)
+    db: DatabaseManager = Depends(get_db)
 ):
-    """
-    Get recent activity feed
-    """
+    """Returns a combined chronological feed of recent user actions and system events"""
     try:
         async with db.pool.acquire() as conn:
-            # Recent events
             activities = await conn.fetch(
                 """
-                SELECT 
-                    'experiment_created' as type,
-                    e.name as title,
-                    'Created new experiment' as description,
-                    e.created_at as timestamp
-                FROM experiments e
-                WHERE e.user_id = $1
-                
+                SELECT 'experiment_created' as type, name as title, 'Created new experiment' as description, created_at as timestamp
+                FROM experiments WHERE user_id = $1
                 UNION ALL
-                
-                SELECT 
-                    'experiment_started' as type,
-                    e.name as title,
-                    'Started experiment' as description,
-                    e.started_at as timestamp
-                FROM experiments e
-                WHERE e.user_id = $1 AND e.started_at IS NOT NULL
-                
-                ORDER BY timestamp DESC
-                LIMIT $2
+                SELECT 'experiment_started' as type, name as title, 'Started experiment' as description, started_at as timestamp
+                FROM experiments WHERE user_id = $1 AND started_at IS NOT NULL
+                ORDER BY timestamp DESC LIMIT $2
                 """,
-                user_id,
-                limit
+                user_id, limit
             )
         
         return {
-            "activities": [dict(activity) for activity in activities]
+            "activities": [
+                ActivityItem(
+                    type=row['type'],
+                    title=row['title'],
+                    description=row['description'],
+                    timestamp=row['timestamp']
+                )
+                for row in activities
+            ]
         }
         
     except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to get activity feed: {str(e)}"
-        )
+        logger.error(f"Activity feed fetch failed: {e}")
+        raise APIError("Failed to fetch activity feed", code=ErrorCodes.DATABASE_ERROR, status=500)

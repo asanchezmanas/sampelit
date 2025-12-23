@@ -22,6 +22,8 @@ from typing import Callable
 
 from config.settings import get_settings
 from data_access.database import DatabaseManager
+from public_api.middleware.error_handler import error_handler_middleware
+from public_api.middleware.rate_limit import rate_limiter
 
 # Import routers
 from public_api.routers import (
@@ -102,29 +104,34 @@ async def lifespan(app: FastAPI):
 # ════════════════════════════════════════════════════════════════════════════
 
 app = FastAPI(
-    title=settings.APP_NAME,
-    description="Intelligent A/B Testing & Optimization Platform",
+    title="Samplit Platform API",
+    description="Unified API for experimentation and tracking",
     version=settings.APP_VERSION,
-    lifespan=lifespan,
-    docs_url="/docs" if settings.DEBUG else None,
-    redoc_url="/redoc" if settings.DEBUG else None,
-    openapi_url="/openapi.json" if settings.DEBUG else None
+    lifespan=lifespan
 )
 
 # ════════════════════════════════════════════════════════════════════════════
 # MIDDLEWARE
 # ════════════════════════════════════════════════════════════════════════════
 
-# CORS
+# 1. Error Handling (must be first to catch everything)
+app.add_middleware(ErrorHandlerMiddleware)
+
+# 2. CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
-    allow_credentials=settings.CORS_ALLOW_CREDENTIALS,
+    allow_origins=["*"],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Trusted Host (security)
+# 3. Security Headers
+app.add_middleware(
+    TrustedHostMiddleware, 
+    allowed_hosts=["localhost", "127.0.0.1", "*.render.com", "*.samplit.com"]
+)
+
 if settings.ENVIRONMENT == "production":
     app.add_middleware(
         TrustedHostMiddleware,
