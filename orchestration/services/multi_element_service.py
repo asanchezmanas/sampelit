@@ -185,11 +185,26 @@ class MultiElementService:
             for element in elements
         ]
         
-        # Producto cartesiano
-        all_combinations = list(product(*variant_lists))
+        # Producto cartesiano con límite de seguridad
+        all_combinations_iter = product(*variant_lists)
+        
+        # ✅ SAFEGUARD: Limit Cartesian product to prevent memory/performance explosion
+        # A factorial test with >500 combinations is practically untestable without massive traffic.
+        MAX_COMBINATIONS = 500
+        all_combinations = []
+        
+        for i, combo in enumerate(all_combinations_iter):
+            if i >= MAX_COMBINATIONS:
+                self.logger.warning(
+                    f"⚠️ Cartesian product for experiment {experiment_id} truncated at {MAX_COMBINATIONS}. "
+                    "Recommend switching to INDEPENDENT mode for high-dimensional tests."
+                )
+                break
+            all_combinations.append(combo)
         
         self.logger.info(
-            f"Generated {len(all_combinations)} combinations for {len(elements)} elements"
+            f"Generated {len(all_combinations)} combinations for {len(elements)} elements "
+            f"(Limit: {MAX_COMBINATIONS})"
         )
         
         # Guardar combinaciones en metadata de experimento

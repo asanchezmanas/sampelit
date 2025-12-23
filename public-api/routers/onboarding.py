@@ -1,15 +1,15 @@
 # public-api/routers/onboarding.py
 
 """
-Onboarding Flow Management
+Onboarding Flow Management - VERSIÓN PREMIUM
 Handles the multi-step initialization process for new users:
 1. Welcome & Introduction
 2. Installation Setup (Platform config)
-3. Connection Verification (Trafic detection)
+3. Connection Verification (Traffic detection)
+4. Dashboard Activation
 """
 
 from fastapi import APIRouter, Depends, Request
-from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timezone as tz
 import logging
@@ -18,26 +18,11 @@ from data_access.database import DatabaseManager
 from public_api.dependencies import get_db, get_current_user
 from public_api.middleware.error_handler import APIError, ErrorCodes
 from public_api.models import APIResponse
+from public_api.models.onboarding_models import OnboardingStatus, CompleteStepRequest
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
-
-# ════════════════════════════════════════════════════════════════════════════
-# MODELS
-# ════════════════════════════════════════════════════════════════════════════
-
-class OnboardingStatus(BaseModel):
-    """Cumulative state of the user's onboarding journey"""
-    completed: bool
-    current_step: str
-    installation_verified: bool
-    installation_token: Optional[str] = None
-    completed_at: Optional[datetime] = None
-
-class CompleteStepRequest(BaseModel):
-    """Payload to transition between onboarding steps"""
-    step: str = Field(..., description="Target step: welcome, install, verify, complete")
 
 # ════════════════════════════════════════════════════════════════════════════
 # ENDPOINTS
@@ -48,7 +33,11 @@ async def get_onboarding_status(
     user_id: str = Depends(get_current_user),
     db: DatabaseManager = Depends(get_db)
 ):
-    """Retrieves current progress or initializes onboarding for a new user"""
+    """
+    Retrieves current progress or initializes onboarding for a new user.
+    
+    Ensures a smooth transition from registration to the first live experiment.
+    """
     try:
         async with db.pool.acquire() as conn:
             # Check for existing record
@@ -75,12 +64,12 @@ async def get_onboarding_status(
                 current_step=row['current_step'],
                 installation_verified=row['installation_verified'],
                 installation_token=token,
-                completed_at=row.get('completed_at')
+                completed_at=row['completed_at']
             )
             
     except Exception as e:
-        logger.error(f"Onboarding status fetch failed: {e}")
-        raise APIError("Failed to fetch onboarding status", code=ErrorCodes.DATABASE_ERROR, status=500)
+        logger.error(f"Onboarding status synchronization failed for {user_id}: {e}")
+        raise APIError("Failed to synchronize onboarding status", code=ErrorCodes.DATABASE_ERROR, status=500)
 
 
 @router.post("/update-step", response_model=APIResponse)
@@ -89,10 +78,14 @@ async def update_onboarding_step(
     user_id: str = Depends(get_current_user),
     db: DatabaseManager = Depends(get_db)
 ):
-    """Manually advances the user to the specified onboarding step"""
+    """
+    Manually advances the user to the specified onboarding step.
+    
+    Used for UI-driven navigation during the guided setup.
+    """
     valid_steps = {'welcome', 'install', 'verify', 'complete'}
     if request.step not in valid_steps:
-        raise APIError(f"Invalid step. Expected: {list(valid_steps)}", code=ErrorCodes.INVALID_INPUT, status=400)
+        raise APIError(f"Invalid onboarding step: {request.step}. Expected: {list(valid_steps)}", code=ErrorCodes.INVALID_INPUT, status=400)
     
     try:
         async with db.pool.acquire() as conn:
@@ -106,11 +99,11 @@ async def update_onboarding_step(
                 """,
                 request.step, request.step == 'complete', user_id
             )
-        return APIResponse(success=True, message=f"Step updated to {request.step}")
+        return APIResponse(success=True, message=f"Onboarding trajectory updated to {request.step}")
         
     except Exception as e:
-        logger.error(f"Step update failed: {e}")
-        raise APIError("Failed to update onboarding progress", code=ErrorCodes.DATABASE_ERROR, status=500)
+        logger.error(f"Step transition failed for {user_id}: {e}")
+        raise APIError("Failed to update onboarding progression", code=ErrorCodes.DATABASE_ERROR, status=500)
 
 
 @router.post("/verify-installation")
@@ -119,7 +112,11 @@ async def verify_installation(
     user_id: str = Depends(get_current_user),
     db: DatabaseManager = Depends(get_db)
 ):
-    """Checks for active traffic signals associated with the provided token"""
+    """
+    Checks for active traffic signals associated with the provided token.
+    
+    Validates that the Samplit tracker is correctly integrated and reachable.
+    """
     try:
         async with db.pool.acquire() as conn:
             # Locate target installation and check ownership
@@ -129,12 +126,17 @@ async def verify_installation(
             )
             
             if not inst:
-                raise APIError("Installation token not found or unauthorized", code=ErrorCodes.NOT_FOUND, status=404)
+                raise APIError("Installation signature not found or unauthorized", code=ErrorCodes.NOT_FOUND, status=404)
             
             # Connection is considered verified if activity was seen in the last 15 minutes
             verified = False
             if inst['last_activity']:
-                time_diff = datetime.now(tz.utc) - inst['last_activity']
+                # Ensure comparison is timezone-aware
+                last_act = inst['last_activity']
+                if last_act.tzinfo is None:
+                    last_act = last_act.replace(tzinfo=tz.utc)
+                
+                time_diff = datetime.now(tz.utc) - last_act
                 verified = time_diff.total_seconds() < 900  # 15 minute window
             
             if verified:
@@ -150,14 +152,14 @@ async def verify_installation(
         
         return {
             "verified": verified,
-            "message": "Signal detected. Integration successful." if verified else "Waiting for signal... Please visit your site to trigger verification."
+            "message": "Protocol handshake successful. Tracking active." if verified else "Awaiting signal synchronization... Please visit your site to trigger the tracker."
         }
         
     except APIError:
         raise
     except Exception as e:
-        logger.error(f"Installation verification failed: {e}")
-        raise APIError("Internal verification error", code=ErrorCodes.INTERNAL_ERROR, status=500)
+        logger.error(f"Installation verification protocol failed: {e}")
+        raise APIError("External verification handshake failed", code=ErrorCodes.INTERNAL_ERROR, status=500)
 
 
 @router.post("/complete", response_model=APIResponse)
@@ -165,17 +167,19 @@ async def complete_onboarding(
     user_id: str = Depends(get_current_user),
     db: DatabaseManager = Depends(get_db)
 ):
-    """Finalizes the onboarding process and unlocks full dashboard access"""
+    """
+    Finalizes the onboarding process and unlocks full dashboard orchestration.
+    """
     try:
         async with db.pool.acquire() as conn:
             await conn.execute(
                 "UPDATE user_onboarding SET completed = true, current_step = 'complete', completed_at = NOW() WHERE user_id = $1",
                 user_id
             )
-        return APIResponse(success=True, message="Onboarding workflow finalized")
+        return APIResponse(success=True, message="Onboarding protocol finalized. Control panel unlocked.")
     except Exception as e:
-        logger.error(f"Onboarding completion failed: {e}")
-        raise APIError("Initialization failed", code=ErrorCodes.DATABASE_ERROR, status=500)
+        logger.error(f"Onboarding completion lock failed: {e}")
+        raise APIError("Failed to finalize account initialization", code=ErrorCodes.DATABASE_ERROR, status=500)
 
 
 @router.post("/skip", response_model=APIResponse)
@@ -183,7 +187,9 @@ async def skip_onboarding(
     user_id: str = Depends(get_current_user),
     db: DatabaseManager = Depends(get_db)
 ):
-    """Allows experienced users to bypass the guided setup"""
+    """
+    Allows experienced users to bypass the guided technical setup.
+    """
     try:
         async with db.pool.acquire() as conn:
             await conn.execute(
@@ -194,7 +200,7 @@ async def skip_onboarding(
                 """,
                 user_id
             )
-        return APIResponse(success=True, message="Onboarding bypassed")
+        return APIResponse(success=True, message="Onboarding protocol bypassed. Direct terminal access enabled.")
     except Exception as e:
-        logger.error(f"Onboarding skip failed: {e}")
-        raise APIError("Operation failed", code=ErrorCodes.DATABASE_ERROR, status=500)
+        logger.error(f"Onboarding bypass failed: {e}")
+        raise APIError("Operation failed while skipping initialization", code=ErrorCodes.DATABASE_ERROR, status=500)

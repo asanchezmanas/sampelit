@@ -39,7 +39,7 @@ class AnalyticsService:
         variants: List[Dict[str, Any]]
     ) -> Dict[str, Any]:
         """
-        Analyze experiment results
+        Analyze experiment results (flat list of variants)
         
         Returns:
             {
@@ -55,11 +55,20 @@ class AnalyticsService:
         """
         
         if not variants:
-            raise ValueError("No variants provided")
+            return {
+                "experiment_id": experiment_id,
+                "variant_count": 0,
+                "total_allocations": 0,
+                "total_conversions": 0,
+                "overall_conversion_rate": 0.0,
+                "variants": [],
+                "bayesian_analysis": {},
+                "recommendations": {}
+            }
         
         # Calculate totals
-        total_allocations = sum(v['total_allocations'] for v in variants)
-        total_conversions = sum(v['total_conversions'] for v in variants)
+        total_allocations = sum(v.get('total_allocations', 0) for v in variants)
+        total_conversions = sum(v.get('total_conversions', 0) for v in variants)
         
         overall_cr = (
             total_conversions / total_allocations
@@ -92,6 +101,64 @@ class AnalyticsService:
             "variants": variant_analysis,
             "bayesian_analysis": bayesian,
             "recommendations": recommendations
+        }
+
+    async def analyze_hierarchical_experiment(
+        self,
+        experiment_id: str,
+        elements: List[Dict[str, Any]]
+    ) -> Dict[str, Any]:
+        """
+        Analyze a multi-element experiment
+        
+        Args:
+            elements: List of dicts, each containing 'id', 'name' and 'variants'
+        """
+        element_analysis = []
+        total_visitors = 0
+        total_conversions = 0
+
+        for element in elements:
+            # Analyze this element's variants
+            analysis = await self.analyze_experiment(
+                element.get('id', 'unknown'),
+                element.get('variants', [])
+            )
+            
+            # Map to expected element performance format
+            element_perf = {
+                "element_id": element.get('id'),
+                "name": element.get('name'),
+                "element_type": element.get('element_type', 'generic'),
+                "variants": analysis['variants'],
+                "best_variant_index": None,
+                "statistical_significance": False
+            }
+            
+            # Find best variant from Bayesian analysis
+            winner = analysis['bayesian_analysis'].get('winner')
+            if winner:
+                for idx, v in enumerate(element.get('variants', [])):
+                    if str(v.get('id')) == str(winner['variant_id']):
+                        element_perf["best_variant_index"] = idx
+                        break
+            
+            # Check significance (e.g., probability best > 95%)
+            if winner and winner.get('probability_best', 0) >= 0.95:
+                element_perf["statistical_significance"] = True
+            
+            element_analysis.append(element_perf)
+            
+            # Visitors are unique to experiment, but we can aggregate here
+            # for a rough estimate if not provided. Better provided by caller.
+            total_visitors = max(total_visitors, analysis['total_allocations'])
+            total_conversions = max(total_conversions, analysis['total_conversions'])
+
+        return {
+            "elements": element_analysis,
+            "total_visitors": total_visitors,
+            "total_conversions": total_conversions,
+            "overall_conversion_rate": (total_conversions / total_visitors) if total_visitors > 0 else 0.0
         }
     
     def _analyze_variant(

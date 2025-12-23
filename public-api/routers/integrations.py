@@ -1,42 +1,28 @@
 # public-api/routers/integrations.py
 
 """
-External Platform Integrations API
+External Platform Integrations API - VERSIÓN PREMIUM
 Supports automated OAuth-based connections for WordPress, Shopify, and WooCommerce.
+Ensures secure handshakes and transparent synchronization status.
 """
 
 from fastapi import APIRouter, Depends, Query, Request, status
 from fastapi.responses import RedirectResponse
-from pydantic import BaseModel, Field
-from typing import List, Optional, Dict, Any
-from datetime import datetime, timezone as tz
 import secrets
 import logging
+from typing import List, Optional, Dict, Any
 
 from data_access.database import DatabaseManager
 from public_api.dependencies import get_db, get_current_user
 from public_api.middleware.error_handler import APIError, ErrorCodes
 from public_api.models import APIResponse
+from public_api.models.integration_models import IntegrationSummary
 from integration.web.wordpress.oauth import WordPressIntegration, generate_state_token
 from integration.web.shopify.oauth import ShopifyIntegration, extract_shop_domain
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
-
-# ════════════════════════════════════════════════════════════════════════════
-# MODELS
-# ════════════════════════════════════════════════════════════════════════════
-
-class IntegrationSummary(BaseModel):
-    """Summarized view of an active platform connection"""
-    id: str
-    platform: str
-    status: str
-    site_name: Optional[str]
-    site_url: Optional[str]
-    connected_at: Optional[datetime]
-    last_sync: Optional[datetime]
 
 # ════════════════════════════════════════════════════════════════════════════
 # ENDPOINTS
@@ -47,7 +33,11 @@ async def list_integrations(
     user_id: str = Depends(get_current_user),
     db: DatabaseManager = Depends(get_db)
 ):
-    """Lists all automated integrations currently active in the user account"""
+    """
+    Lists all automated integrations currently active in the user account.
+    
+    Returns connection status and synchronization metadata for verified platforms.
+    """
     try:
         async with db.pool.acquire() as conn:
             rows = await conn.fetch(
@@ -73,8 +63,8 @@ async def list_integrations(
             for row in rows
         ]
     except Exception as e:
-        logger.error(f"Failed to list integrations: {e}")
-        raise APIError("Search operation failed", code=ErrorCodes.DATABASE_ERROR, status=500)
+        logger.error(f"Failed to list integrations for {user_id}: {e}")
+        raise APIError("Operation failed while retrieving integrations", code=ErrorCodes.DATABASE_ERROR, status=500)
 
 
 @router.post("/connect/{platform}")
@@ -86,9 +76,13 @@ async def initiate_oauth(
     user_id: str = Depends(get_current_user),
     db: DatabaseManager = Depends(get_db)
 ):
-    """Starts the OAuth handshake with the specified external platform"""
+    """
+    Starts the OAuth handshake with the specified external platform.
+    
+    Generates a secure state token and redirects the user to the platform's authorization portal.
+    """
     if platform not in ['wordpress', 'shopify']:
-        raise APIError(f"Unsupported platform: {platform}", code=ErrorCodes.INVALID_INPUT, status=400)
+        raise APIError(f"Unsupported integration platform: {platform}", code=ErrorCodes.INVALID_INPUT, status=400)
     
     try:
         state = generate_state_token()
@@ -106,7 +100,7 @@ async def initiate_oauth(
             url = await wp.get_oauth_url(callback_url, state)
         elif platform == 'shopify':
             if not shop_domain:
-                raise APIError("Shop domain is required for Shopify", code=ErrorCodes.INVALID_INPUT, status=400)
+                raise APIError("Shop domain is required for Shopify authorization", code=ErrorCodes.INVALID_INPUT, status=400)
             shop = extract_shop_domain(shop_domain)
             sh = ShopifyIntegration(installation_id="pending", config={'shop_domain': shop})
             url = await sh.get_oauth_url(callback_url, state)
@@ -115,8 +109,8 @@ async def initiate_oauth(
         
     except Exception as e:
         if isinstance(e, APIError): raise
-        logger.error(f"OAuth initiation failed: {e}")
-        raise APIError("Coult not connect to external provider", code=ErrorCodes.INTERNAL_ERROR, status=503)
+        logger.error(f"OAuth initiation failed for {user_id} on {platform}: {e}")
+        raise APIError("External authorization service is temporarily unreachable", code=ErrorCodes.INTERNAL_ERROR, status=503)
 
 
 @router.get("/callback/{platform}")
@@ -128,12 +122,19 @@ async def oauth_callback(
     shop: Optional[str] = Query(None),
     db: DatabaseManager = Depends(get_db)
 ):
-    """Handles the return redirect from OAuth providers and finalizes the connection"""
+    """
+    Handles the return redirect from OAuth providers and finalizes the connection.
+    
+    Verifies the state token, exchanges the authorization code for an API token, and persists the installation.
+    """
     try:
         async with db.pool.acquire() as conn:
-            st = await conn.fetchrow("SELECT user_id, shop_domain, return_url FROM oauth_states WHERE state_token = $1 AND platform = $2 AND created_at > NOW() - INTERVAL '10 minutes'", state, platform)
+            st = await conn.fetchrow(
+                "SELECT user_id, shop_domain, return_url FROM oauth_states WHERE state_token = $1 AND platform = $2 AND created_at > NOW() - INTERVAL '10 minutes'", 
+                state, platform
+            )
             if not st:
-                raise APIError("Security token expired or invalid", code=ErrorCodes.INVALID_TOKEN, status=400)
+                raise APIError("Authorization session expired or security token invalid", code=ErrorCodes.INVALID_TOKEN, status=400)
             
             user_id = st['user_id']
             ret_url = st['return_url'] or "/"
@@ -175,8 +176,9 @@ async def oauth_callback(
         return RedirectResponse(url=success_url)
         
     except Exception as e:
-        logger.error(f"Callback failure: {e}", exc_info=True)
-        return RedirectResponse(url=f"/?integration=error&msg={str(e)}")
+        logger.error(f"Integrations callback failure: {e}", exc_info=True)
+        # We redirect with an error message instead of raising APIError to keep the user in the UI flow
+        return RedirectResponse(url=f"/?integration=error&msg=Authorization failed")
 
 
 @router.delete("/{id}", response_model=APIResponse)
@@ -185,10 +187,17 @@ async def disconnect_integration(
     user_id: str = Depends(get_current_user),
     db: DatabaseManager = Depends(get_db)
 ):
-    """Severs the link between Samplit and the external platform"""
+    """
+    Severs the link between Samplit and the external platform.
+    
+    Archives the installation and stops all data synchronization.
+    """
     async with db.pool.acquire() as conn:
-        result = await conn.execute("UPDATE platform_installations SET status = 'archived', updated_at = NOW() WHERE id = $1 AND user_id = $2", id, user_id)
+        result = await conn.execute(
+            "UPDATE platform_installations SET status = 'archived', updated_at = NOW() WHERE id = $1 AND user_id = $2", 
+            id, user_id
+        )
         if result == "UPDATE 0":
-            raise APIError("Integration not found", code=ErrorCodes.NOT_FOUND, status=404)
+            raise APIError("Integration not found or unauthorized", code=ErrorCodes.NOT_FOUND, status=404)
             
-    return APIResponse(success=True, message="Connection severed successfully")
+    return APIResponse(success=True, message="Platform connection severed successfully")

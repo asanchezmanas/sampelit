@@ -30,13 +30,19 @@ from public_api.routers import (
     auth,
     experiments,
     analytics,
-    installations,  # ✅ Incluye instalación simple
-    tracker,  # ✅ Incluye endpoint /experiments/active
+    installations,
+    tracker,
     system,
-    experiments_multi_element,  # ✅ EXPERIMENTS MULTI-ELEMENT
-    audit,  # ✅ AUDIT SYSTEM
-    simulator,  # ✅ SIMULATOR
-    leads  # ✅ EMAIL LEAD CAPTURE
+    experiments_multi_element,
+    audit,
+    simulator,
+    leads,
+    public_dashboard,
+    visual_editor,
+    downloads,
+    proxy,
+    traffic_filters,
+    demo
 )
 
 # ════════════════════════════════════════════════════════════════════════════
@@ -239,6 +245,13 @@ app.include_router(
     tags=["Analytics"]
 )
 
+# Dashboard (Private Overview)
+app.include_router(
+    dashboard.router,
+    prefix=f"{settings.API_V1_PREFIX}/dashboard",
+    tags=["Dashboard"]
+)
+
 # System metrics
 app.include_router(
     system.router,
@@ -255,13 +268,57 @@ app.include_router(
 
 # ✅ Multi-element Factorial Experiments
 app.include_router(
-    experiments_multi_element.router
+    experiments_multi_element.router,
+    prefix=f"{settings.API_V1_PREFIX}/orchestration",
+    tags=["Orchestration"]
 )
 
-
-# ✅ Audit System
+# ✅ Audit System & Verification
 app.include_router(
-    audit.router
+    audit.router,
+    prefix=f"{settings.API_V1_PREFIX}/audit",
+    tags=["Audit"]
+)
+
+app.include_router(
+    demo.router,
+    prefix=f"{settings.API_V1_PREFIX}/verify",
+    tags=["Verification"]
+)
+
+# ✅ Public Dashboard & Reports
+app.include_router(
+    public_dashboard.router,
+    prefix=f"{settings.API_V1_PREFIX}/reports",
+    tags=["Reports"]
+)
+
+# ✅ Visual Editor & Canvas
+app.include_router(
+    visual_editor.router,
+    prefix=f"{settings.API_V1_PREFIX}/canvas",
+    tags=["Visual Editor"]
+)
+
+# ✅ Data Export & Downloads
+app.include_router(
+    downloads.router,
+    prefix=f"{settings.API_V1_PREFIX}/export",
+    tags=["Exports"]
+)
+
+# ✅ Edge Proxy & Tunneling
+app.include_router(
+    proxy.router,
+    prefix=f"{settings.API_V1_PREFIX}/edge",
+    tags=["Edge"]
+)
+
+# ✅ Traffic Rules & Filters
+app.include_router(
+    traffic_filters.router,
+    prefix=f"{settings.API_V1_PREFIX}/traffic",
+    tags=["Traffic Control"]
 )
 
 # ✅ Simulator (Public Demo)
@@ -276,6 +333,27 @@ app.include_router(
     leads.router,
     prefix=f"{settings.API_V1_PREFIX}/leads",
     tags=["Leads"]
+)
+
+# ✅ Platform Integrations (WordPress, Shopify)
+app.include_router(
+    integrations.router,
+    prefix=f"{settings.API_V1_PREFIX}/integrations",
+    tags=["Integrations"]
+)
+
+# ✅ Billing & Subscriptions
+app.include_router(
+    subscriptions.router,
+    prefix=f"{settings.API_V1_PREFIX}/subscriptions",
+    tags=["Subscriptions"]
+)
+
+# ✅ User Onboarding
+app.include_router(
+    onboarding.router,
+    prefix=f"{settings.API_V1_PREFIX}/onboarding",
+    tags=["Onboarding"]
 )
 
 # ════════════════════════════════════════════════════════════════════════════

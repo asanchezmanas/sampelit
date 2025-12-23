@@ -147,46 +147,96 @@ async def get_experiment(
     user_id: str = Depends(get_current_user),
     db: DatabaseManager = Depends(get_db)
 ):
-    """Get full experiment details and variants performance"""
+    """
+    Get full experiment details and hierarchical performance.
+    
+    Returns standard ExperimentDetailResponse with unified multi-element structure.
+    """
     try:
+        from orchestration.services.analytics_service import AnalyticsService
+        analytics = AnalyticsService()
+        
         async with db.pool.acquire() as conn:
-            # Get experiment
+            # 1. Get experiment basic info
             experiment = await conn.fetchrow(
                 "SELECT * FROM experiments WHERE id = $1 AND user_id = $2",
                 experiment_id, user_id
             )
             
             if not experiment:
-                raise APIError("Experiment not found", code=ErrorCodes.NOT_FOUND, status=404)
+                raise APIError("Experiment not found or access denied", code=ErrorCodes.NOT_FOUND, status=404)
             
-            # Get variants
-            variant_rows = await conn.fetch(
+            # 2. Get elements
+            elements_rows = await conn.fetch(
                 """
-                SELECT * FROM variants 
+                SELECT * FROM experiment_elements 
                 WHERE experiment_id = $1 
-                ORDER BY created_at
+                ORDER BY element_order
                 """,
                 experiment_id
             )
-        
+            
+            # 3. Get all variants for these elements in one go
+            variant_rows = await conn.fetch(
+                """
+                SELECT ev.*, ee.experiment_id 
+                FROM element_variants ev
+                JOIN experiment_elements ee ON ev.element_id = ee.id
+                WHERE ee.experiment_id = $1
+                ORDER BY ev.element_id, ev.variant_order
+                """,
+                experiment_id
+            )
+            
+            # Group variants by element_id
+            variants_by_element = {}
+            for v in variant_rows:
+                eid = str(v['element_id'])
+                if eid not in variants_by_element:
+                    variants_by_element[eid] = []
+                variants_by_element[eid].append(dict(v))
+            
+            # 4. Prepare data for AnalyticsService
+            elements_data = []
+            for e in elements_rows:
+                eid = str(e['id'])
+                elements_data.append({
+                    "id": eid,
+                    "name": e['name'],
+                    "element_type": e['element_type'],
+                    "variants": variants_by_element.get(eid, [])
+                })
+            
+            # 5. Run Hierarchical Analysis
+            analysis = await analytics.analyze_hierarchical_experiment(
+                experiment_id,
+                elements_data
+            )
+            
+        # Map to ExperimentDetailResponse
         return ExperimentDetailResponse(
             id=str(experiment['id']),
             name=experiment['name'],
             description=experiment.get('description'),
             status=experiment['status'],
-            optimization_strategy=experiment.get('optimization_strategy', 'adaptive'),
-            config=experiment.get('config', {}),
-            target_url=experiment.get('target_url'),
+            url=experiment.get('url', ''),
+            traffic_allocation=float(experiment.get('traffic_allocation', 1.0)),
+            confidence_threshold=float(experiment.get('confidence_threshold', 0.95)),
             created_at=experiment['created_at'],
             started_at=experiment.get('started_at'),
-            variants=[dict(row) for row in variant_rows]
+            # Hierarchical elements with performance
+            elements=analysis['elements'],
+            # Overall stats
+            total_visitors=analysis['total_visitors'],
+            total_conversions=analysis['total_conversions'],
+            overall_conversion_rate=analysis['overall_conversion_rate']
         )
         
     except APIError:
         raise
     except Exception as e:
         logger.error(f"Failed to get experiment {experiment_id}: {e}", exc_info=True)
-        raise APIError("Internal server error", code=ErrorCodes.INTERNAL_ERROR, status=500)
+        raise APIError("Failed to retrieve experiment details", code=ErrorCodes.INTERNAL_ERROR, status=500)
 
 
 @router.patch("/{experiment_id}/status", response_model=APIResponse)
