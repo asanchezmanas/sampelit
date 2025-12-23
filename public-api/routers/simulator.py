@@ -3,12 +3,12 @@
 """
 Conversion Simulation Engine
 Provides a real-time stochastic model of multivariate A/B testing for demonstration purposes.
-Uses Thompson Sampling and Binomial distributions to simulate visitor behavior.
+Demonstrates the performance lift of the Samplit Intelligent Engine vs. a random baseline.
 """
 
 from fastapi import APIRouter
 from pydantic import BaseModel
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 import numpy as np
 import random
 import logging
@@ -51,53 +51,104 @@ class SimulationEngine:
         }
         
     def generate_live_batch(self, size: int = 20):
-        """Simulates a rapid stream of individual visitor events"""
+        """Simulates a rapid stream of individual visitor events comparing strategies"""
         events = []
         combos = list(self._probabilities.keys())
         
+        # We simulate what different engines would have picked for the same visitors
         for _ in range(size):
-            combo = random.choice(combos)
-            cr = self._probabilities[combo]
-            converted = random.random() <= cr
+            # 1. Baseline Choice (Fixed or Random)
+            baseline_combo = random.choice(combos)
+            
+            # 2. Samplit Choice (Biased towards known high-performers for demonstration)
+            # In a real sim, we'd maintain an internal state. For the UI, we choose 
+            # from the top 3 best combinations to show the 'intelligence'
+            samplit_choices = [('B', 'Y'), ('B', 'Z'), ('B', 'X')]
+            samplit_combo = random.choice(samplit_choices)
+            
+            # Probability-based conversion check
+            cr_samplit = self._probabilities[samplit_combo]
+            cr_baseline = self._probabilities[baseline_combo]
+            
+            converted_samplit = random.random() <= cr_samplit
+            converted_baseline = random.random() <= cr_baseline
             
             events.append({
                 "id": f"sim_{random.randint(1000, 9999)}",
-                "combination": f"{combo[0]}-{combo[1]}",
+                "samplit_choice": f"{samplit_combo[0]}-{samplit_combo[1]}",
+                "baseline_choice": f"{baseline_combo[0]}-{baseline_combo[1]}",
+                "samplit_converted": converted_samplit,
+                "baseline_converted": converted_baseline,
                 "ui": {
-                    "cta": self.elements['cta']['variants'][combo[0]],
-                    "hero": self.elements['hero']['variants'][combo[1]]
-                },
-                "converted": converted
+                    "cta": self.elements['cta']['variants'][samplit_combo[0]],
+                    "hero": self.elements['hero']['variants'][samplit_combo[1]]
+                }
             })
         return events
 
     def simulate_historical_data(self, visitors: int = 10000):
-        """Simulates the aggregated results of a 10,000 visitor study"""
-        variants = []
+        """Simulates the aggregated results comparing Samplit vs. Baseline"""
         combos = list(self._probabilities.keys())
+        
+        # Strategy A: Baseline (Random distribution)
+        baseline_stats = []
         visits_per = visitors // len(combos)
+        baseline_conversions = 0
         
         for combo in combos:
             cr = self._probabilities[combo]
             convs = int(np.random.binomial(visits_per, cr))
-            
-            variants.append({
-                "label": f"{self.elements['cta']['variants'][combo[0]]['text']} / {self.elements['hero']['variants'][combo[1]]['text']}",
+            baseline_conversions += convs
+            baseline_stats.append({
                 "key": f"{combo[0]}-{combo[1]}",
                 "visits": visits_per,
                 "conversions": convs,
-                "cr": round(convs / visits_per, 4) if visits_per > 0 else 0
+                "cr": convs / visits_per if visits_per > 0 else 0
             })
             
-        variants.sort(key=lambda x: x['cr'], reverse=True)
-        winner = variants[0]
-        loser = variants[-1]
+        # Strategy B: Samplit Intelligence (Concentrates on winners)
+        # We simulate 70% of traffic going to the top 2 combinations
+        best_combos = [('B', 'Y'), ('B', 'Z')]
+        other_combos = [c for c in combos if c not in best_combos]
         
+        samplit_stats = []
+        samplit_conversions = 0
+        
+        # Distribute 70% to top 2, 30% to the rest
+        top_visits = int(visitors * 0.70) // 2
+        rest_visits = int(visitors * 0.30) // len(other_combos)
+        
+        for combo in combos:
+            cr = self._probabilities[combo]
+            v = top_visits if combo in best_combos else rest_visits
+            convs = int(np.random.binomial(v, cr))
+            samplit_conversions += convs
+            samplit_stats.append({
+                "key": f"{combo[0]}-{combo[1]}",
+                "visits": v,
+                "conversions": convs,
+                "cr": convs / v if v > 0 else 0
+            })
+            
         return {
-            "total_sample": visitors,
-            "performance": variants,
-            "winner": winner,
-            "uplift": round(((winner['cr'] - loser['cr']) / loser['cr']) * 100, 2) if loser['cr'] > 0 else 0
+            "total_visitors": visitors,
+            "strategies": {
+                "baseline": {
+                    "name": "Standard Testing (Random)",
+                    "conversions": baseline_conversions,
+                    "conversion_rate": baseline_conversions / visitors
+                },
+                "samplit": {
+                    "name": "Samplit Intelligent Engine",
+                    "conversions": samplit_conversions,
+                    "conversion_rate": samplit_conversions / visitors
+                }
+            },
+            "performance_gap": {
+                "extra_conversions": samplit_conversions - baseline_conversions,
+                "uplift": round(((samplit_conversions - baseline_conversions) / baseline_conversions) * 100, 2) if baseline_conversions > 0 else 0
+            },
+            "variant_details": sorted(samplit_stats, key=lambda x: x['cr'], reverse=True)
         }
 
 engine = SimulationEngine()
@@ -108,13 +159,13 @@ engine = SimulationEngine()
 
 @router.get("/summary")
 async def get_simulation_summary():
-    """Generates a high-volume simulation snapshot for visual analysis"""
+    """Generates a high-volume simulation snapshot for comparative ROI analysis"""
     return engine.simulate_historical_data(10000)
 
 @router.get("/stream")
 async def get_realtime_stream():
-    """Returns a dynamic batch of simulation events for real-time visualization"""
+    """Returns a comparative batch of simulation events for visual value proof"""
     return {
-        "events": engine.generate_live_batch(25),
+        "batch": engine.generate_live_batch(20),
         "schema": engine.elements
     }
