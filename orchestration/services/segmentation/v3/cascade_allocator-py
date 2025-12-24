@@ -1,0 +1,375 @@
+"""
+Cascade Allocator
+
+Allocates variants using hierarchical cascade with fallback.
+
+Copyright (c) 2024 Samplit Technologies
+"""
+
+import numpy as np
+from typing import Dict, Any, List, Optional
+import logging
+from uuid import UUID
+
+from .hierarchy_builder import HierarchyBuilder, SegmentNode
+
+logger = logging.getLogger(__name__)
+
+
+class CascadeAllocator:
+    """
+    Cascade allocation using hierarchical segments
+    
+    Strategy:
+    1. Start at most specific segment (e.g., country:US|device:mobile|source:instagram)
+    2. If segment has sufficient samples: use segment state
+    3. Else: cascade up to parent (e.g., country:US|device:mobile)
+    4. Repeat until root (global) if needed
+    
+    Benefits:
+    - Leverages specific data when available
+    - Falls back gracefully to parent segments
+    - Balances specificity vs reliability
+    - No cold start problem
+    
+    Example:
+        >>> builder = HierarchyBuilder(db_pool, config)
+        >>> tree = await builder.build_hierarchy(experiment_id)
+        >>> 
+        >>> allocator = CascadeAllocator(db_pool, tree, config)
+        >>> 
+        >>> context = {
+        ...     'country': 'US',
+        ...     'device': 'mobile',
+        ...     'source': 'instagram'
+        ... }
+        >>> 
+        >>> selected = await allocator.select(experiment_id, context)
+        >>> # Uses most specific segment with >= min_samples
+    """
+    
+    def __init__(
+        self,
+        db_pool,
+        hierarchy_tree: SegmentNode,
+        config: Optional[Dict[str, Any]] = None
+    ):
+        """
+        Initialize CascadeAllocator
+        
+        Args:
+            db_pool: Database pool
+            hierarchy_tree: Pre-built hierarchy tree
+            config: Configuration dict
+        """
+        self.db = db_pool
+        self.tree = hierarchy_tree
+        self.config = config or {}
+        
+        # Configuration
+        self.min_samples_per_level = self.config.get('min_samples_per_level', [1000, 500, 200])
+        self.alpha_prior = self.config.get('alpha_prior', 1.0)
+        self.beta_prior = self.config.get('beta_prior', 1.0)
+        
+        # Hierarchy builder (for navigation)
+        self.builder = HierarchyBuilder(db_pool, config)
+        
+        logger.info("Initialized CascadeAllocator")
+    
+    # ========================================================================
+    # MAIN SELECTION
+    # ========================================================================
+    
+    async def select(
+        self,
+        experiment_id: UUID,
+        context: Dict[str, Any]
+    ) -> UUID:
+        """
+        Select variant using cascade strategy
+        
+        Process:
+        1. Get cascade path (specific → general)
+        2. For each level in path:
+           - Check if segment has sufficient samples
+           - If yes: use this segment for allocation
+           - If no: continue to next (more general) level
+        3. Run Thompson Sampling at selected level
+        
+        Args:
+            experiment_id: Experiment UUID
+            context: User context
+        
+        Returns:
+            Selected variant UUID
+        """
+        # ─────────────────────────────────────────────────────────────
+        # Get cascade path
+        # ─────────────────────────────────────────────────────────────
+        cascade_path = self.builder.get_cascade_path(self.tree, context)
+        
+        logger.debug(
+            f"Cascade path: {[node.segment_key for node in cascade_path]}"
+        )
+        
+        # ─────────────────────────────────────────────────────────────
+        # Find best level to use
+        # ─────────────────────────────────────────────────────────────
+        selected_node = await self._select_level(cascade_path)
+        
+        logger.info(
+            f"Selected level: {selected_node.segment_key} "
+            f"(depth={selected_node.depth}, samples={selected_node.samples})"
+        )
+        
+        # ─────────────────────────────────────────────────────────────
+        # Fetch variants with segment states
+        # ─────────────────────────────────────────────────────────────
+        variants = await self._fetch_variants_for_segment(
+            experiment_id,
+            selected_node.segment_key
+        )
+        
+        if not variants:
+            raise ValueError(f"No variants found for experiment {experiment_id}")
+        
+        # ─────────────────────────────────────────────────────────────
+        # Run Thompson Sampling
+        # ─────────────────────────────────────────────────────────────
+        selected_id = self._thompson_sampling(variants)
+        
+        return selected_id
+    
+    async def _select_level(
+        self,
+        cascade_path: List[SegmentNode]
+    ) -> SegmentNode:
+        """
+        Select which level to use for allocation
+        
+        Strategy:
+        - Start from most specific (cascade_path[0])
+        - Use first level with sufficient samples
+        - Fall back to root if needed
+        
+        Args:
+            cascade_path: Path from specific to general
+        
+        Returns:
+            Selected node for allocation
+        """
+        for node in cascade_path:
+            # Get min samples threshold for this level
+            min_samples = self._get_min_samples_for_level(node.level)
+            
+            if node.samples >= min_samples:
+                logger.debug(
+                    f"Level {node.level} has sufficient samples: "
+                    f"{node.samples} >= {min_samples}"
+                )
+                return node
+            else:
+                logger.debug(
+                    f"Level {node.level} insufficient samples: "
+                    f"{node.samples} < {min_samples}, cascading..."
+                )
+        
+        # Fallback to root
+        return cascade_path[-1]
+    
+    def _get_min_samples_for_level(self, level: int) -> int:
+        """Get minimum samples threshold for level"""
+        if level == 0:
+            return 0  # Root always usable
+        
+        if level - 1 < len(self.min_samples_per_level):
+            return self.min_samples_per_level[level - 1]
+        
+        return 100  # Default
+    
+    async def _fetch_variants_for_segment(
+        self,
+        experiment_id: UUID,
+        segment_key: str
+    ) -> List[Dict[str, Any]]:
+        """
+        Fetch variants with segment-specific states
+        
+        Uses variant_segment_state table from V2.
+        """
+        async with self.db.acquire() as conn:
+            rows = await conn.fetch("""
+                SELECT 
+                    v.id,
+                    v.name,
+                    v.total_visitors as global_samples,
+                    v.total_conversions as global_conversions,
+                    
+                    -- Segment-specific state
+                    vss.alpha as segment_alpha,
+                    vss.beta as segment_beta,
+                    vss.samples as segment_samples
+                    
+                FROM element_variants v
+                LEFT JOIN variant_segment_state vss 
+                    ON vss.variant_id = v.id 
+                    AND vss.segment_key = $2
+                WHERE v.experiment_id = $1
+                  AND v.status = 'active'
+            """, experiment_id, segment_key)
+        
+        variants = []
+        
+        for row in rows:
+            # Use segment state if available, else global
+            if row['segment_alpha'] is not None:
+                alpha = row['segment_alpha']
+                beta = row['segment_beta']
+                samples = row['segment_samples']
+            else:
+                # Warm start from global
+                global_samples = row['global_samples']
+                global_conversions = row['global_conversions']
+                alpha = self.alpha_prior + global_conversions
+                beta = self.beta_prior + (global_samples - global_conversions)
+                samples = global_samples
+            
+            variants.append({
+                'id': row['id'],
+                'name': row['name'],
+                'alpha': alpha,
+                'beta': beta,
+                'samples': samples
+            })
+        
+        return variants
+    
+    def _thompson_sampling(
+        self,
+        variants: List[Dict[str, Any]]
+    ) -> UUID:
+        """Run Thompson Sampling"""
+        samples = []
+        
+        for variant in variants:
+            sample = np.random.beta(variant['alpha'], variant['beta'])
+            samples.append(sample)
+            
+            logger.debug(
+                f"Variant {variant['name']}: "
+                f"alpha={variant['alpha']:.2f}, "
+                f"beta={variant['beta']:.2f}, "
+                f"sample={sample:.3f}"
+            )
+        
+        selected_idx = int(np.argmax(samples))
+        return variants[selected_idx]['id']
+    
+    # ========================================================================
+    # ANALYTICS
+    # ========================================================================
+    
+    async def get_cascade_stats(
+        self,
+        experiment_id: UUID
+    ) -> Dict[str, Any]:
+        """
+        Get statistics about cascade usage
+        
+        Returns:
+            {
+                'level_usage': {0: 1000, 1: 500, 2: 200},  # Allocations per level
+                'cascade_rate': 0.3,  # % of allocations that cascaded
+                'avg_depth_used': 1.5
+            }
+        """
+        async with self.db.acquire() as conn:
+            rows = await conn.fetch("""
+                SELECT 
+                    a.segment_id,
+                    cs.segment_key,
+                    COUNT(*) as allocations
+                FROM assignments a
+                JOIN context_segments cs ON cs.id = a.segment_id
+                WHERE a.experiment_id = $1
+                GROUP BY a.segment_id, cs.segment_key
+            """, experiment_id)
+        
+        level_usage = {}
+        total_allocations = 0
+        
+        for row in rows:
+            # Determine level from segment_key (count "|" separators)
+            segment_key = row['segment_key']
+            level = segment_key.count('|') if segment_key != 'global' else 0
+            
+            level_usage[level] = level_usage.get(level, 0) + row['allocations']
+            total_allocations += row['allocations']
+        
+        # Calculate cascade rate (allocations not at most specific level)
+        max_level = max(level_usage.keys()) if level_usage else 0
+        cascaded = sum(count for level, count in level_usage.items() if level < max_level)
+        cascade_rate = cascaded / total_allocations if total_allocations > 0 else 0
+        
+        # Average depth used
+        avg_depth = (
+            sum(level * count for level, count in level_usage.items()) / total_allocations
+            if total_allocations > 0
+            else 0
+        )
+        
+        return {
+            'level_usage': level_usage,
+            'cascade_rate': cascade_rate,
+            'avg_depth_used': avg_depth,
+            'total_allocations': total_allocations
+        }
+    
+    def get_performance_metrics(self) -> Dict[str, Any]:
+        """Get allocator metrics"""
+        # Calculate tree stats
+        tree_stats = self.builder._calculate_tree_stats(self.tree)
+        
+        return {
+            'algorithm': 'hierarchical_cascade',
+            'tree_nodes': tree_stats['total_nodes'],
+            'tree_depth': tree_stats['max_depth'],
+            'leaf_nodes': tree_stats['leaf_nodes'],
+            'min_samples_per_level': self.min_samples_per_level
+        }
+
+
+class CascadeConfig:
+    """Configuration builder for cascade allocator"""
+    
+    @staticmethod
+    def default() -> Dict[str, Any]:
+        """Default configuration"""
+        return {
+            'hierarchy_levels': ['country', 'device', 'source'],
+            'min_samples_per_level': [1000, 500, 200],
+            'max_depth': 3,
+            'prune_ineffective': True,
+            'alpha_prior': 1.0,
+            'beta_prior': 1.0
+        }
+    
+    @staticmethod
+    def shallow() -> Dict[str, Any]:
+        """Shallow hierarchy - faster cascade"""
+        return {
+            'hierarchy_levels': ['device', 'source'],
+            'min_samples_per_level': [500, 200],
+            'max_depth': 2,
+            'prune_ineffective': True
+        }
+    
+    @staticmethod
+    def deep() -> Dict[str, Any]:
+        """Deep hierarchy - more granular"""
+        return {
+            'hierarchy_levels': ['country', 'device', 'source', 'hour'],
+            'min_samples_per_level': [2000, 1000, 500, 200],
+            'max_depth': 4,
+            'prune_ineffective': True
+        }
