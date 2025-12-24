@@ -1,0 +1,52 @@
+# infrastructure/monitoring/alertmanager.yml
+
+global:
+  resolve_timeout: 5m
+  slack_api_url: 'YOUR_SLACK_WEBHOOK_URL'
+
+route:
+  group_by: ['alertname', 'cluster', 'service']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 12h
+  receiver: 'team-notifications'
+  
+  routes:
+    - match:
+        severity: critical
+      receiver: 'team-critical'
+      continue: true
+    
+    - match:
+        severity: warning
+      receiver: 'team-warnings'
+    
+    - match:
+        severity: info
+      receiver: 'team-info'
+
+receivers:
+  - name: 'team-critical'
+    slack_configs:
+      - channel: '#samplit-critical-alerts'
+        title: '🚨 CRITICAL: {{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+    
+    pagerduty_configs:
+      - service_key: 'YOUR_PAGERDUTY_KEY'
+  
+  - name: 'team-warnings'
+    slack_configs:
+      - channel: '#samplit-warnings'
+        title: '⚠️ WARNING: {{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+  
+  - name: 'team-info'
+    slack_configs:
+      - channel: '#samplit-info'
+        title: 'ℹ️ INFO: {{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+  
+  - name: 'team-notifications'
+    slack_configs:
+      - channel: '#samplit-alerts'
