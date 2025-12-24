@@ -40,3 +40,28 @@ __all__ = [
     'CascadeAllocator',
     'TreeVisualizer'
 ]
+
+
+"""
+Deep Learning Embeddings Module (V3.3)
+
+Neural network-based user representations for semantic segmentation.
+
+Copyright (c) 2024 Samplit Technologies
+"""
+
+__version__ = "3.3.0"
+
+from .neural_encoder import NeuralEncoder, EmbeddingConfig
+from .embedding_model import EmbeddingModel, EmbeddingTrainer
+from .similarity_engine import SimilarityEngine
+from .transfer_learning import TransferLearningManager
+
+__all__ = [
+    'NeuralEncoder',
+    'EmbeddingConfig',
+    'EmbeddingModel',
+    'EmbeddingTrainer',
+    'SimilarityEngine',
+    'TransferLearningManager'
+]
