@@ -1,0 +1,114 @@
+# infrastructure/monitoring/prometheus_alerts.yml
+
+groups:
+  - name: samplit_alerts
+    interval: 30s
+    rules:
+      
+      # ================================================================
+      # CRITICAL ALERTS
+      # ================================================================
+      
+      - alert: DatabaseDown
+        expr: up{job="samplit"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Samplit database is down"
+          description: "Database has been unreachable for 1 minute"
+      
+      - alert: HighErrorRate
+        expr: |
+          rate(samplit_http_requests_total{status=~"5.."}[5m]) / 
+          rate(samplit_http_requests_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value | humanizePercentage }} (threshold: 5%)"
+      
+      - alert: DatabasePoolExhausted
+        expr: samplit_db_pool_available == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Database connection pool exhausted"
+          description: "No available database connections for 2 minutes"
+      
+      # ================================================================
+      # WARNING ALERTS
+      # ================================================================
+      
+      - alert: HighLatency
+        expr: |
+          histogram_quantile(0.95, 
+            rate(samplit_http_request_duration_seconds_bucket[5m])
+          ) > 1.0
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High API latency"
+          description: "P95 latency is {{ $value }}s (threshold: 1s)"
+      
+      - alert: LowCacheHitRate
+        expr: |
+          rate(samplit_cache_hits_total[5m]) / 
+          (rate(samplit_cache_hits_total[5m]) + rate(samplit_cache_misses_total[5m])) < 0.8
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low cache hit rate"
+          description: "Cache hit rate is {{ $value | humanizePercentage }} (threshold: 80%)"
+      
+      - alert: HighDatabaseLatency
+        expr: |
+          histogram_quantile(0.95,
+            rate(samplit_db_query_duration_seconds_bucket[5m])
+          ) > 0.5
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High database query latency"
+          description: "P95 database latency is {{ $value }}s"
+      
+      - alert: HighMemoryUsage
+        expr: |
+          (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / 
+          node_memory_MemTotal_bytes > 0.85
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage"
+          description: "Memory usage is {{ $value | humanizePercentage }}"
+      
+      # ================================================================
+      # BUSINESS ALERTS
+      # ================================================================
+      
+      - alert: LowConversionRate
+        expr: |
+          rate(samplit_conversions_total[1h]) / 
+          rate(samplit_allocations_total[1h]) < 0.01
+        for: 2h
+        labels:
+          severity: info
+        annotations:
+          summary: "Unusually low conversion rate"
+          description: "Global conversion rate is {{ $value | humanizePercentage }}"
+      
+      - alert: NoAllocationsRecently
+        expr: |
+          rate(samplit_allocations_total[5m]) == 0
+        for: 30m
+        labels:
+          severity: info
+        annotations:
+          summary: "No allocations in last 30 minutes"
+          description: "No traffic detected - possible integration issue"
