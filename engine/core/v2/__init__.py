@@ -14,6 +14,11 @@ from .allocators import (
     EpsilonGreedyAllocator,
 )
 
+from .allocators.ucb import (
+    UCBAllocator, 
+    UCB1Tuned,
+)
+
 # ============================================
 # ALLOCATOR REGISTRY
 # ============================================
@@ -25,6 +30,10 @@ ALLOCATOR_REGISTRY: Dict[str, Type] = {
     'thompson': BayesianAllocator,
     'sequential': SequentialAllocator,
     'epsilon_greedy': EpsilonGreedyAllocator,
+
+    'ucb': UCBAllocator,
+    'ucb1': UCBAllocator,  # Alias
+    'ucb_tuned': UCB1Tuned,
     
     # Legacy aliases
     'standard': BayesianAllocator,
