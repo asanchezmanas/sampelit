@@ -11,6 +11,7 @@ from .allocators import (
     BayesianAllocator,
     AdaptiveBayesianAllocator,
     SequentialAllocator,
+    EpsilonGreedyAllocator,
 )
 
 # ============================================
@@ -23,6 +24,7 @@ ALLOCATOR_REGISTRY: Dict[str, Type] = {
     'adaptive': AdaptiveBayesianAllocator,
     'thompson': BayesianAllocator,
     'sequential': SequentialAllocator,
+    'epsilon_greedy': EpsilonGreedyAllocator,
     
     # Legacy aliases
     'standard': BayesianAllocator,
