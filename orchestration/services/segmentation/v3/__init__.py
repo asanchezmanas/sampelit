@@ -65,3 +65,27 @@ __all__ = [
     'SimilarityEngine',
     'TransferLearningManager'
 ]
+
+
+"""
+Multi-region Support Module (V3.4)
+
+Geo-distributed allocation with data residency compliance.
+
+Copyright (c) 2024 Samplit Technologies
+"""
+
+__version__ = "3.4.0"
+
+from .region_manager import RegionManager, Region
+from .geo_allocator import GeoAllocator
+from .sync_engine import SyncEngine
+from .gdpr_compliance import GDPRCompliance
+
+__all__ = [
+    'RegionManager',
+    'Region',
+    'GeoAllocator',
+    'SyncEngine',
+    'GDPRCompliance'
+]
