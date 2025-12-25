@@ -42,8 +42,7 @@ from public_api.routers import (
     downloads,
     proxy,
     traffic_filters,
-    demo,
-    segmentation
+    demo
 )
 
 # ════════════════════════════════════════════════════════════════════════════
