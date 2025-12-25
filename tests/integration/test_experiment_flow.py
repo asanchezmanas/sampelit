@@ -17,7 +17,7 @@ class TestExperimentFlow:
         register_response = client.post("/api/v1/auth/register", json={
             "email": email,
             "password": "IntegrationPass123!",
-            "full_name": "Integration Test User"
+            "name": "Integration Test User"
         })
         assert register_response.status_code == 200
         token = register_response.json()["token"]
@@ -111,14 +111,14 @@ class TestExperimentFlow:
         user1_response = client.post("/api/v1/auth/register", json={
             "email": user1_email,
             "password": "Pass123!",
-            "full_name": "User One"
+            "name": "User One"
         })
         user1_token = user1_response.json()["token"]
         
         user2_response = client.post("/api/v1/auth/register", json={
             "email": user2_email,
             "password": "Pass123!",
-            "full_name": "User Two"
+            "name": "User Two"
         })
         user2_token = user2_response.json()["token"]
         

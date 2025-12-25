@@ -26,7 +26,7 @@ def event_loop():
 @pytest.fixture
 def client():
     """Provide FastAPI test client"""
-    return TestClient(app)
+    return TestClient(app, base_url="http://localhost")
 
 @pytest.fixture
 def auth_token(client):
@@ -35,16 +35,23 @@ def auth_token(client):
     response = client.post("/api/v1/auth/register", json={
         "email": email,
         "password": "TestPass123!",
-        "full_name": "Test User"
+        "name": "Test User"
     })
     if response.status_code == 200:
         return response.json()["token"]
+    
+    print(f"Registration failed: {response.status_code} - {response.text}")
+    
     # If registration fails, try login
     response = client.post("/api/v1/auth/login", json={
         "email": email,
         "password": "TestPass123!"
     })
-    return response.json()["token"]
+    if response.status_code == 200:
+        return response.json()["token"]
+        
+    print(f"Login failed: {response.status_code} - {response.text}")
+    raise Exception(f"Auth failed: {response.text}")
 
 @pytest.fixture
 def auth_headers(auth_token):

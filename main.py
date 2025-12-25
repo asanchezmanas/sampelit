@@ -78,8 +78,8 @@ async def lifespan(app: FastAPI):
     logger.info(f"Version: {settings.APP_VERSION}")
     
     # Initialize database
-    db = DatabaseManager()
-    await db.initialize()
+    from data_access.database import get_database
+    db = await get_database()
     app.state.db = db
     logger.info("Database initialized")
     
@@ -99,7 +99,8 @@ async def lifespan(app: FastAPI):
     # Shutdown metrics monitoring
     await ServiceFactory.shutdown()
     
-    await db.close()
+    # We don't close the singleton here as it might be shared across tests
+    # await db.close()
     logger.info("Samplit Platform stopped")
 
 # ════════════════════════════════════════════════════════════════════════════
@@ -130,16 +131,14 @@ app.add_middleware(
 )
 
 # 3. Security Headers
+allowed_hosts = ["localhost", "127.0.0.1", "testserver", "*.render.com", "*.samplit.com"]
+if settings.ENVIRONMENT == "production":
+    allowed_hosts += ["samplit.com"]
+
 app.add_middleware(
     TrustedHostMiddleware, 
-    allowed_hosts=["localhost", "127.0.0.1", "*.render.com", "*.samplit.com"]
+    allowed_hosts=allowed_hosts
 )
-
-if settings.ENVIRONMENT == "production":
-    app.add_middleware(
-        TrustedHostMiddleware,
-        allowed_hosts=["*.samplit.com", "samplit.com"]
-    )
 
 # Request timing middleware
 @app.middleware("http")

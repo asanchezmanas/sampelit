@@ -167,6 +167,7 @@ class DatabaseManager:
         """Close connection pool"""
         if self.pool:
             await self.pool.close()
+            self.pool = None
             logger.info("✅ Database pool closed")
     
     @asynccontextmanager
@@ -410,6 +411,8 @@ async def get_database() -> DatabaseManager:
     
     if _db_manager is None:
         _db_manager = DatabaseManager()
+        await _db_manager.initialize()
+    elif _db_manager.pool is None:
         await _db_manager.initialize()
     
     return _db_manager
