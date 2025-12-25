@@ -96,13 +96,14 @@ class MultiElementService:
             async with conn.transaction():
                 # Crear elementos y variantes
                 for elem_idx, element_config in enumerate(elements_config):
+                    import json as json_lib
                     element_id = await conn.fetchval(
                         """
                         INSERT INTO experiment_elements (
                             experiment_id, element_order, name,
                             selector_type, selector_value, element_type,
                             original_content
-                        ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+                        ) VALUES ($1, $2, $3, $4, $5, $6, $7::jsonb)
                         RETURNING id
                         """,
                         experiment_id,
@@ -111,7 +112,7 @@ class MultiElementService:
                         element_config['selector']['type'],
                         element_config['selector']['selector'],
                         element_config.get('element_type', 'generic'),
-                        element_config.get('original_content', {})
+                        json_lib.dumps(element_config.get('original_content', {}))
                     )
                     
                     # Crear variantes para este elemento
@@ -128,11 +129,14 @@ class MultiElementService:
                             element_id=str(element_id),
                             name=f"Variant {var_idx + 1}",
                             content=variant_content,
-                            initial_state=initial_state
+                            initial_algorithm_state=initial_state,
+                            variant_order=var_idx,
+                            conn=conn
                         )
                         variant_ids.append(variant_id)
                     
                     elements_created.append({
+
                         'element_id': str(element_id),
                         'name': element_config['name'],
                         'variant_ids': variant_ids,

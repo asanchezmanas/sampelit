@@ -7,7 +7,7 @@ Simplificación: eliminamos la distinción entre "traditional" y "multi-element"
 TODO es multi-elemento, solo que algunos experimentos tienen 1 elemento y otros varios.
 """
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, validator, field_validator
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 from enum import Enum
@@ -80,13 +80,15 @@ class ElementConfig(BaseModel):
     selector: SelectorConfig
     element_type: ElementType
     original_content: VariantContent
-    variants: List[VariantContent] = Field(..., min_items=1)
+    variants: List[VariantContent] = Field(..., min_length=1)
     
-    @validator('variants')
+    @field_validator('variants')
+    @classmethod
     def validate_variants(cls, v):
         if len(v) < 1:
             raise ValueError('Necesitas al menos 1 variante')
         return v
+
     
     class Config:
         json_schema_extra = {
@@ -119,17 +121,19 @@ class CreateExperimentRequest(BaseModel):
     url: str = Field(..., description="URL donde corre el experimento")
     
     # Elementos a testear (1 o más)
-    elements: List[ElementConfig] = Field(..., min_items=1)
+    elements: List[ElementConfig] = Field(..., min_length=1)
     
     # Configuración opcional
     traffic_allocation: float = Field(default=1.0, ge=0.0, le=1.0)
     confidence_threshold: float = Field(default=0.95, ge=0.8, le=0.99)
     
-    @validator('url')
+    @field_validator('url')
+    @classmethod
     def validate_url(cls, v):
         if not v.startswith(('http://', 'https://')):
             raise ValueError('URL debe empezar con http:// o https://')
         return v
+
     
     class Config:
         json_schema_extra = {

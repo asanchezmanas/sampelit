@@ -22,7 +22,7 @@ class VariantRepository(BaseRepository):
     """
     
     async def create_variant(self,
-                            experiment_id: str,
+                            element_id: str,
                             name: str,
                             content: Dict[str, Any],
                             initial_algorithm_state: Dict[str, Any],
@@ -45,7 +45,7 @@ class VariantRepository(BaseRepository):
         if conn:
             variant_id = await conn.fetchval(
                 query,
-                experiment_id,
+                element_id,
                 name,
                 json.dumps(content),
                 encrypted_state,
@@ -55,7 +55,7 @@ class VariantRepository(BaseRepository):
             async with self.db.acquire() as conn_new:
                 variant_id = await conn_new.fetchval(
                     query,
-                    experiment_id,
+                    element_id,
                     name,
                     json.dumps(content),
                     encrypted_state,
@@ -63,6 +63,7 @@ class VariantRepository(BaseRepository):
                 )
         
         return str(variant_id)
+
     
     async def get_variants_for_experiment(self, experiment_id: str, active_only: bool = True) -> List[Dict[str, Any]]:
         """Get all variants for an experiment via its elements"""

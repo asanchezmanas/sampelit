@@ -74,8 +74,21 @@ class ErrorHandlerMiddleware(BaseHTTPMiddleware):
                     "timestamp": datetime.now(timezone.utc).isoformat()
                 }
             )
+        
+        except ValueError as e:
+            # Pydantic validation errors come wrapped as ValueError
+            return JSONResponse(
+                status_code=422,
+                content={
+                    "success": False,
+                    "error": str(e),
+                    "code": "VALIDATION_ERROR",
+                    "timestamp": datetime.now(timezone.utc).isoformat()
+                }
+            )
             
         except Exception as e:
+
             # Unexpected errors
             now = datetime.now(timezone.utc)
             error_id = f"err_{now.strftime('%Y%m%d%H%M%S')}"

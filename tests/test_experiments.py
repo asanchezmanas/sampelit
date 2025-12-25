@@ -39,9 +39,10 @@ class TestExperiments:
                 ]
             }
         )
-        assert response.status_code == 200
+        assert response.status_code == 201
         data = response.json()
         assert "id" in data or ("data" in data and "id" in data["data"])
+
     
     def test_create_experiment_invalid_url(self, client, auth_headers):
         """Test experiment creation fails with invalid URL"""
