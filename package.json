@@ -1,0 +1,22 @@
+{
+    "name": "samplit-frontend",
+    "version": "1.0.0",
+    "description": "Frontend for Samplit - Intelligent A/B Testing & Funnels",
+    "scripts": {
+        "start": "npx serve static -p 5500",
+        "dev": "npx serve static -p 5500",
+        "test": "echo \"No frontend tests specified\" && exit 0"
+    },
+    "keywords": [
+        "samplit",
+        "ab-testing",
+        "funnels",
+        "dashboard"
+    ],
+    "author": "Artur",
+    "license": "PRIVATE",
+    "dependencies": {},
+    "devDependencies": {
+        "serve": "^14.2.0"
+    }
+}

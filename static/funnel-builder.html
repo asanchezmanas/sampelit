@@ -14,7 +14,26 @@
     <script>
         tailwind.config = {
             darkMode: 'class',
-            theme: { fontFamily: { sans: ['Inter', 'sans-serif'] } }
+            theme: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#ecf3ff',
+                            100: '#dde9ff',
+                            200: '#c2d6ff',
+                            300: '#9cb9ff',
+                            400: '#7592ff',
+                            500: '#465fff',
+                            600: '#3641f5',
+                            700: '#2a31d8',
+                            800: '#252dae',
+                            900: '#262e89',
+                            950: '#161950',
+                        }
+                    }
+                }
+            }
         }
     </script>
 
@@ -49,7 +68,7 @@
     <!-- Header -->
     <header class="h-14 border-b border-gray-200 bg-white flex items-center px-4 justify-between z-20 shadow-sm">
         <div class="flex items-center gap-3">
-            <a href="/dashboard" class="flex items-center text-gray-500 hover:text-blue-600">
+            <a href="/dashboard" class="flex items-center text-gray-500 hover:text-brand-600">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
@@ -61,7 +80,7 @@
 
         <div class="flex items-center gap-2">
             <button
-                class="px-4 py-1.5 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 shadow-sm transition-colors">
+                class="px-4 py-1.5 bg-brand-600 text-white rounded-md text-sm font-medium hover:bg-brand-700 shadow-sm transition-colors">
                 Save Funnel
             </button>
         </div>
@@ -74,7 +93,7 @@
             class="absolute left-4 top-4 z-10 bg-white rounded-xl shadow-lg border border-gray-100 p-2 flex flex-col gap-2">
             <template x-for="tool in tools">
                 <button @click="addNode(tool.type)"
-                    class="w-10 h-10 flex items-center justify-center rounded-lg text-gray-500 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                    class="w-10 h-10 flex items-center justify-center rounded-lg text-gray-500 hover:bg-brand-50 hover:text-brand-600 transition-colors"
                     :title="tool.label">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         x-html="`<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='${tool.icon}'></path>`"></svg>
@@ -97,7 +116,7 @@
                     <div>
                         <label class="block text-xs font-medium text-gray-500 uppercase">Label</label>
                         <input type="text" x-model="selectedNode.label"
-                            class="mt-1 w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:outline-none">
+                            class="mt-1 w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-brand-500 focus:outline-none">
                     </div>
 
                     <div>
@@ -131,14 +150,14 @@
                 </template>
 
                 <!-- Temporary Connection Line -->
-                <path :d="getTempConnectionPath()" stroke="#3b82f6" stroke-width="2" stroke-dasharray="5,5" fill="none"
+                <path :d="getTempConnectionPath()" stroke="#465fff" stroke-width="2" stroke-dasharray="5,5" fill="none"
                     x-show="connectingNode" />
             </svg>
 
             <!-- NODES -->
             <template x-for="node in nodes" :key="node.id">
                 <div class="absolute w-40 bg-white rounded-lg shadow-sm border border-gray-200 flex flex-col group hover:shadow-md transition-shadow select-none"
-                    :class="{'ring-2 ring-blue-500 border-transparent': selectedNode?.id === node.id}"
+                    :class="{'ring-2 ring-brand-500 border-transparent': selectedNode?.id === node.id}"
                     :style="`transform: translate(${node.x}px, ${node.y}px)`" @mousedown.stop="startDrag($event, node)">
 
                     <!-- Header -->
@@ -154,9 +173,9 @@
                     </div>
 
                     <!-- Connectors -->
-                    <div class="absolute -right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-white border border-blue-200 rounded-full flex items-center justify-center cursor-crosshair hover:bg-blue-50 z-10 shadow-sm"
+                    <div class="absolute -right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-white border border-brand-200 rounded-full flex items-center justify-center cursor-crosshair hover:bg-brand-50 z-10 shadow-sm"
                         @mousedown.stop="startConnection($event, node)" title="Drag">
-                        <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <div class="w-2 h-2 bg-brand-500 rounded-full"></div>
                     </div>
 
                     <div class="absolute -left-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-transparent rounded-full z-0"

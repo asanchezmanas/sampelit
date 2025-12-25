@@ -9,6 +9,31 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <link href="https://fonts.googleapis.com/css?family=Inter:300,400,600,700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#ecf3ff',
+                            100: '#dde9ff',
+                            200: '#c2d6ff',
+                            300: '#9cb9ff',
+                            400: '#7592ff',
+                            500: '#465fff',
+                            600: '#3641f5',
+                            700: '#2a31d8',
+                            800: '#252dae',
+                            900: '#262e89',
+                            950: '#161950',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -239,7 +264,7 @@
                             toolbar: { show: false },
                             sparkline: { enabled: false },
                         },
-                        colors: ['#2563eb', '#94a3b8'],
+                        colors: ['#3641f5', '#94a3b8'],
                         dataLabels: { enabled: false },
                         stroke: { curve: 'smooth', width: 2 },
                         fill: {

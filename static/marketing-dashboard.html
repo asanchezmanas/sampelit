@@ -6,7 +6,7 @@
   <meta name="viewport"
     content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Samplit | Intelligent A/B Testing</title>
+  <title>Dashboard | Sampelit - Intelligent Experiments</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,7 +24,21 @@
         },
         extend: {
           colors: {
-            primary: { "50": "#eff6ff", "100": "#dbeafe", "200": "#bfdbfe", "300": "#93c5fd", "400": "#60a5fa", "500": "#3b82f6", "600": "#2563eb", "700": "#1d4ed8", "800": "#1e40af", "900": "#1e3a8a", "950": "#172554" }
+            primary: { "50": "#eff6ff", "100": "#dbeafe", "200": "#bfdbfe", "300": "#93c5fd", "400": "#60a5fa", "500": "#3b82f6", "600": "#2563eb", "700": "#1d4ed8", "800": "#1e40af", "900": "#1e3a8a", "950": "#172554" },
+            // Standardized Brand Colors (matches Sign In / Styles.css)
+            brand: {
+              50: '#ecf3ff',
+              100: '#dde9ff',
+              200: '#c2d6ff',
+              300: '#9cb9ff',
+              400: '#7592ff',
+              500: '#465fff',
+              600: '#3641f5',
+              700: '#2a31d8',
+              800: '#252dae',
+              900: '#262e89',
+              950: '#161950',
+            }
           }
         }
       }
@@ -77,34 +91,134 @@
 
       <!-- ===== Main Content Start ===== -->
       <main>
-        <div class="mx-auto max-w-(--breakpoint-2xl) p-4 pb-20 md:p-6 md:pb-6">
-          <div class="grid grid-cols-12 gap-4 md:gap-6">
-            <div class="col-span-12">
-              <!-- Metric Group Three -->
-              <include src="./partials/metric-group/metric-group-03.html" />
-              <!-- Metric Group Three -->
-            </div>
+        <div class="mx-auto max-w-(--breakpoint-2xl) p-4 pb-20 md:p-6 md:pb-6" x-data="{ activeTab: 'web' }">
 
-            <div class="col-span-12 space-y-6 xl:col-span-8">
-              <!-- ====== Chart Eight Start -->
-              <include src="./partials/chart/chart-08.html" />
-              <!-- ====== Chart Eight End -->
+          <!-- Modern Tabs Navigation -->
+          <div class="mb-6 border-b border-gray-200 dark:border-gray-700">
+            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+              <a href="#" @click.prevent="activeTab = 'web'"
+                :class="activeTab === 'web' ? 'border-brand-500 text-brand-600 dark:text-brand-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                </svg>
+                Web Experiments
+              </a>
+              <a href="#" @click.prevent="activeTab = 'funnel'"
+                :class="activeTab === 'funnel' ? 'border-brand-500 text-brand-600 dark:text-brand-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                </svg>
+                Web Funnels
+              </a>
+              <a href="#" @click.prevent="activeTab = 'email'"
+                :class="activeTab === 'email' ? 'border-brand-500 text-brand-600 dark:text-brand-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                Email Leads
+              </a>
+            </nav>
+          </div>
 
-              <!-- ====== Table Three Start -->
-              <include src="./partials/table/table-03.html" />
-              <!-- ====== Table Three End -->
-            </div>
+          <!-- TAB 1: WEB (Existing Dashboard) -->
+          <div x-show="activeTab === 'web'" x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
+            <div class="grid grid-cols-12 gap-4 md:gap-6">
+              <div class="col-span-12">
+                <!-- Metric Group Three -->
+                <include src="./partials/metric-group/metric-group-03.html" />
+                <!-- Metric Group Three -->
+              </div>
 
-            <div class="col-span-12 space-y-6 xl:col-span-4">
-              <!-- ====== Traffic Stats Start -->
-              <include src="./partials/traffic-stats.html" />
-              <!-- ====== Traffic Stats End -->
+              <div class="col-span-12 space-y-6 xl:col-span-8">
+                <!-- ====== Chart Eight Start -->
+                <include src="./partials/chart/chart-08.html" />
+                <!-- ====== Chart Eight End -->
 
-              <!-- ====== Traffic Source Start -->
-              <include src="./partials/traffic-source.html" />
-              <!-- ====== Traffic Source End -->
+                <!-- ====== Table Three Start -->
+                <include src="./partials/table/table-03.html" />
+                <!-- ====== Table Three End -->
+              </div>
+
+              <div class="col-span-12 space-y-6 xl:col-span-4">
+                <!-- ====== Traffic Stats Start -->
+                <include src="./partials/traffic-stats.html" />
+                <!-- ====== Traffic Stats End -->
+
+                <!-- ====== Traffic Source Start -->
+                <include src="./partials/traffic-source.html" />
+                <!-- ====== Traffic Source End -->
+              </div>
             </div>
           </div>
+
+          <!-- TAB 2: FUNNELS -->
+          <div x-show="activeTab === 'funnel'" x-cloak x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
+            <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+              <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Visual Funnels</h3>
+                <a href="/static/funnel-builder.html"
+                  class="px-4 py-2 bg-brand-500 text-white rounded-lg text-sm hover:bg-brand-600 transition-colors">
+                  Open Builder
+                </a>
+              </div>
+              <div class="flex flex-col items-center justify-center py-12 text-center">
+                <div class="bg-gray-50 rounded-full p-4 mb-4 dark:bg-gray-800">
+                  <svg class="w-12 h-12 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                  </svg>
+                </div>
+                <h4 class="text-xl font-medium text-gray-900 dark:text-white mb-2">No Active Funnels</h4>
+                <p class="text-gray-500 dark:text-gray-400 max-w-md mb-6">Create multi-step experiments to optimize your
+                  user journey from landing to conversion.</p>
+                <button
+                  class="px-5 py-2.5 bg-brand-500 text-white font-medium rounded-lg hover:bg-brand-600 transition-shadow shadow-theme-md"
+                  onclick="window.location.href='/static/funnel-builder.html'">
+                  Create First Funnel
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 3: EMAIL -->
+          <div x-show="activeTab === 'email'" x-cloak x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
+            <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+              <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Lead Capture Performance</h3>
+              </div>
+              <!-- Placeholder Metrics for Email -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div
+                  class="p-4 rounded-xl bg-brand-50 dark:bg-brand-500/10 border border-brand-100 dark:border-brand-500/20">
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Total Leads</p>
+                  <h4 class="text-2xl font-bold text-gray-800 dark:text-white mt-1">0</h4>
+                </div>
+                <div
+                  class="p-4 rounded-xl bg-green-50 dark:bg-green-500/10 border border-green-100 dark:border-green-500/20">
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Conversion Rate</p>
+                  <h4 class="text-2xl font-bold text-gray-800 dark:text-white mt-1">0%</h4>
+                </div>
+                <div
+                  class="p-4 rounded-xl bg-orange-50 dark:bg-orange-500/10 border border-orange-100 dark:border-orange-500/20">
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Avg. Engagement</p>
+                  <h4 class="text-2xl font-bold text-gray-800 dark:text-white mt-1">-</h4>
+                </div>
+              </div>
+              <div class="text-center py-8 border-t border-gray-100 dark:border-gray-800">
+                <p class="text-gray-500">Connect your email provider to see real-time analytics.</p>
+              </div>
+            </div>
+          </div>
+
         </div>
       </main>
       <!-- ===== Main Content End ===== -->
