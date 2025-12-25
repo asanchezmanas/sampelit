@@ -61,6 +61,29 @@ async def get_current_user(
         raise APIError("Invalid token", code=ErrorCodes.INVALID_TOKEN, status=401)
 
 
+async def get_current_admin_user(
+    user_id: str = Depends(get_current_user),
+    db: DatabaseManager = Depends(get_db)
+) -> str:
+    """
+    Verify user is an admin.
+    """
+    async with db.pool.acquire() as conn:
+        role = await conn.fetchval(
+            "SELECT role FROM users WHERE id = $1",
+            user_id
+        )
+    
+    if role != 'admin':
+        raise APIError(
+            "Admin privileges required", 
+            code=ErrorCodes.FORBIDDEN, 
+            status=403
+        )
+    
+    return user_id
+
+
 async def require_api_key(
     x_api_key: Optional[str] = Header(None, alias="X-API-Key")
 ) -> str:

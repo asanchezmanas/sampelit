@@ -214,6 +214,9 @@ class MABApp {
         if (data.token) {
             localStorage.setItem('mab_token', data.token);
         }
+        if (data.role) {
+            localStorage.setItem('mab_role', data.role);
+        }
 
         this.managers.ui.showToast('Welcome back!', 'success');
 

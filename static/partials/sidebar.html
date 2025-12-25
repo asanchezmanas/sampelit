@@ -12,15 +12,15 @@
             class="text-brand-400">.</span></h1>
       </span>
 
-      <img class="logo-icon" :class="sidebarToggle ? 'xl:block' : 'hidden'" src="./images/logo/logo-icon.svg"
-        alt="Logo" />
+      <span class="logo-icon text-2xl font-bold text-brand-600 dark:text-white"
+        :class="sidebarToggle ? 'xl:block' : 'hidden'">S.</span>
     </a>
   </div>
   <!-- SIDEBAR HEADER -->
 
   <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
     <!-- Sidebar Menu -->
-    <nav x-data="{selected: $persist('Dashboard')}">
+    <nav x-data="{selected: $persist('Dashboard'), role: localStorage.getItem('mab_role') || 'client'}">
 
       <!-- MENU GROUP: CORE -->
       <div>
@@ -40,7 +40,7 @@
 
           <!-- ITEM: DASHBOARD -->
           <li>
-            <a href="/" @click="selected = 'Dashboard'" class="menu-item group"
+            <a href="/?tab=web" @click="selected = 'Dashboard'" class="menu-item group"
               :class="selected === 'Dashboard' ? 'menu-item-active' : 'menu-item-inactive'">
 
               <svg :class="selected === 'Dashboard' ? 'menu-item-icon-active' : 'menu-item-icon-inactive'" width="24"
@@ -56,7 +56,7 @@
 
           <!-- ITEM: EXPERIMENTS -->
           <li>
-            <a href="/experiments" @click="selected = 'Experiments'" class="menu-item group"
+            <a href="/?tab=web" @click="selected = 'Experiments'" class="menu-item group"
               :class="selected === 'Experiments' ? 'menu-item-active' : 'menu-item-inactive'">
 
               <svg :class="selected === 'Experiments' ? 'menu-item-icon-active' : 'menu-item-icon-inactive'" width="24"
@@ -72,7 +72,7 @@
 
           <!-- ITEM: FUNNELS -->
           <li>
-            <a href="/static/funnel-builder.html" @click="selected = 'Funnels'" class="menu-item group"
+            <a href="/?tab=funnels" @click="selected = 'Funnels'" class="menu-item group"
               :class="selected === 'Funnels' ? 'menu-item-active' : 'menu-item-inactive'">
 
               <svg :class="selected === 'Funnels' ? 'menu-item-icon-active' : 'menu-item-icon-inactive'" width="24"
@@ -89,35 +89,30 @@
             </a>
           </li>
 
+        </ul>
+      </div>
+
+      <!-- MENU GROUP: ADMIN (Only for Admins) -->
+      <div x-show="role === 'admin'" x-cloak>
+        <h3 class="mb-4 text-xs leading-[20px] text-gray-400 uppercase">
+          <span class="menu-group-title" :class="sidebarToggle ? 'xl:hidden' : ''">
+            ADMINISTRATION
+          </span>
+        </h3>
+        <ul class="mb-6 flex flex-col gap-1">
           <!-- ITEM: LEADS (EMAIL) -->
           <li>
-            <a href="/leads" @click="selected = 'Leads'" class="menu-item group"
+            <a href="/?tab=email" @click="selected = 'Leads'" class="menu-item group"
               :class="selected === 'Leads' ? 'menu-item-active' : 'menu-item-inactive'">
-
               <svg :class="selected === 'Leads' ? 'menu-item-icon-active' : 'menu-item-icon-inactive'" width="24"
                 height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
-
               <span class="menu-item-text" :class="sidebarToggle ? 'xl:hidden' : ''">Email Leads</span>
             </a>
           </li>
-
-          <!-- ITEM: BLOG/CONTENT (Future) -->
-          <li>
-            <a href="#" class="menu-item group menu-item-inactive opacity-50 cursor-not-allowed" title="Coming Soon">
-              <svg class="menu-item-icon-inactive" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
-                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-              <span class="menu-item-text" :class="sidebarToggle ? 'xl:hidden' : ''">Content / Blog</span>
-            </a>
-          </li>
-
         </ul>
       </div>
 
@@ -125,11 +120,35 @@
       <div>
         <h3 class="mb-4 text-xs leading-[20px] text-gray-400 uppercase">
           <span class="menu-group-title" :class="sidebarToggle ? 'xl:hidden' : ''">
-            ACCOUNT
+            SETTINGS
           </span>
         </h3>
 
         <ul class="mb-6 flex flex-col gap-1">
+          <!-- ITEM: BILLING -->
+          <li>
+            <a href="/settings/billing.html" class="menu-item group menu-item-inactive">
+              <svg class="menu-item-icon-inactive" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span class="menu-item-text" :class="sidebarToggle ? 'xl:hidden' : ''">Billing & Plans</span>
+            </a>
+          </li>
+
+          <!-- ITEM: SITE SETUP -->
+          <li>
+            <a href="/onboarding/verify.html" class="menu-item group menu-item-inactive">
+              <svg class="menu-item-icon-inactive" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+              <span class="menu-item-text" :class="sidebarToggle ? 'xl:hidden' : ''">Site Setup</span>
+            </a>
+          </li>
+
           <!-- ITEM: PROFILE -->
           <li>
             <a href="/profile.html" class="menu-item group menu-item-inactive">

@@ -23,6 +23,7 @@ class RegisterRequest(BaseModel):
     password: str = Field(..., min_length=8, max_length=100)
     name: str = Field(..., min_length=2, max_length=100)
     company: Optional[str] = Field(None, max_length=255)
+    role: Optional[str] = Field('client', pattern='^(client|admin|editor)$')
 
 class LoginRequest(BaseModel):
     email: EmailStr
@@ -33,6 +34,7 @@ class AuthResponse(BaseModel):
     user_id: str
     email: str
     name: str
+    role: str
 
 # ════════════════════════════════════════════════════════════════════════════
 # HELPERS
@@ -54,10 +56,11 @@ def verify_password(password: str, password_hash: str) -> bool:
     except Exception:
         return False
 
-def create_token(user_id: str) -> str:
-    """Create JWT token"""
+def create_token(user_id: str, role: str = 'client') -> str:
+    """Create JWT token with role"""
     payload = {
         'sub': user_id,
+        'role': role,
         'exp': datetime.now(timezone.utc) + timedelta(hours=24),
         'iat': datetime.now(timezone.utc)
     }
@@ -103,14 +106,15 @@ async def register(
         async with db.pool.acquire() as conn:
             user_id = await conn.fetchval(
                 """
-                INSERT INTO users (email, password_hash, name, company)
-                VALUES ($1, $2, $3, $4)
+                INSERT INTO users (email, password_hash, name, company, role)
+                VALUES ($1, $2, $3, $4, $5)
                 RETURNING id
                 """,
                 request.email.lower(),
                 password_hash,
                 request.name,
-                request.company
+                request.company,
+                request.role
             )
     except Exception as e:
         raise APIError(
@@ -120,13 +124,14 @@ async def register(
         )
     
     # Generate token
-    token = create_token(str(user_id))
+    token = create_token(str(user_id), request.role)
     
     return AuthResponse(
         token=token,
         user_id=str(user_id),
         email=request.email,
-        name=request.name
+        name=request.name,
+        role=request.role
     )
 
 @router.post("/login", response_model=AuthResponse, dependencies=[Depends(check_rate_limit)])
@@ -140,7 +145,7 @@ async def login(
     async with db.pool.acquire() as conn:
         user = await conn.fetchrow(
             """
-            SELECT id, email, password_hash, name
+            SELECT id, email, password_hash, name, role
             FROM users
             WHERE email = $1
             """,
@@ -163,13 +168,16 @@ async def login(
         )
     
     # Generate token
-    token = create_token(str(user['id']))
+    # Handle nullable role (migration safety) by defaulting to client
+    role = user['role'] if user.get('role') else 'client'
+    token = create_token(str(user['id']), role)
     
     return AuthResponse(
         token=token,
         user_id=str(user['id']),
         email=user['email'],
-        name=user['name']
+        name=user['name'],
+        role=role
     )
 
 @router.get("/me")
@@ -199,7 +207,7 @@ async def get_current_user_info(
     async with db.pool.acquire() as conn:
         user = await conn.fetchrow(
             """
-            SELECT id, email, name, company, created_at
+            SELECT id, email, name, company, role, created_at
             FROM users
             WHERE id = $1
             """,
@@ -209,6 +217,11 @@ async def get_current_user_info(
     if not user:
         raise APIError("User not found", code=ErrorCodes.USER_NOT_FOUND, status=404)
     
-    return dict(user)
+    # Return dict with role (defaults to client if None due to migration)
+    user_dict = dict(user)
+    if not user_dict.get('role'):
+        user_dict['role'] = 'client'
+        
+    return user_dict
 
     return dict(user)
