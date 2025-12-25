@@ -18,11 +18,11 @@ from public_api.models import (
     ExperimentDetailResponse,
     ExperimentStatus,
     APIResponse,
-    PaginatedResponse,
-    ErrorCodes
+    PaginatedResponse
 )
 from public_api.dependencies import get_db, check_rate_limit, get_current_user, PaginationParams, get_pagination
 from public_api.middleware.error_handler import APIError
+from public_api.errors import ErrorCode, get_error_description
 
 logger = logging.getLogger(__name__)
 
@@ -87,7 +87,11 @@ async def create_experiment(
         
     except Exception as e:
         logger.error(f"Failed to create experiment: {e}", exc_info=True)
-        raise APIError(f"Failed to create experiment: {str(e)}", code=ErrorCodes.DATABASE_ERROR, status=500)
+        raise APIError(
+            f"{get_error_description(ErrorCode.DB_QUERY_001)}: {str(e)}",
+            code=ErrorCode.EXP_CREATE_001,
+            status=500
+        )
 
 
 @router.get("/", response_model=PaginatedResponse[ExperimentListResponse])
@@ -153,7 +157,11 @@ async def list_experiments(
         
     except Exception as e:
         logger.error(f"Failed to list experiments: {e}", exc_info=True)
-        raise APIError("Failed to fetch experiments", code=ErrorCodes.DATABASE_ERROR, status=500)
+        raise APIError(
+            get_error_description(ErrorCode.DB_QUERY_001),
+            code=ErrorCode.DB_QUERY_001,
+            status=500
+        )
 
 
 @router.get("/{experiment_id}", response_model=ExperimentDetailResponse)
@@ -179,7 +187,11 @@ async def get_experiment(
             )
             
             if not experiment:
-                raise APIError("Experiment not found or access denied", code=ErrorCodes.NOT_FOUND, status=404)
+                raise APIError(
+                    get_error_description(ErrorCode.EXP_READ_001),
+                    code=ErrorCode.EXP_READ_001,
+                    status=404
+                )
             
             # 2. Get elements
             elements_rows = await conn.fetch(

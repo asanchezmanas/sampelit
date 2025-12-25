@@ -25,7 +25,8 @@ from public_api.models.tracker import (
     GenericEventRequest
 )
 from public_api.dependencies import get_db, check_rate_limit
-from public_api.middleware.error_handler import APIError, ErrorCodes
+from public_api.middleware.error_handler import APIError
+from public_api.errors import ErrorCode, get_error_description
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +60,11 @@ async def get_active_experiments_for_installation(
         
         if not installation:
             logger.warning(f"Installation not found: {request.installation_token[:15]}...")
-            raise APIError("Installation not found", code=ErrorCodes.NOT_FOUND, status=404)
+            raise APIError(
+                get_error_description(ErrorCode.TRACK_ASSIGN_001),
+                code=ErrorCode.TRACK_ASSIGN_001,
+                status=404
+            )
         
         if installation['status'] != 'active':
             return ActiveExperimentsResponse(experiments=[], count=0)
@@ -98,7 +103,11 @@ async def get_active_experiments_for_installation(
         raise
     except Exception as e:
         logger.error(f"Failed to get active experiments: {e}", exc_info=True)
-        raise APIError("Internal server error", code=ErrorCodes.INTERNAL_ERROR, status=500)
+        raise APIError(
+            get_error_description(ErrorCode.API_INT_001),
+            code=ErrorCode.API_INT_001,
+            status=500
+        )
 
 
 @router.post("/assign", response_model=TrackerAssignmentResponse, dependencies=[Depends(check_rate_limit)])
@@ -116,7 +125,11 @@ async def assign_variant(
             )
         
         if not installation or installation['status'] != 'active':
-            raise APIError("Invalid or inactive installation token", code=ErrorCodes.UNAUTHORIZED, status=400)
+                        raise APIError(
+                get_error_description(ErrorCode.TRACK_ASSIGN_001),
+                code=ErrorCode.TRACK_ASSIGN_001,
+                status=400
+            )
         
         # Get experiment service
         service = await ServiceFactory.create_experiment_service(db)
@@ -130,7 +143,11 @@ async def assign_variant(
         )
         
         if not assignment:
-            raise APIError("Experiment not found or inactive", code=ErrorCodes.EXPERIMENT_NOT_FOUND, status=404)
+            raise APIError(
+                get_error_description(ErrorCode.TRACK_ASSIGN_002),
+                code=ErrorCode.TRACK_ASSIGN_002,
+                status=404
+            )
         
         return TrackerAssignmentResponse(
             variant_id=assignment['variant_id'],
@@ -143,10 +160,14 @@ async def assign_variant(
     except APIError:
         raise
     except ValueError as e:
-        raise APIError(str(e), code=ErrorCodes.INVALID_INPUT, status=400)
+        raise APIError(str(e), code=ErrorCode.API_VAL_001, status=400)
     except Exception as e:
         logger.error(f"Unexpected error in assign_variant: {e}", exc_info=True)
-        raise APIError("Internal server error", code=ErrorCodes.INTERNAL_ERROR, status=500)
+        raise APIError(
+            get_error_description(ErrorCode.API_INT_001),
+            code=ErrorCode.API_INT_001,
+            status=500
+        )
 
 
 @router.post("/convert", response_model=TrackerConversionResponse, dependencies=[Depends(check_rate_limit)])
@@ -164,7 +185,11 @@ async def record_conversion(
             )
         
         if not installation or installation['status'] != 'active':
-            raise APIError("Invalid or inactive installation token", code=ErrorCodes.UNAUTHORIZED, status=400)
+                        raise APIError(
+                get_error_description(ErrorCode.TRACK_ASSIGN_001),
+                code=ErrorCode.TRACK_ASSIGN_001,
+                status=400
+            )
         
         # Get experiment service
         service = await ServiceFactory.create_experiment_service(db)
@@ -192,10 +217,14 @@ async def record_conversion(
     except APIError:
         raise
     except ValueError as e:
-        raise APIError(str(e), code=ErrorCodes.INVALID_INPUT, status=400)
+        raise APIError(str(e), code=ErrorCode.API_VAL_001, status=400)
     except Exception as e:
         logger.error(f"Unexpected error in record_conversion: {e}", exc_info=True)
-        raise APIError("Internal server error", code=ErrorCodes.INTERNAL_ERROR, status=500)
+        raise APIError(
+            get_error_description(ErrorCode.API_INT_001),
+            code=ErrorCode.API_INT_001,
+            status=500
+        )
 
 
 @router.get("/health")

@@ -9,7 +9,8 @@ from datetime import datetime, timedelta, timezone
 
 from data_access.database import DatabaseManager
 from public_api.dependencies import get_db, check_rate_limit, get_current_user
-from public_api.middleware.error_handler import APIError, ErrorCodes
+from public_api.middleware.error_handler import APIError
+from public_api.errors import ErrorCode, get_error_description
 from config.settings import settings
 
 router = APIRouter()
@@ -94,8 +95,8 @@ async def register(
     
     if existing:
         raise APIError(
-            message="Email already registered",
-            code=ErrorCodes.VALIDATION_ERROR,
+            message=get_error_description(ErrorCode.AUTH_REG_001),
+            code=ErrorCode.AUTH_REG_001,
             status=400
         )
     
@@ -119,8 +120,8 @@ async def register(
             )
     except Exception as e:
         raise APIError(
-            message=f"Failed to create user: {str(e)}",
-            code=ErrorCodes.DATABASE_ERROR,
+            message=f"{get_error_description(ErrorCode.DB_QUERY_001)}: {str(e)}",
+            code=ErrorCode.DB_QUERY_001,
             status=500
         )
     
@@ -155,16 +156,16 @@ async def login(
     
     if not user:
         raise APIError(
-            message="Invalid email or password",
-            code=ErrorCodes.UNAUTHORIZED,
+            message=get_error_description(ErrorCode.AUTH_LOGIN_001),
+            code=ErrorCode.AUTH_LOGIN_001,
             status=401
         )
     
     # Verify password
     if not verify_password(request.password, user['password_hash']):
         raise APIError(
-            message="Invalid email or password",
-            code=ErrorCodes.UNAUTHORIZED,
+            message=get_error_description(ErrorCode.AUTH_LOGIN_001),
+            code=ErrorCode.AUTH_LOGIN_001,
             status=401
         )
     
