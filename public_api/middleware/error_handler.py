@@ -106,20 +106,43 @@ def _create_error_response(
     error_type: Optional[str] = None,
     location: Optional[Dict[str, Any]] = None
 ) -> JSONResponse:
-    """Create consistent error response format with enhanced debugging info."""
+    """
+    Create consistent error response format with enhanced debugging info.
+    
+    SECURITY: Internal error codes (AUTH_REG_001, EXP_CREATE_001, etc.) are
+    ONLY visible in development mode. In production, users see generic codes
+    to prevent information leakage to competitors.
+    """
     # Generate request ID if not provided
     if error_id is None:
         error_id = generate_request_id()
     
+    # Obfuscate internal error codes in production
+    # Users see generic codes, logs have full details
+    if IS_DEVELOPMENT:
+        public_code = code  # Show full internal code in dev
+    else:
+        # Map internal codes to generic categories for production
+        code_prefix = code.split("_")[0] if "_" in str(code) else str(code)
+        public_code_map = {
+            "AUTH": "AUTH_ERROR",
+            "EXP": "EXPERIMENT_ERROR",
+            "TRACK": "TRACKING_ERROR",
+            "ANAL": "ANALYTICS_ERROR",
+            "DB": "SERVER_ERROR",
+            "API": "REQUEST_ERROR"
+        }
+        public_code = public_code_map.get(code_prefix, "ERROR")
+    
     content = {
         "success": False,
         "error": error,
-        "code": code,
+        "code": public_code,
         "request_id": error_id,
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
     
-    # Add request context if available
+    # Add request context only in development
     if request and IS_DEVELOPMENT:
         content["request"] = {
             "method": request.method,
@@ -127,12 +150,22 @@ def _create_error_response(
             "query": str(request.url.query) if request.url.query else None
         }
     
-    if details is not None:
+    # Details only in development (may contain sensitive info)
+    if details is not None and IS_DEVELOPMENT:
         content["details"] = _sanitize_for_json(details)
-    if error_type is not None:
+    elif details is not None:
+        # In production, only show count of validation errors, not details
+        if isinstance(details, list):
+            content["error_count"] = len(details)
+    
+    if error_type is not None and IS_DEVELOPMENT:
         content["type"] = error_type
     if location is not None and IS_DEVELOPMENT:
         content["location"] = location
+    
+    # Log full details for dev team (always, even in production)
+    if not IS_DEVELOPMENT:
+        logger.info(f"[{error_id}] Internal code: {code}")
     
     return JSONResponse(status_code=status_code, content=content)
 
