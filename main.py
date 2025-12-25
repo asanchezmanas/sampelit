@@ -12,6 +12,7 @@ Copyright (c) 2024 Samplit Technologies. All rights reserved.
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from contextlib import asynccontextmanager
@@ -137,6 +138,12 @@ if settings.ENVIRONMENT == "production":
 app.add_middleware(
     TrustedHostMiddleware, 
     allowed_hosts=allowed_hosts
+)
+
+# 4. GZip Compression
+app.add_middleware(
+    GZipMiddleware,
+    minimum_size=1000
 )
 
 # Request timing middleware
