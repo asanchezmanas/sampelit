@@ -15,7 +15,6 @@ from uuid import uuid4
 from data_access.repositories.experiment_repository import ExperimentRepository
 from data_access.repositories.variant_repository import VariantRepository
 from data_access.repositories.assignment_repository import AssignmentRepository
-from engine.core.allocators.bayesian import BayesianAllocator
 
 logger = logging.getLogger(__name__)
 
@@ -441,24 +440,51 @@ class ExperimentService:
         Select variant using Adaptive algorithm
         
         Uses encrypted state from variants
+        Modified to use consolidated _bayesian allocator
         """
-        
-        allocator = BayesianAllocator()
+        # Lazy import to avoid circular dependencies
+        from engine.core.allocators._bayesian import AdaptiveBayesianAllocator
         
         try:
-            # Select variant
-            selected_idx = allocator.select_variant(variants)
+            # Map variants to format expected by _bayesian allocator
+            # _bayesian expects '_internal_state' with 'success_count'/'failure_count'
+            mapped_options = []
+            for v in variants:
+                state = v.get('algorithm_state', {})
+                alpha = float(state.get('alpha', 1.0))
+                beta = float(state.get('beta', 1.0))
+                samples = int(state.get('samples', 0))
+                
+                # Convert alpha/beta back to counts (assuming Prior=1.0)
+                # alpha = success + 1  => success = alpha - 1
+                success_count = max(0, int(alpha - 1))
+                failure_count = max(0, int(beta - 1))
+                
+                # Create a copy with the mapped state
+                v_copy = v.copy()
+                v_copy['_internal_state'] = {
+                    'success_count': success_count,
+                    'failure_count': failure_count,
+                    'samples': samples
+                }
+                mapped_options.append(v_copy)
             
-            if selected_idx is None or selected_idx >= len(variants):
-                return None
+            # Use consolidated allocator
+            allocator = AdaptiveBayesianAllocator({})
+            selected_id = await allocator.select(mapped_options, {})
             
-            return variants[selected_idx]
+            # Find selected variant by ID
+            for v in variants:
+                if v['id'] == selected_id:
+                    return v
+                    
+            return None
         
         except Exception as e:
             self.logger.error(f"Adaptive selection error: {e}")
             # Fallback to random uniform
             import random
-            return random.choice(variants)
+            return random.choice(variants) if variants else None
     
     # ========================================================================
     # CONVERSION TRACKING

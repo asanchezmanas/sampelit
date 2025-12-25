@@ -14,7 +14,7 @@ from .._base import BaseAllocator
 _STRATEGY_MAP = {
     "adaptive": "allocators._bayesian",
     "fast_learning": "allocators._explore", 
-    "sequential": "allocators._sequential",
+    "sequential": "allocators.sequential",
     "hybrid": "allocators._hybrid"
 }
 

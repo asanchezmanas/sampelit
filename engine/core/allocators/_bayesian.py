@@ -129,9 +129,10 @@ class AdaptiveBayesianAllocator(BaseAllocator):
         # Solo loggear info no-sensible
         self.logger.info(
             "Variant allocated",
-            variant=kwargs['selected_id'],
-            method="samplit-adaptive"  # Genérico
-            # NO loggear scores, algoritmo, etc.
+            extra={
+                "variant": kwargs['selected_id'],
+                "method": "samplit-adaptive"
+            }
         )
 
 def create(config: Dict[str, Any]) -> AdaptiveBayesianAllocator:
