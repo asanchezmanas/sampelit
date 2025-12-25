@@ -327,13 +327,20 @@ app.include_router(
     tags=["Simulator"]
 )
 
-# ✅ Funnels & Sequential Experiments
-from public_api.routers import funnels
-app.include_router(
-    funnels.router,
-    prefix=f"{settings.API_V1_PREFIX}/funnels",
-    tags=["Funnels"]
-)
+# ═══════════════════════════════════════════════════════════════════════════
+# FUNNELS (v1.1 - Not enabled in v1.0)
+# Schema, models, repository, and router are ready in:
+# - public_api/routers/funnels.py
+# - public_api/models/funnel_models.py
+# - data_access/repositories/funnel_repository.py
+# - DB tables: funnels, funnel_nodes, funnel_edges, funnel_sessions
+# ═══════════════════════════════════════════════════════════════════════════
+# from public_api.routers import funnels
+# app.include_router(
+#     funnels.router,
+#     prefix=f"{settings.API_V1_PREFIX}/funnels",
+#     tags=["Funnels"]
+# )
 
 # Admin Endpoints (Protected)
 app.include_router(
