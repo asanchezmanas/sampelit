@@ -150,7 +150,8 @@
                 async refreshData() {
                     this.loading = true;
                     try {
-                        const response = await MABApp.api.get(`/experiment/${this.experimentId}`);
+                        // Using analytics endpoint for detailed stats: /api/v1/analytics/experiment/{id}
+                        const response = await MABApp.api.get(`/analytics/experiment/${this.experimentId}`);
                         if (response.success) {
                             this.processData(response.data);
                         }
@@ -248,12 +249,14 @@
                 },
 
                 downloadReport(format) {
-                    const url = `/api/v1/experiments/${this.experimentId}/export/${format}`;
+                    // Mapped to audit.py: /api/v1/audit/experiments/{id}/export/{format}
+                    const url = `/api/v1/audit/experiments/${this.experimentId}/export/${format}`;
                     window.open(url, '_blank');
                 },
 
                 async showFairnessProof() {
-                    const res = await MABApp.api.get(`/experiments/${this.experimentId}/proof-of-fairness`);
+                    // Mapped to audit.py: /api/v1/audit/experiments/{id}/proof-of-fairness
+                    const res = await MABApp.api.get(`/audit/experiments/${this.experimentId}/proof-of-fairness`);
                     if (res.success) {
                         alert(`Fairness Verified!\n\nIntegrity Hash: ${res.data.evidence.integrity_hash}\nAll checks passed.`);
                     }

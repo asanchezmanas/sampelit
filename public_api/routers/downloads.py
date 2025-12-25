@@ -36,15 +36,22 @@ async def export_audit_log(
     await _verify_ownership(db, experiment_id, user_id)
     
     try:
-        exporter = ExperimentFileExporter(experiment_id)
-        # In production, this would pull from the algorithm_audit_trail table
-        # For the demo, we check if the pre-generated file exists
-        mock_path = 'audit_decisions.csv'
-        if not os.path.exists(mock_path):
-            raise APIError("Audit log not yet matured", code=ErrorCodes.NOT_FOUND, status=404)
-            
+        from orchestration.services.audit_service import AuditService
         import pandas as pd
-        df = pd.read_csv(mock_path)
+        import uuid
+        
+        service = AuditService(db)
+        # Fetch all records
+        records = await service.get_audit_trail(
+            experiment_id=uuid.UUID(experiment_id), 
+            limit=100000
+        )
+        
+        if not records:
+            raise APIError("No audit data available yet", code=ErrorCodes.NOT_FOUND, status=404)
+            
+        df = pd.DataFrame(records)
+        exporter = ExperimentFileExporter(experiment_id)
         
         if fmt == 'csv':
             path = exporter.export_audit_log_csv(df)
@@ -71,19 +78,70 @@ async def export_results_package(
     await _verify_ownership(db, experiment_id, user_id)
     
     try:
-        mock_results = 'demo_comparison_results.json'
-        if not os.path.exists(mock_results):
-            raise APIError("Results not processed", code=ErrorCodes.NOT_FOUND, status=404)
+        from orchestration.services.analytics_service import AnalyticsService
+        analytics = AnalyticsService()
+        
+        # 1. Fetch real analytics data
+        # We need to manually construct the data for the exporter because AnalyticsService
+        # returns a different structure than what the legacy exporter expects.
+        # For MVP, we will map it on the fly.
+        
+        # This requires fetching variants first to pass to analytics_service if using `analyze_experiment`
+        # But `experiments.py` logic handles fetching.
+        # Ideally we should assume `ExperimentDetailResponse` structure.
+        
+        # Re-using the logic from experiments.py to get full data
+        async with db.pool.acquire() as conn:
+            experiment = await conn.fetchrow("SELECT * FROM experiments WHERE id = $1", experiment_id)
+            elements = await conn.fetch("SELECT * FROM experiment_elements WHERE experiment_id = $1", experiment_id)
+            # (Simplification: just get variants)
+            variants = await conn.fetch(
+                """
+                SELECT ev.* FROM element_variants ev 
+                JOIN experiment_elements ee ON ev.element_id = ee.id 
+                WHERE ee.experiment_id = $1
+                """, experiment_id
+            )
             
-        import json
-        with open(mock_results, 'r') as f:
-            data = json.load(f)
-            
+        # Analyze
+        # Group variants by element (assuming single element for simple export now)
+        variants_dict = [dict(v) for v in variants]
+        analysis = await analytics.analyze_experiment(experiment_id, variants_dict)
+        
+        # 2. Structure for Exporter
+        # The exporter expects 'traditional' vs 'samplit' comparison.
+        # We will populate 'samplit' with actuals and 'traditional' with a placeholder baseline.
+        
+        samplit_results = {
+            'total_conversions': analysis['total_conversions'],
+            'avg_conversion_rate': analysis['overall_conversion_rate'],
+            'combination_stats': [
+                {
+                    'Variant': v['variant_name'], 
+                    'Impressions': v['total_allocations'],
+                    'Conversions': v['total_conversions'],
+                    'CR': v['conversion_rate']
+                } for v in analysis['variants']
+            ]
+        }
+        
+        # Placeholder for stats we don't calculate currently
+        traditional_results = {
+            'total_conversions': 0,
+            'avg_conversion_rate': 0,
+            'combination_stats': []
+        }
+        
+        comparison = {
+            'additional_conversions': 0,
+            'improvement_percentage': 0.0
+        }
+        
         exporter = ExperimentFileExporter(experiment_id)
         path = exporter.export_results_excel(
-            traditional_results=data['traditional'],
-            samplit_results=data['samplit'],
-            comparison=data['comparison']
+            traditional_results=traditional_results,
+            samplit_results=samplit_results,
+            comparison=comparison
         )
         
         return FileResponse(
