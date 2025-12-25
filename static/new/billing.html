@@ -1,368 +1,384 @@
 <!DOCTYPE html>
-
-<html class="dark" lang="es">
+<html lang="es">
 
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>AI Tester - Facturación</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <!-- Google Fonts: Inter -->
+    <title>Stitch AI - Billing &amp; Subscription</title>
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&amp;family=Manrope:wght@400;500;600&amp;display=swap"
         rel="stylesheet" />
-    <!-- Material Symbols -->
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-        rel="stylesheet" />
-    <script id="tailwind-config">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
         tailwind.config = {
-            darkMode: "class",
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#135bec",
-                        "background-light": "#f6f6f8",
-                        "background-dark": "#111722",
-                        "surface-dark": "#192233",
-                        "border-dark": "#324467",
-                        "text-secondary": "#92a4c9"
+                        background: "#0B1120", // Deepest slate/navy base
+                        surface: "#151E2E",    // Slightly lighter card background
+                        "surface-hover": "#1E293B",
+                        primary: "#3b82f6",    // Bright Blue for visibility in dark mode
+                        "primary-hover": "#2563eb",
+                        "primary-soft": "rgba(59, 130, 246, 0.1)",
+                        text: {
+                            main: "#F1F5F9",   // Slate 100 - High contrast text
+                            muted: "#94A3B8",  // Slate 400 - Muted text
+                            dim: "#64748B"     // Slate 500 - Dim text
+                        },
+                        border: {
+                            light: "#1E293B",  // Slate 800
+                            subtle: "#334155"  // Slate 700
+                        }
                     },
                     fontFamily: {
-                        "display": ["Inter", "sans-serif"],
-                        "sans": ["Inter", "sans-serif"]
+                        display: ['"Manrope"', 'sans-serif'],
+                        body: ['"Inter"', 'sans-serif'],
                     },
+                    boxShadow: {
+                        'soft': '0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.1)',
+                        'glow': '0 0 15px rgba(59, 130, 246, 0.15)'
+                    }
                 },
             },
-        }
+        };
     </script>
     <style>
         body {
-            font-family: 'Inter', sans-serif;
+            background-color: #0B1120;
+            color: #F1F5F9;
         }
 
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        .glass-panel {
+            background: rgba(21, 30, 46, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(30, 41, 59, 0.5);
         }
 
-        /* Custom scrollbar for dark theme */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
 
         ::-webkit-scrollbar-track {
-            background: #111722;
+            background: #0B1120;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #324467;
+            background: #334155;
             border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #4b5e85;
+            background: #475569;
         }
     </style>
 </head>
 
-<body class="bg-background-dark text-white antialiased overflow-hidden">
-    <div class="flex h-screen w-full flex-row overflow-hidden bg-background-dark">
-        <!-- Sidebar Navigation -->
-        <aside class="hidden w-64 flex-col border-r border-border-dark bg-background-dark md:flex">
-            <div class="flex h-full flex-col justify-between p-4">
-                <div class="flex flex-col gap-6">
-                    <!-- User Profile -->
-                    <div class="flex items-center gap-3 px-2">
-                        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 ring-2 ring-border-dark"
-                            data-alt="Portrait of the logged in user"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBDS5CPF6EmSQwgpaWDTwrV_Rj-GFdSGqh9pkX1xQPcT1kHHOCwmz-8gMhC69wZDlb2YmudO2WsjZzA760AX49ghEDnNdwDbAGGLs-9NXS_et5ePTqPUBZ8hbUnLTmwt73PeCiJtE0BgNIsH39-0WzAspw17Ner4At-N9Iwa3ZnEV1Ep92Wu4CKfZR_ySmO82_Ko6hF5fzhR1k_o_mhWEANGXNX6XrIh6bj3l0yTbm9EwtYFmVxLUMxmWtkMEVE1UArzcc7Dc1R");'>
+<body class="font-body antialiased selection:bg-primary/20 selection:text-primary">
+    <nav class="fixed w-full z-50 transition-all duration-300 glass-panel">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">auto_fix_high</span>
+                    </div>
+                    <span class="font-display font-medium text-lg tracking-tight text-text-main">Stitch<span
+                            class="text-text-dim font-normal">.ai</span></span>
+                </div>
+                <div class="hidden md:flex items-center gap-8">
+                    <a class="text-sm font-normal text-text-muted hover:text-primary transition-colors"
+                        href="#">Dashboard</a>
+                    <a class="text-sm font-normal text-text-muted hover:text-primary transition-colors"
+                        href="#">Experimentos</a>
+                    <a class="text-sm font-medium text-text-main" href="#">Facturación</a>
+                    <a class="text-sm font-normal text-text-muted hover:text-primary transition-colors"
+                        href="#">Configuración</a>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-3 pl-6 border-l border-border-light">
+                        <div class="text-right hidden sm:block">
+                            <p class="text-sm font-medium text-text-main">Alex M.</p>
+                            <p class="text-[10px] text-text-muted uppercase tracking-wider">Workspace Admin</p>
                         </div>
-                        <div class="flex flex-col">
-                            <h1 class="text-white text-sm font-bold leading-tight">Alex Morgan</h1>
-                            <p class="text-text-secondary text-xs font-normal">Admin</p>
+                        <div
+                            class="h-9 w-9 rounded-full bg-gradient-to-br from-slate-700 to-slate-800 border border-border-light flex items-center justify-center text-text-muted shadow-soft">
+                            <span class="material-symbols-outlined text-sm">person</span>
                         </div>
                     </div>
-                    <!-- Nav Links -->
-                    <nav class="flex flex-col gap-2">
-                        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-dark transition-colors group"
-                            href="#">
-                            <span
-                                class="material-symbols-outlined text-text-secondary group-hover:text-white">dashboard</span>
-                            <p class="text-text-secondary text-sm font-medium group-hover:text-white">Dashboard</p>
-                        </a>
-                        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-dark transition-colors group"
-                            href="#">
-                            <span
-                                class="material-symbols-outlined text-text-secondary group-hover:text-white">science</span>
-                            <p class="text-text-secondary text-sm font-medium group-hover:text-white">Experimentos</p>
-                        </a>
-                        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-dark transition-colors group"
-                            href="#">
-                            <span
-                                class="material-symbols-outlined text-text-secondary group-hover:text-white">trending_up</span>
-                            <p class="text-text-secondary text-sm font-medium group-hover:text-white">Resultados</p>
-                        </a>
-                        <!-- Active Link -->
-                        <a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-[#232f48] shadow-sm ring-1 ring-white/5"
-                            href="#">
-                            <span class="material-symbols-outlined text-primary fill-1">credit_card</span>
-                            <p class="text-white text-sm font-bold">Facturación</p>
-                        </a>
-                        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-dark transition-colors group"
-                            href="#">
-                            <span
-                                class="material-symbols-outlined text-text-secondary group-hover:text-white">settings</span>
-                            <p class="text-text-secondary text-sm font-medium group-hover:text-white">Configuración</p>
-                        </a>
-                    </nav>
                 </div>
-                <!-- Bottom Actions -->
-                <div class="flex flex-col gap-1 border-t border-border-dark pt-4">
+            </div>
+        </div>
+    </nav>
+    <main class="pt-32 pb-24 max-w-6xl mx-auto px-6 lg:px-8">
+        <div class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+                <h1 class="text-3xl md:text-4xl font-display font-medium text-text-main mb-3">Facturación</h1>
+                <p class="text-text-muted font-light text-sm max-w-xl leading-relaxed">
+                    Gestione su suscripción al plan Business, actualice métodos de pago y descargue sus facturas
+                    fiscales en un solo lugar.
+                </p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button
+                    class="px-4 py-2 text-xs font-medium text-text-muted hover:text-text-main transition-colors border border-transparent hover:border-border-light rounded-lg">
+                    Contactar Soporte
+                </button>
+                <button
+                    class="px-5 py-2 text-xs font-medium text-white bg-primary hover:bg-primary-hover shadow-glow transition-all rounded-lg flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[16px]">add</span>
+                    Actualizar Plan
+                </button>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+            <div
+                class="lg:col-span-2 bg-surface rounded-2xl border border-border-light p-8 shadow-soft relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-8 opacity-50 group-hover:opacity-100 transition-opacity">
+                    <div
+                        class="px-3 py-1 rounded-full border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2">
+                        <span
+                            class="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]"></span>
+                        Activo
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 mb-8">
+                    <div class="p-3 rounded-xl bg-primary/10 text-primary border border-primary/10">
+                        <span class="material-symbols-outlined">rocket_launch</span>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-text-dim uppercase tracking-widest mb-1">Plan Actual</p>
+                        <h3 class="text-2xl font-display font-medium text-text-main">Business Pro</h3>
+                        <p class="text-sm text-text-muted mt-1 font-light">Renovación automática el <span
+                                class="text-text-main font-medium">24 de Octubre, 2023</span></p>
+                    </div>
+                </div>
+                <div class="grid sm:grid-cols-2 gap-10 mt-8 pt-8 border-t border-border-light/50">
+                    <div>
+                        <div class="flex justify-between items-end mb-2">
+                            <span class="text-xs font-medium text-text-muted">Usuarios Activos Mensuales</span>
+                            <span class="text-xs font-medium text-text-main">45k / 100k</span>
+                        </div>
+                        <div class="w-full bg-border-light rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-primary h-1.5 rounded-full" style="width: 45%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-end mb-2">
+                            <span class="text-xs font-medium text-text-muted">Experimentos Simultáneos</span>
+                            <span class="text-xs font-medium text-text-main">8 / 15</span>
+                        </div>
+                        <div class="w-full bg-border-light rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-blue-400 h-1.5 rounded-full" style="width: 53%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="bg-surface rounded-2xl border border-border-light p-8 shadow-soft flex flex-col justify-between h-full">
+                <div>
+                    <div class="flex justify-between items-start mb-6">
+                        <p class="text-[10px] font-bold text-text-dim uppercase tracking-widest">Método de Pago</p>
+                        <button
+                            class="text-xs font-medium text-primary hover:text-white transition-colors">Editar</button>
+                    </div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div
+                            class="w-12 h-8 rounded bg-[#1e293b] border border-border-light flex items-center justify-center">
+                            <svg class="h-3" fill="none" height="11" viewBox="0 0 32 11" width="32"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M11.66 0.700195L8.03003 10.3002H5.63003L3.89003 2.1902C3.79003 1.8302 3.65003 1.6302 3.20003 1.4002C2.43003 0.990195 1.15003 0.690195 0.380029 0.540195L0.460029 0.200195H4.25003C4.78003 0.200195 5.27003 0.550195 5.39003 1.1502L6.37003 6.7802L9.08003 0.700195H11.66ZM16.27 7.0702C16.28 4.3802 12.56 4.2402 12.65 3.0302C12.66 2.6602 13.02 2.2702 13.97 2.1302C14.45 2.0602 15.75 2.0302 16.27 2.2702L16.56 0.880195C16.16 0.740195 15.65 0.600195 15.02 0.600195C13.19 0.600195 11.23 1.5702 11.23 3.4202C11.23 5.3102 13.88 5.4302 13.9 6.2702C13.9 6.8702 13.36 7.1502 12.78 7.1502C11.88 7.1502 10.82 6.9002 10.37 6.6902L10.08 8.0802C10.51 8.2802 11.31 8.4602 12.18 8.4602C14.07 8.4802 16.27 7.5302 16.27 7.0702ZM21.05 0.700195H19.14C18.61 0.700195 18.15 1.0102 17.96 1.4702L15.35 7.5502L15.22 8.1602L14.78 10.3002H17.34L17.84 8.0202C18.39 8.0202 20.91 8.0202 21.49 8.0202C21.61 8.5502 21.75 9.1902 21.82 9.4702L21.99 10.3002H24.36L21.05 0.700195ZM18.35 5.8602C18.49 5.2502 19.04 3.0402 19.11 2.6902C19.34 3.5902 19.67 5.0402 19.82 5.8602H18.35ZM29.62 0.700195H27.35L25.13 6.9302L24.16 2.1902C23.97 1.2502 23.75 0.940195 23.11 0.700195H22.7L22.42 2.0502L24.58 6.5502L22.31 11.6002L24.87 11.6002L30.63 0.700195H29.62Z"
+                                    fill="white"></path>
+                            </svg>
+                        </div>
+                        <span class="text-sm font-medium text-text-main">•••• •••• •••• 4242</span>
+                    </div>
+                    <div class="text-xs text-text-muted space-y-1 font-light">
+                        <p>Expira: 12/25</p>
+                        <p>Titular: Alex Morgan</p>
+                        <p class="pt-2 text-text-dim">Dirección de facturación: Bahnhofstrasse 12, Zurich.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-lg font-display font-medium text-text-main">Historial de Transacciones</h2>
+                <div class="flex gap-2">
                     <button
-                        class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-dark transition-colors group w-full text-left">
-                        <span class="material-symbols-outlined text-text-secondary group-hover:text-white">logout</span>
-                        <p class="text-text-secondary text-sm font-medium group-hover:text-white">Cerrar Sesión</p>
+                        class="p-2 text-text-muted hover:text-text-main rounded-md hover:bg-surface-hover transition-colors">
+                        <span class="material-symbols-outlined text-lg">filter_list</span>
+                    </button>
+                    <button
+                        class="p-2 text-text-muted hover:text-text-main rounded-md hover:bg-surface-hover transition-colors">
+                        <span class="material-symbols-outlined text-lg">download</span>
                     </button>
                 </div>
             </div>
-        </aside>
-        <!-- Main Content Area -->
-        <main class="flex-1 overflow-y-auto bg-background-dark">
-            <div class="mx-auto max-w-5xl p-6 md:p-10 flex flex-col gap-8 pb-20">
-                <!-- Page Heading -->
-                <header class="flex flex-col gap-2">
-                    <h1 class="text-white text-4xl font-black leading-tight tracking-[-0.033em]">Facturación</h1>
-                    <p class="text-text-secondary text-base font-normal">Gestiona tu plan de suscripción, métodos de
-                        pago e historial de facturas.</p>
-                </header>
-                <!-- Current Plan Section -->
-                <section class="flex flex-col gap-6">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <div class="flex flex-col gap-2">
-                            <h2 class="text-white text-2xl font-bold leading-tight">Plan Actual</h2>
-                            <p class="text-text-secondary text-base font-normal max-w-xl">
-                                Estás suscrito al <span class="text-white font-medium">Plan Pro</span>. Tu próxima
-                                facturación de <span class="text-white font-medium">$49.00</span> es el 24 de Octubre,
-                                2023.
-                            </p>
-                        </div>
-                        <button
-                            class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-primary hover:bg-blue-600 transition-colors text-white text-sm font-bold tracking-[0.015em] shrink-0 w-fit shadow-lg shadow-blue-900/20">
-                            Cambiar Plan
-                        </button>
-                    </div>
-                    <!-- Stats Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <!-- Stat 1 -->
-                        <div class="flex gap-4 rounded-xl border border-border-dark bg-surface-dark p-5 shadow-sm">
-                            <div
-                                class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[#232f48] text-primary">
-                                <span class="material-symbols-outlined">psychology</span>
-                            </div>
-                            <div class="flex flex-col justify-center">
-                                <h3 class="text-white text-base font-bold">Créditos AI</h3>
-                                <p class="text-text-secondary text-sm">2,500 / 5,000</p>
-                            </div>
-                        </div>
-                        <!-- Stat 2 -->
-                        <div class="flex gap-4 rounded-xl border border-border-dark bg-surface-dark p-5 shadow-sm">
-                            <div
-                                class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[#232f48] text-primary">
-                                <span class="material-symbols-outlined">groups</span>
-                            </div>
-                            <div class="flex flex-col justify-center">
-                                <h3 class="text-white text-base font-bold">Tráfico</h3>
-                                <p class="text-text-secondary text-sm">50k / 100k</p>
-                            </div>
-                        </div>
-                        <!-- Stat 3 -->
-                        <div class="flex gap-4 rounded-xl border border-border-dark bg-surface-dark p-5 shadow-sm">
-                            <div
-                                class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[#232f48] text-primary">
-                                <span class="material-symbols-outlined">badge</span>
-                            </div>
-                            <div class="flex flex-col justify-center">
-                                <h3 class="text-white text-base font-bold">Miembros</h3>
-                                <p class="text-text-secondary text-sm">5 / 10 activos</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <!-- Detailed Usage Progress -->
-                <section class="flex flex-col gap-3 rounded-xl bg-[#141b26] p-6 border border-border-dark/50">
-                    <div class="flex items-end justify-between">
-                        <div class="flex flex-col gap-1">
-                            <h3 class="text-white text-base font-bold">Uso de Créditos de Generación</h3>
-                            <p class="text-text-secondary text-sm">Ciclo actual: 1 Oct - 31 Oct</p>
-                        </div>
-                        <p class="text-white text-lg font-bold">50%</p>
-                    </div>
-                    <div class="h-3 w-full rounded-full bg-border-dark overflow-hidden">
-                        <div class="h-full rounded-full bg-gradient-to-r from-blue-600 to-primary" style="width: 50%;">
-                        </div>
-                    </div>
-                    <p class="text-text-secondary text-xs mt-1">Has utilizado 2,500 de 5,000 créditos. <a
-                            class="text-primary hover:underline font-medium" href="#">Comprar más créditos</a></p>
-                </section>
-                <!-- Payment Method -->
-                <section class="flex flex-col gap-4">
-                    <h2 class="text-white text-xl font-bold">Método de Pago</h2>
-                    <div
-                        class="flex flex-col md:flex-row items-stretch justify-between gap-6 rounded-xl bg-surface-dark p-6 border border-border-dark shadow-sm">
-                        <div class="flex flex-1 flex-col justify-between gap-4">
-                            <div class="flex flex-col gap-2">
-                                <div class="flex items-center gap-2">
-                                    <span
-                                        class="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 text-xs font-bold border border-blue-500/20">Predeterminado</span>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <span class="material-symbols-outlined text-white text-3xl">credit_card</span>
-                                    <div>
-                                        <p class="text-white text-lg font-bold">Visa terminada en 4242</p>
-                                        <p class="text-text-secondary text-sm">Expira en 12/2025</p>
+            <div class="bg-surface rounded-2xl border border-border-light overflow-hidden shadow-soft">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr
+                                class="border-b border-border-light text-[10px] font-bold text-text-dim uppercase tracking-widest">
+                                <th class="px-6 py-4 font-semibold">Factura</th>
+                                <th class="px-6 py-4 font-semibold">Fecha</th>
+                                <th class="px-6 py-4 font-semibold">Monto</th>
+                                <th class="px-6 py-4 font-semibold">Plan</th>
+                                <th class="px-6 py-4 font-semibold">Estado</th>
+                                <th class="px-6 py-4 text-right font-semibold">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-border-light">
+                            <tr class="group hover:bg-surface-hover transition-colors">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="p-1.5 rounded bg-[#1e293b] text-text-muted">
+                                            <span class="material-symbols-outlined text-sm block">description</span>
+                                        </div>
+                                        <span class="text-sm font-medium text-text-main font-mono">INV-2023-009</span>
                                     </div>
-                                </div>
-                                <p class="text-text-secondary text-sm mt-1">Facturación enviada a:
-                                    alex.morgan@company.com</p>
-                            </div>
-                            <button
-                                class="flex items-center justify-center gap-2 rounded-lg bg-[#232f48] px-4 py-2 text-white text-sm font-medium hover:bg-[#2d3b58] transition-colors w-fit border border-white/5">
-                                <span class="material-symbols-outlined text-[18px]">edit</span>
-                                Editar
-                            </button>
-                        </div>
-                        <!-- Decorative Card Image -->
-                        <div class="hidden md:block w-full md:w-1/3 h-32 md:h-auto bg-cover bg-center rounded-lg opacity-80"
-                            data-alt="Abstract blue and purple gradient pattern representing digital security"
-                            style='background-image: linear-gradient(135deg, rgba(19, 91, 236, 0.4) 0%, rgba(16, 22, 34, 0.9) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuB6pGnOyGSU-nSS_1JI2kLkaFF7WgBWWBGcg7VIehzHw6ytz7k6kj-jaj8eFAWbOt4CuxjJl1dz2fEvPJv3wpxDV7SHM4s_imjV0_Moq7TtfNqjOzJEBTGpMOfxS7nTRiLgE43Rip80AfZPdxOJ8ZUxlcItJ-ORibMWJu8CXHmV0eMlbuXBIOPdeEuYDIpgJNzVO9DKsXe0ajwrXIZjXsTqp0cZGnCPXI_qgGQu7cy_sDSRZg9SRB6c9L72o_LFLyv6vUkTE_RJ");'>
-                        </div>
+                                </td>
+                                <td class="px-6 py-4 text-sm text-text-muted font-light">24 Sep, 2023</td>
+                                <td class="px-6 py-4 text-sm text-text-main font-medium">€149.00</td>
+                                <td class="px-6 py-4 text-xs text-text-muted">Business Pro</td>
+                                <td class="px-6 py-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase tracking-wider border border-emerald-500/10">
+                                        Pagado
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <a class="text-xs font-medium text-primary hover:text-primary-hover hover:underline transition-colors"
+                                        href="#">Descargar PDF</a>
+                                </td>
+                            </tr>
+                            <tr class="group hover:bg-surface-hover transition-colors">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="p-1.5 rounded bg-[#1e293b] text-text-muted">
+                                            <span class="material-symbols-outlined text-sm block">description</span>
+                                        </div>
+                                        <span class="text-sm font-medium text-text-main font-mono">INV-2023-008</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-sm text-text-muted font-light">24 Ago, 2023</td>
+                                <td class="px-6 py-4 text-sm text-text-main font-medium">€149.00</td>
+                                <td class="px-6 py-4 text-xs text-text-muted">Business Pro</td>
+                                <td class="px-6 py-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase tracking-wider border border-emerald-500/10">
+                                        Pagado
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <a class="text-xs font-medium text-primary hover:text-primary-hover hover:underline transition-colors"
+                                        href="#">Descargar PDF</a>
+                                </td>
+                            </tr>
+                            <tr class="group hover:bg-surface-hover transition-colors">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="p-1.5 rounded bg-[#1e293b] text-text-muted">
+                                            <span class="material-symbols-outlined text-sm block">description</span>
+                                        </div>
+                                        <span class="text-sm font-medium text-text-main font-mono">INV-2023-007</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-sm text-text-muted font-light">24 Jul, 2023</td>
+                                <td class="px-6 py-4 text-sm text-text-main font-medium">€149.00</td>
+                                <td class="px-6 py-4 text-xs text-text-muted">Business Pro</td>
+                                <td class="px-6 py-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase tracking-wider border border-emerald-500/10">
+                                        Pagado
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <a class="text-xs font-medium text-primary hover:text-primary-hover hover:underline transition-colors"
+                                        href="#">Descargar PDF</a>
+                                </td>
+                            </tr>
+                            <tr class="group hover:bg-surface-hover transition-colors">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="p-1.5 rounded bg-[#1e293b] text-text-muted">
+                                            <span class="material-symbols-outlined text-sm block">description</span>
+                                        </div>
+                                        <span class="text-sm font-medium text-text-main font-mono">INV-2023-006</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-sm text-text-muted font-light">24 Jun, 2023</td>
+                                <td class="px-6 py-4 text-sm text-text-main font-medium">€49.00</td>
+                                <td class="px-6 py-4 text-xs text-text-muted">Starter</td>
+                                <td class="px-6 py-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-slate-700/30 text-slate-400 text-[10px] font-bold uppercase tracking-wider border border-slate-700/30">
+                                        Archivado
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <a class="text-xs font-medium text-primary hover:text-primary-hover hover:underline transition-colors"
+                                        href="#">Descargar PDF</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div
+                    class="px-6 py-4 border-t border-border-light bg-surface-hover/30 flex items-center justify-between">
+                    <p class="text-xs text-text-muted">Mostrando 4 de 24 facturas</p>
+                    <div class="flex gap-2">
+                        <button
+                            class="px-3 py-1 text-xs text-text-muted border border-border-light rounded hover:bg-surface-hover hover:text-text-main transition-colors">Anterior</button>
+                        <button
+                            class="px-3 py-1 text-xs text-text-muted border border-border-light rounded hover:bg-surface-hover hover:text-text-main transition-colors">Siguiente</button>
                     </div>
-                </section>
-                <!-- Transaction History Table -->
-                <section class="flex flex-col gap-4">
-                    <div class="flex items-center justify-between">
-                        <h2 class="text-white text-xl font-bold">Historial de Transacciones</h2>
-                        <button class="text-sm text-primary hover:text-blue-400 font-medium">Ver todo</button>
-                    </div>
-                    <div class="overflow-x-auto rounded-xl border border-border-dark bg-surface-dark shadow-sm">
-                        <table class="w-full min-w-[600px] border-collapse">
-                            <thead>
-                                <tr class="border-b border-border-dark bg-[#1f2a3e]">
-                                    <th
-                                        class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-text-secondary">
-                                        Fecha</th>
-                                    <th
-                                        class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-text-secondary">
-                                        Concepto</th>
-                                    <th
-                                        class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-text-secondary">
-                                        Monto</th>
-                                    <th
-                                        class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-text-secondary">
-                                        Estado</th>
-                                    <th
-                                        class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-text-secondary">
-                                        Factura</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-border-dark text-sm">
-                                <!-- Row 1 -->
-                                <tr class="hover:bg-[#232f48]/50 transition-colors">
-                                    <td class="px-6 py-4 text-white font-medium">24 Oct, 2023</td>
-                                    <td class="px-6 py-4 text-text-secondary">Suscripción Plan Pro</td>
-                                    <td class="px-6 py-4 text-white font-medium">$49.00</td>
-                                    <td class="px-6 py-4">
-                                        <span
-                                            class="inline-flex items-center gap-1 rounded-full bg-green-500/10 px-2 py-1 text-xs font-medium text-green-400 border border-green-500/20">
-                                            <span class="size-1.5 rounded-full bg-green-400"></span>
-                                            Pagado
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 text-right">
-                                        <button
-                                            class="inline-flex items-center gap-1 text-text-secondary hover:text-white transition-colors">
-                                            <span class="material-symbols-outlined text-[20px]">download</span>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <!-- Row 2 -->
-                                <tr class="hover:bg-[#232f48]/50 transition-colors">
-                                    <td class="px-6 py-4 text-white font-medium">24 Sep, 2023</td>
-                                    <td class="px-6 py-4 text-text-secondary">Suscripción Plan Pro</td>
-                                    <td class="px-6 py-4 text-white font-medium">$49.00</td>
-                                    <td class="px-6 py-4">
-                                        <span
-                                            class="inline-flex items-center gap-1 rounded-full bg-green-500/10 px-2 py-1 text-xs font-medium text-green-400 border border-green-500/20">
-                                            <span class="size-1.5 rounded-full bg-green-400"></span>
-                                            Pagado
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 text-right">
-                                        <button
-                                            class="inline-flex items-center gap-1 text-text-secondary hover:text-white transition-colors">
-                                            <span class="material-symbols-outlined text-[20px]">download</span>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <!-- Row 3 -->
-                                <tr class="hover:bg-[#232f48]/50 transition-colors">
-                                    <td class="px-6 py-4 text-white font-medium">24 Ago, 2023</td>
-                                    <td class="px-6 py-4 text-text-secondary">Suscripción Plan Pro</td>
-                                    <td class="px-6 py-4 text-white font-medium">$49.00</td>
-                                    <td class="px-6 py-4">
-                                        <span
-                                            class="inline-flex items-center gap-1 rounded-full bg-green-500/10 px-2 py-1 text-xs font-medium text-green-400 border border-green-500/20">
-                                            <span class="size-1.5 rounded-full bg-green-400"></span>
-                                            Pagado
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 text-right">
-                                        <button
-                                            class="inline-flex items-center gap-1 text-text-secondary hover:text-white transition-colors">
-                                            <span class="material-symbols-outlined text-[20px]">download</span>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <!-- Row 4 -->
-                                <tr class="hover:bg-[#232f48]/50 transition-colors">
-                                    <td class="px-6 py-4 text-white font-medium">10 Ago, 2023</td>
-                                    <td class="px-6 py-4 text-text-secondary">Créditos Extra (2,000)</td>
-                                    <td class="px-6 py-4 text-white font-medium">$15.00</td>
-                                    <td class="px-6 py-4">
-                                        <span
-                                            class="inline-flex items-center gap-1 rounded-full bg-green-500/10 px-2 py-1 text-xs font-medium text-green-400 border border-green-500/20">
-                                            <span class="size-1.5 rounded-full bg-green-400"></span>
-                                            Pagado
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 text-right">
-                                        <button
-                                            class="inline-flex items-center gap-1 text-text-secondary hover:text-white transition-colors">
-                                            <span class="material-symbols-outlined text-[20px]">download</span>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-                <!-- Footer / Help -->
-                <div class="flex justify-center mt-4">
-                    <p class="text-text-secondary text-sm">
-                        ¿Tienes problemas con tu factura? <a
-                            class="text-primary hover:text-blue-400 underline decoration-primary/30 underline-offset-4"
-                            href="#">Contactar Soporte</a>
-                    </p>
                 </div>
             </div>
-        </main>
-    </div>
+        </div>
+        <div
+            class="mt-12 p-6 rounded-xl border border-border-light/50 bg-gradient-to-r from-surface to-background flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+                <h4 class="text-sm font-bold text-text-main mb-1">¿Necesita una auditoría personalizada?</h4>
+                <p class="text-xs text-text-muted font-light">Para planes Enterprise, ofrecemos facturación anual
+                    consolidada y soporte dedicado.</p>
+            </div>
+            <a class="text-sm font-medium text-primary hover:text-white transition-colors flex items-center gap-1 group"
+                href="#">
+                Contactar Ventas Enterprise
+                <span
+                    class="material-symbols-outlined text-sm transform group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </a>
+        </div>
+    </main>
+    <footer class="border-t border-border-light bg-background pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center gap-2">
+                    <div
+                        class="w-6 h-6 rounded bg-surface border border-border-light flex items-center justify-center text-primary">
+                        <span class="material-symbols-outlined text-[14px]">auto_fix_high</span>
+                    </div>
+                    <p class="text-xs text-text-dim">© 2023 Stitch AI Inc.</p>
+                </div>
+                <div class="flex gap-8">
+                    <a class="text-xs text-text-dim hover:text-primary transition-colors" href="#">Privacidad</a>
+                    <a class="text-xs text-text-dim hover:text-primary transition-colors" href="#">Términos</a>
+                    <a class="text-xs text-text-dim hover:text-primary transition-colors" href="#">Seguridad</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
 </body>
 
 </html>

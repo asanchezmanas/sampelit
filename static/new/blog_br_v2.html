@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html class="" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Listado de Blog - A/B Tester</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f3460", "primary-light": "#e0e7ff",
+                        "background-light": "#ffffff",
+                        "background-off": "#f9fafb",
+                        "text-main": "#1a1a1a",
+                        "text-muted": "#555555",
+                        "border-light": "#e5e7eb",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem" },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-background-light text-text-main font-body antialiased selection:bg-primary/10 selection:text-primary">
+    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+        <header class="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/95 backdrop-blur-sm transition-all">
+            <div class="mx-auto flex h-20 max-w-[1200px] items-center justify-between px-6">
+                <div class="flex items-center gap-3 text-text-main">
+                    <div class="flex size-10 items-center justify-center rounded-lg bg-primary/5 text-primary">
+                        <span class="material-symbols-outlined text-[28px]">science</span>
+                    </div>
+                    <h2 class="text-xl font-bold tracking-tight text-primary font-display">A/B Tester</h2>
+                </div>
+                <nav class="hidden md:flex items-center gap-10">
+                    <a class="text-sm font-medium text-text-muted hover:text-primary transition-colors"
+                        href="#">Platform</a>
+                    <a class="text-sm font-medium text-text-muted hover:text-primary transition-colors"
+                        href="#">Solutions</a>
+                    <a class="text-sm font-medium text-text-muted hover:text-primary transition-colors"
+                        href="#">Resources</a>
+                    <a class="text-sm font-medium text-text-muted hover:text-primary transition-colors"
+                        href="#">Pricing</a>
+                </nav>
+                <div class="flex items-center gap-4">
+                    <button
+                        class="hidden md:flex cursor-pointer items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold text-text-muted hover:text-primary transition-colors">
+                        Log In
+                    </button>
+                    <button
+                        class="flex cursor-pointer items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#0a2545] transition-colors">
+                        Get Started
+                    </button>
+                </div>
+            </div>
+        </header>
+        <main class="flex-grow">
+            <section class="bg-background-off py-16 md:py-24 border-b border-border-light">
+                <div class="mx-auto max-w-[1200px] px-6 text-center">
+                    <h1 class="mb-6 text-4xl font-extrabold tracking-tight text-text-main sm:text-5xl font-display">
+                        Insights &amp; Updates
+                    </h1>
+                    <p class="mx-auto max-w-2xl text-lg text-text-muted font-light">
+                        Discover the latest trends in AI-driven experimentation, data science, and growth marketing
+                        strategies.
+                    </p>
+                    <div class="mx-auto mt-10 max-w-3xl">
+                        <div
+                            class="flex flex-col gap-4 p-2 bg-white rounded-xl shadow-sm border border-border-light sm:flex-row sm:items-center">
+                            <div class="relative flex-grow">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                                    <span class="material-symbols-outlined text-[20px]">search</span>
+                                </span>
+                                <input
+                                    class="w-full border-none bg-transparent py-2.5 pl-10 pr-4 text-sm text-text-main placeholder-gray-400 focus:ring-0"
+                                    placeholder="Search articles..." type="text" />
+                            </div>
+                            <div class="h-px w-full bg-gray-100 sm:h-8 sm:w-px"></div>
+                            <div class="flex items-center justify-between gap-3 px-2 sm:justify-start">
+                                <div class="relative">
+                                    <select
+                                        class="appearance-none border-none bg-transparent py-2 pl-2 pr-8 text-sm font-medium text-text-main focus:ring-0 cursor-pointer">
+                                        <option>All Topics</option>
+                                        <option>Engineering</option>
+                                        <option>Product</option>
+                                        <option>Case Studies</option>
+                                    </select>
+                                    <span
+                                        class="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                                        <span class="material-symbols-outlined text-[16px]">expand_more</span>
+                                    </span>
+                                </div>
+                                <button
+                                    class="rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-white hover:bg-[#0a2545] transition-colors">
+                                    Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-8 flex flex-wrap justify-center gap-2">
+                        <button
+                            class="rounded-full border border-primary bg-primary/5 px-4 py-1.5 text-xs font-medium text-primary hover:bg-primary hover:text-white transition-all">Latest</button>
+                        <button
+                            class="rounded-full border border-gray-200 bg-white px-4 py-1.5 text-xs font-medium text-text-muted hover:border-primary hover:text-primary transition-all">Data
+                            Science</button>
+                        <button
+                            class="rounded-full border border-gray-200 bg-white px-4 py-1.5 text-xs font-medium text-text-muted hover:border-primary hover:text-primary transition-all">UX
+                            Design</button>
+                        <button
+                            class="rounded-full border border-gray-200 bg-white px-4 py-1.5 text-xs font-medium text-text-muted hover:border-primary hover:text-primary transition-all">Growth</button>
+                        <button
+                            class="rounded-full border border-gray-200 bg-white px-4 py-1.5 text-xs font-medium text-text-muted hover:border-primary hover:text-primary transition-all">Engineering</button>
+                    </div>
+                </div>
+            </section>
+            <section class="py-16 bg-background-light">
+                <div class="mx-auto max-w-[1200px] px-6">
+                    <div class="mb-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:items-center">
+                        <div
+                            class="group relative overflow-hidden rounded-2xl bg-gray-100 shadow-sm aspect-[4/3] md:aspect-[16/10]">
+                            <div class="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBJiDtPfDJzoTuWZVkkJzAQkE4pl-1dVuBCUUh9NSRl-_kNtmmAHLxk0ztNxo7LZBZZ0mBMYhA3p-lSXqyHeeFaLruAYphWSqYyhm6m15_OOYUVG-9ZesUhY6flKbQJ60aHcGuKPzDjRbk7DaarIM0G6OS6zYw70MlZvrmQUrhwp14RMoDytw8CfNUW3ASeBLxBOce7IcsDvujqpe7LbF-d9QBz_IqeDjlTnczmZfJhW0gvfKbJo7wy37rDCsqeOBe_QFeQaxnW");'>
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                        </div>
+                        <div class="flex flex-col justify-center space-y-4">
+                            <div class="flex items-center gap-3">
+                                <span
+                                    class="rounded bg-primary/10 px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-primary">Featured</span>
+                                <span class="text-xs text-text-muted font-medium">Oct 24, 2023</span>
+                            </div>
+                            <h2 class="text-3xl font-bold leading-tight text-text-main font-display sm:text-4xl">
+                                <a class="hover:text-primary transition-colors" href="#">The Evolution of Automated A/B
+                                    Testing in 2024</a>
+                            </h2>
+                            <p class="text-base text-text-muted leading-relaxed line-clamp-3">
+                                The traditional methods of A/B testing are being rapidly supplanted by AI-driven
+                                automation. Discover how circular testing models are changing the game.
+                            </p>
+                            <div class="pt-2 flex items-center gap-3">
+                                <div class="h-8 w-8 overflow-hidden rounded-full border border-gray-100">
+                                    <div class="h-full w-full bg-cover bg-center"
+                                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAyF6VncZ5uEpBL4iAxREles5-0eOChtQge6PB-eSw6SL9xS0Cp4-Vqjf_CWYOfvGE5vHMf3bHstssfc6Icpl4VqKRjXARR7K92IcgANXFNT9sHL4431zomtGXkqTL8pBVCIo90bWmRu0Nfpr8IWCbAOP13DYbav5ReZeUvZ73Mrn4PvasN6vWUAyae8Ar5eyzkM068aq_3z0cGfTBM5qeJzoRcg6LYheuRjbZgGxabbgQfqZaAef5NbnRrqmiGA_C1n1ib_OHq");'>
+                                    </div>
+                                </div>
+                                <span class="text-sm font-medium text-text-main">Elena Fischer</span>
+                                <span class="text-xs text-text-muted">• 8 min read</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-full h-px bg-gray-100 mb-16"></div>
+                    <div class="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+                        <article class="flex flex-col group">
+                            <a class="mb-4 block overflow-hidden rounded-xl bg-gray-100 aspect-[16/10]" href="#">
+                                <div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCJlRjUuX1sclmhA_lNVPsSd9El2vHR969Tj_li4GH1ZJbGgsaHn5L17pJ-xmHzwx_nKVqWjfzdCP8jmTZYbTF907Pq-rtLhw2Lq14zxW4vfyFD8yDqeUReRf-jitnL3h4jZSSkWOnTzKp8tIFuTEFNcXfWCTmj0xgJ0EiR1DEHcHgt_-oPnwWAXvIZ5tL5jBx05PKlNym5VebI7OY7a37rCFztrPYxV7wfjpyERcULNi0_qv0CC4fukW6amYsMA96RBZSTxJAB");'>
+                                </div>
+                            </a>
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="text-xs font-bold uppercase tracking-wide text-primary">Case Study</span>
+                                <span class="h-1 w-1 rounded-full bg-gray-300"></span>
+                                <span class="text-xs text-text-muted">Nov 02, 2023</span>
+                            </div>
+                            <h3
+                                class="mb-2 text-xl font-bold text-text-main group-hover:text-primary transition-colors font-display">
+                                <a href="#">How FinTech Giants Scale Experimentation</a>
+                            </h3>
+                            <p class="mb-4 text-sm text-text-muted line-clamp-2 leading-relaxed">
+                                Learn the infrastructure secrets behind successful experimentation programs at scale in
+                                highly regulated industries.
+                            </p>
+                            <div class="mt-auto flex items-center gap-2">
+                                <div class="h-6 w-6 rounded-full bg-gray-200"></div>
+                                <span class="text-xs font-medium text-text-main">Mark S.</span>
+                            </div>
+                        </article>
+                        <article class="flex flex-col group">
+                            <a class="mb-4 block overflow-hidden rounded-xl bg-gray-100 aspect-[16/10]" href="#">
+                                <div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDSOp2ICqsAkEUK6AvYhDOgQ1pvoyFtKPv7eGfYFWQDFHXJ1M1TaB8dgTBmV_3WW3CmAGSYhyeetjbUCmmFV0gna9L6RTahGbexZqm0Hq_aIBOV6HWRRLVuZKXIWyF6AehAYWH43PjXz3ARtLfn8pcyiW9LTLnvP3oKyrPWSMQoGKA4NyWOFil4jBked2sn4MbQvwS7SBRPXr4FnDDzzbq8XQ2GqIIGbnK2LWGz6LkTIwQ1fWng1gP9jf6gwO-Gi0vOC_RWVW53");'>
+                                </div>
+                            </a>
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="text-xs font-bold uppercase tracking-wide text-primary">Tutorial</span>
+                                <span class="h-1 w-1 rounded-full bg-gray-300"></span>
+                                <span class="text-xs text-text-muted">Oct 15, 2023</span>
+                            </div>
+                            <h3
+                                class="mb-2 text-xl font-bold text-text-main group-hover:text-primary transition-colors font-display">
+                                <a href="#">Setting Up Multi-Armed Bandits in Python</a>
+                            </h3>
+                            <p class="mb-4 text-sm text-text-muted line-clamp-2 leading-relaxed">
+                                A step-by-step guide to implementing efficient exploration-exploitation algorithms for
+                                your own testing framework.
+                            </p>
+                            <div class="mt-auto flex items-center gap-2">
+                                <div class="h-6 w-6 rounded-full bg-gray-200"></div>
+                                <span class="text-xs font-medium text-text-main">Sarah Jenkins</span>
+                            </div>
+                        </article>
+                        <article class="flex flex-col group">
+                            <a class="mb-4 block overflow-hidden rounded-xl bg-gray-100 aspect-[16/10]" href="#">
+                                <div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAQ6pf-El_f0Z7x5SfGwB5Xkb4zNO9LzpavGtK8_K8vKg5qvcF6HGs4E9w8OE0c7qyWALphyMOptexSIGeolxlGtDvQCEiCZyRY9nKdcDWzDgmhBQJmC__j6Hsx6BDpJvj-iyDCzm18FXR2a5gjKTpzL8Iu_ZjXY0ipTABt6r88eRS7U2RSaTV3hI8UKJ8e1m1npERMapJ2CVmAdyfKN8_GFw3q5BmdY5wncml1zVn-WtJ8YqKTM0ox-u1Mg2XmLHVRlb0VFZTx");'>
+                                </div>
+                            </a>
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="text-xs font-bold uppercase tracking-wide text-primary">Opinion</span>
+                                <span class="h-1 w-1 rounded-full bg-gray-300"></span>
+                                <span class="text-xs text-text-muted">Sep 28, 2023</span>
+                            </div>
+                            <h3
+                                class="mb-2 text-xl font-bold text-text-main group-hover:text-primary transition-colors font-display">
+                                <a href="#">Why P-Values Are Misleading Your Team</a>
+                            </h3>
+                            <p class="mb-4 text-sm text-text-muted line-clamp-2 leading-relaxed">
+                                Statistical significance is often misunderstood. Here is why you should focus on effect
+                                size and confidence intervals instead.
+                            </p>
+                            <div class="mt-auto flex items-center gap-2">
+                                <div class="h-6 w-6 rounded-full bg-gray-200"></div>
+                                <span class="text-xs font-medium text-text-main">David Chen</span>
+                            </div>
+                        </article>
+                        <article class="flex flex-col group">
+                            <a class="mb-4 block overflow-hidden rounded-xl bg-gray-100 aspect-[16/10]" href="#">
+                                <div
+                                    class="h-full w-full bg-gradient-to-br from-gray-100 to-gray-200 transition-transform duration-500 group-hover:scale-105 flex items-center justify-center text-gray-300">
+                                    <span class="material-symbols-outlined text-[48px]">bar_chart</span>
+                                </div>
+                            </a>
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="text-xs font-bold uppercase tracking-wide text-primary">Strategy</span>
+                                <span class="h-1 w-1 rounded-full bg-gray-300"></span>
+                                <span class="text-xs text-text-muted">Sep 12, 2023</span>
+                            </div>
+                            <h3
+                                class="mb-2 text-xl font-bold text-text-main group-hover:text-primary transition-colors font-display">
+                                <a href="#">The ROI of Continuous Testing</a>
+                            </h3>
+                            <p class="mb-4 text-sm text-text-muted line-clamp-2 leading-relaxed">
+                                Calculating the financial impact of a robust experimentation culture on your bottom
+                                line.
+                            </p>
+                            <div class="mt-auto flex items-center gap-2">
+                                <div class="h-6 w-6 rounded-full bg-gray-200"></div>
+                                <span class="text-xs font-medium text-text-main">Alex Rivera</span>
+                            </div>
+                        </article>
+                        <article class="flex flex-col group">
+                            <a class="mb-4 block overflow-hidden rounded-xl bg-gray-100 aspect-[16/10]" href="#">
+                                <div
+                                    class="h-full w-full bg-gradient-to-br from-blue-50 to-indigo-50 transition-transform duration-500 group-hover:scale-105 flex items-center justify-center text-blue-200">
+                                    <span class="material-symbols-outlined text-[48px]">smart_toy</span>
+                                </div>
+                            </a>
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="text-xs font-bold uppercase tracking-wide text-primary">AI &amp; ML</span>
+                                <span class="h-1 w-1 rounded-full bg-gray-300"></span>
+                                <span class="text-xs text-text-muted">Aug 20, 2023</span>
+                            </div>
+                            <h3
+                                class="mb-2 text-xl font-bold text-text-main group-hover:text-primary transition-colors font-display">
+                                <a href="#">Predictive Analytics for UX</a>
+                            </h3>
+                            <p class="mb-4 text-sm text-text-muted line-clamp-2 leading-relaxed">
+                                Using machine learning models to predict user frustration before it leads to churn.
+                            </p>
+                            <div class="mt-auto flex items-center gap-2">
+                                <div class="h-6 w-6 rounded-full bg-gray-200"></div>
+                                <span class="text-xs font-medium text-text-main">Elena Fischer</span>
+                            </div>
+                        </article>
+                        <article class="flex flex-col group">
+                            <a class="mb-4 block overflow-hidden rounded-xl bg-gray-100 aspect-[16/10]" href="#">
+                                <div
+                                    class="h-full w-full bg-gradient-to-br from-slate-50 to-slate-100 transition-transform duration-500 group-hover:scale-105 flex items-center justify-center text-slate-300">
+                                    <span class="material-symbols-outlined text-[48px]">psychology</span>
+                                </div>
+                            </a>
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="text-xs font-bold uppercase tracking-wide text-primary">Psychology</span>
+                                <span class="h-1 w-1 rounded-full bg-gray-300"></span>
+                                <span class="text-xs text-text-muted">Aug 05, 2023</span>
+                            </div>
+                            <h3
+                                class="mb-2 text-xl font-bold text-text-main group-hover:text-primary transition-colors font-display">
+                                <a href="#">Cognitive Biases in A/B Testing</a>
+                            </h3>
+                            <p class="mb-4 text-sm text-text-muted line-clamp-2 leading-relaxed">
+                                How confirmation bias and the novelty effect can skew your results and how to avoid
+                                them.
+                            </p>
+                            <div class="mt-auto flex items-center gap-2">
+                                <div class="h-6 w-6 rounded-full bg-gray-200"></div>
+                                <span class="text-xs font-medium text-text-main">Dr. Emily Watts</span>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="mt-20 flex items-center justify-center gap-2">
+                        <button
+                            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-text-muted hover:border-primary hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+                        </button>
+                        <button
+                            class="flex h-10 w-10 items-center justify-center rounded-lg border border-primary bg-primary text-white transition-colors">1</button>
+                        <button
+                            class="flex h-10 w-10 items-center justify-center rounded-lg border border-transparent text-text-muted hover:bg-gray-50 transition-colors">2</button>
+                        <button
+                            class="flex h-10 w-10 items-center justify-center rounded-lg border border-transparent text-text-muted hover:bg-gray-50 transition-colors">3</button>
+                        <span class="flex h-10 w-10 items-center justify-center text-text-muted">...</span>
+                        <button
+                            class="flex h-10 w-10 items-center justify-center rounded-lg border border-transparent text-text-muted hover:bg-gray-50 transition-colors">8</button>
+                        <button
+                            class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-text-muted hover:border-primary hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <section class="border-t border-gray-100 bg-background-off py-20">
+                <div class="mx-auto max-w-[1200px] px-6 text-center">
+                    <span
+                        class="mb-4 inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">Newsletter</span>
+                    <h3 class="mb-4 text-3xl font-bold text-text-main font-display">Get the latest optimization insights
+                    </h3>
+                    <p class="mx-auto mb-8 max-w-lg text-text-muted font-light">Join 15,000+ product managers and growth
+                        marketers receiving weekly tips on A/B testing and AI.</p>
+                    <form class="mx-auto flex max-w-md flex-col gap-3 sm:flex-row">
+                        <input
+                            class="flex-1 rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                            placeholder="Enter your work email" required="" type="email" />
+                        <button
+                            class="rounded-lg bg-primary px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary/25 hover:bg-[#0a2545] transition-colors"
+                            type="submit">Subscribe</button>
+                    </form>
+                    <p class="mt-4 text-xs text-gray-400">We care about your data in our privacy policy.</p>
+                </div>
+            </section>
+        </main>
+        <footer class="bg-[#0f141e] py-16 text-white border-t border-gray-800">
+            <div class="mx-auto max-w-[1200px] px-6">
+                <div class="grid gap-12 lg:grid-cols-4">
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[28px] text-white/90">science</span>
+                            <span class="text-xl font-bold font-display">A/B Tester</span>
+                        </div>
+                        <p class="text-sm text-gray-400 leading-relaxed font-light">Empowering growth teams with
+                            AI-driven experimentation infrastructure since 2021.</p>
+                        <div class="flex gap-4 pt-2">
+                            <a class="text-gray-400 hover:text-white transition-colors" href="#">
+                                <svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84">
+                                    </path>
+                                </svg>
+                            </a>
+                            <a class="text-gray-400 hover:text-white transition-colors" href="#">
+                                <svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path clip-rule="evenodd"
+                                        d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                                        fill-rule="evenodd"></path>
+                                </svg>
+                            </a>
+                            <a class="text-gray-400 hover:text-white transition-colors" href="#">
+                                <svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path clip-rule="evenodd"
+                                        d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
+                                        fill-rule="evenodd"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="mb-4 font-bold text-white">Product</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li><a class="hover:text-primary-light transition-colors" href="#">Features</a></li>
+                            <li><a class="hover:text-primary-light transition-colors" href="#">Integrations</a></li>
+                            <li><a class="hover:text-primary-light transition-colors" href="#">Pricing</a></li>
+                            <li><a class="hover:text-primary-light transition-colors" href="#">Changelog</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="mb-4 font-bold text-white">Resources</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li><a class="hover:text-primary-light transition-colors" href="#">Documentation</a></li>
+                            <li><a class="hover:text-primary-light transition-colors" href="#">API Reference</a></li>
+                            <li><a class="hover:text-primary-light transition-colors" href="#">Community</a></li>
+                            <li><a class="hover:text-primary-light transition-colors" href="#">Blog</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="mb-4 font-bold text-white">Company</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li><a class="hover:text-primary-light transition-colors" href="#">About</a></li>
+                            <li><a class="hover:text-primary-light transition-colors" href="#">Careers</a></li>
+                            <li><a class="hover:text-primary-light transition-colors" href="#">Legal</a></li>
+                            <li><a class="hover:text-primary-light transition-colors" href="#">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-16 border-t border-gray-800 pt-8 text-center text-xs text-gray-500">
+                    © 2024 A/B Tester Inc. All rights reserved.
+                </div>
+            </div>
+        </footer>
+    </div>
+
+</body>
+
+</html>

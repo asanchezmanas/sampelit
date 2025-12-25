@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Blog List - A/B Tester</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3b82f6", "accent-navy": "#1e3a8a",
+                        "bg-dark": "#0f1115", "bg-card": "#181b21",
+                        "text-main": "#f3f4f6",
+                        "text-muted": "#9ca3af",
+                        "border-subtle": "#272a30",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem" },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f1115;
+            color: #f3f4f6;
+        }
+
+        .search-input-wrapper:focus-within {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+        }
+
+        .filter-btn.active {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+    </style>
+</head>
+
+<body class="bg-bg-dark text-text-main font-body antialiased selection:bg-primary/20 selection:text-white">
+    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+        <header
+            class="sticky top-0 z-50 w-full border-b border-border-subtle bg-bg-dark/95 backdrop-blur-md transition-all">
+            <div class="mx-auto flex h-20 max-w-[1280px] items-center justify-between px-6 lg:px-8">
+                <div class="flex items-center gap-3">
+                    <div class="flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                        <span class="material-symbols-outlined text-[28px]">science</span>
+                    </div>
+                    <span class="text-lg font-display font-bold tracking-tight text-white">A/B Tester</span>
+                </div>
+                <nav class="hidden md:flex items-center gap-10">
+                    <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors"
+                        href="#">Platform</a>
+                    <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors"
+                        href="#">Solutions</a>
+                    <a class="text-sm font-medium text-white" href="#">Blog</a>
+                    <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors" href="#">Pricing</a>
+                </nav>
+                <div class="flex items-center gap-4">
+                    <button class="hidden md:flex text-sm font-medium text-gray-300 hover:text-white transition-colors">
+                        Log In
+                    </button>
+                    <button
+                        class="flex cursor-pointer items-center justify-center rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-bg-dark hover:bg-gray-100 transition-colors">
+                        Get Started
+                    </button>
+                </div>
+            </div>
+        </header>
+        <main class="flex-grow">
+            <section class="relative pt-20 pb-16 px-6 lg:px-8">
+                <div class="mx-auto max-w-[1280px]">
+                    <div class="max-w-2xl">
+                        <h1 class="font-display text-4xl font-bold tracking-tight text-white sm:text-5xl mb-6">
+                            Insights &amp; Updates
+                        </h1>
+                        <p class="text-lg text-text-muted mb-10 leading-relaxed font-light">
+                            Explore the latest strategies in automated experimentation, data science, and AI-driven
+                            growth engineering.
+                        </p>
+                    </div>
+                    <div
+                        class="flex flex-col lg:flex-row gap-6 lg:items-center justify-between mt-8 border-b border-border-subtle pb-8">
+                        <div
+                            class="search-input-wrapper flex items-center w-full lg:w-[420px] bg-bg-card border border-border-subtle rounded-xl px-4 py-3 transition-all duration-200">
+                            <span class="material-symbols-outlined text-gray-500 mr-3">search</span>
+                            <input
+                                class="bg-transparent border-none outline-none text-white placeholder-gray-500 w-full focus:ring-0 p-0 font-display text-sm"
+                                placeholder="Search articles..." type="text" />
+                        </div>
+                        <div class="flex flex-wrap gap-2 overflow-x-auto pb-2 lg:pb-0 no-scrollbar">
+                            <button
+                                class="filter-btn active whitespace-nowrap rounded-full border border-border-subtle px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:border-gray-500 transition-all">All</button>
+                            <button
+                                class="filter-btn whitespace-nowrap rounded-full border border-border-subtle px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:border-gray-500 transition-all">Case
+                                Studies</button>
+                            <button
+                                class="filter-btn whitespace-nowrap rounded-full border border-border-subtle px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:border-gray-500 transition-all">Engineering</button>
+                            <button
+                                class="filter-btn whitespace-nowrap rounded-full border border-border-subtle px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:border-gray-500 transition-all">Product
+                                Updates</button>
+                            <button
+                                class="filter-btn whitespace-nowrap rounded-full border border-border-subtle px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:border-gray-500 transition-all">Tutorials</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="px-6 lg:px-8 pb-16">
+                <div class="mx-auto max-w-[1280px]">
+                    <h2 class="text-xs font-bold uppercase tracking-widest text-primary mb-6">Featured Story</h2>
+                    <a class="group grid lg:grid-cols-2 gap-8 lg:gap-12 items-center bg-bg-card rounded-2xl p-6 lg:p-8 border border-border-subtle hover:border-gray-700 transition-all duration-300"
+                        href="#">
+                        <div class="aspect-[16/10] w-full overflow-hidden rounded-xl bg-gray-800">
+                            <div class="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100"
+                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBJiDtPfDJzoTuWZVkkJzAQkE4pl-1dVuBCUUh9NSRl-_kNtmmAHLxk0ztNxo7LZBZZ0mBMYhA3p-lSXqyHeeFaLruAYphWSqYyhm6m15_OOYUVG-9ZesUhY6flKbQJ60aHcGuKPzDjRbk7DaarIM0G6OS6zYw70MlZvrmQUrhwp14RMoDytw8CfNUW3ASeBLxBOce7IcsDvujqpe7LbF-d9QBz_IqeDjlTnczmZfJhW0gvfKbJo7wy37rDCsqeOBe_QFeQaxnW");'>
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-center">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span
+                                    class="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">AI
+                                    Trends</span>
+                                <span class="text-xs text-text-muted">Oct 24, 2023 • 8 min read</span>
+                            </div>
+                            <h3
+                                class="font-display text-2xl lg:text-3xl font-bold text-white mb-4 group-hover:text-primary transition-colors">
+                                The Evolution of Automated A/B Testing in 2024</h3>
+                            <p class="text-text-muted mb-6 leading-relaxed line-clamp-3">
+                                As digital landscapes become increasingly saturated, the margin for error in user
+                                experience optimization narrows significantly. Discover how AI is shifting the paradigm
+                                from manual segmentation to automated continuous optimization.
+                            </p>
+                            <div class="flex items-center gap-3">
+                                <div class="h-8 w-8 overflow-hidden rounded-full border border-gray-700">
+                                    <div class="h-full w-full bg-cover bg-center"
+                                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAyF6VncZ5uEpBL4iAxREles5-0eOChtQge6PB-eSw6SL9xS0Cp4-Vqjf_CWYOfvGE5vHMf3bHstssfc6Icpl4VqKRjXARR7K92IcgANXFNT9sHL4431zomtGXkqTL8pBVCIo90bWmRu0Nfpr8IWCbAOP13DYbav5ReZeUvZ73Mrn4PvasN6vWUAyae8Ar5eyzkM068aq_3z0cGfTBM5qeJzoRcg6LYheuRjbZgGxabbgQfqZaAef5NbnRrqmiGA_C1n1ib_OHq");'>
+                                    </div>
+                                </div>
+                                <span class="text-sm font-medium text-white">Elena Fischer</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </section>
+            <section class="px-6 lg:px-8 pb-24">
+                <div class="mx-auto max-w-[1280px]">
+                    <div class="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+                        <article class="flex flex-col group">
+                            <a class="block overflow-hidden rounded-xl bg-gray-800 mb-5" href="#">
+                                <div class="aspect-[3/2] w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100"
+                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCJlRjUuX1sclmhA_lNVPsSd9El2vHR969Tj_li4GH1ZJbGgsaHn5L17pJ-xmHzwx_nKVqWjfzdCP8jmTZYbTF907Pq-rtLhw2Lq14zxW4vfyFD8yDqeUReRf-jitnL3h4jZSSkWOnTzKp8tIFuTEFNcXfWCTmj0xgJ0EiR1DEHcHgt_-oPnwWAXvIZ5tL5jBx05PKlNym5VebI7OY7a37rCFztrPYxV7wfjpyERcULNi0_qv0CC4fukW6amYsMA96RBZSTxJAB");'>
+                                </div>
+                            </a>
+                            <div class="flex flex-col flex-1">
+                                <div class="flex items-center gap-3 text-xs mb-3">
+                                    <span class="text-primary font-semibold">Case Study</span>
+                                    <span class="text-text-muted">•</span>
+                                    <span class="text-text-muted">Nov 02, 2023</span>
+                                </div>
+                                <a class="block group-hover:text-primary transition-colors" href="#">
+                                    <h3 class="font-display text-xl font-bold text-white mb-3">How FinTech Giants Scale
+                                        Experimentation</h3>
+                                </a>
+                                <p class="text-sm text-text-muted leading-relaxed line-clamp-2 mb-4">
+                                    A deep dive into the infrastructure required to run thousands of concurrent
+                                    experiments without latency.
+                                </p>
+                                <div
+                                    class="mt-auto pt-4 border-t border-border-subtle/50 flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <div class="h-6 w-6 rounded-full bg-gray-700"></div>
+                                        <span class="text-xs font-medium text-gray-300">Marcus Chen</span>
+                                    </div>
+                                    <span class="text-xs text-text-muted">12 min read</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="flex flex-col group">
+                            <a class="block overflow-hidden rounded-xl bg-gray-800 mb-5" href="#">
+                                <div class="aspect-[3/2] w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100"
+                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDSOp2ICqsAkEUK6AvYhDOgQ1pvoyFtKPv7eGfYFWQDFHXJ1M1TaB8dgTBmV_3WW3CmAGSYhyeetjbUCmmFV0gna9L6RTahGbexZqm0Hq_aIBOV6HWRRLVuZKXIWyF6AehAYWH43PjXz3ARtLfn8pcyiW9LTLnvP3oKyrPWSMQoGKA4NyWOFil4jBked2sn4MbQvwS7SBRPXr4FnDDzzbq8XQ2GqIIGbnK2LWGz6LkTIwQ1fWng1gP9jf6gwO-Gi0vOC_RWVW53");'>
+                                </div>
+                            </a>
+                            <div class="flex flex-col flex-1">
+                                <div class="flex items-center gap-3 text-xs mb-3">
+                                    <span class="text-primary font-semibold">Tutorial</span>
+                                    <span class="text-text-muted">•</span>
+                                    <span class="text-text-muted">Oct 15, 2023</span>
+                                </div>
+                                <a class="block group-hover:text-primary transition-colors" href="#">
+                                    <h3 class="font-display text-xl font-bold text-white mb-3">Setting Up Multi-Armed
+                                        Bandits in Python</h3>
+                                </a>
+                                <p class="text-sm text-text-muted leading-relaxed line-clamp-2 mb-4">
+                                    Learn how to implement epsilon-greedy algorithms for dynamic traffic allocation in
+                                    your own backend.
+                                </p>
+                                <div
+                                    class="mt-auto pt-4 border-t border-border-subtle/50 flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <div class="h-6 w-6 rounded-full bg-gray-700"></div>
+                                        <span class="text-xs font-medium text-gray-300">Sarah Jenkins</span>
+                                    </div>
+                                    <span class="text-xs text-text-muted">6 min read</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="flex flex-col group">
+                            <a class="block overflow-hidden rounded-xl bg-gray-800 mb-5" href="#">
+                                <div class="aspect-[3/2] w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100"
+                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAQ6pf-El_f0Z7x5SfGwB5Xkb4zNO9LzpavGtK8_K8vKg5qvcF6HGs4E9w8OE0c7qyWALphyMOptexSIGeolxlGtDvQCEiCZyRY9nKdcDWzDgmhBQJmC__j6Hsx6BDpJvj-iyDCzm18FXR2a5gjKTpzL8Iu_ZjXY0ipTABt6r88eRS7U2RSaTV3hI8UKJ8e1m1npERMapJ2CVmAdyfKN8_GFw3q5BmdY5wncml1zVn-WtJ8YqKTM0ox-u1Mg2XmLHVRlb0VFZTx");'>
+                                </div>
+                            </a>
+                            <div class="flex flex-col flex-1">
+                                <div class="flex items-center gap-3 text-xs mb-3">
+                                    <span class="text-primary font-semibold">Opinion</span>
+                                    <span class="text-text-muted">•</span>
+                                    <span class="text-text-muted">Sep 28, 2023</span>
+                                </div>
+                                <a class="block group-hover:text-primary transition-colors" href="#">
+                                    <h3 class="font-display text-xl font-bold text-white mb-3">Why P-Values Are
+                                        Misleading Your Team</h3>
+                                </a>
+                                <p class="text-sm text-text-muted leading-relaxed line-clamp-2 mb-4">
+                                    Statistical significance is often misunderstood. Here is why you should focus on
+                                    confidence intervals instead.
+                                </p>
+                                <div
+                                    class="mt-auto pt-4 border-t border-border-subtle/50 flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <div class="h-6 w-6 rounded-full bg-gray-700"></div>
+                                        <span class="text-xs font-medium text-gray-300">David Ross</span>
+                                    </div>
+                                    <span class="text-xs text-text-muted">5 min read</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="flex flex-col group">
+                            <a class="block overflow-hidden rounded-xl bg-gray-800 mb-5" href="#">
+                                <div
+                                    class="aspect-[3/2] w-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
+                                    <span class="material-symbols-outlined text-gray-700 text-6xl">bar_chart</span>
+                                </div>
+                            </a>
+                            <div class="flex flex-col flex-1">
+                                <div class="flex items-center gap-3 text-xs mb-3">
+                                    <span class="text-primary font-semibold">Strategy</span>
+                                    <span class="text-text-muted">•</span>
+                                    <span class="text-text-muted">Sep 14, 2023</span>
+                                </div>
+                                <a class="block group-hover:text-primary transition-colors" href="#">
+                                    <h3 class="font-display text-xl font-bold text-white mb-3">Designing for Metrics
+                                        that Matter</h3>
+                                </a>
+                                <p class="text-sm text-text-muted leading-relaxed line-clamp-2 mb-4">
+                                    Stop optimizing for vanity metrics. Learn how to align your A/B tests with North
+                                    Star metrics.
+                                </p>
+                                <div
+                                    class="mt-auto pt-4 border-t border-border-subtle/50 flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <div class="h-6 w-6 rounded-full bg-gray-700"></div>
+                                        <span class="text-xs font-medium text-gray-300">Alex Morgan</span>
+                                    </div>
+                                    <span class="text-xs text-text-muted">7 min read</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="flex flex-col group">
+                            <a class="block overflow-hidden rounded-xl bg-gray-800 mb-5" href="#">
+                                <div
+                                    class="aspect-[3/2] w-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
+                                    <span class="material-symbols-outlined text-gray-700 text-6xl">psychology</span>
+                                </div>
+                            </a>
+                            <div class="flex flex-col flex-1">
+                                <div class="flex items-center gap-3 text-xs mb-3">
+                                    <span class="text-primary font-semibold">Psychology</span>
+                                    <span class="text-text-muted">•</span>
+                                    <span class="text-text-muted">Aug 30, 2023</span>
+                                </div>
+                                <a class="block group-hover:text-primary transition-colors" href="#">
+                                    <h3 class="font-display text-xl font-bold text-white mb-3">Cognitive Biases in User
+                                        Testing</h3>
+                                </a>
+                                <p class="text-sm text-text-muted leading-relaxed line-clamp-2 mb-4">
+                                    How confirmation bias and the Hawthorne effect might be skewing your test results
+                                    without you knowing.
+                                </p>
+                                <div
+                                    class="mt-auto pt-4 border-t border-border-subtle/50 flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <div class="h-6 w-6 rounded-full bg-gray-700"></div>
+                                        <span class="text-xs font-medium text-gray-300">Elena Fischer</span>
+                                    </div>
+                                    <span class="text-xs text-text-muted">10 min read</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="flex flex-col group">
+                            <a class="block overflow-hidden rounded-xl bg-gray-800 mb-5" href="#">
+                                <div
+                                    class="aspect-[3/2] w-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
+                                    <span class="material-symbols-outlined text-gray-700 text-6xl">code</span>
+                                </div>
+                            </a>
+                            <div class="flex flex-col flex-1">
+                                <div class="flex items-center gap-3 text-xs mb-3">
+                                    <span class="text-primary font-semibold">Engineering</span>
+                                    <span class="text-text-muted">•</span>
+                                    <span class="text-text-muted">Aug 12, 2023</span>
+                                </div>
+                                <a class="block group-hover:text-primary transition-colors" href="#">
+                                    <h3 class="font-display text-xl font-bold text-white mb-3">Reducing Flicker in
+                                        Client-Side Testing</h3>
+                                </a>
+                                <p class="text-sm text-text-muted leading-relaxed line-clamp-2 mb-4">
+                                    Technical strategies to ensure a seamless user experience while loading experiment
+                                    variations.
+                                </p>
+                                <div
+                                    class="mt-auto pt-4 border-t border-border-subtle/50 flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <div class="h-6 w-6 rounded-full bg-gray-700"></div>
+                                        <span class="text-xs font-medium text-gray-300">Tom Baker</span>
+                                    </div>
+                                    <span class="text-xs text-text-muted">8 min read</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="mt-16 flex items-center justify-center gap-2">
+                        <button
+                            class="flex h-10 w-10 items-center justify-center rounded-lg border border-border-subtle text-gray-400 hover:bg-white hover:text-bg-dark transition-colors">
+                            <span class="material-symbols-outlined text-sm">chevron_left</span>
+                        </button>
+                        <button
+                            class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white font-medium hover:bg-blue-600 transition-colors">1</button>
+                        <button
+                            class="flex h-10 w-10 items-center justify-center rounded-lg border border-border-subtle text-gray-400 hover:bg-white hover:text-bg-dark transition-colors">2</button>
+                        <button
+                            class="flex h-10 w-10 items-center justify-center rounded-lg border border-border-subtle text-gray-400 hover:bg-white hover:text-bg-dark transition-colors">3</button>
+                        <span class="px-2 text-gray-600">...</span>
+                        <button
+                            class="flex h-10 w-10 items-center justify-center rounded-lg border border-border-subtle text-gray-400 hover:bg-white hover:text-bg-dark transition-colors">8</button>
+                        <button
+                            class="flex h-10 w-10 items-center justify-center rounded-lg border border-border-subtle text-gray-400 hover:bg-white hover:text-bg-dark transition-colors">
+                            <span class="material-symbols-outlined text-sm">chevron_right</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <section class="border-t border-border-subtle bg-bg-card py-20">
+            <div class="mx-auto max-w-[1280px] px-6 lg:px-8">
+                <div
+                    class="relative overflow-hidden rounded-2xl bg-[#13161c] px-6 py-16 sm:px-12 xl:py-20 border border-border-subtle">
+                    <div class="relative z-10 mx-auto max-w-2xl text-center">
+                        <h3 class="mb-4 text-3xl font-bold tracking-tight text-white font-display">Join the optimization
+                            elite</h3>
+                        <p class="mb-8 text-gray-400 text-lg font-light">Get weekly insights on experimental design and
+                            statistical analysis delivered to your inbox.</p>
+                        <form class="mx-auto flex max-w-md flex-col gap-3 sm:flex-row">
+                            <input
+                                class="flex-1 rounded-lg border border-border-subtle bg-bg-dark px-4 py-3 text-sm text-white outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder-gray-600"
+                                placeholder="Enter your work email" required="" type="email" />
+                            <button
+                                class="rounded-lg bg-white px-6 py-3 text-sm font-bold text-bg-dark shadow-lg hover:bg-gray-200 transition-colors"
+                                type="submit">Subscribe</button>
+                        </form>
+                    </div>
+                    <div
+                        class="absolute left-1/2 top-1/2 -z-10 h-[300px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/5 blur-3xl">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer class="bg-bg-dark py-16 text-white border-t border-border-subtle">
+            <div class="mx-auto max-w-[1280px] px-6 lg:px-8">
+                <div class="grid gap-12 lg:grid-cols-4">
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[28px] text-primary">science</span>
+                            <span class="text-xl font-bold font-display">A/B Tester</span>
+                        </div>
+                        <p class="text-sm text-gray-500 leading-relaxed">Empowering growth teams with AI-driven
+                            experimentation infrastructure since 2021.</p>
+                        <div class="flex gap-4 pt-2">
+                            <a class="text-gray-500 hover:text-white transition-colors" href="#"><span
+                                    class="material-symbols-outlined text-xl">share</span></a>
+                            <a class="text-gray-500 hover:text-white transition-colors" href="#"><span
+                                    class="material-symbols-outlined text-xl">alternate_email</span></a>
+                            <a class="text-gray-500 hover:text-white transition-colors" href="#"><span
+                                    class="material-symbols-outlined text-xl">code</span></a>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="mb-5 font-bold text-white font-display">Product</h4>
+                        <ul class="space-y-3 text-sm text-gray-500">
+                            <li><a class="hover:text-primary transition-colors" href="#">Features</a></li>
+                            <li><a class="hover:text-primary transition-colors" href="#">Integrations</a></li>
+                            <li><a class="hover:text-primary transition-colors" href="#">Pricing</a></li>
+                            <li><a class="hover:text-primary transition-colors" href="#">Changelog</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="mb-5 font-bold text-white font-display">Resources</h4>
+                        <ul class="space-y-3 text-sm text-gray-500">
+                            <li><a class="hover:text-primary transition-colors" href="#">Documentation</a></li>
+                            <li><a class="hover:text-primary transition-colors" href="#">API Reference</a></li>
+                            <li><a class="hover:text-primary transition-colors" href="#">Community</a></li>
+                            <li><a class="hover:text-primary transition-colors" href="#">Blog</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="mb-5 font-bold text-white font-display">Company</h4>
+                        <ul class="space-y-3 text-sm text-gray-500">
+                            <li><a class="hover:text-primary transition-colors" href="#">About</a></li>
+                            <li><a class="hover:text-primary transition-colors" href="#">Careers</a></li>
+                            <li><a class="hover:text-primary transition-colors" href="#">Legal</a></li>
+                            <li><a class="hover:text-primary transition-colors" href="#">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-16 border-t border-border-subtle pt-8 text-center text-xs text-gray-600 font-medium">
+                    © 2024 A/B Tester Inc. All rights reserved.
+                </div>
+            </div>
+        </footer>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Home - Stitch AI (European Bright Mode)</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: "#FFFFFF",
+                        surface: "#FAFAFA", // Lighter than Slate 50, closer to true white
+                        "surface-highlight": "#F8FAFC", // Slate 50
+                        primary: "#0f172a", // Dark Navy/Slate (European style prefers near-black for elegance)
+                        accent: "#1e3a8a", // Classic Navy Blue for interactive elements
+                        "primary-light": "#3b82f6",
+                        "primary-soft": "rgba(30, 58, 138, 0.03)",
+                        text: {
+                            main: "#1E293B", // Slate 800 - softer than pure black
+                            muted: "#64748B", // Slate 500 - Refined gray
+                            dim: "#94A3B8"    // Slate 400
+                        },
+                        border: {
+                            light: "#E2E8F0", // Slate 200
+                            subtle: "#F1F5F9" // Slate 100
+                        }
+                    },
+                    fontFamily: {
+                        display: ['"Manrope"', 'sans-serif'],
+                        body: ['"Inter"', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        DEFAULT: "6px",
+                        'lg': "8px",
+                        'xl': "12px",
+                        '2xl': "16px",
+                        '3xl': "24px",
+                    },
+                    backgroundImage: {
+                        'gradient-subtle': 'linear-gradient(to bottom, #FFFFFF, #FAFAFA)',
+                        'gradient-mesh': 'radial-gradient(at 27% 37%, hsla(215, 98%, 61%, 0.03) 0px, transparent 0%), radial-gradient(at 97% 21%, hsla(220, 90%, 98%, 1) 0px, transparent 50%), radial-gradient(at 52% 99%, hsla(220, 98%, 98%, 1) 0px, transparent 50%), radial-gradient(at 10% 29%, hsla(220, 96%, 93%, 0.05) 0px, transparent 50%), radial-gradient(at 97% 96%, hsla(220, 90%, 98%, 1) 0px, transparent 50%), radial-gradient(at 33% 50%, hsla(220, 90%, 98%, 1) 0px, transparent 50%), radial-gradient(at 79% 53%, hsla(220, 90%, 98%, 1) 0px, transparent 50%)',
+                    },
+                    boxShadow: {
+                        'soft': '0 2px 10px rgba(0, 0, 0, 0.03)',
+                        'card': '0 10px 30px -5px rgba(0, 0, 0, 0.04)',
+                        'elevation': '0 20px 40px -10px rgba(15, 23, 42, 0.08)',
+                        'glow': '0 0 20px rgba(30, 58, 138, 0.1)'
+                    }
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            background-color: #FFFFFF;
+            color: #1E293B;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(226, 232, 240, 0.6);
+        }
+
+        .text-balance {
+            text-wrap: balance;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #E2E8F0;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #CBD5E1;
+        }
+
+        .nav-link {
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: #1e3a8a;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body class="font-body antialiased selection:bg-accent/10 selection:text-accent">
+    <nav class="fixed w-full z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">auto_fix_high</span>
+                    </div>
+                    <span class="font-display font-bold text-xl tracking-tight text-text-main">Stitch<span
+                            class="text-accent">.</span></span>
+                </div>
+                <div class="hidden md:flex items-center gap-10">
+                    <a class="nav-link text-sm font-medium text-text-main hover:text-accent transition-colors"
+                        href="#features">Producto</a>
+                    <a class="nav-link text-sm font-medium text-text-muted hover:text-accent transition-colors"
+                        href="#how-it-works">Soluciones</a>
+                    <a class="nav-link text-sm font-medium text-text-muted hover:text-accent transition-colors"
+                        href="#blog">Journal</a>
+                    <a class="nav-link text-sm font-medium text-text-muted hover:text-accent transition-colors"
+                        href="#pricing">Precios</a>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a class="hidden md:inline-flex text-sm font-medium text-text-muted hover:text-text-main transition-colors"
+                        href="#">
+                        Log in
+                    </a>
+                    <a class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white transition-all bg-primary hover:bg-accent rounded-lg shadow-sm hover:shadow-md"
+                        href="#">
+                        Start Free
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-28 overflow-hidden bg-gradient-mesh">
+        <div class="absolute inset-0 bg-white/60 pointer-events-none"></div>
+        <div class="max-w-6xl mx-auto px-6 lg:px-8 relative z-10 text-center">
+            <div
+                class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-slate-200 shadow-sm mb-8 animate-fade-in-up">
+                <span class="flex h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                <span class="text-[11px] font-bold text-text-muted tracking-widest uppercase font-display">Neural Engine
+                    V3.2</span>
+            </div>
+            <h1
+                class="text-5xl sm:text-6xl lg:text-[5rem] font-display font-bold tracking-tight mb-8 text-text-main leading-[1.05] text-balance">
+                La ciencia de la <br />
+                <span class="text-accent">experimentación digital</span>
+            </h1>
+            <p
+                class="text-lg sm:text-xl text-text-muted mb-12 max-w-2xl mx-auto leading-relaxed font-light text-balance">
+                Automatización inteligente para equipos de crecimiento. Analizamos el comportamiento en tiempo real para
+                eliminar la incertidumbre.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-24">
+                <button
+                    class="w-full sm:w-auto px-8 py-4 bg-primary text-white rounded-xl font-semibold text-sm hover:bg-accent transition-all flex items-center justify-center gap-2 shadow-lg shadow-slate-200 hover:shadow-xl transform hover:-translate-y-0.5 duration-300">
+                    Comenzar ahora
+                    <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                </button>
+                <button
+                    class="w-full sm:w-auto px-8 py-4 bg-white border border-slate-200 text-text-main rounded-xl font-medium text-sm hover:bg-surface transition-all flex items-center justify-center gap-2 hover:border-slate-300">
+                    <span class="material-symbols-outlined text-lg text-text-muted">play_arrow</span>
+                    Ver funcionamiento
+                </button>
+            </div>
+            <div class="relative w-full max-w-5xl mx-auto mt-8">
+                <div
+                    class="absolute -inset-10 bg-gradient-to-t from-slate-100/80 to-transparent rounded-[3rem] blur-3xl opacity-50 pointer-events-none">
+                </div>
+                <div class="relative glass-panel rounded-2xl overflow-hidden shadow-card ring-1 ring-black/5">
+                    <div
+                        class="h-12 border-b border-slate-100 flex items-center px-6 justify-between bg-white/80 backdrop-blur-sm">
+                        <div class="flex gap-2">
+                            <div class="w-3 h-3 rounded-full bg-slate-100 border border-slate-200"></div>
+                            <div class="w-3 h-3 rounded-full bg-slate-100 border border-slate-200"></div>
+                            <div class="w-3 h-3 rounded-full bg-slate-100 border border-slate-200"></div>
+                        </div>
+                        <div class="text-[10px] text-text-dim uppercase tracking-widest font-bold">stitch.ai · analytics
+                        </div>
+                    </div>
+                    <div class="p-8 md:p-10 grid grid-cols-1 md:grid-cols-12 gap-8 bg-surface/50">
+                        <div class="md:col-span-8 space-y-6">
+                            <div
+                                class="rounded-xl border border-slate-200/60 bg-white p-8 h-full shadow-soft flex flex-col justify-between">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h3 class="text-xs font-bold text-text-muted uppercase tracking-widest mb-1">
+                                            Tasa de Conversión</h3>
+                                        <div class="flex items-baseline gap-3">
+                                            <span
+                                                class="text-5xl font-display font-medium text-text-main tracking-tight">4.8%</span>
+                                            <span
+                                                class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md border border-emerald-100/50">
+                                                +12.4% vs control
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <button
+                                            class="px-3 py-1 text-xs font-medium text-white bg-accent rounded-md shadow-sm">Variante
+                                            B</button>
+                                        <button
+                                            class="px-3 py-1 text-xs font-medium text-text-muted bg-slate-50 border border-slate-100 rounded-md hover:bg-slate-100">Control</button>
+                                    </div>
+                                </div>
+                                <div class="relative h-48 w-full mt-8">
+                                    <svg class="w-full h-full overflow-visible" preserveAspectRatio="none"
+                                        viewBox="0 0 400 150">
+                                        <line stroke="#F1F5F9" stroke-width="1" x1="0" x2="400" y1="150" y2="150">
+                                        </line>
+                                        <line stroke="#F1F5F9" stroke-width="1" x1="0" x2="400" y1="100" y2="100">
+                                        </line>
+                                        <line stroke="#F1F5F9" stroke-width="1" x1="0" x2="400" y1="50" y2="50"></line>
+                                        <line stroke="#F1F5F9" stroke-width="1" x1="0" x2="400" y1="0" y2="0"></line>
+                                        <path d="M0,130 C50,125 100,110 150,115 C200,120 250,100 300,95 C350,90 400,85"
+                                            fill="none" stroke="#CBD5E1" stroke-dasharray="6 6" stroke-width="2"></path>
+                                        <path d="M0,130 C50,110 100,80 150,70 C200,60 250,40 300,35 C350,30 400,10"
+                                            fill="none" stroke="#1e3a8a" stroke-linecap="round" stroke-width="3"></path>
+                                        <path
+                                            d="M0,130 C50,110 100,80 150,70 C200,60 250,40 300,35 C350,30 400,10 V150 H0 Z"
+                                            fill="url(#gradientBlue)" opacity="0.1"></path>
+                                        <defs>
+                                            <linearGradient id="gradientBlue" x1="0%" x2="0%" y1="0%" y2="100%">
+                                                <stop offset="0%" stop-color="#1e3a8a"></stop>
+                                                <stop offset="100%" stop-color="white" stop-opacity="0"></stop>
+                                            </linearGradient>
+                                        </defs>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md:col-span-4 space-y-6">
+                            <div class="p-6 rounded-xl border border-slate-200/60 bg-white shadow-soft">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="p-2 rounded-lg bg-slate-50 text-text-muted border border-slate-100">
+                                        <span class="material-symbols-outlined text-xl block">attach_money</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-text-muted uppercase tracking-widest">Revenue
+                                        Uplift</span>
+                                </div>
+                                <p class="text-3xl font-display font-medium text-text-main">$12,450</p>
+                                <p class="text-xs text-text-muted mt-2">Proyección mensual estimada</p>
+                            </div>
+                            <div class="p-6 rounded-xl border border-slate-200/60 bg-white shadow-soft">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="p-2 rounded-lg bg-slate-50 text-text-muted border border-slate-100">
+                                        <span class="material-symbols-outlined text-xl block">group</span>
+                                    </div>
+                                    <span
+                                        class="text-xs font-bold text-text-muted uppercase tracking-widest">Participantes</span>
+                                </div>
+                                <p class="text-3xl font-display font-medium text-text-main">45.2k</p>
+                                <div class="w-full bg-slate-100 h-1.5 rounded-full mt-4 overflow-hidden">
+                                    <div class="bg-accent h-full w-[78%] rounded-full"></div>
+                                </div>
+                                <p class="text-xs text-text-muted mt-2 text-right">78% Significancia</p>
+                            </div>
+                            <div
+                                class="p-5 rounded-xl bg-primary text-white shadow-lg flex items-center justify-between">
+                                <div>
+                                    <span class="text-[10px] uppercase tracking-widest opacity-80 font-bold">Ganador
+                                        Probable</span>
+                                    <p class="font-display font-bold mt-1">Variante B</p>
+                                </div>
+                                <button class="bg-white/10 hover:bg-white/20 p-2 rounded-lg transition-colors">
+                                    <span class="material-symbols-outlined text-lg">check</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="py-16 border-y border-slate-100 bg-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <p class="text-center text-sm font-semibold text-text-muted uppercase tracking-widest mb-10">Con la
+                confianza de equipos de producto modernos</p>
+            <div
+                class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+                <div class="flex items-center justify-center font-display font-bold text-xl text-text-main">ACME <span
+                        class="font-light text-text-muted">Corp</span></div>
+                <div class="flex items-center justify-center font-display font-bold text-xl text-text-main">Global<span
+                        class="font-light text-text-muted">Bank</span></div>
+                <div class="flex items-center justify-center font-display font-bold text-xl text-text-main">Stratos<span
+                        class="font-light text-text-muted">Phere</span></div>
+                <div class="flex items-center justify-center font-display font-bold text-xl text-text-main">NORDIC<span
+                        class="font-light text-text-muted">Soft</span></div>
+            </div>
+        </div>
+    </section>
+    <section class="py-32 bg-white" id="features">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="mb-24 text-center max-w-3xl mx-auto">
+                <h2 class="text-sm font-bold text-accent tracking-widest uppercase mb-4">Tecnología Central</h2>
+                <p class="text-4xl md:text-5xl font-display font-bold text-text-main leading-tight mb-6">
+                    Infraestructura diseñada para la <br /> optimización continua.
+                </p>
+                <p class="text-lg text-text-muted font-light">
+                    Herramientas poderosas envueltas en una interfaz serena. Sin distracciones, solo datos accionables.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8 lg:gap-12">
+                <div
+                    class="p-10 rounded-2xl bg-surface border border-slate-100 hover:border-slate-200 transition-all duration-300 hover:shadow-card group hover:-translate-y-1">
+                    <div
+                        class="w-14 h-14 rounded-xl bg-white flex items-center justify-center text-accent mb-8 shadow-soft border border-slate-50 group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined text-2xl">auto_graph</span>
+                    </div>
+                    <h3 class="text-xl font-display font-bold text-text-main mb-4">Smart Allocation</h3>
+                    <p class="text-text-muted text-base leading-relaxed">
+                        Algoritmos Multi-armed Bandit que redistribuyen el tráfico dinámicamente hacia la variante
+                        ganadora para no perder conversiones.
+                    </p>
+                </div>
+                <div
+                    class="p-10 rounded-2xl bg-surface border border-slate-100 hover:border-slate-200 transition-all duration-300 hover:shadow-card group hover:-translate-y-1">
+                    <div
+                        class="w-14 h-14 rounded-xl bg-white flex items-center justify-center text-accent mb-8 shadow-soft border border-slate-50 group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined text-2xl">psychology</span>
+                    </div>
+                    <h3 class="text-xl font-display font-bold text-text-main mb-4">Inferencia Bayesiana</h3>
+                    <p class="text-text-muted text-base leading-relaxed">
+                        Modelos estadísticos avanzados que ofrecen resultados más rápidos e interpretables que los tests
+                        frecuentistas tradicionales.
+                    </p>
+                </div>
+                <div
+                    class="p-10 rounded-2xl bg-surface border border-slate-100 hover:border-slate-200 transition-all duration-300 hover:shadow-card group hover:-translate-y-1">
+                    <div
+                        class="w-14 h-14 rounded-xl bg-white flex items-center justify-center text-accent mb-8 shadow-soft border border-slate-50 group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined text-2xl">code_off</span>
+                    </div>
+                    <h3 class="text-xl font-display font-bold text-text-main mb-4">Editor Visual Puro</h3>
+                    <p class="text-text-muted text-base leading-relaxed">
+                        Modifique componentes React, Vue o estáticos directamente en el navegador. Cambios de CSS y copy
+                        sin despliegues.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="py-32 bg-surface-highlight border-t border-slate-100 overflow-hidden" id="how-it-works">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row items-center gap-24">
+                <div class="lg:w-1/2">
+                    <h2 class="text-3xl md:text-4xl font-display font-bold text-text-main mb-12 leading-tight">
+                        Complejidad abstracta, <br />control absoluto.
+                    </h2>
+                    <div class="space-y-16">
+                        <div class="flex gap-8 group">
+                            <div class="flex-shrink-0 relative">
+                                <span
+                                    class="flex items-center justify-center w-12 h-12 rounded-full border border-slate-200 bg-white text-lg font-display font-bold text-text-main group-hover:border-accent group-hover:text-accent transition-colors shadow-sm z-10 relative">1</span>
+                                <div class="absolute top-12 left-6 w-px h-24 bg-slate-200 -ml-[0.5px]"></div>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-text-main mb-3">Definición de Métricas</h4>
+                                <p class="text-text-muted text-sm leading-relaxed">Seleccione KPIs de negocio reales:
+                                    ARPU, LTV o retención, no solo clicks.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-8 group">
+                            <div class="flex-shrink-0 relative">
+                                <span
+                                    class="flex items-center justify-center w-12 h-12 rounded-full border border-slate-200 bg-white text-lg font-display font-bold text-text-main group-hover:border-accent group-hover:text-accent transition-colors shadow-sm z-10 relative">2</span>
+                                <div class="absolute top-12 left-6 w-px h-24 bg-slate-200 -ml-[0.5px]"></div>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-text-main mb-3">Segmentación Precisa</h4>
+                                <p class="text-text-muted text-sm leading-relaxed">Filtre audiencias por
+                                    geolocalización, dispositivo o comportamiento previo.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-8 group">
+                            <div class="flex-shrink-0">
+                                <span
+                                    class="flex items-center justify-center w-12 h-12 rounded-full border border-slate-200 bg-white text-lg font-display font-bold text-text-main group-hover:border-accent group-hover:text-accent transition-colors shadow-sm">3</span>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-text-main mb-3">Lanzamiento Seguro</h4>
+                                <p class="text-text-muted text-sm leading-relaxed">Despliegue gradual (Phased rollout)
+                                    para monitorear impacto técnico antes del 100%.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 w-full">
+                    <div class="relative">
+                        <div class="absolute -top-10 -right-10 w-64 h-64 bg-slate-200/50 rounded-full blur-3xl"></div>
+                        <div class="absolute -bottom-10 -left-10 w-64 h-64 bg-blue-100/50 rounded-full blur-3xl"></div>
+                        <div
+                            class="relative bg-white rounded-xl shadow-card border border-slate-100 p-2 transform rotate-1 transition-transform hover:rotate-0 duration-700">
+                            <div class="bg-surface rounded-lg p-8 h-full border border-slate-50">
+                                <div class="flex justify-between items-center mb-8 border-b border-slate-200 pb-6">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="w-12 h-12 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-accent shadow-sm">
+                                            <span class="material-symbols-outlined">science</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-text-main text-base font-bold">New Checkout Flow</h4>
+                                            <p class="text-text-muted text-xs uppercase tracking-wider">Configuración
+                                                Activa</p>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="px-3 py-1 rounded-full bg-emerald-100/50 text-emerald-700 text-xs font-bold uppercase tracking-wider border border-emerald-100">
+                                        Running</div>
+                                </div>
+                                <div class="space-y-4">
+                                    <div
+                                        class="p-4 rounded-lg bg-white border border-slate-200 shadow-sm flex items-center justify-between">
+                                        <div class="flex items-center gap-4">
+                                            <span
+                                                class="w-8 h-8 flex items-center justify-center rounded bg-slate-100 text-xs font-bold text-text-muted">A</span>
+                                            <span class="text-sm font-medium text-text-main">Control</span>
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            <div class="h-1.5 w-24 bg-slate-100 rounded-full overflow-hidden">
+                                                <div class="h-full bg-slate-400 w-[45%]"></div>
+                                            </div>
+                                            <span class="text-xs font-mono text-text-muted">45%</span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="p-4 rounded-lg bg-white border border-accent/20 shadow-md flex items-center justify-between relative overflow-hidden">
+                                        <div class="absolute left-0 top-0 bottom-0 w-1 bg-accent"></div>
+                                        <div class="flex items-center gap-4">
+                                            <span
+                                                class="w-8 h-8 flex items-center justify-center rounded bg-accent text-white text-xs font-bold">B</span>
+                                            <span class="text-sm font-bold text-text-main">Checkout Simplificado</span>
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            <div class="h-1.5 w-24 bg-slate-100 rounded-full overflow-hidden">
+                                                <div class="h-full bg-accent w-[55%]"></div>
+                                            </div>
+                                            <span class="text-xs font-bold font-mono text-accent">55%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-8 pt-6 border-t border-slate-200 flex justify-between items-center">
+                                    <span class="text-xs text-text-muted">Tiempo restante estimado: <span
+                                            class="text-text-main font-medium">3 días</span></span>
+                                    <button
+                                        class="text-xs font-bold text-accent uppercase tracking-widest hover:underline">Ver
+                                        Reporte Detallado</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="py-24 bg-white border-t border-slate-100" id="blog">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-end mb-16 gap-6">
+                <div>
+                    <span class="text-xs font-bold text-accent tracking-widest uppercase mb-2 block">Journal</span>
+                    <h2 class="text-3xl md:text-4xl font-display font-bold text-text-main">
+                        Perspectivas de Crecimiento
+                    </h2>
+                </div>
+                <a class="group inline-flex items-center gap-2 text-sm font-semibold text-text-main hover:text-accent transition-colors"
+                    href="#">
+                    Ver todos los artículos
+                    <span
+                        class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+            </div>
+            <div class="grid md:grid-cols-3 gap-10">
+                <article class="group cursor-pointer flex flex-col h-full">
+                    <div
+                        class="aspect-[16/10] mb-6 overflow-hidden rounded-xl bg-surface border border-slate-100 relative shadow-sm group-hover:shadow-md transition-all">
+                        <div class="absolute inset-0 bg-gradient-subtle opacity-50"></div>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-10">
+                            <span class="material-symbols-outlined text-[80px] text-text-dim">price_change</span>
+                        </div>
+                        <div class="absolute top-4 left-4">
+                            <span
+                                class="px-2 py-1 bg-white/90 backdrop-blur border border-slate-100 rounded text-[10px] font-bold uppercase tracking-wider text-text-main shadow-sm">Estrategia</span>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 text-xs text-text-muted mb-3 font-medium">
+                            <span>12 Oct, 2023</span>
+                            <span class="w-1 h-1 rounded-full bg-slate-300"></span>
+                            <span>5 min lectura</span>
+                        </div>
+                        <h3
+                            class="text-xl font-display font-bold text-text-main mb-3 group-hover:text-accent transition-colors leading-snug">
+                            La psicología detrás de los precios dinámicos
+                        </h3>
+                        <p class="text-sm text-text-muted leading-relaxed line-clamp-3">
+                            Cómo utilizar la percepción de valor para ajustar estrategias de pricing sin sacrificar la
+                            lealtad del cliente a largo plazo.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-50">
+                        <span class="text-xs font-bold text-accent uppercase tracking-widest group-hover:underline">Leer
+                            artículo</span>
+                    </div>
+                </article>
+                <article class="group cursor-pointer flex flex-col h-full">
+                    <div
+                        class="aspect-[16/10] mb-6 overflow-hidden rounded-xl bg-surface border border-slate-100 relative shadow-sm group-hover:shadow-md transition-all">
+                        <div class="absolute inset-0 bg-gradient-subtle opacity-50"></div>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-10">
+                            <span class="material-symbols-outlined text-[80px] text-text-dim">speed</span>
+                        </div>
+                        <div class="absolute top-4 left-4">
+                            <span
+                                class="px-2 py-1 bg-white/90 backdrop-blur border border-slate-100 rounded text-[10px] font-bold uppercase tracking-wider text-text-main shadow-sm">Ingeniería</span>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 text-xs text-text-muted mb-3 font-medium">
+                            <span>28 Sep, 2023</span>
+                            <span class="w-1 h-1 rounded-full bg-slate-300"></span>
+                            <span>8 min lectura</span>
+                        </div>
+                        <h3
+                            class="text-xl font-display font-bold text-text-main mb-3 group-hover:text-accent transition-colors leading-snug">
+                            Optimizando la latencia en A/B Testing
+                        </h3>
+                        <p class="text-sm text-text-muted leading-relaxed line-clamp-3">
+                            Reduciendo el "flicker effect" mediante edge computing y distribución de variantes estáticas
+                            para una experiencia de usuario fluida.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-50">
+                        <span class="text-xs font-bold text-accent uppercase tracking-widest group-hover:underline">Leer
+                            artículo</span>
+                    </div>
+                </article>
+                <article class="group cursor-pointer flex flex-col h-full">
+                    <div
+                        class="aspect-[16/10] mb-6 overflow-hidden rounded-xl bg-surface border border-slate-100 relative shadow-sm group-hover:shadow-md transition-all">
+                        <div class="absolute inset-0 bg-gradient-subtle opacity-50"></div>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-10">
+                            <span class="material-symbols-outlined text-[80px] text-text-dim">trending_up</span>
+                        </div>
+                        <div class="absolute top-4 left-4">
+                            <span
+                                class="px-2 py-1 bg-white/90 backdrop-blur border border-slate-100 rounded text-[10px] font-bold uppercase tracking-wider text-text-main shadow-sm">Case
+                                Study</span>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 text-xs text-text-muted mb-3 font-medium">
+                            <span>15 Sep, 2023</span>
+                            <span class="w-1 h-1 rounded-full bg-slate-300"></span>
+                            <span>4 min lectura</span>
+                        </div>
+                        <h3
+                            class="text-xl font-display font-bold text-text-main mb-3 group-hover:text-accent transition-colors leading-snug">
+                            Incrementando el LTV en SaaS B2B
+                        </h3>
+                        <p class="text-sm text-text-muted leading-relaxed line-clamp-3">
+                            Análisis profundo de cómo las pruebas multivariante ayudaron a aumentar la retención anual
+                            en un 25% para una fintech.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-50">
+                        <span class="text-xs font-bold text-accent uppercase tracking-widest group-hover:underline">Leer
+                            artículo</span>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+    <footer class="bg-surface-highlight border-t border-slate-200 pt-20 pb-12">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-20">
+                <div class="col-span-1 md:col-span-4 pr-8">
+                    <div class="flex items-center gap-2 mb-6">
+                        <div
+                            class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white shadow-md">
+                            <span class="material-symbols-outlined text-[20px]">auto_fix_high</span>
+                        </div>
+                        <span class="font-display font-bold text-xl text-text-main">Stitch</span>
+                    </div>
+                    <p class="text-text-muted text-sm leading-relaxed font-light mb-6">
+                        Plataforma de experimentación digital impulsada por inteligencia artificial. Precisión suiza,
+                        diseño global, resultados medibles.
+                    </p>
+                    <div class="flex space-x-5">
+                        <a class="text-slate-400 hover:text-accent transition-colors" href="#"><span
+                                class="sr-only">Twitter</span><svg class="h-5 w-5" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84">
+                                </path>
+                            </svg></a>
+                        <a class="text-slate-400 hover:text-accent transition-colors" href="#"><span
+                                class="sr-only">GitHub</span><svg class="h-5 w-5" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path clip-rule="evenodd"
+                                    d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                                    fill-rule="evenodd"></path>
+                            </svg></a>
+                        <a class="text-slate-400 hover:text-accent transition-colors" href="#"><span
+                                class="sr-only">LinkedIn</span><svg class="h-5 w-5" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z">
+                                </path>
+                            </svg></a>
+                    </div>
+                </div>
+                <div class="col-span-1 md:col-span-2 md:col-start-6">
+                    <h4 class="text-text-main text-xs font-bold mb-6 font-display uppercase tracking-wider">Producto
+                    </h4>
+                    <ul class="space-y-4 text-sm text-text-muted font-normal">
+                        <li><a class="hover:text-accent transition-colors block" href="#">Características</a></li>
+                        <li><a class="hover:text-accent transition-colors block" href="#">Integraciones</a></li>
+                        <li><a class="hover:text-accent transition-colors block" href="#">Seguridad</a></li>
+                        <li><a class="hover:text-accent transition-colors block" href="#">Roadmap</a></li>
+                    </ul>
+                </div>
+                <div class="col-span-1 md:col-span-2">
+                    <h4 class="text-text-main text-xs font-bold mb-6 font-display uppercase tracking-wider">Recursos
+                    </h4>
+                    <ul class="space-y-4 text-sm text-text-muted font-normal">
+                        <li><a class="hover:text-accent transition-colors block" href="#">Documentación</a></li>
+                        <li><a class="hover:text-accent transition-colors block" href="#">API Reference</a></li>
+                        <li><a class="hover:text-accent transition-colors block" href="#">Journal</a></li>
+                        <li><a class="hover:text-accent transition-colors block" href="#">Status</a></li>
+                    </ul>
+                </div>
+                <div class="col-span-1 md:col-span-2">
+                    <h4 class="text-text-main text-xs font-bold mb-6 font-display uppercase tracking-wider">Legal</h4>
+                    <ul class="space-y-4 text-sm text-text-muted font-normal">
+                        <li><a class="hover:text-accent transition-colors block" href="#">Privacidad</a></li>
+                        <li><a class="hover:text-accent transition-colors block" href="#">Términos</a></li>
+                        <li><a class="hover:text-accent transition-colors block" href="#">Cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-slate-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-xs text-text-dim font-medium">
+                    © 2023 Stitch AI Inc. Zurich, Switzerland. All rights reserved.
+                </p>
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <span class="text-xs text-text-muted font-medium">All systems operational</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

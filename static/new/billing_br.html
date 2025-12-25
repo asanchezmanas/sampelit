@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Stitch AI - Facturación y Suscripción</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: "#FFFFFF",
+                        surface: "#F8FAFC", // Slate 50
+                        "surface-highlight": "#F1F5F9", // Slate 100
+                        primary: "#1e3a8a", // Refined Navy Blue
+                        "primary-light": "#3b82f6", // Brighter blue for small accents
+                        "primary-soft": "rgba(30, 58, 138, 0.05)",
+                        text: {
+                            main: "#0F172A", // Slate 900 - Deep, almost black
+                            muted: "#64748B", // Slate 500 - Elegant gray
+                            dim: "#94A3B8"    // Slate 400 - Light gray
+                        },
+                        border: {
+                            light: "#E2E8F0", // Slate 200
+                            subtle: "#F1F5F9" // Slate 100
+                        }
+                    },
+                    fontFamily: {
+                        display: ['"Manrope"', 'sans-serif'],
+                        body: ['"Inter"', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        DEFAULT: "6px",
+                        'lg': "8px",
+                        'xl': "12px",
+                        '2xl': "16px",
+                        '3xl': "24px",
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02)',
+                        'card': '0 10px 15px -3px rgba(0, 0, 0, 0.03), 0 4px 6px -2px rgba(0, 0, 0, 0.02)',
+                        'elevation': '0 25px 50px -12px rgba(15, 23, 42, 0.15)',
+                    }
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            background-color: #F8FAFC;
+            color: #0F172A;
+        }
+
+        .text-balance {
+            text-wrap: balance;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #F8FAFC;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+
+        .european-table th {
+            font-weight: 600;
+            letter-spacing: 0.025em;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #64748B;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .european-table td {
+            padding-top: 1.25rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid #F1F5F9;
+        }
+
+        .european-table tr:last-child td {
+            border-bottom: none;
+        }
+    </style>
+</head>
+
+<body
+    class="font-body antialiased selection:bg-primary/10 selection:text-primary bg-surface min-h-screen flex flex-col">
+    <nav class="fixed w-full z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-8 h-8 rounded-lg bg-primary/5 border border-primary/10 flex items-center justify-center text-primary">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">auto_fix_high</span>
+                    </div>
+                    <span class="font-display font-bold text-xl tracking-tight text-text-main">Stitch<span
+                            class="text-text-muted font-normal">.ai</span></span>
+                </div>
+                <div class="hidden md:flex items-center gap-8">
+                    <a class="text-sm font-medium text-text-muted hover:text-primary transition-colors"
+                        href="#">Dashboard</a>
+                    <a class="text-sm font-medium text-text-muted hover:text-primary transition-colors"
+                        href="#">Experimentos</a>
+                    <a class="text-sm font-medium text-text-muted hover:text-primary transition-colors"
+                        href="#">Reportes</a>
+                    <a class="text-sm font-medium text-primary transition-colors" href="#">Configuración</a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="h-8 w-8 rounded-full bg-slate-200 border border-slate-300 overflow-hidden">
+                        <img alt="User" class="h-full w-full object-cover"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtRq5JIOrS_5Rnki56m5CEC8-1-Ri1kgh_UAH5FMFWAuIDG7XKCG5fHv6Pv_PNIL6MK5QmCZIe6TmNrdRAyEy2PuCuiEBFrx9yefNLRWz_bmwz-damQ8b9njkKR3c-erq1X-gy1vOat6tvquQFnVZwNd3eqRCFSqObK5rfIQ0Da078ERag6ej6Bwtx-lYv6kjfCqOmTLB3VUKeNHDzAAQDFOSZZajjG9M8hmDpd4doKUG4nfSosdJwN-YQUzUpXtgk3_CYf_tu" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <main class="flex-grow pt-32 pb-20 px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+                <div>
+                    <h1 class="text-3xl font-display font-bold text-text-main tracking-tight">Facturación</h1>
+                    <p class="text-text-muted mt-2 text-sm leading-relaxed max-w-xl">
+                        Gestione su suscripción, métodos de pago y descargue sus facturas históricas.
+                    </p>
+                </div>
+                <div class="flex gap-3">
+                    <button
+                        class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-text-muted bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-primary transition-all shadow-sm">
+                        <span class="material-symbols-outlined text-[18px] mr-2">help</span>
+                        Ayuda
+                    </button>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 space-y-8">
+                    <div
+                        class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 relative overflow-hidden group">
+                        <div
+                            class="absolute top-0 right-0 w-64 h-64 bg-blue-50/50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none">
+                        </div>
+                        <div class="relative z-10">
+                            <div class="flex justify-between items-start mb-8">
+                                <div>
+                                    <div
+                                        class="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-blue-50 border border-blue-100 mb-3">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                        <span class="text-[10px] font-bold text-primary uppercase tracking-widest">Plan
+                                            Activo</span>
+                                    </div>
+                                    <h2 class="text-2xl font-display font-bold text-text-main">Stitch Professional</h2>
+                                    <p class="text-sm text-text-muted mt-1">Renovación automática el 24 de Octubre, 2023
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="flex items-baseline justify-end gap-1">
+                                        <span class="text-3xl font-display font-bold text-text-main">€149</span>
+                                        <span class="text-sm text-text-muted font-medium">/mes</span>
+                                    </div>
+                                    <a class="text-xs font-medium text-primary hover:underline mt-1 block" href="#">Ver
+                                        detalles del plan</a>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 py-6 border-t border-slate-100">
+                                <div>
+                                    <div class="flex justify-between items-end mb-2">
+                                        <span
+                                            class="text-xs font-semibold text-text-muted uppercase tracking-wide">Visitantes
+                                            Únicos</span>
+                                        <span class="text-sm font-bold text-text-main">45,200 <span
+                                                class="text-text-dim text-xs font-normal">/ 100k</span></span>
+                                    </div>
+                                    <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-primary w-[45%] rounded-full"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-end mb-2">
+                                        <span
+                                            class="text-xs font-semibold text-text-muted uppercase tracking-wide">Experimentos</span>
+                                        <span class="text-sm font-bold text-text-main">4 <span
+                                                class="text-text-dim text-xs font-normal">/ 10</span></span>
+                                    </div>
+                                    <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-blue-400 w-[40%] rounded-full"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex flex-wrap gap-4 pt-4">
+                                <button
+                                    class="px-5 py-2.5 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary/90 transition-all shadow-md shadow-primary/10">
+                                    Actualizar Plan
+                                </button>
+                                <button
+                                    class="px-5 py-2.5 bg-white border border-slate-200 text-text-main text-sm font-medium rounded-lg hover:bg-slate-50 transition-colors">
+                                    Cancelar Suscripción
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-lg font-display font-bold text-text-main">Historial de Pagos</h3>
+                            <button
+                                class="text-xs font-bold text-primary hover:text-primary-light uppercase tracking-wide flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm">download</span> Exportar CSV
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left european-table">
+                                <thead>
+                                    <tr>
+                                        <th class="w-1/4">Referencia</th>
+                                        <th class="w-1/4">Fecha</th>
+                                        <th class="w-1/6">Estado</th>
+                                        <th class="w-1/6 text-right">Monto</th>
+                                        <th class="w-1/6 text-right">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="group hover:bg-slate-50/50 transition-colors">
+                                        <td class="font-medium text-text-main text-sm">INV-2023-009</td>
+                                        <td class="text-sm text-text-muted">24 Sep, 2023</td>
+                                        <td>
+                                            <span
+                                                class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-wide">
+                                                Pagado
+                                            </span>
+                                        </td>
+                                        <td class="text-sm font-medium text-text-main text-right">€149.00</td>
+                                        <td class="text-right">
+                                            <a class="text-text-muted hover:text-primary transition-colors p-1 rounded-md hover:bg-slate-100 inline-block"
+                                                href="#">
+                                                <span
+                                                    class="material-symbols-outlined text-[18px] align-middle">visibility</span>
+                                            </a>
+                                            <a class="text-text-muted hover:text-primary transition-colors p-1 rounded-md hover:bg-slate-100 inline-block ml-1"
+                                                href="#">
+                                                <span
+                                                    class="material-symbols-outlined text-[18px] align-middle">download</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr class="group hover:bg-slate-50/50 transition-colors">
+                                        <td class="font-medium text-text-main text-sm">INV-2023-008</td>
+                                        <td class="text-sm text-text-muted">24 Ago, 2023</td>
+                                        <td>
+                                            <span
+                                                class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-wide">
+                                                Pagado
+                                            </span>
+                                        </td>
+                                        <td class="text-sm font-medium text-text-main text-right">€149.00</td>
+                                        <td class="text-right">
+                                            <a class="text-text-muted hover:text-primary transition-colors p-1 rounded-md hover:bg-slate-100 inline-block"
+                                                href="#">
+                                                <span
+                                                    class="material-symbols-outlined text-[18px] align-middle">visibility</span>
+                                            </a>
+                                            <a class="text-text-muted hover:text-primary transition-colors p-1 rounded-md hover:bg-slate-100 inline-block ml-1"
+                                                href="#">
+                                                <span
+                                                    class="material-symbols-outlined text-[18px] align-middle">download</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr class="group hover:bg-slate-50/50 transition-colors">
+                                        <td class="font-medium text-text-main text-sm">INV-2023-007</td>
+                                        <td class="text-sm text-text-muted">24 Jul, 2023</td>
+                                        <td>
+                                            <span
+                                                class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-wide">
+                                                Pagado
+                                            </span>
+                                        </td>
+                                        <td class="text-sm font-medium text-text-main text-right">€149.00</td>
+                                        <td class="text-right">
+                                            <a class="text-text-muted hover:text-primary transition-colors p-1 rounded-md hover:bg-slate-100 inline-block"
+                                                href="#">
+                                                <span
+                                                    class="material-symbols-outlined text-[18px] align-middle">visibility</span>
+                                            </a>
+                                            <a class="text-text-muted hover:text-primary transition-colors p-1 rounded-md hover:bg-slate-100 inline-block ml-1"
+                                                href="#">
+                                                <span
+                                                    class="material-symbols-outlined text-[18px] align-middle">download</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:col-span-1 space-y-6">
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-sm font-bold text-text-muted uppercase tracking-widest">Método de Pago</h3>
+                            <button class="text-primary hover:text-primary-light transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">edit_square</span>
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-4 p-4 rounded-xl border border-slate-100 bg-surface mb-4">
+                            <div class="w-12 h-8 rounded bg-[#1e293b] flex items-center justify-center shadow-sm">
+                                <span class="text-white font-bold text-[10px] tracking-widest italic">VISA</span>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-text-main font-mono">•••• 4242</p>
+                                <p class="text-[11px] text-text-muted font-medium">Expira 12/2025</p>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-text-muted leading-relaxed">
+                            El próximo cobro se realizará automáticamente a esta tarjeta. <a
+                                class="text-primary hover:underline" href="#">Gestionar métodos de pago</a>.
+                        </p>
+                    </div>
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-sm font-bold text-text-muted uppercase tracking-widest">Detalles de Empresa
+                            </h3>
+                            <button class="text-primary hover:text-primary-light transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">edit_square</span>
+                            </button>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="pb-3 border-b border-slate-50 last:border-0 last:pb-0">
+                                <p class="text-[10px] text-text-dim uppercase font-bold tracking-wider mb-1">Nombre
+                                    Legal</p>
+                                <p class="text-sm font-medium text-text-main">Stitch Analytics GmbH</p>
+                            </div>
+                            <div class="pb-3 border-b border-slate-50 last:border-0 last:pb-0">
+                                <p class="text-[10px] text-text-dim uppercase font-bold tracking-wider mb-1">Dirección
+                                </p>
+                                <p class="text-sm font-medium text-text-main text-balance">
+                                    Bahnhofstrasse 10<br />
+                                    8001 Zurich, Switzerland
+                                </p>
+                            </div>
+                            <div class="pb-3 border-b border-slate-50 last:border-0 last:pb-0">
+                                <p class="text-[10px] text-text-dim uppercase font-bold tracking-wider mb-1">VAT / NIF
+                                </p>
+                                <p class="text-sm font-medium text-text-main">CHE-123.456.789</p>
+                            </div>
+                            <div class="pb-3 border-b border-slate-50 last:border-0 last:pb-0">
+                                <p class="text-[10px] text-text-dim uppercase font-bold tracking-wider mb-1">Email de
+                                    Facturación</p>
+                                <p class="text-sm font-medium text-text-main">billing@stitch.ai</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-gradient-to-br from-primary to-[#172554] rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+                        <div class="relative z-10">
+                            <div
+                                class="w-8 h-8 rounded bg-white/10 flex items-center justify-center mb-3 backdrop-blur-sm border border-white/10">
+                                <span class="material-symbols-outlined text-sm text-blue-100">trending_up</span>
+                            </div>
+                            <h4 class="text-sm font-bold mb-1">Aumente su capacidad</h4>
+                            <p class="text-xs text-blue-200 leading-relaxed mb-4">Está cerca del 50% de su límite de
+                                tráfico mensual.</p>
+                            <button
+                                class="w-full py-2 bg-white text-primary text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-blue-50 transition-colors shadow-sm">
+                                Ver Planes Enterprise
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="bg-white border-t border-slate-200 pt-16 pb-10 mt-auto">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 rounded bg-primary flex items-center justify-center text-white">
+                        <span class="material-symbols-outlined text-[14px]">auto_fix_high</span>
+                    </div>
+                    <span class="font-display font-bold text-lg text-text-main">Stitch</span>
+                </div>
+                <div class="flex gap-8">
+                    <a class="text-xs font-medium text-text-muted hover:text-primary transition-colors"
+                        href="#">Términos</a>
+                    <a class="text-xs font-medium text-text-muted hover:text-primary transition-colors"
+                        href="#">Privacidad</a>
+                    <a class="text-xs font-medium text-text-muted hover:text-primary transition-colors"
+                        href="#">Seguridad</a>
+                    <a class="text-xs font-medium text-text-muted hover:text-primary transition-colors"
+                        href="#">Contacto</a>
+                </div>
+                <p class="text-xs text-text-dim font-medium">
+                    © 2023 Stitch AI Inc. Zurich.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

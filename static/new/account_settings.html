@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Perfil de Usuario - Stitch AI</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: "#FFFFFF",
+                        surface: "#F8FAFC", // Slate 50
+                        "surface-highlight": "#F1F5F9", // Slate 100
+                        primary: "#1e3a8a", // Refined Navy Blue
+                        "primary-light": "#3b82f6", // Brighter blue for small accents
+                        "primary-soft": "rgba(30, 58, 138, 0.05)",
+                        text: {
+                            main: "#0F172A", // Slate 900 - Deep, almost black
+                            muted: "#64748B", // Slate 500 - Elegant gray
+                            dim: "#94A3B8"    // Slate 400 - Light gray
+                        },
+                        border: {
+                            light: "#E2E8F0", // Slate 200
+                            subtle: "#F1F5F9" // Slate 100
+                        }
+                    },
+                    fontFamily: {
+                        display: ['"Manrope"', 'sans-serif'],
+                        body: ['"Inter"', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        DEFAULT: "6px",
+                        'lg': "8px",
+                        'xl': "12px",
+                        '2xl': "16px",
+                        '3xl': "24px",
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02)',
+                        'card': '0 10px 15px -3px rgba(0, 0, 0, 0.03), 0 4px 6px -2px rgba(0, 0, 0, 0.02)',
+                        'elevation': '0 25px 50px -12px rgba(15, 23, 42, 0.15)',
+                    }
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            background-color: #F8FAFC;
+            color: #0F172A;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .form-input {
+            border-color: #E2E8F0;
+            background-color: #FFFFFF;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            padding: 0.625rem 1rem;
+            color: #0F172A;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: #1e3a8a;
+            box-shadow: 0 0 0 1px #1e3a8a;
+            outline: none;
+        }
+    </style>
+</head>
+
+<body class="font-body antialiased selection:bg-primary/10 selection:text-primary min-h-screen flex flex-col">
+    <nav class="sticky top-0 w-full z-50 bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-8">
+                    <a class="flex items-center gap-2 group" href="#">
+                        <div
+                            class="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center shadow-sm group-hover:bg-primary/90 transition-colors">
+                            <span class="material-symbols-outlined" style="font-size: 20px;">auto_fix_high</span>
+                        </div>
+                        <span class="font-display font-bold text-lg tracking-tight text-text-main">Stitch<span
+                                class="text-text-muted font-normal">.ai</span></span>
+                    </a>
+                    <div class="hidden md:flex items-center gap-1 pl-6 border-l border-slate-200 h-8">
+                        <a class="px-3 py-1.5 text-sm font-medium text-text-muted hover:text-primary hover:bg-slate-50 rounded-md transition-all"
+                            href="#">Dashboard</a>
+                        <a class="px-3 py-1.5 text-sm font-medium text-text-muted hover:text-primary hover:bg-slate-50 rounded-md transition-all"
+                            href="#">Experimentos</a>
+                        <a class="px-3 py-1.5 text-sm font-medium text-text-muted hover:text-primary hover:bg-slate-50 rounded-md transition-all"
+                            href="#">Reportes</a>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="text-text-muted hover:text-primary transition-colors p-1 relative">
+                        <span class="material-symbols-outlined">notifications</span>
+                        <span
+                            class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                    </button>
+                    <div class="h-8 w-px bg-slate-200 mx-1"></div>
+                    <div
+                        class="flex items-center gap-3 cursor-pointer p-1 pr-2 rounded-lg hover:bg-slate-50 transition-colors">
+                        <div class="w-8 h-8 rounded-full bg-slate-200 overflow-hidden ring-2 ring-white shadow-sm">
+                            <img alt="Avatar" class="w-full h-full object-cover"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdxnUmVKSTCE9ZljmXNxMnCjPtg5MR-msSuhNiQcDwz1HtWmEwbsB1GaAWa1tRfN7CuO28-HnUQoutcnjNiDKffTx-WqpUVnfho94fCTi66c4KoGv5A3U7DQU-oCwN6h3Uw-ClJtESXeOlHqxnTllDqlJv3BiIr1T5PwLJacuIbDUu49_4NbncLy0nO3dSd-CI3RxHBrA7I8OrU8CMWmk5NpnNk1uCJszT6BafRmmMyk7sOggGJeBPHhYGJy9JZxxojT9-sUKk" />
+                        </div>
+                        <div class="hidden sm:block text-left">
+                            <p class="text-xs font-bold text-text-main leading-none">Isabella Wagner</p>
+                            <p class="text-[10px] text-text-muted leading-tight mt-0.5">Product Lead</p>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-text-muted text-sm hidden sm:block">expand_more</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <main class="flex-grow py-12">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="mb-10">
+                <h1 class="text-3xl font-display font-bold text-text-main tracking-tight">Configuración de Perfil</h1>
+                <p class="text-text-muted mt-2 text-sm max-w-2xl">Administre su información personal, preferencias de
+                    seguridad y la configuración de su espacio de trabajo.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <div class="lg:col-span-3 space-y-8">
+                    <nav class="space-y-1">
+                        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white border border-slate-200 shadow-sm text-primary font-medium text-sm transition-all relative overflow-hidden group"
+                            href="#">
+                            <div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+                            <span class="material-symbols-outlined text-[20px]">person</span>
+                            Información General
+                        </a>
+                        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:text-text-main hover:bg-white hover:shadow-sm hover:border-slate-200 border border-transparent font-medium text-sm transition-all"
+                            href="#">
+                            <span class="material-symbols-outlined text-[20px]">lock</span>
+                            Seguridad
+                        </a>
+                        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:text-text-main hover:bg-white hover:shadow-sm hover:border-slate-200 border border-transparent font-medium text-sm transition-all"
+                            href="#">
+                            <span class="material-symbols-outlined text-[20px]">notifications</span>
+                            Notificaciones
+                        </a>
+                        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:text-text-main hover:bg-white hover:shadow-sm hover:border-slate-200 border border-transparent font-medium text-sm transition-all"
+                            href="#">
+                            <span class="material-symbols-outlined text-[20px]">credit_card</span>
+                            Facturación
+                        </a>
+                        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:text-text-main hover:bg-white hover:shadow-sm hover:border-slate-200 border border-transparent font-medium text-sm transition-all"
+                            href="#">
+                            <span class="material-symbols-outlined text-[20px]">group</span>
+                            Equipo
+                        </a>
+                    </nav>
+                    <div
+                        class="bg-gradient-to-br from-primary to-blue-900 rounded-xl p-6 text-white shadow-lg relative overflow-hidden">
+                        <div class="absolute top-0 right-0 -mr-8 -mt-8 w-24 h-24 rounded-full bg-white/10 blur-xl">
+                        </div>
+                        <div class="relative z-10">
+                            <p class="text-xs font-semibold uppercase tracking-wider text-blue-200 mb-2">Plan Actual</p>
+                            <h3 class="text-lg font-display font-bold mb-1">Stitch Professional</h3>
+                            <p class="text-xs text-blue-100 mb-4 opacity-80">Próxima facturación: 24 Oct, 2023</p>
+                            <button
+                                class="w-full py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg text-xs font-bold uppercase tracking-wide transition-colors">Gestionar
+                                Suscripción</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:col-span-9 space-y-6">
+                    <div class="bg-white rounded-xl shadow-card border border-slate-100 p-8">
+                        <div class="flex flex-col sm:flex-row items-center gap-8">
+                            <div class="relative group cursor-pointer">
+                                <div class="w-24 h-24 rounded-full overflow-hidden ring-4 ring-slate-50">
+                                    <img alt="Profile"
+                                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKuKqxBmwfPIhXnv038hJZrmmkHc01B_5H8b6Zm7tuVGxIkr0O9tDRrycWOnYBjrMX4wYFqcpPD09BrLTprj6USWhs2SRvbyYCFZQrwIMiECJWDr6ZZ95G1WFQvUr5kVJvj-SDE1_Y8rNlHlwrQxkHx9d0pkK1IpFl9gUypa2-ObU8vNvjaIHOGxvuWbgZN4I6Fmo_FOK5uArHx2cJp2_sSPY8-crmWQGxzr18njeJiEhs_H-TZzIQRdC25B0rVh-FKkdGkOPP" />
+                                </div>
+                                <div
+                                    class="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <span class="material-symbols-outlined text-white">photo_camera</span>
+                                </div>
+                                <div
+                                    class="absolute bottom-0 right-0 w-7 h-7 bg-white rounded-full border border-slate-200 flex items-center justify-center shadow-sm text-primary">
+                                    <span class="material-symbols-outlined text-sm font-bold">edit</span>
+                                </div>
+                            </div>
+                            <div class="text-center sm:text-left flex-1">
+                                <h2 class="text-lg font-bold text-text-main font-display">Foto de Perfil</h2>
+                                <p class="text-sm text-text-muted mt-1 font-light">Se recomienda una imagen de
+                                    400x400px. <br />Formatos soportados: JPG, PNG, o GIF.</p>
+                                <div class="mt-4 flex gap-3 justify-center sm:justify-start">
+                                    <button
+                                        class="px-4 py-2 bg-white border border-slate-200 text-text-main text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-slate-50 transition-colors shadow-sm">Cambiar</button>
+                                    <button
+                                        class="px-4 py-2 bg-white border border-transparent text-red-600 text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-red-50 transition-colors">Eliminar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-card border border-slate-100 p-8">
+                        <div class="flex items-center justify-between mb-8 pb-4 border-b border-slate-100">
+                            <div>
+                                <h2 class="text-lg font-bold text-text-main font-display">Datos Personales</h2>
+                                <p class="text-sm text-text-muted mt-1 font-light">Información utilizada para la
+                                    comunicación y facturación.</p>
+                            </div>
+                            <span
+                                class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 text-[10px] font-bold uppercase tracking-wider">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Verificado
+                            </span>
+                        </div>
+                        <form class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-text-muted uppercase tracking-wider"
+                                    for="firstname">Nombre</label>
+                                <input class="form-input w-full" id="firstname" type="text" value="Isabella" />
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-text-muted uppercase tracking-wider"
+                                    for="lastname">Apellido</label>
+                                <input class="form-input w-full" id="lastname" type="text" value="Wagner" />
+                            </div>
+                            <div class="space-y-1.5 md:col-span-2">
+                                <label class="block text-xs font-bold text-text-muted uppercase tracking-wider"
+                                    for="email">Correo Electrónico</label>
+                                <div class="relative">
+                                    <div
+                                        class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-text-dim">
+                                        <span class="material-symbols-outlined text-[18px]">mail</span>
+                                    </div>
+                                    <input class="form-input w-full pl-10" id="email" type="email"
+                                        value="isabella.wagner@stitch.ai" />
+                                </div>
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-text-muted uppercase tracking-wider"
+                                    for="role">Cargo / Rol</label>
+                                <input class="form-input w-full" id="role" type="text" value="Product Lead" />
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-text-muted uppercase tracking-wider"
+                                    for="department">Departamento</label>
+                                <select class="form-input w-full text-text-main">
+                                    <option>Product Management</option>
+                                    <option>Engineering</option>
+                                    <option>Marketing</option>
+                                    <option>Design</option>
+                                </select>
+                            </div>
+                            <div class="space-y-1.5 md:col-span-2">
+                                <label class="block text-xs font-bold text-text-muted uppercase tracking-wider"
+                                    for="bio">Bio</label>
+                                <textarea class="form-input w-full h-24 resize-none" id="bio"
+                                    placeholder="Escriba una breve descripción...">Leading product initiatives at Stitch.ai mostly focused on neural engine optimization.</textarea>
+                                <div class="flex justify-end">
+                                    <span class="text-[10px] text-text-dim">84/200 caracteres</span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-card border border-slate-100 p-8">
+                        <div class="mb-6">
+                            <h2 class="text-lg font-bold text-text-main font-display">Preferencias Regionales</h2>
+                            <p class="text-sm text-text-muted mt-1 font-light">Ajuste su zona horaria y formato de
+                                moneda.</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-text-muted uppercase tracking-wider"
+                                    for="language">Idioma</label>
+                                <select class="form-input w-full">
+                                    <option>Español (ES)</option>
+                                    <option>English (US)</option>
+                                    <option>Deutsch (DE)</option>
+                                    <option>Français (FR)</option>
+                                </select>
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-text-muted uppercase tracking-wider"
+                                    for="timezone">Zona Horaria</label>
+                                <select class="form-input w-full">
+                                    <option>(GMT+01:00) Zurich</option>
+                                    <option>(GMT+00:00) London</option>
+                                    <option>(GMT-05:00) New York</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-end gap-4 pt-4">
+                        <button
+                            class="px-6 py-2.5 text-sm font-bold text-text-muted bg-transparent border border-transparent rounded-lg hover:text-text-main hover:bg-slate-100 transition-all">Cancelar</button>
+                        <button
+                            class="px-8 py-2.5 text-sm font-bold text-white bg-primary rounded-lg hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all transform hover:-translate-y-0.5">Guardar
+                            Cambios</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="bg-white border-t border-slate-200 py-10 mt-auto">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded bg-primary/10 flex items-center justify-center text-primary">
+                    <span class="material-symbols-outlined text-[16px]">auto_fix_high</span>
+                </div>
+                <p class="text-xs text-text-muted font-medium">© 2023 Stitch AI Inc.</p>
+            </div>
+            <div class="flex gap-6 text-xs text-text-muted">
+                <a class="hover:text-primary transition-colors" href="#">Soporte</a>
+                <a class="hover:text-primary transition-colors" href="#">Privacidad</a>
+                <a class="hover:text-primary transition-colors" href="#">Términos</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>
