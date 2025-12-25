@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Experiment Details | Samplit</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                extend: {
+                    colors: {
+                        brand: { 50: '#ecf3ff', 500: '#465fff', 600: '#3641f5' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body x-data="{ page: 'experiments', darkMode: localStorage.getItem('darkMode') === 'true' }"
+    :class="{'dark bg-gray-900': darkMode}" x-init="$watch('darkMode', val => localStorage.setItem('darkMode', val))">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <include src="./partials/sidebar.html"></include>
+
+        <!-- Content -->
+        <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+            <!-- Header -->
+            <include src="./partials/header.html"></include>
+
+            <!-- Main -->
+            <main>
+                <div class="mx-auto max-w-7xl p-4 md:p-6 pb-20">
+
+                    <!-- Breadcrumb & Back -->
+                    <div class="mb-6 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <a href="/"
+                                class="p-2 text-gray-500 hover:text-brand-600 rounded-lg hover:bg-gray-100 transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                                </svg>
+                            </a>
+                            <div>
+                                <h2 class="text-xl font-bold text-gray-900 dark:text-white">Experiment Details</h2>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">View performance metrics and audit
+                                    trails</p>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="flex gap-2">
+                            <a href="#" x-data
+                                :href="'/static/visual-editor.html?url=' + new URLSearchParams(window.location.search).get('url')"
+                                class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800">
+                                Edit Visuals
+                            </a>
+                            <button
+                                class="px-4 py-2 bg-brand-500 text-white rounded-lg text-sm font-medium hover:bg-brand-600 transition-colors shadow-sm">
+                                Stop Experiment
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ANALYTICS COMPONENT -->
+                    <include src="./experiment-results.html"></include>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Dependencies -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Chart.js is loaded dynamically by the component, or we can load it here -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="./js/include.js"></script>
+    <script src="./js/core/api.js"></script>
+    <script src="./js/core/app.js"></script>
+
+    <script>
+        // Initialize App
+        document.addEventListener('alpine:init', () => {
+            window.MABApp = new MABApp();
+        });
+    </script>
+</body>
+
+</html>

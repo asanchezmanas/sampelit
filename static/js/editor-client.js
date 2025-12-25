@@ -1,27 +1,25 @@
 /**
- * Samplit Visual Editor Injector
- * 
- * This script is injected into the proxied iframe.
- * It handles element highlighting and selection.
+ * Samplit Visual Editor Client
+ * Injected into the proxied iframe to handle element selection and interaction.
  */
 
 (function () {
-    console.log('[Samplit] Visual Editor Injector Loaded');
+    console.log('[Samplit] Editor Client Initialized');
 
     let hoveredElement = null;
     let selectedElement = null;
 
-    // Helper to generate CSS selector
+    // Helper: Generate unique CSS selector
     function getCssSelector(el) {
-        if (!el || el.tagName.toLowerCase() === 'html') return '';
+        if (!(el instanceof Element)) return;
 
-        let path = [];
+        const path = [];
         while (el.nodeType === Node.ELEMENT_NODE) {
             let selector = el.nodeName.toLowerCase();
             if (el.id) {
                 selector += '#' + el.id;
                 path.unshift(selector);
-                break; // IDs are unique
+                break;
             } else {
                 let sib = el, nth = 1;
                 while (sib = sib.previousElementSibling) {
@@ -33,31 +31,22 @@
             }
             path.unshift(selector);
             el = el.parentNode;
-            if (el.id === 'samplit-overlay-root') break;
         }
         return path.join(" > ");
     }
 
-    document.addEventListener('mouseover', function (e) {
-        // Ignorar scripts y estilos
-        if (['HTML', 'BODY', 'SCRIPT', 'STYLE'].includes(e.target.tagName)) return;
-
-        if (hoveredElement && hoveredElement !== e.target) {
-            hoveredElement.classList.remove('samplit-highlight');
-        }
-
-        hoveredElement = e.target;
-        hoveredElement.classList.add('samplit-highlight');
-    }, true);
-
-    document.addEventListener('mouseout', function (e) {
+    // 1. Highlight on Hover
+    document.addEventListener('mouseover', (e) => {
         if (hoveredElement) {
             hoveredElement.classList.remove('samplit-highlight');
-            hoveredElement = null;
         }
+        hoveredElement = e.target;
+        hoveredElement.classList.add('samplit-highlight');
+        e.stopPropagation();
     }, true);
 
-    document.addEventListener('click', function (e) {
+    // 2. Select on Click
+    document.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -68,22 +57,28 @@
         selectedElement = e.target;
         selectedElement.classList.add('samplit-selected');
 
+        // Send to Parent
         const selector = getCssSelector(selectedElement);
+        const payload = {
+            tagName: selectedElement.tagName,
+            id: selectedElement.id,
+            className: selectedElement.className,
+            innerHTML: selectedElement.innerHTML,
+            innerText: selectedElement.innerText,
+            selector: selector
+        };
 
-        // Send data to parent
+        console.log('[Samplit] Selected:', payload);
+
+        // Post Message to Parent Window (visual-editor.html)
         window.parent.postMessage({
             type: 'SAMPLIT_ELEMENT_SELECTED',
-            payload: {
-                tagName: selectedElement.tagName,
-                selector: selector,
-                innerHTML: selectedElement.innerHTML,
-                innerText: selectedElement.innerText,
-                rect: selectedElement.getBoundingClientRect()
-            }
+            payload: payload
         }, '*');
 
-        console.log('[Samplit] Selected:', selector);
-        return false;
     }, true);
+
+    // 3. Disable Links and Forms
+    document.addEventListener('submit', (e) => e.preventDefault(), true);
 
 })();

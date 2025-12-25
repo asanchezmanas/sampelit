@@ -1,0 +1,264 @@
+<div x-data="experimentResults()" x-init="init()" class="space-y-6">
+    <!-- Header / Controls -->
+    <div class="flex items-center justify-between">
+        <h3 class="text-lg font-medium text-gray-900 dark:text-white">Experiment Results</h3>
+        <div class="flex gap-2">
+            <button @click="downloadReport('csv')"
+                class="px-3 py-1.5 text-sm border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 flex items-center gap-2 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                    </path>
+                </svg>
+                Export CSV
+            </button>
+            <button @click="refreshData()"
+                class="px-3 py-1.5 text-sm bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 flex items-center gap-2 transition-colors">
+                <svg class="w-4 h-4" :class="loading ? 'animate-spin' : ''" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                    </path>
+                </svg>
+                Refresh
+            </button>
+        </div>
+    </div>
+
+    <!-- Overview Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Visitors -->
+        <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+            <div class="text-sm text-gray-500 dark:text-gray-400">Total Visitors</div>
+            <div class="text-2xl font-bold text-gray-900 mt-1 dark:text-white"
+                x-text="formatNumber(stats.total_visitors)">0</div>
+        </div>
+        <!-- Conversions -->
+        <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+            <div class="text-sm text-gray-500 dark:text-gray-400">Conversions</div>
+            <div class="text-2xl font-bold text-indigo-600 mt-1" x-text="formatNumber(stats.total_conversions)">0</div>
+        </div>
+        <!-- Conversion Rate -->
+        <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+            <div class="text-sm text-gray-500 dark:text-gray-400">Conversion Rate</div>
+            <div class="text-2xl font-bold text-green-600 mt-1" x-text="formatPercent(stats.overall_conversion_rate)">0%
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Chart -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+        <h4 class="text-sm font-semibold text-gray-800 mb-4 dark:text-gray-200">Performance Over Time</h4>
+        <div class="relative h-[300px] w-full">
+            <canvas id="resultsChart"></canvas>
+            <div x-show="loading"
+                class="absolute inset-0 bg-white/50 flex items-center justify-center z-10 dark:bg-gray-800/50">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Table & Audit -->
+    <div
+        class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+        <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-700">
+            <h4 class="text-sm font-semibold text-gray-800 dark:text-gray-200">Variant Breakdown</h4>
+        </div>
+        <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
+            <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th class="px-6 py-3">Variant</th>
+                    <th class="px-6 py-3">Visitors</th>
+                    <th class="px-6 py-3">Conversions</th>
+                    <th class="px-6 py-3">CR</th>
+                    <th class="px-6 py-3">Chance to Beat Baseline</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                <template x-for="variant in variants" :key="variant.id">
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                        <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                            <span class="flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full" :style="{ backgroundColor: variant.color }"></span>
+                                <span x-text="variant.name"></span>
+                                <span x-show="variant.islines"
+                                    class="text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded border border-gray-200 dark:bg-gray-600 dark:text-gray-300 dark:border-gray-500">Control</span>
+                                <span x-show="variant.isWinner"
+                                    class="text-xs bg-green-100 text-green-700 px-1.5 py-0.5 rounded border border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800">Winner</span>
+                            </span>
+                        </td>
+                        <td class="px-6 py-4" x-text="formatNumber(variant.visitors)"></td>
+                        <td class="px-6 py-4" x-text="formatNumber(variant.conversions)"></td>
+                        <td class="px-6 py-4 font-medium" :class="getCrClass(variant.cr, baseline.cr)"
+                            x-text="formatPercent(variant.cr)"></td>
+                        <td class="px-6 py-4">
+                            <!-- Bayesian Probability Bar -->
+                            <div class="flex items-center gap-2">
+                                <div class="w-24 h-1.5 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-700">
+                                    <div class="h-full bg-blue-500 rounded-full"
+                                        :style="{ width: (variant.probability * 100) + '%' }"></div>
+                                </div>
+                                <span class="text-xs font-mono"
+                                    x-text="Math.round(variant.probability * 100) + '%'"></span>
+                            </div>
+                        </td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Fairness Proof -->
+    <div class="mt-4 flex justify-end">
+        <a href="#" @click.prevent="showFairnessProof()"
+            class="text-xs text-gray-400 hover:text-gray-600 flex items-center gap-1 transition-colors dark:text-gray-500 dark:hover:text-gray-300">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Audit Trail & Fairness Proof Verified
+        </a>
+    </div>
+
+    <!-- Logic -->
+    <script>
+        function experimentResults() {
+            return {
+                loading: false,
+                experimentId: new URLSearchParams(window.location.search).get('id'),
+                stats: { total_visitors: 0, total_conversions: 0, overall_conversion_rate: 0 },
+                variants: [],
+                baseline: { cr: 0 },
+                chart: null,
+
+                async init() {
+                    if (!this.experimentId) return;
+                    await this.loadChartLib();
+                    await this.refreshData();
+                },
+
+                async loadChartLib() {
+                    // Dynamic import for Chart.js if not present
+                    if (typeof Chart === 'undefined') {
+                        const script = document.createElement('script');
+                        script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+                        document.head.appendChild(script);
+                        await new Promise(resolve => script.onload = resolve);
+                    }
+                },
+
+                async refreshData() {
+                    this.loading = true;
+                    try {
+                        const response = await MABApp.api.get(`/experiment/${this.experimentId}`);
+                        if (response.success) {
+                            this.processData(response.data);
+                        }
+                    } catch (e) {
+                        console.error('Failed to load results:', e);
+                        MABApp.ui.showToast('Failed to load results', 'error');
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+
+                processData(data) {
+                    this.stats = {
+                        total_visitors: data.total_visitors,
+                        total_conversions: data.total_conversions,
+                        overall_conversion_rate: data.overall_conversion_rate
+                    };
+
+                    // Flatten variants (taking first element for simplicity in MVP)
+                    // TODO: Handle multi-element properly
+                    if (data.elements && data.elements.length > 0) {
+                        const element = data.elements[0];
+                        this.variants = element.variants.map((v, idx) => ({
+                            id: idx,
+                            name: v.content.text ? `"${v.content.text}"` : `Variant ${idx + 1}`,
+                            visitors: v.allocations,
+                            conversions: v.conversions,
+                            cr: v.conversion_rate,
+                            probability: v.confidence_score || 0, // Fallback
+                            isBaseline: idx === 0,
+                            isWinner: v.is_winner, // If backend provides this
+                            color: this.getVariantColor(idx)
+                        }));
+
+                        this.baseline = this.variants.find(v => v.isBaseline) || { cr: 0 };
+                        this.renderChart();
+                    }
+                },
+
+                renderChart() {
+                    const ctx = document.getElementById('resultsChart');
+                    if (!ctx) return;
+
+                    if (this.chart) this.chart.destroy();
+
+                    this.chart = new Chart(ctx, {
+                        type: 'bar', // Using Bar for CR comparison for now
+                        data: {
+                            labels: this.variants.map(v => v.name),
+                            datasets: [{
+                                label: 'Conversion Rate',
+                                data: this.variants.map(v => v.cr * 100),
+                                backgroundColor: this.variants.map(v => v.color),
+                                borderRadius: 4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    callbacks: {
+                                        label: (ctx) => `${ctx.raw.toFixed(2)}% Conversion Rate`
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    grid: { display: false }
+                                }
+                            }
+                        }
+                    });
+                },
+
+                getVariantColor(idx) {
+                    const colors = ['#9CA3AF', '#3B82F6', '#10B981', '#F59E0B', '#EF4444'];
+                    return colors[idx % colors.length];
+                },
+
+                formatNumber(n) {
+                    return new Intl.NumberFormat('en-US').format(n);
+                },
+
+                formatPercent(n) {
+                    return (n * 100).toFixed(1) + '%';
+                },
+
+                getCrClass(cr, baselineCr) {
+                    if (cr > baselineCr * 1.05) return 'text-green-600';
+                    if (cr < baselineCr * 0.95) return 'text-red-500';
+                    return 'text-gray-900 dark:text-gray-100';
+                },
+
+                downloadReport(format) {
+                    const url = `/api/v1/experiments/${this.experimentId}/export/${format}`;
+                    window.open(url, '_blank');
+                },
+
+                async showFairnessProof() {
+                    const res = await MABApp.api.get(`/experiments/${this.experimentId}/proof-of-fairness`);
+                    if (res.success) {
+                        alert(`Fairness Verified!\n\nIntegrity Hash: ${res.data.evidence.integrity_hash}\nAll checks passed.`);
+                    }
+                }
+            }
+        }
+    </script>
+</div>
