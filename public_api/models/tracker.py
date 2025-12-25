@@ -3,7 +3,7 @@
 Models for the JavaScript tracker and event collection.
 """
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional, Dict, Any, List
 from datetime import datetime
 
@@ -16,14 +16,16 @@ class TrackerAssignmentRequest(BaseModel):
     session_id: Optional[str] = Field(None, max_length=255)
     context: Optional[Dict[str, Any]] = None
     
-    @validator('installation_token')
-    def validate_token(cls, v):
+    @field_validator('installation_token')
+    @classmethod
+    def validate_token(cls, v: str) -> str:
         if not v or v.strip() == '':
             raise ValueError("installation_token cannot be empty")
         return v.strip()
     
-    @validator('user_identifier')
-    def validate_user(cls, v):
+    @field_validator('user_identifier')
+    @classmethod
+    def validate_user(cls, v: str) -> str:
         if not v or v.strip() == '':
             raise ValueError("user_identifier cannot be empty")
         return v.strip()
@@ -37,14 +39,16 @@ class TrackerConversionRequest(BaseModel):
     conversion_value: Optional[float] = Field(None, ge=0)
     metadata: Optional[Dict[str, Any]] = None
     
-    @validator('installation_token')
-    def validate_token(cls, v):
+    @field_validator('installation_token')
+    @classmethod
+    def validate_token(cls, v: str) -> str:
         if not v or v.strip() == '':
             raise ValueError("installation_token cannot be empty")
         return v.strip()
     
-    @validator('user_identifier')
-    def validate_user(cls, v):
+    @field_validator('user_identifier')
+    @classmethod
+    def validate_user(cls, v: str) -> str:
         if not v or v.strip() == '':
             raise ValueError("user_identifier cannot be empty")
         return v.strip()
@@ -78,8 +82,9 @@ class ActiveExperimentsRequest(BaseModel):
     installation_token: str = Field(..., min_length=1)
     page_url: Optional[str] = None
     
-    @validator('installation_token')
-    def validate_token(cls, v):
+    @field_validator('installation_token')
+    @classmethod
+    def validate_token(cls, v: str) -> str:
         if not v or v.strip() == '':
             raise ValueError("installation_token cannot be empty")
         return v.strip()

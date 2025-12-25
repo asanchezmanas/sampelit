@@ -3,7 +3,7 @@
 Lead capture models for email signup and waitlist management.
 """
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, ConfigDict
 from typing import Optional
 from datetime import datetime
 from enum import Enum
@@ -29,14 +29,15 @@ class LeadCaptureRequest(BaseModel):
     utm_medium: Optional[str] = None
     utm_campaign: Optional[str] = None
     
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "email": "user@example.com",
                 "source": "simulator",
                 "variant": "headline_v2"
             }
         }
+    )
 
 
 class LeadCaptureResponse(BaseModel):
@@ -45,14 +46,15 @@ class LeadCaptureResponse(BaseModel):
     message: str = "You're on the list. We'll be in touch."
     lead_id: Optional[str] = None
     
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "success": True,
                 "message": "You're on the list. We'll be in touch.",
                 "lead_id": "lead_abc123"
             }
         }
+    )
 
 
 class LeadDetail(BaseModel):

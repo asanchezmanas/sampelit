@@ -26,13 +26,13 @@ class ElementSpec(BaseModel):
     name: str = Field(..., min_length=1, max_length=255)
     selector: SelectorSpec
     category: str = Field(..., pattern="^(text|image|button|div|section|other)$")
-    variations: List[ContentPayload] = Field(..., min_items=2)
+    variations: List[ContentPayload] = Field(..., min_length=2)
 
 class MultiElementOrchestrationRequest(BaseModel):
     """Full orchestration request for high-dimensional experiments"""
     name: str = Field(..., min_length=3, max_length=255)
     description: Optional[str] = Field(None, max_length=2000)
-    elements: List[ElementSpec] = Field(..., min_items=1)
+    elements: List[ElementSpec] = Field(..., min_length=1)
     protocol: OptimizationProtocol = OptimizationProtocol.INDEPENDENT
     target_url: str = Field(..., min_length=1)
     allocation: float = Field(1.0, ge=0.0, le=1.0)

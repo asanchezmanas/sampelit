@@ -3,7 +3,7 @@
 Common response models used across all endpoints.
 """
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Any, Dict, List, Optional, TypeVar, Generic
 from datetime import datetime, timezone
 
@@ -16,14 +16,15 @@ class APIResponse(BaseModel):
     message: str = "OK"
     data: Optional[Any] = None
     
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "success": True,
                 "message": "Operation completed",
                 "data": {"id": "abc123"}
             }
         }
+    )
 
 
 class ErrorResponse(BaseModel):
@@ -34,8 +35,8 @@ class ErrorResponse(BaseModel):
     details: Optional[Dict[str, Any]] = None
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "success": False,
                 "error": "Resource not found",
@@ -44,6 +45,7 @@ class ErrorResponse(BaseModel):
                 "timestamp": "2025-01-01T00:00:00Z"
             }
         }
+    )
 
 
 class PaginatedResponse(BaseModel, Generic[T]):
@@ -67,8 +69,8 @@ class HealthResponse(BaseModel):
     cache: bool = True
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "status": "healthy",
                 "version": "1.0.0",
@@ -77,6 +79,7 @@ class HealthResponse(BaseModel):
                 "timestamp": "2025-01-01T00:00:00Z"
             }
         }
+    )
 
 class ErrorCodes:
     """Standard error codes for consistent error handling"""

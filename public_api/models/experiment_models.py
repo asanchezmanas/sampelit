@@ -7,7 +7,7 @@ Simplificación: eliminamos la distinción entre "traditional" y "multi-element"
 TODO es multi-elemento, solo que algunos experimentos tienen 1 elemento y otros varios.
 """
 
-from pydantic import BaseModel, Field, validator, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 from enum import Enum
@@ -49,14 +49,15 @@ class SelectorConfig(BaseModel):
     selector: str
     fallback_selectors: List[str] = Field(default_factory=list)
     
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "type": "css",
                 "selector": "#hero-cta",
                 "fallback_selectors": [".cta-button", "[data-test='cta']"]
             }
         }
+    )
 
 class VariantContent(BaseModel):
     """Contenido de una variante"""
@@ -66,13 +67,14 @@ class VariantContent(BaseModel):
     styles: Optional[Dict[str, str]] = None
     image_url: Optional[str] = None
     
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "text": "Get Started Free",
                 "styles": {"background": "#FF5733", "color": "white"}
             }
         }
+    )
 
 class ElementConfig(BaseModel):
     """Configuración de un elemento testeable"""
@@ -90,8 +92,8 @@ class ElementConfig(BaseModel):
         return v
 
     
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "name": "Hero CTA Button",
                 "selector": {
@@ -109,6 +111,7 @@ class ElementConfig(BaseModel):
                 ]
             }
         }
+    )
 
 # ============================================
 # EXPERIMENT REQUESTS
@@ -135,8 +138,8 @@ class CreateExperimentRequest(BaseModel):
         return v
 
     
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "name": "Homepage CTA Test",
                 "description": "Testing different CTA button texts",
@@ -155,12 +158,14 @@ class CreateExperimentRequest(BaseModel):
                 ]
             }
         }
+    )
 
 class UpdateExperimentRequest(BaseModel):
     """Actualizar experimento"""
     name: Optional[str] = Field(None, min_length=3, max_length=255)
     description: Optional[str] = None
     traffic_allocation: Optional[float] = Field(None, ge=0.0, le=1.0)
+
 
 # ============================================
 # EXPERIMENT RESPONSES
