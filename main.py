@@ -327,6 +327,14 @@ app.include_router(
     tags=["Simulator"]
 )
 
+# ✅ Funnels & Sequential Experiments
+from public_api.routers import funnels
+app.include_router(
+    funnels.router,
+    prefix=f"{settings.API_V1_PREFIX}/funnels",
+    tags=["Funnels"]
+)
+
 # Admin Endpoints (Protected)
 app.include_router(
     leads.router,
