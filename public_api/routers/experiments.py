@@ -40,33 +40,48 @@ async def create_experiment(
 ):
     """Create new experiment and initialize optimization strategy"""
     try:
-        service = await ServiceFactory.create_experiment_service(db)
+        from orchestration.services.multi_element_service import create_multi_element_service
         
-        # Convert variants to dict format for service
-        variants_data = [
-            {
-                'name': v.name,
-                'description': v.description,
-                'content': v.content
-            }
-            for v in request.variants
-        ]
+        # 1. Create base experiment in main repo
+        from data_access.repositories.experiment_repository import ExperimentRepository
+        exp_repo = ExperimentRepository(db.pool)
         
-        result = await service.create_experiment(
-            user_id=user_id,
-            name=request.name,
-            description=request.description,
-            variants_data=variants_data,
-            config=request.config or {},
-            target_url=request.target_url
+        experiment_id = await exp_repo.create({
+            "user_id": user_id,
+            "name": request.name,
+            "description": request.description,
+            "url": request.url,
+            "status": "draft"
+        })
+        
+        # 2. Use MultiElementService to handle elements and variants
+        service = await create_multi_element_service(db)
+        
+        elements_config = []
+        for elem in request.elements:
+            elements_config.append({
+                'name': elem.name,
+                'selector': {
+                    'type': elem.selector.type.value if hasattr(elem.selector.type, 'value') else elem.selector.type,
+                    'selector': elem.selector.selector
+                },
+                'element_type': elem.element_type.value if hasattr(elem.element_type, 'value') else elem.element_type,
+                'original_content': elem.original_content.dict(),
+                'variants': [v.dict() for v in elem.variants]
+            })
+            
+        result = await service.create_multi_element_experiment(
+            experiment_id=experiment_id,
+            elements_config=elements_config,
+            combination_mode="independent"  # Default for now
         )
         
         return APIResponse(
             success=True,
             message="Experiment created successfully",
             data={
-                "experiment_id": result['experiment_id'],
-                "variant_ids": result['variant_ids']
+                "id": experiment_id,
+                "elements": result['elements']
             }
         )
         

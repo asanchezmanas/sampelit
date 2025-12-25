@@ -771,9 +771,10 @@ class MultiElementService:
 async def create_multi_element_service(db_pool):
     """Factory function para crear el servicio"""
     from data_access.repositories.variant_repository import VariantRepository
-    from data_access.repositories.allocation_repository import AllocationRepository
+    from data_access.repositories.assignment_repository import AssignmentRepository
     
     variant_repo = VariantRepository(db_pool)
-    assignment_repo = AllocationRepository(db_pool)
+    assignment_repo = AssignmentRepository(db_pool)
     
     return MultiElementService(db_pool, variant_repo, assignment_repo)
+
