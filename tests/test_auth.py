@@ -11,6 +11,8 @@ class TestAuth:
             "password": "SecurePass123!",
             "name": "Test User"
         })
+        if response.status_code != 200:
+            print(f"DEBUG: Register Success failed: {response.status_code} - {response.text}")
         assert response.status_code == 200
         data = response.json()
         assert "token" in data
@@ -21,7 +23,7 @@ class TestAuth:
         response = client.post("/api/v1/auth/register", json={
             "email": "invalid-email",
             "password": "Pass123!",
-            "full_name": "Test User"
+            "name": "Test User"
         })
         assert response.status_code == 422  # Validation error
     
@@ -30,7 +32,7 @@ class TestAuth:
         response = client.post("/api/v1/auth/register", json={
             "email": f"test_{uuid.uuid4()}@example.com",
             "password": "weak",
-            "full_name": "Test User"
+            "name": "Test User"
         })
         # Should fail validation or return error
         assert response.status_code in [400, 422]
@@ -52,6 +54,8 @@ class TestAuth:
             "email": email,
             "password": password
         })
+        if response.status_code != 200:
+            print(f"DEBUG: Login Success failed: {response.status_code} - {response.text}")
         assert response.status_code == 200
         data = response.json()
         assert "token" in data

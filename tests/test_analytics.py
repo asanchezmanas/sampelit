@@ -111,5 +111,5 @@ class TestAnalyticsService:
         )
         
         # 150/1000 = 15% vs 10% baseline should be significant
-        assert is_sig is True
+        assert is_sig == True
         assert p_value < 0.05

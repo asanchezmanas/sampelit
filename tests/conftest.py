@@ -25,8 +25,9 @@ def event_loop():
 
 @pytest.fixture
 def client():
-    """Provide FastAPI test client"""
-    return TestClient(app, base_url="http://localhost")
+    """Provide FastAPI test client with lifespan support"""
+    with TestClient(app, base_url="http://localhost") as c:
+        yield c
 
 @pytest.fixture
 def auth_token(client):

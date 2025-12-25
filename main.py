@@ -99,8 +99,7 @@ async def lifespan(app: FastAPI):
     # Shutdown metrics monitoring
     await ServiceFactory.shutdown()
     
-    # We don't close the singleton here as it might be shared across tests
-    # await db.close()
+    await db.close()
     logger.info("Samplit Platform stopped")
 
 # ════════════════════════════════════════════════════════════════════════════
@@ -207,6 +206,7 @@ async def general_exception_handler(request: Request, exc: Exception):
         )
     # Development: Show details
     else:
+        print(f"DEBUG EXCEPTION: {type(exc).__name__}: {str(exc)}")
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={

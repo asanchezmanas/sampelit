@@ -87,6 +87,12 @@ class Settings(BaseSettings):
         default="",
         env="SUPABASE_SERVICE_KEY"
     )
+
+    SUPABASE_JWT_SECRET: str = Field(
+        default="temporary-jwt-secret-for-development-32-chars",
+        env="SUPABASE_JWT_SECRET",
+        min_length=32
+    )
     
     # ─────────────────────────────────────────────────────────────
     # Redis

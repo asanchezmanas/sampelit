@@ -88,10 +88,11 @@ class ErrorHandlerMiddleware(BaseHTTPMiddleware):
                 status_code=500,
                 content={
                     "success": False,
-                    "error": "An unexpected error occurred",
+                    "error": str(e),
                     "code": "INTERNAL_ERROR",
                     "error_id": error_id,
-                    "timestamp": datetime.utcnow().isoformat()
+                    "type": type(e).__name__,
+                    "timestamp": datetime.now(timezone.utc).isoformat()
                 }
             )
 

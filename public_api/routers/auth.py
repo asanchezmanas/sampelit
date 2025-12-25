@@ -30,6 +30,7 @@ class LoginRequest(BaseModel):
     password: str = Field(..., min_length=1, max_length=100)
 
 class AuthResponse(BaseModel):
+    success: bool = True
     token: str
     user_id: str
     email: str
