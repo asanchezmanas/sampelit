@@ -1,24 +1,29 @@
-# Samplit Business Operations
+# 📚 Samplit Documentation
 
-Documentación de negocio para operación como fundador solo.
+Welcome to the project documentation.
 
-## Estructura
+## 🛠 Technical Documentation
 
-```
-docs/
-├── business/
-│   ├── solo-founder-playbook.md   # Guía táctica completa
-│   ├── pricing-strategy.md        # Estrategia de precios
-│   ├── growth-tactics.md          # Tácticas de crecimiento
-│   └── reinvestment-plan.md       # Plan de reinversión
-└── technical/
-    ├── faq_installation.md
-    └── guia_instalacion_desarrolladores.md
-```
+| Document | Description |
+|----------|-------------|
+| **[Backend Architecture](technical/backend_architecture.md)** | System overview, Data Models, API structure, and Bandit algorithms. |
+| **[Frontend Architecture](technical/frontend_architecture.md)** | "State of the Art" UI patterns, Alpine.js usage, and Visual Editor proxy. |
+| **[Testing Strategy](technical/testing_strategy.md)** | Full testing stack (Pytest, Playwright), coverage goals, and examples. |
+| **[Database Optimization](technical/database_optimization.md)** | Optimization plans, Indexes, and Realtime setup. |
+| **[Deployment Guide](technical/deployment_guide.md)** | Operations strategy for Render + Supabase (Blue/Green, PITR). |
+| **[Database Schema](database_schema.md)** | Entity-Relationship Diagram and Schema Reference. |
 
-## Principios Operativos
+## 📅 Releases
 
-1. **Async-first**: Sin llamadas, todo por email/chat
-2. **Self-service**: El producto debe venderse solo
-3. **Automatización**: Minimizar tareas manuales
-4. **Transparencia**: Publicar métricas y experimentos
+| Document | Description |
+|----------|-------------|
+| **[v1.0 Release Notes](release_notes.md)** | Features, Known Issues, and Future Scope. |
+
+## 💼 Business & Product
+
+*See [business/](business/) folder for Strategy, Monetization, and Legal documents.*
+
+---
+
+**Version**: 1.0
+**Status**: Stable (Release)

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Profile Settings - A/B AI Tester</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Tailwind Config -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1152d4",
+                        "primary-hover": "#0e44b0",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622", // Deep charcoal/black
+                        "surface-dark": "#192233",    // Slightly lighter for cards
+                        "border-dark": "#232f48",     // Border color
+                        "text-secondary": "#92a4c9",  // Muted text
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Custom scrollbar for dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #101622;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #232f48;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #324467;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white min-h-screen flex flex-col font-display selection:bg-primary selection:text-white">
+    <!-- Top Navigation -->
+    <header
+        class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-border-dark bg-background-dark/95 backdrop-blur-sm px-6 py-3 lg:px-10">
+        <div class="flex items-center gap-4 text-white">
+            <div class="size-8 flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-3xl">science</span>
+            </div>
+            <h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">A/B AI Tester</h2>
+        </div>
+        <div class="flex flex-1 justify-end gap-8">
+            <nav class="hidden md:flex items-center gap-9">
+                <a class="text-text-secondary hover:text-white transition-colors text-sm font-medium leading-normal flex items-center gap-2"
+                    href="#">
+                    <span class="material-symbols-outlined text-[20px]">dashboard</span>
+                    Dashboard
+                </a>
+                <a class="text-text-secondary hover:text-white transition-colors text-sm font-medium leading-normal flex items-center gap-2"
+                    href="#">
+                    <span class="material-symbols-outlined text-[20px]">experiment</span>
+                    Experiments
+                </a>
+                <a class="text-text-secondary hover:text-white transition-colors text-sm font-medium leading-normal flex items-center gap-2"
+                    href="#">
+                    <span class="material-symbols-outlined text-[20px]">analytics</span>
+                    Results
+                </a>
+                <a class="text-white text-sm font-medium leading-normal flex items-center gap-2" href="#">
+                    <span class="material-symbols-outlined text-[20px] fill-1">person</span>
+                    Profile
+                </a>
+            </nav>
+            <div class="flex items-center gap-4">
+                <button
+                    class="hidden sm:flex h-10 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-primary hover:bg-primary-hover transition-colors px-4 text-white text-sm font-bold leading-normal tracking-[0.015em]">
+                    <span class="truncate">New Experiment</span>
+                </button>
+                <div class="bg-center bg-no-repeat bg-cover rounded-full size-10 border border-border-dark"
+                    data-alt="User avatar placeholder with abstract gradient"
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBMEw0C6fibAJ_mmqg_tK2UXDKWOALAZin3RtEJp4fc51N_LkOha6y_PhuLhCa2uGLGPRANvqj0bOlOub9gTO73zVv_xZW34a_ziTZCXWIc1ItJkzioL7l2QsGHsI4qjrBKlEtoG7W3dwt5Wme-pd5PPR9cU_CSa04BIukmAhJoiA6ac1kZnRe27FmUunZzBuEoF2WZslGWNNwadQou6TO6eiNtojN6_sOvYFdA4MC07Ye4s_RZV7fXOMv5Txvk7qXAiVcHCMZ0");'>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Main Layout -->
+    <div class="flex flex-1 w-full max-w-[1440px] mx-auto p-4 md:p-6 lg:p-10 gap-8">
+        <!-- Sidebar Navigation (Desktop) -->
+        <aside class="hidden lg:flex w-64 flex-col gap-6 shrink-0">
+            <!-- User Summary Card -->
+            <div class="flex items-center gap-3 p-4 rounded-xl bg-surface-dark border border-border-dark">
+                <div class="bg-center bg-no-repeat bg-cover rounded-full size-12" data-alt="Small user avatar"
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD2pQfeM2yjG4gs80ykST_WvuB1yu8bceLW1jrC_g12xOz48TXEWnFV9bY-R6RFQJA5EILR8Y0xB6Am815_ngkCCHEPlL9QtVxDkf0cgQP4Hvg-D6-NDn6nzV4jE7M2MJLBbQ1xcL8RnilMaQRF90rVEd2jXgXuKHPtK8SWYmmKxuFhjcGWrFDJcI4oJ30JO_7MjXM6oZJ6RCSLFn4FZBJARaNpaIIbJPrWwf65hQFP2AGG4fz0tdkrTsRUTeNAMWVIq_INq1uU");'>
+                </div>
+                <div class="flex flex-col overflow-hidden">
+                    <h1 class="text-white text-sm font-bold truncate">Alex Morgan</h1>
+                    <p class="text-text-secondary text-xs truncate">Admin Role</p>
+                </div>
+            </div>
+            <!-- Navigation Links -->
+            <nav class="flex flex-col gap-2">
+                <p class="px-3 text-xs font-bold text-text-secondary uppercase tracking-wider mb-2">Settings</p>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 text-primary border border-primary/20 transition-all"
+                    href="#">
+                    <span class="material-symbols-outlined text-[22px] fill-1">person</span>
+                    <span class="text-sm font-bold">My Profile</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-secondary hover:text-white hover:bg-surface-dark transition-all"
+                    href="#">
+                    <span class="material-symbols-outlined text-[22px]">lock</span>
+                    <span class="text-sm font-medium">Security</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-secondary hover:text-white hover:bg-surface-dark transition-all"
+                    href="#">
+                    <span class="material-symbols-outlined text-[22px]">credit_card</span>
+                    <span class="text-sm font-medium">Billing &amp; Plans</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-secondary hover:text-white hover:bg-surface-dark transition-all"
+                    href="#">
+                    <span class="material-symbols-outlined text-[22px]">notifications</span>
+                    <span class="text-sm font-medium">Notifications</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-secondary hover:text-white hover:bg-surface-dark transition-all"
+                    href="#">
+                    <span class="material-symbols-outlined text-[22px]">group</span>
+                    <span class="text-sm font-medium">Team Members</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-secondary hover:text-white hover:bg-surface-dark transition-all"
+                    href="#">
+                    <span class="material-symbols-outlined text-[22px]">extension</span>
+                    <span class="text-sm font-medium">Integrations</span>
+                </a>
+            </nav>
+        </aside>
+        <!-- Main Content Area -->
+        <main class="flex-1 flex flex-col gap-8 min-w-0">
+            <!-- Page Heading -->
+            <div class="flex flex-col gap-2">
+                <h1 class="text-white text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em]">Profile
+                    Settings</h1>
+                <p class="text-text-secondary text-base font-normal">Manage your personal information, AI preferences,
+                    and account security.</p>
+            </div>
+            <!-- Profile Header Card -->
+            <section class="rounded-2xl bg-surface-dark border border-border-dark p-6 md:p-8">
+                <div class="flex flex-col md:flex-row gap-6 md:items-center justify-between">
+                    <div class="flex gap-5 items-center">
+                        <div class="relative group">
+                            <div class="bg-center bg-no-repeat bg-cover rounded-full size-24 md:size-32 border-4 border-background-dark shadow-xl"
+                                data-alt="Large profile picture of Alex Morgan"
+                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCG7dv8rUTIdwCU_JJX9Tlan0ShZBjtxsUyOtvS2elXK6synHNgK5nUES8tNr2chnJ4AbSnlV8UQNuXg8-XtkuUhPkoXg99gR6oDyLk7koykw2SfCO5EOX9510_i16ah7xFAcz4GLtMAxRlhPLYk90epNlL27tJBEfB8H3yylSnaLUD8SnuydPZUoTi9zD5sFLucKVdJD9qFe6kIziRpaI4K5CwEZz4wVKeniey5uArQB_9k2CHIQkO4qZd0NwuxINN0DP_Mfhu");'>
+                            </div>
+                            <button
+                                class="absolute bottom-1 right-1 bg-primary text-white p-1.5 rounded-full border-2 border-background-dark hover:bg-primary-hover transition-colors shadow-sm"
+                                title="Change Photo">
+                                <span class="material-symbols-outlined text-[18px]">edit</span>
+                            </button>
+                        </div>
+                        <div class="flex flex-col justify-center gap-1">
+                            <h2 class="text-white text-xl md:text-2xl font-bold">Alex Morgan</h2>
+                            <p class="text-text-secondary text-sm md:text-base font-medium">Senior Product Manager</p>
+                            <div class="flex items-center gap-1.5 mt-1 text-text-secondary text-xs md:text-sm">
+                                <span class="material-symbols-outlined text-[16px]">calendar_month</span>
+                                <span>Member since Jan 2023</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-2 md:mt-0">
+                        <button
+                            class="flex-1 md:flex-auto h-10 px-4 items-center justify-center rounded-lg bg-border-dark hover:bg-[#324467] text-white text-sm font-bold transition-colors">
+                            Remove Photo
+                        </button>
+                        <button
+                            class="flex-1 md:flex-auto h-10 px-4 items-center justify-center rounded-lg bg-primary hover:bg-primary-hover text-white text-sm font-bold shadow-lg shadow-primary/20 transition-colors">
+                            Upload New
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <!-- Personal Information Form -->
+            <section class="rounded-2xl bg-surface-dark border border-border-dark p-6 md:p-8 flex flex-col gap-6">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-white">Personal Information</h3>
+                    <span class="text-text-secondary text-sm cursor-pointer hover:text-white transition-colors">Edit
+                        Details</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <label class="flex flex-col gap-2">
+                        <span class="text-text-secondary text-sm font-semibold">First Name</span>
+                        <input
+                            class="form-input w-full rounded-lg border-border-dark bg-background-dark text-white placeholder-text-secondary focus:border-primary focus:ring-1 focus:ring-primary transition-all h-12 px-4"
+                            type="text" value="Alex" />
+                    </label>
+                    <label class="flex flex-col gap-2">
+                        <span class="text-text-secondary text-sm font-semibold">Last Name</span>
+                        <input
+                            class="form-input w-full rounded-lg border-border-dark bg-background-dark text-white placeholder-text-secondary focus:border-primary focus:ring-1 focus:ring-primary transition-all h-12 px-4"
+                            type="text" value="Morgan" />
+                    </label>
+                    <label class="flex flex-col gap-2">
+                        <span class="text-text-secondary text-sm font-semibold">Email Address</span>
+                        <div class="relative">
+                            <span
+                                class="absolute left-4 top-3 text-text-secondary material-symbols-outlined text-[20px]">mail</span>
+                            <input
+                                class="form-input w-full rounded-lg border-border-dark bg-background-dark text-white placeholder-text-secondary focus:border-primary focus:ring-1 focus:ring-primary transition-all h-12 pl-11 pr-4"
+                                type="email" value="alex.morgan@company.com" />
+                        </div>
+                    </label>
+                    <label class="flex flex-col gap-2">
+                        <span class="text-text-secondary text-sm font-semibold">Phone Number</span>
+                        <div class="relative">
+                            <span
+                                class="absolute left-4 top-3 text-text-secondary material-symbols-outlined text-[20px]">call</span>
+                            <input
+                                class="form-input w-full rounded-lg border-border-dark bg-background-dark text-white placeholder-text-secondary focus:border-primary focus:ring-1 focus:ring-primary transition-all h-12 pl-11 pr-4"
+                                type="tel" value="+1 (555) 000-0000" />
+                        </div>
+                    </label>
+                    <label class="flex flex-col gap-2">
+                        <span class="text-text-secondary text-sm font-semibold">Job Title</span>
+                        <input
+                            class="form-input w-full rounded-lg border-border-dark bg-background-dark text-white placeholder-text-secondary focus:border-primary focus:ring-1 focus:ring-primary transition-all h-12 px-4"
+                            type="text" value="Senior Product Manager" />
+                    </label>
+                    <label class="flex flex-col gap-2">
+                        <span class="text-text-secondary text-sm font-semibold">Company Name</span>
+                        <input
+                            class="form-input w-full rounded-lg border-border-dark bg-background-dark text-white placeholder-text-secondary focus:border-primary focus:ring-1 focus:ring-primary transition-all h-12 px-4"
+                            type="text" value="TechNova Inc." />
+                    </label>
+                </div>
+            </section>
+            <!-- Settings Grid: Subscription & Preferences -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Subscription Card -->
+                <section class="rounded-2xl bg-surface-dark border border-border-dark p-6 flex flex-col h-full">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">diamond</span>
+                            Current Plan
+                        </h3>
+                        <span
+                            class="px-3 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-bold border border-green-500/20">ACTIVE</span>
+                    </div>
+                    <div class="mb-6">
+                        <p class="text-3xl font-black text-white mb-1">Growth AI</p>
+                        <p class="text-text-secondary text-sm">Ideally for scaling startups.</p>
+                    </div>
+                    <div class="space-y-4 mb-8">
+                        <div>
+                            <div class="flex justify-between text-sm font-medium mb-2">
+                                <span class="text-white">Active Experiments</span>
+                                <span class="text-text-secondary">8 / 10</span>
+                            </div>
+                            <div class="w-full bg-background-dark rounded-full h-2 overflow-hidden">
+                                <div class="bg-primary h-2 rounded-full" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm font-medium mb-2">
+                                <span class="text-white">AI Predictions</span>
+                                <span class="text-text-secondary">2,450 / 5,000</span>
+                            </div>
+                            <div class="w-full bg-background-dark rounded-full h-2 overflow-hidden">
+                                <div class="bg-purple-500 h-2 rounded-full" style="width: 49%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-auto pt-6 border-t border-border-dark flex gap-3">
+                        <button
+                            class="flex-1 py-2.5 rounded-lg bg-background-dark border border-border-dark text-white text-sm font-bold hover:bg-[#232f48] transition-colors">Manage
+                            Billing</button>
+                        <button
+                            class="flex-1 py-2.5 rounded-lg bg-primary text-white text-sm font-bold hover:bg-primary-hover transition-colors shadow-lg shadow-primary/20">Upgrade
+                            Plan</button>
+                    </div>
+                </section>
+                <!-- AI Preferences -->
+                <section class="rounded-2xl bg-surface-dark border border-border-dark p-6 flex flex-col h-full">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">psychology</span>
+                            AI Configuration
+                        </h3>
+                    </div>
+                    <div class="flex flex-col gap-6">
+                        <!-- Toggle Item -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex flex-col gap-1">
+                                <span class="text-white font-medium text-sm">Auto-Pause Low Performing</span>
+                                <span class="text-text-secondary text-xs">Automatically stop variations with &lt; 5%
+                                    conversion chance.</span>
+                            </div>
+                            <!-- Custom Toggle Switch -->
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input checked="" class="sr-only peer" type="checkbox" value="" />
+                                <div
+                                    class="w-11 h-6 bg-background-dark peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                                </div>
+                            </label>
+                        </div>
+                        <!-- Toggle Item -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex flex-col gap-1">
+                                <span class="text-white font-medium text-sm">Suggest Copy Variations</span>
+                                <span class="text-text-secondary text-xs">AI will draft new headlines for
+                                    testing.</span>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input checked="" class="sr-only peer" type="checkbox" value="" />
+                                <div
+                                    class="w-11 h-6 bg-background-dark peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                                </div>
+                            </label>
+                        </div>
+                        <!-- Toggle Item -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex flex-col gap-1">
+                                <span class="text-white font-medium text-sm">Aggressive Optimization</span>
+                                <span class="text-text-secondary text-xs">Faster results with higher traffic allocation
+                                    volatility.</span>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input class="sr-only peer" type="checkbox" value="" />
+                                <div
+                                    class="w-11 h-6 bg-background-dark peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mt-auto pt-6">
+                        <button
+                            class="w-full py-2.5 rounded-lg bg-background-dark border border-border-dark text-text-secondary text-sm font-bold hover:text-white hover:bg-[#232f48] transition-colors flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">tune</span>
+                            Advanced AI Settings
+                        </button>
+                    </div>
+                </section>
+            </div>
+            <!-- Action Footer -->
+            <div
+                class="sticky bottom-0 bg-background-dark/95 backdrop-blur-md border-t border-border-dark -mx-4 md:-mx-10 px-4 md:px-10 py-4 flex justify-between items-center z-10">
+                <p class="text-text-secondary text-sm hidden sm:block">Last saved: Today at 10:23 AM</p>
+                <div class="flex gap-4 w-full sm:w-auto">
+                    <button
+                        class="flex-1 sm:flex-auto min-w-[100px] h-11 rounded-lg border border-border-dark text-white font-bold text-sm hover:bg-surface-dark transition-colors">Cancel</button>
+                    <button
+                        class="flex-1 sm:flex-auto min-w-[140px] h-11 rounded-lg bg-primary text-white font-bold text-sm shadow-lg shadow-primary/25 hover:bg-primary-hover transition-colors">Save
+                        Changes</button>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

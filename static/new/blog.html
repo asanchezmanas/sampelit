@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>OptiMind AI Blog</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8", // Not used heavily in this specific dark design but defined for consistency
+                        "background-dark": "#111722",
+                        "card-dark": "#192233",
+                        "text-secondary": "#92a4c9",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+
+<body class="bg-background-dark text-white">
+    <div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+        <!-- Header -->
+        <div class="layout-container flex w-full flex-col bg-[#111722]">
+            <header
+                class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#232f48] px-4 md:px-10 py-3 max-w-[1440px] mx-auto w-full">
+                <div class="flex items-center gap-4 text-white">
+                    <div class="size-8 text-[#135bec]">
+                        <svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z"
+                                fill="currentColor"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">OptiMind AI</h2>
+                </div>
+                <div class="flex flex-1 justify-end gap-8">
+                    <div class="hidden md:flex items-center gap-9">
+                        <a class="text-white text-sm font-medium leading-normal hover:text-[#135bec] transition-colors"
+                            href="#">Product</a>
+                        <a class="text-white text-sm font-medium leading-normal hover:text-[#135bec] transition-colors"
+                            href="#">Solutions</a>
+                        <a class="text-white text-sm font-medium leading-normal hover:text-[#135bec] transition-colors"
+                            href="#">Pricing</a>
+                        <a class="text-[#135bec] text-sm font-medium leading-normal" href="#">Blog</a>
+                        <a class="text-white text-sm font-medium leading-normal hover:text-[#135bec] transition-colors"
+                            href="#">Docs</a>
+                    </div>
+                    <button
+                        class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#135bec] text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-blue-600 transition-colors">
+                        <span class="truncate">Sign In</span>
+                    </button>
+                </div>
+            </header>
+        </div>
+        <!-- Main Content -->
+        <main class="layout-container flex h-full grow flex-col max-w-[1200px] mx-auto w-full px-4 md:px-8 py-8">
+            <!-- Hero & Search Section -->
+            <div class="flex flex-col gap-6 mb-10">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                    <!-- Heading -->
+                    <div class="flex flex-col gap-3 max-w-2xl">
+                        <p class="text-white text-4xl md:text-5xl font-black leading-tight tracking-[-0.033em]">
+                            Mastering AI-Driven Optimization</p>
+                        <p class="text-[#92a4c9] text-lg font-normal leading-normal">Deep dives into A/B testing,
+                            machine learning algorithms, and conversion rate optimization strategies for modern growth
+                            teams.</p>
+                    </div>
+                    <!-- Search -->
+                    <div class="w-full md:w-auto min-w-[300px]">
+                        <label class="flex flex-col h-12 w-full">
+                            <div
+                                class="flex w-full flex-1 items-stretch rounded-lg h-full border border-[#232f48] bg-[#192233] focus-within:border-[#135bec] transition-colors">
+                                <div class="text-[#92a4c9] flex items-center justify-center pl-4 pr-2">
+                                    <span class="material-symbols-outlined text-[24px]">search</span>
+                                </div>
+                                <input
+                                    class="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-white focus:outline-0 bg-transparent placeholder:text-[#586580] px-2 text-base font-normal leading-normal"
+                                    placeholder="Search articles..." value="" />
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <!-- Chips/Filters -->
+                <div class="flex flex-wrap gap-3 py-2 overflow-x-auto no-scrollbar">
+                    <button
+                        class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#135bec] px-4 transition-transform hover:scale-105 active:scale-95">
+                        <p class="text-white text-sm font-bold leading-normal">All Posts</p>
+                    </button>
+                    <button
+                        class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#232f48] border border-transparent hover:border-[#3e4f6e] px-4 transition-all">
+                        <p class="text-[#92a4c9] text-sm font-medium leading-normal">AI Models</p>
+                    </button>
+                    <button
+                        class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#232f48] border border-transparent hover:border-[#3e4f6e] px-4 transition-all">
+                        <p class="text-[#92a4c9] text-sm font-medium leading-normal">Case Studies</p>
+                    </button>
+                    <button
+                        class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#232f48] border border-transparent hover:border-[#3e4f6e] px-4 transition-all">
+                        <p class="text-[#92a4c9] text-sm font-medium leading-normal">Tutorials</p>
+                    </button>
+                    <button
+                        class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#232f48] border border-transparent hover:border-[#3e4f6e] px-4 transition-all">
+                        <p class="text-[#92a4c9] text-sm font-medium leading-normal">Industry News</p>
+                    </button>
+                    <button
+                        class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#232f48] border border-transparent hover:border-[#3e4f6e] px-4 transition-all">
+                        <p class="text-[#92a4c9] text-sm font-medium leading-normal">Engineering</p>
+                    </button>
+                </div>
+            </div>
+            <!-- Featured Article -->
+            <div class="w-full mb-12 @container">
+                <div
+                    class="flex flex-col md:flex-row items-stretch justify-start rounded-xl shadow-lg bg-[#192233] overflow-hidden hover:shadow-[0_0_20px_rgba(19,91,236,0.15)] transition-shadow duration-300 border border-[#232f48] cursor-pointer group">
+                    <div class="w-full md:w-3/5 bg-center bg-no-repeat bg-cover min-h-[300px] md:min-h-full relative overflow-hidden"
+                        data-alt="Abstract visualization of predictive data analytics with glowing nodes and lines"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBegZGt0Oe1sew4vnJ2hwA0JY5F3gknMtgOIABnyfe-pGKG4mAYpbbRX319QIEx4mDfUd1tc5hySQ3W0NWlP7mT_EeJIh8zh0NrvwNb3sV-7CfP42GjCSs3OU_0OpEMjvACrdgVv8-VKsILJwOGgVME0Xyg6alnF3_zV718QZLAqoGq8W04rLck4bobTJjZltdOqUchHmJOX755bUtUvdsYR-FZouTRwojo9EDgrsWNWpqlwN3xHusjdWt3frRWQ7-jzHKzrMsE");'>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-[#192233] to-transparent md:bg-gradient-to-r md:from-transparent md:to-[#192233] opacity-80 md:opacity-100">
+                        </div>
+                    </div>
+                    <div class="flex w-full md:w-2/5 flex-col items-start justify-center gap-4 p-6 md:p-10 relative">
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="px-2 py-1 rounded text-xs font-bold bg-[#135bec]/20 text-[#135bec] uppercase tracking-wider">Featured</span>
+                            <span class="text-[#586580] text-xs font-medium">5 min read</span>
+                        </div>
+                        <h3
+                            class="text-white text-2xl md:text-3xl font-bold leading-tight tracking-[-0.015em] group-hover:text-[#135bec] transition-colors">
+                            How AI Predicts Winning Variants Before You Finish Testing
+                        </h3>
+                        <p class="text-[#92a4c9] text-base font-normal leading-relaxed line-clamp-3">
+                            Stop wasting traffic on losing variants. Learn how our predictive modeling engine analyzes
+                            early signals to identify high-potential changes, saving you weeks of testing time.
+                        </p>
+                        <div
+                            class="mt-2 flex items-center text-[#135bec] font-bold text-sm gap-1 group-hover:translate-x-1 transition-transform">
+                            Read Article <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Article Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+                <!-- Card 1 -->
+                <div
+                    class="flex flex-col rounded-xl overflow-hidden bg-[#192233] border border-[#232f48] shadow-sm hover:shadow-md hover:border-[#3e4f6e] hover:-translate-y-1 transition-all duration-300 cursor-pointer group h-full">
+                    <div class="w-full aspect-video bg-cover bg-center"
+                        data-alt="Dark abstract geometric shapes representing statistical data"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDeyL6ArExp3lt9YA-PKPNlcV4cnySbsNtMSlTNWgjaXtweqCbRj_5z-2ryl1pB1gbpN6meAOIhldw2qkGIlS0COhgYaeIlr01L48B4PCS9JxWqH9ocnCU0b4detBLA-9ZGKm8GKjh57mbMo5MykSV3g8hFcXGII3NLkMo05dEAQVkhx0LftTsLq1K0wNFhyPArpPjCoCdJYRul0KHL4tckFSjowNHUgq9faDezaqrXSdPtNdtkhAKiw-JCgJ7xVsJjwQ8gERiN");'>
+                    </div>
+                    <div class="flex flex-col flex-1 p-5 gap-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#135bec] text-xs font-bold uppercase tracking-wider">Methodology</span>
+                            <span class="text-[#586580] text-xs">Mar 15, 2024</span>
+                        </div>
+                        <h4
+                            class="text-white text-xl font-bold leading-tight group-hover:text-[#135bec] transition-colors">
+                            The Death of Statistical Significance? New Models Explained
+                        </h4>
+                        <p class="text-[#92a4c9] text-sm leading-relaxed line-clamp-3">
+                            Why traditional frequentist statistics might be holding back your growth velocity, and what
+                            Bayesian models offer instead.
+                        </p>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div
+                    class="flex flex-col rounded-xl overflow-hidden bg-[#192233] border border-[#232f48] shadow-sm hover:shadow-md hover:border-[#3e4f6e] hover:-translate-y-1 transition-all duration-300 cursor-pointer group h-full">
+                    <div class="w-full aspect-video bg-cover bg-center"
+                        data-alt="Futuristic dashboard interface showing growth metrics"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAF7Bf8QDfwDSOXuBu3wcsP_Txz-pxLeXr4DfEZEqRzDRHBGw0CKaXxLJOTL106D52hpDotm7XXXZQwJQegeYI-DMYl57mqCPTSfePgXHf1dIxECQeLZTx-Chj_gve3QQwsVgLdU0FDyl637S3sgKYlNOf6UwOARsvvcCQRWo2v6J_Kp7CrfUCx9w3yT6m8byfs8FNQ3Wgw3SbyKA2bxCE5UUBeIrqYNJkRhE6-JSm9i89DOQlBqyB67V9RtB9Oss1_6yQ3pY9K");'>
+                    </div>
+                    <div class="flex flex-col flex-1 p-5 gap-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#135bec] text-xs font-bold uppercase tracking-wider">Case Study</span>
+                            <span class="text-[#586580] text-xs">Mar 10, 2024</span>
+                        </div>
+                        <h4
+                            class="text-white text-xl font-bold leading-tight group-hover:text-[#135bec] transition-colors">
+                            Increasing SaaS Signups by 45% with Micro-Copy Changes
+                        </h4>
+                        <p class="text-[#92a4c9] text-sm leading-relaxed line-clamp-3">
+                            A detailed breakdown of how a B2B platform used AI suggestions to tweak their CTA copy and
+                            achieved massive results.
+                        </p>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div
+                    class="flex flex-col rounded-xl overflow-hidden bg-[#192233] border border-[#232f48] shadow-sm hover:shadow-md hover:border-[#3e4f6e] hover:-translate-y-1 transition-all duration-300 cursor-pointer group h-full">
+                    <div class="w-full aspect-video bg-cover bg-center"
+                        data-alt="Blue neon circuit board pattern representing machine learning"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBaG1xw5EbMHHhi_nSmvGlKwOnvTPjGnxfs9RbMH4-z_dKzA7ExiU2fbqDBYEmm8IDCsH6k-SEuIS_WkfHPGyRJa8gir2_ATQCZyXU5iwDKiGwjJoU-_o9fr5O6P5C7UUWg4az_YsG-XXQTDJ5TfLtHiJNuc10mruMq1bb4fpiuErGpDVMlHSA2xvVYRjfsJegVEkRdA1d90sMrhShyvTh7H5YGtflcqAFwFYxRHP6WTvzlUVtE2Zn8ZLfkvgymZ-h8G2YI6aHq");'>
+                    </div>
+                    <div class="flex flex-col flex-1 p-5 gap-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#135bec] text-xs font-bold uppercase tracking-wider">Tutorial</span>
+                            <span class="text-[#586580] text-xs">Feb 28, 2024</span>
+                        </div>
+                        <h4
+                            class="text-white text-xl font-bold leading-tight group-hover:text-[#135bec] transition-colors">
+                            Setting Up Your First Multi-Armed Bandit Experiment
+                        </h4>
+                        <p class="text-[#92a4c9] text-sm leading-relaxed line-clamp-3">
+                            Step-by-step guide to configuring dynamic traffic allocation for real-time optimization
+                            campaigns.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- Newsletter CTA -->
+            <div
+                class="w-full rounded-2xl bg-gradient-to-r from-[#135bec] to-[#0f40a8] p-8 md:p-12 mb-16 relative overflow-hidden">
+                <!-- Background abstract shapes -->
+                <div
+                    class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none">
+                </div>
+                <div
+                    class="absolute bottom-0 left-0 w-48 h-48 bg-black opacity-10 rounded-full blur-2xl -ml-10 -mb-10 pointer-events-none">
+                </div>
+                <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div class="flex flex-col gap-2 max-w-lg">
+                        <h3 class="text-white text-2xl md:text-3xl font-black tracking-tight">Stay ahead of the curve
+                        </h3>
+                        <p class="text-blue-100 text-base">Get the latest insights on AI optimization and testing
+                            strategies delivered to your inbox weekly. No spam, just data.</p>
+                    </div>
+                    <div class="w-full md:w-auto flex-shrink-0">
+                        <form class="flex flex-col sm:flex-row gap-3">
+                            <input
+                                class="h-12 px-4 rounded-lg bg-white/10 border border-white/20 text-white placeholder:text-blue-100 focus:outline-none focus:bg-white/20 focus:border-white w-full sm:w-64 backdrop-blur-sm"
+                                placeholder="Enter your work email" required="" type="email" />
+                            <button
+                                class="h-12 px-6 rounded-lg bg-white text-[#135bec] font-bold text-sm hover:bg-gray-100 transition-colors shadow-lg"
+                                type="button">
+                                Subscribe
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- More Articles Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <!-- Card 4 -->
+                <div
+                    class="flex flex-col rounded-xl overflow-hidden bg-[#192233] border border-[#232f48] shadow-sm hover:shadow-md hover:border-[#3e4f6e] hover:-translate-y-1 transition-all duration-300 cursor-pointer group h-full">
+                    <div class="w-full aspect-video bg-cover bg-center" data-alt="Abstract digital network connections"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD0WAN3rIhCIDKjRNARrYbTUdq45pKGEcC8CDM347SvfsTLqkAnYVSnVhu9taZtaiFY3B1Cb0zE1SIe183MYMR1l76PQ3sU7Oym9Puf-YWp-npXmuyS-WYKjr2gvdxOlEeoSyzGNyoGyWgokuwAYC5ZdY8iSo4A56VFl4bz8W3BQpFv--MxY3mptlZMu74tfJAQUrMtSVSw-wjKeFyKeAxCJwj0McMr1VyYrzn5tRTC-HiTpe9LPem5rV7KmuOt7wnRBc6YtI10");'>
+                    </div>
+                    <div class="flex flex-col flex-1 p-5 gap-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#135bec] text-xs font-bold uppercase tracking-wider">Engineering</span>
+                            <span class="text-[#586580] text-xs">Feb 22, 2024</span>
+                        </div>
+                        <h4
+                            class="text-white text-xl font-bold leading-tight group-hover:text-[#135bec] transition-colors">
+                            Reducing Latency in Real-Time Personalization
+                        </h4>
+                        <p class="text-[#92a4c9] text-sm leading-relaxed line-clamp-3">
+                            Technical deep dive into edge computing and how it enables instant A/B test variations
+                            without flickering.
+                        </p>
+                    </div>
+                </div>
+                <!-- Card 5 -->
+                <div
+                    class="flex flex-col rounded-xl overflow-hidden bg-[#192233] border border-[#232f48] shadow-sm hover:shadow-md hover:border-[#3e4f6e] hover:-translate-y-1 transition-all duration-300 cursor-pointer group h-full">
+                    <div class="w-full aspect-video bg-cover bg-center"
+                        data-alt="Data visualization charts on a dark screen"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD_d18ZTFp2BnndM2KODL_d5VHppliEKzaeYMpXOF0Bz5YabSazE7Yt6L8x1jvFr1-Mkbc-bbnBzeN8lEG36AhKKyy5aDN1RkObXhiOTtw13f9gQ6xMO0DyM-6gLKX6WIWB5TVumwh6WSasqZjNAXcaM62SSeh1qk2wkkVnyh2FxTApteDjleqm4JwYLC8SCXzH8FOCw0caxVo4FHrjIza8dME3zYhsyziPemHnbxKJtb2v5UQevKXBqDenkUQJq-oYkZCNsO1C");'>
+                    </div>
+                    <div class="flex flex-col flex-1 p-5 gap-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#135bec] text-xs font-bold uppercase tracking-wider">Industry News</span>
+                            <span class="text-[#586580] text-xs">Feb 15, 2024</span>
+                        </div>
+                        <h4
+                            class="text-white text-xl font-bold leading-tight group-hover:text-[#135bec] transition-colors">
+                            The Future of CRO: Trends to Watch in 2025
+                        </h4>
+                        <p class="text-[#92a4c9] text-sm leading-relaxed line-clamp-3">
+                            Experts weigh in on the shift from manual testing to automated, AI-driven continuous
+                            optimization cycles.
+                        </p>
+                    </div>
+                </div>
+                <!-- Card 6 -->
+                <div
+                    class="flex flex-col rounded-xl overflow-hidden bg-[#192233] border border-[#232f48] shadow-sm hover:shadow-md hover:border-[#3e4f6e] hover:-translate-y-1 transition-all duration-300 cursor-pointer group h-full">
+                    <div class="w-full aspect-video bg-cover bg-center"
+                        data-alt="Abstract 3D rendering of cubes in blue light"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBenXV-H_7CK-PAzF8cknWLzZ_ToWqCgcBtGCsZpGmg0vL45kQl0BZn681CZIDpTqiz4k348vkFApoCMXAk30B4qSD5cvm4mEgS92vyYjZNi55luRsau6YsuksA9U9wCMNC1WwrEBb4TnVG6-lhUtiygrEEzMklWq2x_tp8dTsjLqXTslr_g9Gj7bBvAfWhtS0vpeqF_5nUxINGNUY4VMmrScP874H9wkhATdVrd7nJ2EPlOonOm2q8OIOdNj6Kj976kVovZsYB");'>
+                    </div>
+                    <div class="flex flex-col flex-1 p-5 gap-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#135bec] text-xs font-bold uppercase tracking-wider">Tutorial</span>
+                            <span class="text-[#586580] text-xs">Feb 10, 2024</span>
+                        </div>
+                        <h4
+                            class="text-white text-xl font-bold leading-tight group-hover:text-[#135bec] transition-colors">
+                            Designing High-Converting Landing Pages for SaaS
+                        </h4>
+                        <p class="text-[#92a4c9] text-sm leading-relaxed line-clamp-3">
+                            Frameworks and principles for creating page layouts that are prime candidates for
+                            high-impact testing.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- Pagination/Load More -->
+            <div class="flex justify-center pb-8">
+                <button
+                    class="flex items-center gap-2 px-6 py-3 rounded-lg border border-[#232f48] bg-[#192233] text-white text-sm font-bold hover:bg-[#232f48] hover:border-[#3e4f6e] transition-all">
+                    Load More Articles
+                    <span class="material-symbols-outlined text-lg">expand_more</span>
+                </button>
+            </div>
+        </main>
+        <!-- Footer Simple -->
+        <footer class="border-t border-[#232f48] bg-[#111722] py-8 mt-auto">
+            <div class="max-w-[960px] mx-auto text-center px-4">
+                <div class="flex items-center justify-center gap-2 mb-4 text-white opacity-50">
+                    <div class="size-4">
+                        <svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z"
+                                fill="currentColor"></path>
+                        </svg>
+                    </div>
+                    <span class="font-bold">OptiMind AI</span>
+                </div>
+                <p class="text-[#586580] text-sm">© 2024 OptiMind AI Inc. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>

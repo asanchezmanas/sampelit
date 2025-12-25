@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>FAQ - AI A/B Tester</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Theme Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                        "surface-dark": "#1a2332",
+                        "surface-highlight": "#232f48"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "sans": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem", // 12px
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for dark mode aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #101622;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #232f48;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #135bec;
+        }
+
+        details>summary {
+            list-style: none;
+        }
+
+        details>summary::-webkit-details-marker {
+            display: none;
+        }
+
+        /* Smooth animation for details expansion */
+        details[open] summary~* {
+            animation: sweep .3s ease-in-out;
+        }
+
+        @keyframes sweep {
+            0% {
+                opacity: 0;
+                transform: translateY(-10px)
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display antialiased text-slate-900 dark:text-white selection:bg-primary selection:text-white">
+    <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+        <!-- Navbar -->
+        <header
+            class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-[#232f48] bg-white/90 dark:bg-[#111722]/90 backdrop-blur-md px-4 md:px-10 py-3">
+            <div class="flex items-center gap-4 text-slate-900 dark:text-white">
+                <div class="size-8 text-primary">
+                    <svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_6_535)">
+                            <path clip-rule="evenodd"
+                                d="M47.2426 24L24 47.2426L0.757355 24L24 0.757355L47.2426 24ZM12.2426 21H35.7574L24 9.24264L12.2426 21Z"
+                                fill="currentColor" fill-rule="evenodd"></path>
+                        </g>
+                        <defs>
+                            <clippath id="clip0_6_535">
+                                <rect fill="white" height="48" width="48"></rect>
+                            </clippath>
+                        </defs>
+                    </svg>
+                </div>
+                <h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">AI A/B Tester</h2>
+            </div>
+            <div class="flex flex-1 justify-end gap-8">
+                <div class="hidden md:flex items-center gap-9">
+                    <a class="text-slate-600 dark:text-slate-300 text-sm font-medium leading-normal hover:text-primary transition-colors"
+                        href="#">Features</a>
+                    <a class="text-slate-600 dark:text-slate-300 text-sm font-medium leading-normal hover:text-primary transition-colors"
+                        href="#">Pricing</a>
+                    <a class="text-slate-600 dark:text-slate-300 text-sm font-medium leading-normal hover:text-primary transition-colors"
+                        href="#">Documentation</a>
+                </div>
+                <div class="flex gap-4 items-center">
+                    <a class="hidden md:block text-slate-600 dark:text-slate-300 text-sm font-medium leading-normal hover:text-primary transition-colors"
+                        href="#">Login</a>
+                    <button
+                        class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-blue-600 transition-colors shadow-lg shadow-primary/20">
+                        <span class="truncate">Get Started</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        <!-- Hero Section -->
+        <div class="relative w-full bg-background-light dark:bg-background-dark">
+            <!-- Abstract background gradient -->
+            <div aria-hidden="true"
+                class="absolute inset-0 bg-gradient-to-b from-blue-900/10 via-transparent to-transparent pointer-events-none">
+            </div>
+            <div class="layout-container flex flex-col items-center justify-center py-16 px-4 md:px-10">
+                <div class="flex flex-col gap-6 items-center justify-center max-w-[800px] text-center z-10">
+                    <div class="flex flex-col gap-4">
+                        <span class="text-primary font-bold text-sm uppercase tracking-wider">Centro de Ayuda</span>
+                        <h1
+                            class="text-slate-900 dark:text-white text-4xl md:text-6xl font-black leading-tight tracking-[-0.033em]">
+                            ¿Cómo podemos ayudarte?
+                        </h1>
+                        <h2 class="text-slate-500 dark:text-slate-400 text-lg font-normal leading-relaxed max-w-2xl">
+                            Todo lo que necesitas saber sobre nuestra IA de A/B Testing, facturación, integraciones y
+                            más.
+                        </h2>
+                    </div>
+                    <div class="w-full max-w-[540px] mt-4">
+                        <label class="relative flex w-full items-center">
+                            <div
+                                class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-slate-400">
+                                <span class="material-symbols-outlined">search</span>
+                            </div>
+                            <input
+                                class="w-full h-14 pl-12 pr-32 rounded-xl bg-white dark:bg-[#1a2332] border border-slate-200 dark:border-[#232f48] text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent shadow-lg shadow-black/5"
+                                placeholder="Busca una pregunta..." type="text" />
+                            <div class="absolute inset-y-0 right-2 flex items-center">
+                                <button
+                                    class="h-10 px-5 rounded-lg bg-primary text-white text-sm font-bold hover:bg-blue-600 transition-colors">
+                                    Buscar
+                                </button>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Main Content Area -->
+        <div class="flex flex-col items-center px-4 md:px-10 pb-20">
+            <div class="w-full max-w-[960px] flex flex-col gap-10">
+                <!-- Category Tabs -->
+                <div class="w-full overflow-x-auto pb-2 scrollbar-hide">
+                    <div class="flex border-b border-slate-200 dark:border-[#232f48] gap-8 min-w-max">
+                        <a class="relative flex flex-col items-center justify-center pb-4 pt-2 group cursor-pointer"
+                            href="#">
+                            <p class="text-primary font-bold text-sm tracking-[0.015em]">General</p>
+                            <span class="absolute bottom-0 h-0.5 w-full bg-primary rounded-t-full"></span>
+                        </a>
+                        <a class="relative flex flex-col items-center justify-center pb-4 pt-2 group cursor-pointer"
+                            href="#">
+                            <p
+                                class="text-slate-500 dark:text-[#92a4c9] text-sm font-medium hover:text-slate-800 dark:hover:text-white transition-colors tracking-[0.015em]">
+                                Integraciones</p>
+                            <span
+                                class="absolute bottom-0 h-0.5 w-full bg-transparent group-hover:bg-slate-300 dark:group-hover:bg-slate-700 rounded-t-full transition-colors"></span>
+                        </a>
+                        <a class="relative flex flex-col items-center justify-center pb-4 pt-2 group cursor-pointer"
+                            href="#">
+                            <p
+                                class="text-slate-500 dark:text-[#92a4c9] text-sm font-medium hover:text-slate-800 dark:hover:text-white transition-colors tracking-[0.015em]">
+                                Facturación</p>
+                            <span
+                                class="absolute bottom-0 h-0.5 w-full bg-transparent group-hover:bg-slate-300 dark:group-hover:bg-slate-700 rounded-t-full transition-colors"></span>
+                        </a>
+                        <a class="relative flex flex-col items-center justify-center pb-4 pt-2 group cursor-pointer"
+                            href="#">
+                            <p
+                                class="text-slate-500 dark:text-[#92a4c9] text-sm font-medium hover:text-slate-800 dark:hover:text-white transition-colors tracking-[0.015em]">
+                                Funciones de IA</p>
+                            <span
+                                class="absolute bottom-0 h-0.5 w-full bg-transparent group-hover:bg-slate-300 dark:group-hover:bg-slate-700 rounded-t-full transition-colors"></span>
+                        </a>
+                    </div>
+                </div>
+                <!-- Section: General -->
+                <div class="flex flex-col gap-6">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-slate-900 dark:text-white text-2xl font-bold leading-tight tracking-[-0.015em]">
+                            Preguntas Generales</h2>
+                        <span
+                            class="text-xs font-semibold px-2 py-1 rounded bg-slate-100 dark:bg-[#232f48] text-slate-500 dark:text-slate-400">5
+                            artículos</span>
+                    </div>
+                    <!-- Accordions -->
+                    <div class="flex flex-col gap-4">
+                        <!-- Question 1 -->
+                        <details
+                            class="group flex flex-col rounded-xl bg-white dark:bg-[#1a2332] border border-slate-200 dark:border-[#232f48] shadow-sm hover:shadow-md transition-all duration-300"
+                            open="">
+                            <summary
+                                class="flex cursor-pointer items-center justify-between gap-6 p-5 md:p-6 select-none">
+                                <p class="text-slate-900 dark:text-white text-base md:text-lg font-bold leading-normal">
+                                    ¿Cómo funciona la IA de A/B testing?</p>
+                                <span
+                                    class="material-symbols-outlined text-primary group-open:rotate-180 transition-transform duration-300">expand_more</span>
+                            </summary>
+                            <div class="px-5 md:px-6 pb-6 pt-0">
+                                <p class="text-slate-600 dark:text-[#9ca3af] text-base font-normal leading-relaxed">
+                                    Nuestra IA utiliza algoritmos de aprendizaje por refuerzo para analizar el
+                                    comportamiento del usuario en tiempo real. En lugar de esperar a que finalice una
+                                    prueba tradicional, el sistema ajusta dinámicamente el tráfico hacia las variantes
+                                    ganadoras, maximizando la conversión mientras se ejecuta el experimento. Esto reduce
+                                    el "costo de oportunidad" de probar variantes de bajo rendimiento.
+                                </p>
+                            </div>
+                        </details>
+                        <!-- Question 2 -->
+                        <details
+                            class="group flex flex-col rounded-xl bg-white dark:bg-[#1a2332] border border-slate-200 dark:border-[#232f48] shadow-sm hover:shadow-md transition-all duration-300">
+                            <summary
+                                class="flex cursor-pointer items-center justify-between gap-6 p-5 md:p-6 select-none">
+                                <p class="text-slate-900 dark:text-white text-base md:text-lg font-bold leading-normal">
+                                    ¿Necesito conocimientos de programación?</p>
+                                <span
+                                    class="material-symbols-outlined text-primary group-open:rotate-180 transition-transform duration-300">expand_more</span>
+                            </summary>
+                            <div class="px-5 md:px-6 pb-6 pt-0">
+                                <p class="text-slate-600 dark:text-[#9ca3af] text-base font-normal leading-relaxed">
+                                    No, en absoluto. Nuestra plataforma ofrece un editor visual "Drag &amp; Drop" que te
+                                    permite crear variantes de tus páginas web sin tocar una sola línea de código. Para
+                                    usuarios avanzados, también ofrecemos la opción de inyectar CSS o JS personalizado
+                                    si se requiere un control más granular.
+                                </p>
+                            </div>
+                        </details>
+                        <!-- Question 3 -->
+                        <details
+                            class="group flex flex-col rounded-xl bg-white dark:bg-[#1a2332] border border-slate-200 dark:border-[#232f48] shadow-sm hover:shadow-md transition-all duration-300">
+                            <summary
+                                class="flex cursor-pointer items-center justify-between gap-6 p-5 md:p-6 select-none">
+                                <p class="text-slate-900 dark:text-white text-base md:text-lg font-bold leading-normal">
+                                    ¿Cuánto tarda en dar resultados significativos?</p>
+                                <span
+                                    class="material-symbols-outlined text-primary group-open:rotate-180 transition-transform duration-300">expand_more</span>
+                            </summary>
+                            <div class="px-5 md:px-6 pb-6 pt-0">
+                                <p class="text-slate-600 dark:text-[#9ca3af] text-base font-normal leading-relaxed">
+                                    Depende del volumen de tráfico de tu sitio web. Para sitios con más de 10,000
+                                    visitas mensuales, nuestra IA puede comenzar a identificar tendencias significativas
+                                    en tan solo 3-5 días. Para sitios con menos tráfico, el sistema prioriza la
+                                    significancia estadística y podría tardar hasta 2 semanas en declarar un ganador
+                                    definitivo.
+                                </p>
+                            </div>
+                        </details>
+                        <!-- Question 4 -->
+                        <details
+                            class="group flex flex-col rounded-xl bg-white dark:bg-[#1a2332] border border-slate-200 dark:border-[#232f48] shadow-sm hover:shadow-md transition-all duration-300">
+                            <summary
+                                class="flex cursor-pointer items-center justify-between gap-6 p-5 md:p-6 select-none">
+                                <p class="text-slate-900 dark:text-white text-base md:text-lg font-bold leading-normal">
+                                    ¿Es compatible con mi stack actual?</p>
+                                <span
+                                    class="material-symbols-outlined text-primary group-open:rotate-180 transition-transform duration-300">expand_more</span>
+                            </summary>
+                            <div class="px-5 md:px-6 pb-6 pt-0">
+                                <p class="text-slate-600 dark:text-[#9ca3af] text-base font-normal leading-relaxed">
+                                    Sí, nos integramos nativamente con las plataformas más populares como Shopify,
+                                    WordPress, Webflow, y React. La instalación se realiza mediante un script ligero de
+                                    una sola línea que se coloca en el encabezado de tu sitio. También disponemos de API
+                                    para integraciones personalizadas.
+                                </p>
+                            </div>
+                        </details>
+                        <!-- Question 5 -->
+                        <details
+                            class="group flex flex-col rounded-xl bg-white dark:bg-[#1a2332] border border-slate-200 dark:border-[#232f48] shadow-sm hover:shadow-md transition-all duration-300">
+                            <summary
+                                class="flex cursor-pointer items-center justify-between gap-6 p-5 md:p-6 select-none">
+                                <p class="text-slate-900 dark:text-white text-base md:text-lg font-bold leading-normal">
+                                    ¿Qué impacto tiene en la velocidad de carga?</p>
+                                <span
+                                    class="material-symbols-outlined text-primary group-open:rotate-180 transition-transform duration-300">expand_more</span>
+                            </summary>
+                            <div class="px-5 md:px-6 pb-6 pt-0">
+                                <p class="text-slate-600 dark:text-[#9ca3af] text-base font-normal leading-relaxed">
+                                    El rendimiento es nuestra prioridad. Nuestro script es asíncrono y pesa menos de
+                                    15kb. Además, utilizamos una CDN global para asegurar que los experimentos se
+                                    carguen instantáneamente sin causar "flicker" (parpadeo) en la pantalla del usuario.
+                                    El impacto en el Core Web Vitals es despreciable.
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+                <!-- Still need help? CTA -->
+                <div
+                    class="mt-8 rounded-2xl bg-gradient-to-br from-[#1a2332] to-[#111722] border border-slate-200 dark:border-[#232f48] p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left relative overflow-hidden group">
+                    <!-- Decorative background element -->
+                    <div
+                        class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-colors duration-500">
+                    </div>
+                    <div class="flex flex-col gap-2 z-10">
+                        <h3 class="text-slate-900 dark:text-white text-xl font-bold">¿No encuentras la respuesta que
+                            buscas?</h3>
+                        <p class="text-slate-500 dark:text-slate-400">Nuestro equipo de soporte está disponible 24/7
+                            para ayudarte con cualquier duda técnica.</p>
+                    </div>
+                    <div class="flex gap-4 z-10">
+                        <button
+                            class="flex items-center justify-center rounded-lg h-12 px-6 bg-white dark:bg-[#232f48] text-slate-900 dark:text-white text-sm font-bold border border-slate-200 dark:border-[#324467] hover:bg-slate-50 dark:hover:bg-[#2d3b55] transition-colors">
+                            Ver Documentación
+                        </button>
+                        <button
+                            class="flex items-center justify-center rounded-lg h-12 px-6 bg-primary text-white text-sm font-bold hover:bg-blue-600 transition-colors shadow-lg shadow-primary/25">
+                            Contactar Soporte
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer simplified -->
+        <footer class="border-t border-slate-200 dark:border-[#232f48] bg-white dark:bg-[#111722] py-8">
+            <div
+                class="layout-container flex flex-col md:flex-row justify-between items-center px-4 md:px-10 gap-4 text-sm text-slate-500 dark:text-slate-400">
+                <p>© 2023 AI A/B Tester Inc. Todos los derechos reservados.</p>
+                <div class="flex gap-6">
+                    <a class="hover:text-primary" href="#">Privacidad</a>
+                    <a class="hover:text-primary" href="#">Términos</a>
+                    <a class="hover:text-primary" href="#">Twitter</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>

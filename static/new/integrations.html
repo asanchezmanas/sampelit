@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Configuración - A/B AI Tester</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f49bd",
+                        "primary-hover": "#0c3b9e",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111722",
+                        "surface-dark": "#192233",
+                        "border-dark": "#324467",
+                        "text-secondary": "#92a4c9",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #0f49bd;
+        }
+
+        .toggle-checkbox:checked+.toggle-label {
+            background-color: #0f49bd;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white antialiased selection:bg-primary selection:text-white">
+    <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+        <!-- Top Navigation -->
+        <header
+            class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-border-dark px-10 py-3 bg-surface-dark sticky top-0 z-50">
+            <div class="flex items-center gap-4 text-white">
+                <div class="size-8 flex items-center justify-center bg-primary rounded-lg text-white">
+                    <span class="material-symbols-outlined text-2xl">science</span>
+                </div>
+                <h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">A/B AI Tester</h2>
+            </div>
+            <div class="flex flex-1 justify-end gap-8">
+                <nav class="hidden md:flex items-center gap-9">
+                    <a class="text-text-secondary hover:text-white transition-colors text-sm font-medium leading-normal"
+                        href="#">Dashboard</a>
+                    <a class="text-text-secondary hover:text-white transition-colors text-sm font-medium leading-normal"
+                        href="#">Experimentos</a>
+                    <a class="text-text-secondary hover:text-white transition-colors text-sm font-medium leading-normal"
+                        href="#">Resultados</a>
+                    <a class="text-white text-sm font-bold leading-normal" href="#">Configuración</a>
+                </nav>
+                <div class="flex gap-2">
+                    <button
+                        class="flex items-center justify-center rounded-lg size-10 bg-[#232f48] hover:bg-[#2d3b55] text-white transition-colors">
+                        <span class="material-symbols-outlined">notifications</span>
+                    </button>
+                    <button
+                        class="flex items-center justify-center rounded-lg size-10 bg-[#232f48] hover:bg-[#2d3b55] text-white transition-colors">
+                        <span class="material-symbols-outlined">help</span>
+                    </button>
+                    <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 ring-2 ring-primary/20"
+                        data-alt="User profile avatar showing a smiling person"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBmh6pMDqMEiUFPPVyH_RTfNd9jpN4RTW3qai8hmqeKKHtU-L0dxrXHv-BgHLegRz3wl_9-uNPJYCf5MIVqz64WY_3d2j5ajBwfKpdjx1plnyto8LzEKtNQYojmoTnZ-x9JCwV_0BiiGOPg8Til0qy0XPfMyPjOG5RH51kL320ECccZTVHIK-w6C6iVm8VEWvNDKqNraHOrCtceq7RxwcD4i9YKY3pOSjS_t1Ums9mGbwf8mOrCTQpyEdFTcCHdJ_uTj-c3yMEG");'>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="layout-container flex h-full grow flex-col">
+            <div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-8">
+                <div class="layout-content-container flex flex-col max-w-[1024px] flex-1 gap-8">
+                    <!-- Page Heading -->
+                    <div class="flex flex-col gap-3">
+                        <h1 class="text-white text-4xl font-black leading-tight tracking-[-0.033em]">Configuración</h1>
+                        <p class="text-text-secondary text-base font-normal leading-normal max-w-2xl">
+                            Gestiona tus integraciones, configura el comportamiento de seguimiento web y personaliza las
+                            notificaciones por correo electrónico desde un solo lugar.
+                        </p>
+                    </div>
+                    <!-- Navigation Tabs -->
+                    <div class="border-b border-border-dark">
+                        <div class="flex gap-8 overflow-x-auto">
+                            <a class="group flex items-center justify-center border-b-[3px] border-primary text-white pb-3 pt-2 px-1 min-w-[100px] cursor-pointer"
+                                href="#integrations">
+                                <span class="text-sm font-bold tracking-[0.015em]">Integraciones</span>
+                            </a>
+                            <a class="group flex items-center justify-center border-b-[3px] border-transparent hover:border-border-dark text-text-secondary hover:text-white pb-3 pt-2 px-1 min-w-[100px] transition-all cursor-pointer"
+                                href="#web">
+                                <span class="text-sm font-bold tracking-[0.015em]">Web</span>
+                            </a>
+                            <a class="group flex items-center justify-center border-b-[3px] border-transparent hover:border-border-dark text-text-secondary hover:text-white pb-3 pt-2 px-1 min-w-[100px] transition-all cursor-pointer"
+                                href="#email">
+                                <span class="text-sm font-bold tracking-[0.015em]">Email</span>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Main Content Area -->
+                    <main class="flex flex-col gap-10">
+                        <!-- SECTION: INTEGRATIONS -->
+                        <section class="flex flex-col gap-5 animate-fadeIn" id="integrations">
+                            <div class="flex items-center justify-between">
+                                <h2 class="text-white text-xl font-bold leading-tight">Integraciones Disponibles</h2>
+                                <button class="text-sm text-primary font-bold hover:underline">Ver catálogo
+                                    completo</button>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <!-- Card: Google Analytics -->
+                                <div
+                                    class="flex flex-col gap-4 rounded-xl border border-border-dark bg-surface-dark p-5 hover:border-primary/50 transition-colors group">
+                                    <div class="flex justify-between items-start">
+                                        <div class="p-2 bg-white/5 rounded-lg text-white">
+                                            <span
+                                                class="material-symbols-outlined text-orange-400 text-3xl">analytics</span>
+                                        </div>
+                                        <div
+                                            class="flex items-center gap-1.5 px-2 py-1 rounded bg-green-500/10 border border-green-500/20">
+                                            <div class="size-1.5 rounded-full bg-green-500"></div>
+                                            <span class="text-xs font-semibold text-green-400">Conectado</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-white text-lg font-bold">Google Analytics</h3>
+                                        <p class="text-text-secondary text-sm mt-1">Sincroniza eventos de conversión y
+                                            métricas de audiencia.</p>
+                                    </div>
+                                    <div class="mt-auto pt-2">
+                                        <button
+                                            class="w-full py-2 px-4 rounded-lg border border-border-dark text-text-secondary text-sm font-bold hover:bg-white/5 hover:text-white transition-colors">Configurar</button>
+                                    </div>
+                                </div>
+                                <!-- Card: Slack -->
+                                <div
+                                    class="flex flex-col gap-4 rounded-xl border border-border-dark bg-surface-dark p-5 hover:border-primary/50 transition-colors group">
+                                    <div class="flex justify-between items-start">
+                                        <div class="p-2 bg-white/5 rounded-lg text-white">
+                                            <span
+                                                class="material-symbols-outlined text-purple-400 text-3xl">forum</span>
+                                        </div>
+                                        <div
+                                            class="flex items-center gap-1.5 px-2 py-1 rounded bg-slate-700/30 border border-slate-700">
+                                            <div class="size-1.5 rounded-full bg-slate-500"></div>
+                                            <span class="text-xs font-semibold text-slate-400">Desconectado</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-white text-lg font-bold">Slack</h3>
+                                        <p class="text-text-secondary text-sm mt-1">Recibe alertas de experimentos en
+                                            tus canales de equipo.</p>
+                                    </div>
+                                    <div class="mt-auto pt-2">
+                                        <button
+                                            class="w-full py-2 px-4 rounded-lg bg-primary text-white text-sm font-bold hover:bg-primary-hover transition-colors shadow-lg shadow-primary/20">Conectar</button>
+                                    </div>
+                                </div>
+                                <!-- Card: HubSpot -->
+                                <div
+                                    class="flex flex-col gap-4 rounded-xl border border-border-dark bg-surface-dark p-5 hover:border-primary/50 transition-colors group">
+                                    <div class="flex justify-between items-start">
+                                        <div class="p-2 bg-white/5 rounded-lg text-white">
+                                            <span class="material-symbols-outlined text-orange-600 text-3xl">hub</span>
+                                        </div>
+                                        <div
+                                            class="flex items-center gap-1.5 px-2 py-1 rounded bg-slate-700/30 border border-slate-700">
+                                            <div class="size-1.5 rounded-full bg-slate-500"></div>
+                                            <span class="text-xs font-semibold text-slate-400">Desconectado</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-white text-lg font-bold">HubSpot</h3>
+                                        <p class="text-text-secondary text-sm mt-1">Importa contactos y segmenta tus
+                                            pruebas A/B.</p>
+                                    </div>
+                                    <div class="mt-auto pt-2">
+                                        <button
+                                            class="w-full py-2 px-4 rounded-lg bg-primary text-white text-sm font-bold hover:bg-primary-hover transition-colors shadow-lg shadow-primary/20">Conectar</button>
+                                    </div>
+                                </div>
+                                <!-- Card: Segment -->
+                                <div
+                                    class="flex flex-col gap-4 rounded-xl border border-border-dark bg-surface-dark p-5 hover:border-primary/50 transition-colors group">
+                                    <div class="flex justify-between items-start">
+                                        <div class="p-2 bg-white/5 rounded-lg text-white">
+                                            <span
+                                                class="material-symbols-outlined text-green-400 text-3xl">polyline</span>
+                                        </div>
+                                        <div
+                                            class="flex items-center gap-1.5 px-2 py-1 rounded bg-green-500/10 border border-green-500/20">
+                                            <div class="size-1.5 rounded-full bg-green-500"></div>
+                                            <span class="text-xs font-semibold text-green-400">Conectado</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-white text-lg font-bold">Segment</h3>
+                                        <p class="text-text-secondary text-sm mt-1">Centraliza tus datos de cliente en
+                                            una sola plataforma.</p>
+                                    </div>
+                                    <div class="mt-auto pt-2">
+                                        <button
+                                            class="w-full py-2 px-4 rounded-lg border border-border-dark text-text-secondary text-sm font-bold hover:bg-white/5 hover:text-white transition-colors">Configurar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <div class="h-px w-full bg-border-dark"></div>
+                        <!-- SECTION: WEB SETTINGS -->
+                        <section class="flex flex-col gap-5" id="web">
+                            <h2 class="text-white text-xl font-bold leading-tight">Configuración Web</h2>
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                <!-- Left Column: General Form -->
+                                <div
+                                    class="lg:col-span-2 flex flex-col gap-6 rounded-xl border border-border-dark bg-surface-dark p-6">
+                                    <h3 class="text-white font-bold text-lg mb-2">General</h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                        <div class="flex flex-col gap-2">
+                                            <label
+                                                class="text-xs font-bold uppercase tracking-wider text-text-secondary">Dominio
+                                                Principal</label>
+                                            <div class="relative flex items-center">
+                                                <span
+                                                    class="material-symbols-outlined absolute left-3 text-text-secondary text-lg">language</span>
+                                                <input
+                                                    class="w-full bg-[#111722] border border-border-dark rounded-lg py-2.5 pl-10 pr-4 text-white placeholder-text-secondary focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                                                    type="text" value="app.ejemplo.com" />
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col gap-2">
+                                            <label
+                                                class="text-xs font-bold uppercase tracking-wider text-text-secondary">Zona
+                                                Horaria</label>
+                                            <div class="relative flex items-center">
+                                                <span
+                                                    class="material-symbols-outlined absolute left-3 text-text-secondary text-lg">schedule</span>
+                                                <select
+                                                    class="w-full bg-[#111722] border border-border-dark rounded-lg py-2.5 pl-10 pr-4 text-white appearance-none focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
+                                                    <option>(GMT-05:00) Eastern Time (US &amp; Canada)</option>
+                                                    <option>(GMT-06:00) Central Time (US &amp; Canada)</option>
+                                                    <option>(GMT+01:00) Madrid, Paris</option>
+                                                </select>
+                                                <span
+                                                    class="material-symbols-outlined absolute right-3 text-text-secondary text-lg pointer-events-none">expand_more</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <label
+                                            class="text-xs font-bold uppercase tracking-wider text-text-secondary">Snippet
+                                            de Seguimiento</label>
+                                        <div class="relative">
+                                            <textarea
+                                                class="w-full h-32 bg-[#111722] border border-border-dark rounded-lg p-4 text-sm font-mono text-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none resize-none"
+                                                readonly="">&lt;script&gt;
+  (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&amp;l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-XXXX');
+&lt;/script&gt;</textarea>
+                                            <button
+                                                class="absolute top-2 right-2 p-1.5 bg-surface-dark border border-border-dark rounded hover:bg-white/10 text-white transition-colors"
+                                                title="Copiar código">
+                                                <span class="material-symbols-outlined text-lg">content_copy</span>
+                                            </button>
+                                        </div>
+                                        <p class="text-text-secondary text-xs">Copia y pega este código en la etiqueta
+                                            &lt;head&gt; de tu sitio web.</p>
+                                    </div>
+                                </div>
+                                <!-- Right Column: Toggles -->
+                                <div
+                                    class="lg:col-span-1 flex flex-col gap-4 rounded-xl border border-border-dark bg-surface-dark p-6 h-fit">
+                                    <h3 class="text-white font-bold text-lg mb-2">Comportamiento</h3>
+                                    <div class="flex items-center justify-between py-2 border-b border-white/5">
+                                        <div class="flex flex-col gap-0.5">
+                                            <span class="text-white font-medium text-sm">Cross-domain Tracking</span>
+                                            <span class="text-text-secondary text-xs">Seguimiento entre
+                                                subdominios</span>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input checked="" class="sr-only peer" type="checkbox" />
+                                            <div
+                                                class="w-11 h-6 bg-[#232f48] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center justify-between py-2 border-b border-white/5">
+                                        <div class="flex flex-col gap-0.5">
+                                            <span class="text-white font-medium text-sm">Modo SPA</span>
+                                            <span class="text-text-secondary text-xs">Para Single Page Apps</span>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input class="sr-only peer" type="checkbox" />
+                                            <div
+                                                class="w-11 h-6 bg-[#232f48] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center justify-between py-2">
+                                        <div class="flex flex-col gap-0.5">
+                                            <span class="text-white font-medium text-sm">Auto-captura de Eventos</span>
+                                            <span class="text-text-secondary text-xs">Clicks y envíos de
+                                                formulario</span>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input checked="" class="sr-only peer" type="checkbox" />
+                                            <div
+                                                class="w-11 h-6 bg-[#232f48] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <div class="h-px w-full bg-border-dark"></div>
+                        <!-- SECTION: EMAIL SETTINGS -->
+                        <section class="flex flex-col gap-5 pb-10" id="email">
+                            <h2 class="text-white text-xl font-bold leading-tight">Configuración de Email</h2>
+                            <div class="rounded-xl border border-border-dark bg-surface-dark p-6">
+                                <div class="flex flex-col md:flex-row gap-8">
+                                    <!-- Email Form -->
+                                    <div class="flex-1 flex flex-col gap-6">
+                                        <div class="flex flex-col gap-4">
+                                            <h3 class="text-white font-bold text-lg">Servidor SMTP</h3>
+                                            <div class="grid grid-cols-2 gap-4">
+                                                <div class="col-span-2">
+                                                    <label
+                                                        class="text-xs font-bold uppercase tracking-wider text-text-secondary mb-2 block">Host</label>
+                                                    <input
+                                                        class="w-full bg-[#111722] border border-border-dark rounded-lg py-2.5 px-4 text-white focus:border-primary outline-none"
+                                                        placeholder="smtp.ejemplo.com" type="text" />
+                                                </div>
+                                                <div>
+                                                    <label
+                                                        class="text-xs font-bold uppercase tracking-wider text-text-secondary mb-2 block">Puerto</label>
+                                                    <input
+                                                        class="w-full bg-[#111722] border border-border-dark rounded-lg py-2.5 px-4 text-white focus:border-primary outline-none"
+                                                        placeholder="587" type="text" />
+                                                </div>
+                                                <div>
+                                                    <label
+                                                        class="text-xs font-bold uppercase tracking-wider text-text-secondary mb-2 block">Protocolo</label>
+                                                    <select
+                                                        class="w-full bg-[#111722] border border-border-dark rounded-lg py-2.5 px-4 text-white appearance-none focus:border-primary outline-none">
+                                                        <option>TLS</option>
+                                                        <option>SSL</option>
+                                                        <option>Ninguno</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col gap-4 mt-2">
+                                            <h3 class="text-white font-bold text-lg">Notificaciones</h3>
+                                            <div class="space-y-3">
+                                                <label
+                                                    class="flex items-center gap-3 p-3 rounded-lg border border-border-dark bg-[#111722] cursor-pointer hover:border-primary/50 transition-all">
+                                                    <input checked=""
+                                                        class="w-5 h-5 rounded border-gray-600 text-primary focus:ring-primary bg-gray-800"
+                                                        type="checkbox" />
+                                                    <span class="text-sm font-medium text-white">Pruebas
+                                                        finalizadas</span>
+                                                </label>
+                                                <label
+                                                    class="flex items-center gap-3 p-3 rounded-lg border border-border-dark bg-[#111722] cursor-pointer hover:border-primary/50 transition-all">
+                                                    <input checked=""
+                                                        class="w-5 h-5 rounded border-gray-600 text-primary focus:ring-primary bg-gray-800"
+                                                        type="checkbox" />
+                                                    <span class="text-sm font-medium text-white">Significancia
+                                                        estadística alcanzada</span>
+                                                </label>
+                                                <label
+                                                    class="flex items-center gap-3 p-3 rounded-lg border border-border-dark bg-[#111722] cursor-pointer hover:border-primary/50 transition-all">
+                                                    <input
+                                                        class="w-5 h-5 rounded border-gray-600 text-primary focus:ring-primary bg-gray-800"
+                                                        type="checkbox" />
+                                                    <span class="text-sm font-medium text-white">Resumen semanal de
+                                                        rendimiento</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Templates Preview -->
+                                    <div class="w-full md:w-80 flex flex-col gap-4">
+                                        <h3 class="text-white font-bold text-lg">Plantillas</h3>
+                                        <div class="flex flex-col gap-3">
+                                            <div
+                                                class="group relative aspect-video w-full rounded-lg overflow-hidden border border-border-dark cursor-pointer">
+                                                <div class="absolute inset-0 bg-cover bg-center opacity-70 group-hover:opacity-100 transition-opacity"
+                                                    data-alt="Preview of a clean email template with charts"
+                                                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAN_9OR_9PDcMlndJYU-XhaM7NOUHfVn6s61TuM31QkfDYYXUzTWbsRtMBJdGA03xzkmWMqzZGrdqZBLhuVYb_Y6Fu0L_sS2vEc1t7pvY14zp3KRuJXZEnxyua9opRkUlPZwRflORCYKmDtt0dOEcVBYseSyTtVUDsGYKY-NBD1XLXwpvmHNEvx9S-rfIJ7ve87m4gt9cvv1PLZ7nMKJqtV1Mh_W5z3elnzs2cCTx6SYlAIJY9FKIe4WuYdtSgxcquywlyzYhVq');">
+                                                </div>
+                                                <div
+                                                    class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <span
+                                                        class="bg-white/10 backdrop-blur-sm text-white px-3 py-1.5 rounded text-sm font-bold border border-white/20">Vista
+                                                        Previa</span>
+                                                </div>
+                                            </div>
+                                            <p class="text-xs text-text-secondary text-center">Plantilla: Alerta de
+                                                Resultados</p>
+                                        </div>
+                                        <div class="flex flex-col gap-3">
+                                            <div
+                                                class="group relative aspect-video w-full rounded-lg overflow-hidden border border-border-dark cursor-pointer">
+                                                <div class="absolute inset-0 bg-cover bg-center opacity-70 group-hover:opacity-100 transition-opacity"
+                                                    data-alt="Preview of a digest email template with list items"
+                                                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDUIGWqdIhKHzboAgFsbhcaNxoCYqW3cs5aTip1OqxeFOxu0YExEFHVz5fu_P-CS5VYzUtfG9ireBXGDHbEwhpPs77ShfuR79j6i632nPGeLiCxfXliaCSY69sYMP8UUrfc00OLgboMYXRN8TbVkALQhEJMCytUTpBy7i-jmc52f5yPs4jZiGxmbN8ALbqd5EKzjBnRw4YTg1C39mn_eRJ1PD4e97N6kO56rXV415x7CPf4Nz5RFXrFH-9QSZbjDx_Nd1337Ov5');">
+                                                </div>
+                                                <div
+                                                    class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <span
+                                                        class="bg-white/10 backdrop-blur-sm text-white px-3 py-1.5 rounded text-sm font-bold border border-white/20">Vista
+                                                        Previa</span>
+                                                </div>
+                                            </div>
+                                            <p class="text-xs text-text-secondary text-center">Plantilla: Resumen
+                                                Semanal</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </main>
+                    <!-- Sticky Footer Actions -->
+                    <div
+                        class="sticky bottom-4 z-40 rounded-xl bg-surface-dark border border-border-dark p-4 shadow-2xl flex items-center justify-between">
+                        <span class="text-text-secondary text-sm hidden sm:block">Hay cambios sin guardar en la
+                            configuración Web.</span>
+                        <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+                            <button
+                                class="px-5 py-2.5 rounded-lg border border-border-dark text-white font-bold text-sm hover:bg-white/5 transition-colors">Descartar</button>
+                            <button
+                                class="px-5 py-2.5 rounded-lg bg-primary text-white font-bold text-sm hover:bg-primary-hover transition-colors shadow-lg shadow-primary/25">Guardar
+                                Cambios</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

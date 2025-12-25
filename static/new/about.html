@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>About Us - OptiAI</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622", // Matches the deep dark aesthetic
+                        "surface-dark": "#192233", // Slightly lighter for cards
+                        "border-dark": "#232f48", // Borders
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #101622;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #232f48;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #135bec;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-x-hidden antialiased selection:bg-primary selection:text-white">
+    <!-- Navbar -->
+    <header
+        class="sticky top-0 z-50 w-full border-b border-solid border-b-border-dark bg-background-dark/95 backdrop-blur-sm">
+        <div class="flex items-center justify-between whitespace-nowrap px-6 py-4 lg:px-10">
+            <div class="flex items-center gap-4 text-white cursor-pointer">
+                <div class="size-8 text-primary">
+                    <span class="material-symbols-outlined text-[32px]">dataset</span>
+                </div>
+                <h2 class="text-white text-xl font-bold leading-tight tracking-tight">OptiAI</h2>
+            </div>
+            <div class="hidden lg:flex flex-1 justify-end gap-8">
+                <nav class="flex items-center gap-9">
+                    <a class="text-slate-300 hover:text-white text-sm font-medium transition-colors"
+                        href="#">Features</a>
+                    <a class="text-slate-300 hover:text-white text-sm font-medium transition-colors"
+                        href="#">Pricing</a>
+                    <a class="text-white text-sm font-bold transition-colors" href="#">About Us</a>
+                    <a class="text-slate-300 hover:text-white text-sm font-medium transition-colors" href="#">Docs</a>
+                </nav>
+                <div class="flex gap-3">
+                    <button
+                        class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-surface-dark border border-border-dark text-white text-sm font-bold hover:bg-border-dark transition-all">
+                        <span class="truncate">Log In</span>
+                    </button>
+                    <button
+                        class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-primary text-white text-sm font-bold shadow-lg shadow-primary/25 hover:bg-blue-600 transition-all">
+                        <span class="truncate">Start Free Trial</span>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile Menu Icon -->
+            <div class="lg:hidden text-white">
+                <span class="material-symbols-outlined">menu</span>
+            </div>
+        </div>
+    </header>
+    <main class="flex flex-col items-center w-full">
+        <!-- Hero Section -->
+        <section class="w-full px-4 py-12 md:px-10 lg:px-40 flex justify-center">
+            <div class="w-full max-w-[1024px]">
+                <div class="@container">
+                    <div class="relative flex min-h-[480px] flex-col gap-6 overflow-hidden rounded-2xl items-center justify-center p-8 md:p-12 text-center"
+                        data-alt="Abstract dark blue digital data visualization resembling neural networks"
+                        style='background-image: linear-gradient(to bottom, rgba(16, 22, 34, 0.7) 0%, rgba(16, 22, 34, 1) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuBHMbhkyJjlOOlh1zKODCCmkGKL2urMbSeAf7bZQeMPVr7f8F9qX8TpVH2iu5YycC1kibMuz3ArthOnEk-BhOqWZBBfGunl9B__P4Q-v__zYbUeAlbepjd67LpCI_JbleJZvOxwuhNms-nu4eUCiqAgpxwJNj3cUFMHw-yfHN-mLG0BmBhZE5Z3CwAQ6zgtCqFawI9eeQqnnwsefasXJGs8D3QjF7OSfVOlkWoKW_30mk1xRLnqegOZPoWoiD8MJHLEet64iH1T"); background-size: cover; background-position: center;'>
+                        <div class="absolute inset-0 bg-primary/10 mix-blend-overlay"></div>
+                        <div class="relative z-10 flex flex-col gap-4 max-w-2xl">
+                            <span
+                                class="inline-block px-3 py-1 rounded-full bg-surface-dark border border-border-dark text-primary text-xs font-bold uppercase tracking-wider w-fit mx-auto">
+                                The Future of Optimization
+                            </span>
+                            <h1 class="text-white text-4xl md:text-6xl font-black leading-tight tracking-[-0.033em]">
+                                We are redefining decision-making with AI.
+                            </h1>
+                            <p class="text-slate-300 text-lg font-normal leading-relaxed">
+                                Our platform automates A/B testing to uncover insights faster than ever before, removing
+                                the guesswork from growth.
+                            </p>
+                        </div>
+                        <div class="relative z-10 mt-4 flex gap-4">
+                            <button
+                                class="flex h-12 items-center justify-center rounded-lg bg-primary px-8 text-base font-bold text-white shadow-xl shadow-primary/20 hover:bg-blue-600 hover:scale-105 transition-all">
+                                View Our Journey
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Stats Section -->
+        <section class="w-full px-4 md:px-10 lg:px-40 pb-12 flex justify-center">
+            <div class="w-full max-w-[1024px] grid grid-cols-2 md:grid-cols-4 gap-6 border-y border-border-dark py-8">
+                <div class="flex flex-col items-center text-center">
+                    <span class="text-3xl md:text-4xl font-black text-white mb-1">2019</span>
+                    <span class="text-sm text-slate-400 font-medium uppercase tracking-wide">Founded</span>
+                </div>
+                <div class="flex flex-col items-center text-center">
+                    <span class="text-3xl md:text-4xl font-black text-white mb-1">50M+</span>
+                    <span class="text-sm text-slate-400 font-medium uppercase tracking-wide">Users Tested</span>
+                </div>
+                <div class="flex flex-col items-center text-center">
+                    <span class="text-3xl md:text-4xl font-black text-white mb-1">99.9%</span>
+                    <span class="text-sm text-slate-400 font-medium uppercase tracking-wide">Accuracy</span>
+                </div>
+                <div class="flex flex-col items-center text-center">
+                    <span class="text-3xl md:text-4xl font-black text-white mb-1">12</span>
+                    <span class="text-sm text-slate-400 font-medium uppercase tracking-wide">Countries</span>
+                </div>
+            </div>
+        </section>
+        <!-- Mission & Vision -->
+        <section class="w-full px-4 md:px-10 lg:px-40 py-12 flex justify-center bg-surface-dark/30">
+            <div class="w-full max-w-[1024px] flex flex-col items-center">
+                <h2 class="text-white text-3xl font-bold mb-10 text-center">Our Core Values</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+                    <!-- Mission Card -->
+                    <div
+                        class="group flex flex-col gap-4 rounded-xl border border-border-dark bg-surface-dark p-8 hover:border-primary/50 transition-colors">
+                        <div
+                            class="size-12 rounded-lg bg-primary/20 flex items-center justify-center text-primary mb-2 group-hover:bg-primary group-hover:text-white transition-colors">
+                            <span class="material-symbols-outlined text-[28px]">rocket_launch</span>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <h3 class="text-white text-xl font-bold leading-tight">Mission: Democratize Growth</h3>
+                            <p class="text-slate-400 text-base leading-relaxed">
+                                To provide every product team with the power of data-driven decision making, removing
+                                the complexity of manual testing and statistical analysis.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Vision Card -->
+                    <div
+                        class="group flex flex-col gap-4 rounded-xl border border-border-dark bg-surface-dark p-8 hover:border-primary/50 transition-colors">
+                        <div
+                            class="size-12 rounded-lg bg-primary/20 flex items-center justify-center text-primary mb-2 group-hover:bg-primary group-hover:text-white transition-colors">
+                            <span class="material-symbols-outlined text-[28px]">visibility</span>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <h3 class="text-white text-xl font-bold leading-tight">Vision: Optimal Experiences</h3>
+                            <p class="text-slate-400 text-base leading-relaxed">
+                                A world where no digital experience is left to chance, and every interaction is
+                                optimized for maximum value and user satisfaction.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Our Story / Timeline -->
+        <section class="w-full px-4 md:px-10 lg:px-40 py-20 flex justify-center">
+            <div class="w-full max-w-[800px] flex flex-col">
+                <div class="text-center mb-16">
+                    <h2 class="text-white text-3xl md:text-4xl font-bold mb-4">Our Journey</h2>
+                    <p class="text-slate-400 max-w-lg mx-auto">From a small garage project to a global leader in AI
+                        optimization.</p>
+                </div>
+                <!-- Timeline Container -->
+                <div class="relative border-l-2 border-border-dark ml-4 md:ml-0 md:pl-0 space-y-12">
+                    <!-- Item 1 -->
+                    <div class="relative pl-8 md:pl-0 md:grid md:grid-cols-2 md:gap-16 items-center group">
+                        <!-- Dot -->
+                        <div
+                            class="absolute -left-[9px] top-0 md:left-1/2 md:-ml-[9px] size-[18px] rounded-full bg-background-dark border-4 border-primary z-10">
+                        </div>
+                        <!-- Content Left (Date) -->
+                        <div class="md:text-right mb-2 md:mb-0">
+                            <span class="text-primary font-bold text-lg">2019</span>
+                        </div>
+                        <!-- Content Right (Text) -->
+                        <div class="md:text-left">
+                            <h3 class="text-white font-bold text-xl mb-2">The Inception</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed">
+                                Founded by two data scientists frustrated with the slow pace of manual A/B testing. We
+                                built the first prototype to automate statistical significance calculations.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Item 2 -->
+                    <div class="relative pl-8 md:pl-0 md:grid md:grid-cols-2 md:gap-16 items-center group">
+                        <!-- Dot -->
+                        <div
+                            class="absolute -left-[9px] top-0 md:left-1/2 md:-ml-[9px] size-[18px] rounded-full bg-background-dark border-4 border-surface-dark group-hover:border-primary transition-colors z-10">
+                        </div>
+                        <!-- Content Left (Text - swapped for visual flow on desktop) -->
+                        <div class="hidden md:block md:text-right">
+                            <h3 class="text-white font-bold text-xl mb-2">Seed Funding &amp; AI Integration</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed">
+                                We secured $2M in seed funding, allowing us to integrate deep learning models that
+                                predict user behavior before tests even conclude.
+                            </p>
+                        </div>
+                        <!-- Content Right (Date) -->
+                        <div class="mb-2 md:mb-0 md:order-first md:text-right">
+                            <span class="text-primary font-bold text-lg md:hidden">2021</span>
+                        </div>
+                        <!-- Mobile View Content -->
+                        <div class="md:hidden">
+                            <h3 class="text-white font-bold text-xl mb-2">Seed Funding &amp; AI Integration</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed">
+                                We secured $2M in seed funding, allowing us to integrate deep learning models that
+                                predict user behavior before tests even conclude.
+                            </p>
+                        </div>
+                        <!-- Desktop Date -->
+                        <div class="hidden md:block">
+                            <span
+                                class="text-slate-500 font-bold text-lg group-hover:text-primary transition-colors">2021</span>
+                        </div>
+                    </div>
+                    <!-- Item 3 -->
+                    <div class="relative pl-8 md:pl-0 md:grid md:grid-cols-2 md:gap-16 items-center group">
+                        <div
+                            class="absolute -left-[9px] top-0 md:left-1/2 md:-ml-[9px] size-[18px] rounded-full bg-background-dark border-4 border-surface-dark group-hover:border-primary transition-colors z-10">
+                        </div>
+                        <div class="md:text-right mb-2 md:mb-0">
+                            <span
+                                class="text-slate-500 font-bold text-lg group-hover:text-primary transition-colors">2023</span>
+                        </div>
+                        <div class="md:text-left">
+                            <h3 class="text-white font-bold text-xl mb-2">Global Expansion</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed">
+                                OptiAI opened offices in London and Singapore. We launched our Enterprise suite, serving
+                                Fortune 500 companies worldwide.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Item 4 -->
+                    <div class="relative pl-8 md:pl-0 md:grid md:grid-cols-2 md:gap-16 items-center group">
+                        <div
+                            class="absolute -left-[9px] top-0 md:left-1/2 md:-ml-[9px] size-[18px] rounded-full bg-background-dark border-4 border-surface-dark group-hover:border-primary transition-colors z-10">
+                        </div>
+                        <div class="hidden md:block md:text-right">
+                            <h3 class="text-white font-bold text-xl mb-2">The Future</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed">
+                                We are working on Generative UI, where our AI doesn't just test variants, but creates
+                                them in real-time for each user segment.
+                            </p>
+                        </div>
+                        <div class="mb-2 md:mb-0 md:order-first md:text-right">
+                            <span class="text-primary font-bold text-lg md:hidden">Today</span>
+                        </div>
+                        <div class="md:hidden">
+                            <h3 class="text-white font-bold text-xl mb-2">The Future</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed">
+                                We are working on Generative UI, where our AI doesn't just test variants, but creates
+                                them in real-time for each user segment.
+                            </p>
+                        </div>
+                        <div class="hidden md:block">
+                            <span
+                                class="text-slate-500 font-bold text-lg group-hover:text-primary transition-colors">Today</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Team Section -->
+        <section
+            class="w-full px-4 md:px-10 lg:px-40 py-16 flex justify-center bg-surface-dark/20 border-y border-border-dark">
+            <div class="w-full max-w-[1024px] flex flex-col items-center">
+                <div class="text-center mb-12">
+                    <h2 class="text-white text-3xl font-bold mb-3">Meet the Minds</h2>
+                    <p class="text-slate-400">The engineers, data scientists, and strategists behind OptiAI.</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
+                    <!-- Team Member 1 -->
+                    <div
+                        class="group relative flex flex-col items-center p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-primary/50 transition-all">
+                        <div
+                            class="size-24 mb-4 rounded-full overflow-hidden border-2 border-primary/20 group-hover:border-primary transition-colors">
+                            <img class="w-full h-full object-cover" data-alt="Portrait of James Chen, CEO"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYg708JQany-xxZQ1qwAlPkXyRPSp_tFdSR8CUTU8GgEbsb8rREqUO_qRyG9ZGxiqSjZkdsPgJWujaJaKxodvf39k0u1XzlSn615gAHsMEjVOcCtgbnZ3H_9QdZ9fScA7ZWBkBu2gO2rEdHjfsZU2Qi05Fy4EC7W9KXHzj5DNpsUMzX_fjGo_t1Pu3w4AapeuZlUr-2QCKPBbL0azHyKO43JkjzGp0u2NmvnS9MWMBzt3juAvWMKKUGXkyIsjZl4xtHPzHHopu" />
+                        </div>
+                        <h3 class="text-white font-bold text-lg">James Chen</h3>
+                        <p class="text-primary text-sm font-medium mb-3">CEO &amp; Co-Founder</p>
+                        <p class="text-slate-400 text-xs text-center mb-4">Ex-Google Data Scientist with a passion for
+                            Bayesian statistics.</p>
+                        <div class="flex gap-3 mt-auto">
+                            <a class="text-slate-500 hover:text-white transition-colors" href="#"><span
+                                    class="material-symbols-outlined text-[20px]">link</span></a>
+                            <a class="text-slate-500 hover:text-white transition-colors" href="#"><span
+                                    class="material-symbols-outlined text-[20px]">alternate_email</span></a>
+                        </div>
+                    </div>
+                    <!-- Team Member 2 -->
+                    <div
+                        class="group relative flex flex-col items-center p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-primary/50 transition-all">
+                        <div
+                            class="size-24 mb-4 rounded-full overflow-hidden border-2 border-primary/20 group-hover:border-primary transition-colors">
+                            <img class="w-full h-full object-cover" data-alt="Portrait of Sarah Miller, CTO"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpBlcZc9_I8n_d_DF0uCUfhOmr5z9KooBbE9JHAmFDjwh8hb0biSAJPqayWX-kgSLO9JuQpOCTT-smu4SWdlqzcSHwBsPiD1LwuGkmjktazWKjkZ_llyKYZw0QYKH8UBcYEGKJWKSOJjwA9R9gH50WfIr8rUiptb3_OrexmaYKT0uRGBOG9lmzzqa_enCyJ-BJc9lUcdKq6EbhvAoYHYQF4waixrEb7mZlXsBK-CMv--zqotV9LL2f4YIlde0MuEpG5VDs2AzK" />
+                        </div>
+                        <h3 class="text-white font-bold text-lg">Sarah Miller</h3>
+                        <p class="text-primary text-sm font-medium mb-3">CTO</p>
+                        <p class="text-slate-400 text-xs text-center mb-4">AI researcher specializing in reinforcement
+                            learning models.</p>
+                        <div class="flex gap-3 mt-auto">
+                            <a class="text-slate-500 hover:text-white transition-colors" href="#"><span
+                                    class="material-symbols-outlined text-[20px]">link</span></a>
+                            <a class="text-slate-500 hover:text-white transition-colors" href="#"><span
+                                    class="material-symbols-outlined text-[20px]">alternate_email</span></a>
+                        </div>
+                    </div>
+                    <!-- Team Member 3 -->
+                    <div
+                        class="group relative flex flex-col items-center p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-primary/50 transition-all">
+                        <div
+                            class="size-24 mb-4 rounded-full overflow-hidden border-2 border-primary/20 group-hover:border-primary transition-colors">
+                            <img class="w-full h-full object-cover" data-alt="Portrait of David Okonjo, Head of Product"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrFtibMJrK3Q2J3irzaZOVRkKrpYqKLzQPQG0f0qEqnYKv26tjlHSjRlIlZ9TR4vRn2PZYqdPQS5EAP49lZlg-dh6GMkLdeLwQuSq6_x0-mdHUV_65PWLavuyRCjSwVZqSKuVIIzjjL6jZA2LUWClZpkVDEIUNKVz8w36IAxJe8vCm2r_BrPXuX00IPs17BqEQtuglTa8-K22og6rvueAyPlvsOtk9SH5LpC2JSwmoKI_caRM4STLuza2pQ8KrcuzFi7N5T7BS" />
+                        </div>
+                        <h3 class="text-white font-bold text-lg">David Okonjo</h3>
+                        <p class="text-primary text-sm font-medium mb-3">Head of Product</p>
+                        <p class="text-slate-400 text-xs text-center mb-4">Product visionary focused on simplifying
+                            complex data workflows.</p>
+                        <div class="flex gap-3 mt-auto">
+                            <a class="text-slate-500 hover:text-white transition-colors" href="#"><span
+                                    class="material-symbols-outlined text-[20px]">link</span></a>
+                            <a class="text-slate-500 hover:text-white transition-colors" href="#"><span
+                                    class="material-symbols-outlined text-[20px]">alternate_email</span></a>
+                        </div>
+                    </div>
+                    <!-- Team Member 4 -->
+                    <div
+                        class="group relative flex flex-col items-center p-4 rounded-xl bg-surface-dark border border-border-dark hover:border-primary/50 transition-all">
+                        <div
+                            class="size-24 mb-4 rounded-full overflow-hidden border-2 border-primary/20 group-hover:border-primary transition-colors">
+                            <img class="w-full h-full object-cover"
+                                data-alt="Portrait of Elena Rodriguez, Lead Designer"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuADM9rGss6uKTkJZZ9A5sEzlE3Cv_e-4Dw71a_0CxchDZuyITRggAGcbY-3CZUSMhy9Pu01G0LUywQ4Swa3IFfPgmnSic4IUOVRMHgj8Tc_Ss3CKy7pFy7-K29NQLDr1dnCvws30Evsc3l7HTyT_PmV4wZTdahyTKNjzJB7Ov1QRl273WDCYXxm2sFJajbBhTkbaqvugWtDVcSEZfz9VV2aoVVT6mWhK-DdZ0nR3g5FBhB2zbVwz1X3ncLHcoJzlZJ_T0DMNpXZ" />
+                        </div>
+                        <h3 class="text-white font-bold text-lg">Elena Rodriguez</h3>
+                        <p class="text-primary text-sm font-medium mb-3">Lead Designer</p>
+                        <p class="text-slate-400 text-xs text-center mb-4">Obsessed with dark mode aesthetics and
+                            intuitive interfaces.</p>
+                        <div class="flex gap-3 mt-auto">
+                            <a class="text-slate-500 hover:text-white transition-colors" href="#"><span
+                                    class="material-symbols-outlined text-[20px]">link</span></a>
+                            <a class="text-slate-500 hover:text-white transition-colors" href="#"><span
+                                    class="material-symbols-outlined text-[20px]">alternate_email</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Testimonial/Partners -->
+        <section class="w-full px-4 md:px-10 lg:px-40 py-16 flex justify-center">
+            <div class="w-full max-w-[1024px] flex flex-col items-center">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center w-full">
+                    <div
+                        class="rounded-2xl bg-gradient-to-br from-surface-dark to-background-dark border border-border-dark p-8 md:p-12 relative overflow-hidden">
+                        <span
+                            class="material-symbols-outlined absolute top-6 left-6 text-primary/20 text-[120px] -z-0">format_quote</span>
+                        <div class="relative z-10 flex flex-col gap-6">
+                            <p class="text-xl md:text-2xl font-medium text-white italic">
+                                "OptiAI completely removed the bottleneck in our experimentation process. We are running
+                                10x more tests with the same team size."
+                            </p>
+                            <div class="flex items-center gap-4">
+                                <div class="size-10 rounded-full bg-slate-600 overflow-hidden">
+                                    <img class="w-full h-full object-cover" data-alt="Client Portrait"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAINsWbCcdzXMcJ3E37Fs3p3w9jhIPh7QMFyHT7kN52GbyjvEr7nDlJ9Ny7es_f3eRP-e47faMoBZiz5dhypMSS5CASUt5B_0PiPEwMRV_wZwn_95P_Mkx85YbLyCyVOnrVjYivCrWa8SQE9JbzrsKinv4ZnDHpH0a0oUrKv5rCajr-DpAqBPuqH0il4JrKhtRnVo5ZV2ypHdwQ8_B6USZyFnxaxrV-OILLsxtX_6M9V3wEFRKQT0u1emTWHgqRsw2uhqQmR-nN" />
+                                </div>
+                                <div>
+                                    <p class="text-white font-bold text-sm">Marcus Johnson</p>
+                                    <p class="text-slate-400 text-xs">VP of Growth at TechFlow</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-6">
+                        <h3 class="text-slate-400 font-bold uppercase tracking-wider text-sm">Trusted by Industry
+                            Leaders</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Fake Logos using text for simplicity/compliance -->
+                            <div
+                                class="h-16 rounded-lg bg-surface-dark border border-border-dark flex items-center justify-center text-slate-300 font-bold text-lg opacity-60 hover:opacity-100 transition-opacity">
+                                ACME Corp</div>
+                            <div
+                                class="h-16 rounded-lg bg-surface-dark border border-border-dark flex items-center justify-center text-slate-300 font-bold text-lg opacity-60 hover:opacity-100 transition-opacity">
+                                GlobalBank</div>
+                            <div
+                                class="h-16 rounded-lg bg-surface-dark border border-border-dark flex items-center justify-center text-slate-300 font-bold text-lg opacity-60 hover:opacity-100 transition-opacity">
+                                Starlight</div>
+                            <div
+                                class="h-16 rounded-lg bg-surface-dark border border-border-dark flex items-center justify-center text-slate-300 font-bold text-lg opacity-60 hover:opacity-100 transition-opacity">
+                                Nebula</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Footer / CTA -->
+        <footer class="w-full bg-surface-dark border-t border-border-dark">
+            <div class="px-4 py-16 md:px-10 lg:px-40 flex justify-center">
+                <div class="w-full max-w-[1024px] flex flex-col md:flex-row justify-between items-center gap-8">
+                    <div class="flex flex-col gap-4 max-w-md text-center md:text-left">
+                        <h2 class="text-white text-3xl font-bold">Ready to optimize?</h2>
+                        <p class="text-slate-400">Join 500+ engineering teams building better products with OptiAI.</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button
+                            class="flex min-w-[160px] h-12 cursor-pointer items-center justify-center overflow-hidden rounded-lg px-6 bg-primary text-white text-base font-bold shadow-lg shadow-primary/20 hover:bg-blue-600 transition-all">
+                            Start Free Trial
+                        </button>
+                        <button
+                            class="flex min-w-[160px] h-12 cursor-pointer items-center justify-center overflow-hidden rounded-lg px-6 bg-transparent border border-border-dark text-white text-base font-bold hover:bg-border-dark transition-all">
+                            Contact Sales
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-border-dark/50 bg-[#0d121c] py-8">
+                <div
+                    class="px-4 md:px-10 lg:px-40 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500 max-w-[1024px] mx-auto">
+                    <p>© 2023 OptiAI Inc. All rights reserved.</p>
+                    <div class="flex gap-6">
+                        <a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+                        <a class="hover:text-white transition-colors" href="#">Terms of Service</a>
+                        <a class="hover:text-white transition-colors" href="#">Cookie Settings</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+</body>
+
+</html>

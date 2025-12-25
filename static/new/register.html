@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Página de Registro - OptimizAI</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                        "surface-dark": "#1e293b",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased min-h-screen flex flex-col overflow-x-hidden">
+    <!-- Header / Navbar -->
+    <header
+        class="w-full border-b border-gray-200 dark:border-[#232f48] bg-white/80 dark:bg-[#111722]/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="size-8 text-primary">
+                        <svg class="h-full w-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z"
+                                fill="currentColor"></path>
+                        </svg>
+                    </div>
+                    <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">OptimizAI</span>
+                </div>
+                <!-- Nav Action -->
+                <a class="group flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+                    href="#">
+                    <span>¿Ya tienes cuenta?</span>
+                    <span
+                        class="hidden sm:inline-flex items-center justify-center px-4 py-2 rounded-lg bg-gray-100 dark:bg-[#232f48] text-slate-900 dark:text-white group-hover:bg-primary group-hover:text-white transition-all">
+                        Iniciar Sesión
+                    </span>
+                </a>
+            </div>
+        </div>
+    </header>
+    <!-- Main Content -->
+    <main class="flex-grow relative flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <!-- Abstract Background Decoration -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+            <div class="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-30 mix-blend-screen"
+                data-alt="Abstract blue gradient glow top left"></div>
+            <div class="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-3xl opacity-20 mix-blend-screen"
+                data-alt="Abstract purple gradient glow bottom right"></div>
+        </div>
+        <div class="w-full max-w-lg space-y-8">
+            <!-- Page Heading -->
+            <div class="text-center space-y-2">
+                <h1 class="text-4xl font-black tracking-tight text-slate-900 dark:text-white">
+                    Crea tu cuenta
+                </h1>
+                <p class="text-slate-600 dark:text-[#92a4c9] text-base">
+                    Empieza a optimizar tus pruebas A/B con nuestra IA.
+                </p>
+            </div>
+            <!-- Registration Card -->
+            <div
+                class="bg-white dark:bg-[#192233]/50 backdrop-blur-sm border border-gray-200 dark:border-[#324467] rounded-xl shadow-xl dark:shadow-none p-6 sm:p-8">
+                <form action="#" class="space-y-5" method="POST" onsubmit="event.preventDefault()">
+                    <!-- Name Field -->
+                    <div>
+                        <label class="block text-sm font-medium leading-6 text-slate-900 dark:text-white mb-2"
+                            for="name">Nombre completo</label>
+                        <div class="relative">
+                            <div
+                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                <span class="material-symbols-outlined text-[20px]">person</span>
+                            </div>
+                            <input autocomplete="name"
+                                class="block w-full rounded-lg border-0 py-3 pl-10 text-slate-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-[#324467] placeholder:text-gray-400 dark:placeholder:text-[#92a4c9] focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-[#101622] sm:text-sm sm:leading-6 transition-all"
+                                id="name" name="name" placeholder="Ej. Juan Pérez" required="" type="text" />
+                        </div>
+                    </div>
+                    <!-- Email Field -->
+                    <div>
+                        <label class="block text-sm font-medium leading-6 text-slate-900 dark:text-white mb-2"
+                            for="email">Correo electrónico</label>
+                        <div class="relative">
+                            <div
+                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                <span class="material-symbols-outlined text-[20px]">mail</span>
+                            </div>
+                            <input autocomplete="email"
+                                class="block w-full rounded-lg border-0 py-3 pl-10 text-slate-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-[#324467] placeholder:text-gray-400 dark:placeholder:text-[#92a4c9] focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-[#101622] sm:text-sm sm:leading-6 transition-all"
+                                id="email" name="email" placeholder="nombre@empresa.com" required="" type="email" />
+                        </div>
+                    </div>
+                    <!-- Password Fields (Row on desktop) -->
+                    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                        <div>
+                            <label class="block text-sm font-medium leading-6 text-slate-900 dark:text-white mb-2"
+                                for="password">Contraseña</label>
+                            <div class="relative">
+                                <div
+                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                    <span class="material-symbols-outlined text-[20px]">lock</span>
+                                </div>
+                                <input
+                                    class="block w-full rounded-lg border-0 py-3 pl-10 text-slate-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-[#324467] placeholder:text-gray-400 dark:placeholder:text-[#92a4c9] focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-[#101622] sm:text-sm sm:leading-6 transition-all"
+                                    id="password" name="password" placeholder="••••••••" required="" type="password" />
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium leading-6 text-slate-900 dark:text-white mb-2"
+                                for="confirm-password">Confirmar</label>
+                            <div class="relative">
+                                <div
+                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                    <span class="material-symbols-outlined text-[20px]">lock_reset</span>
+                                </div>
+                                <input
+                                    class="block w-full rounded-lg border-0 py-3 pl-10 text-slate-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-[#324467] placeholder:text-gray-400 dark:placeholder:text-[#92a4c9] focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-[#101622] sm:text-sm sm:leading-6 transition-all"
+                                    id="confirm-password" name="confirm-password" placeholder="••••••••" required=""
+                                    type="password" />
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Terms Checkbox -->
+                    <div class="flex items-center">
+                        <input
+                            class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary dark:border-[#324467] dark:bg-[#101622]"
+                            id="terms" name="terms" type="checkbox" />
+                        <label class="ml-2 block text-sm text-slate-600 dark:text-[#92a4c9]" for="terms">
+                            Acepto los <a class="font-medium text-primary hover:text-blue-500" href="#">Términos y
+                                Condiciones</a>
+                        </label>
+                    </div>
+                    <!-- Submit Button -->
+                    <div>
+                        <button
+                            class="flex w-full justify-center rounded-lg bg-primary px-3 py-3.5 text-sm font-bold leading-6 text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all"
+                            type="submit">
+                            Registrarse
+                        </button>
+                    </div>
+                    <!-- Social Login Divider -->
+                    <div class="relative mt-6">
+                        <div aria-hidden="true" class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-200 dark:border-[#324467]"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm font-medium leading-6">
+                            <span
+                                class="bg-white px-6 text-slate-500 dark:bg-[#161d2d] dark:text-gray-400 rounded-full">O
+                                continúa con</span>
+                        </div>
+                    </div>
+                    <!-- Social Buttons -->
+                    <div class="grid grid-cols-2 gap-4 mt-6">
+                        <a class="flex w-full items-center justify-center gap-3 rounded-lg bg-white dark:bg-[#232f48] px-3 py-2 text-sm font-semibold text-slate-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-[#324467] hover:bg-gray-50 dark:hover:bg-[#2d3b58] focus-visible:ring-transparent transition-all"
+                            href="#">
+                            <span class="material-symbols-outlined text-[20px]">account_circle</span>
+                            <span class="text-sm">Google</span>
+                        </a>
+                        <a class="flex w-full items-center justify-center gap-3 rounded-lg bg-white dark:bg-[#232f48] px-3 py-2 text-sm font-semibold text-slate-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-[#324467] hover:bg-gray-50 dark:hover:bg-[#2d3b58] focus-visible:ring-transparent transition-all"
+                            href="#">
+                            <span class="material-symbols-outlined text-[20px]">code</span>
+                            <span class="text-sm">GitHub</span>
+                        </a>
+                    </div>
+                </form>
+            </div>
+            <p class="text-center text-xs text-slate-500 dark:text-[#64748b]">
+                Protegido por reCAPTCHA y sujeto a la Política de Privacidad y Términos de Servicio de Google.
+            </p>
+        </div>
+    </main>
+</body>
+
+</html>
