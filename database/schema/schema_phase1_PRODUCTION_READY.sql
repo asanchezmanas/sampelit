@@ -102,7 +102,7 @@ CREATE TABLE element_variants (
     total_conversions INTEGER DEFAULT 0,
     conversion_rate DECIMAL(10,6) DEFAULT 0,
     
-    -- CRITICO: Estado cifrado de Thompson Sampling (BYTEA)
+    -- CRITICO: Estado cifrado de Adaptive Choice Strategy (BYTEA)
     algorithm_state BYTEA,
     state_version INTEGER DEFAULT 1,
     
@@ -526,7 +526,7 @@ WHERE e.status = 'active';
 COMMENT ON TABLE users IS 'Users of the Samplit platform';
 COMMENT ON TABLE experiments IS 'A/B test experiments';
 COMMENT ON TABLE experiment_elements IS 'Elements being tested in multi-element experiments';
-COMMENT ON TABLE element_variants IS 'Variants for each element with encrypted Thompson Sampling state';
+COMMENT ON TABLE element_variants IS 'Variants for each element with encrypted Adaptive Choice Strategy state';
 COMMENT ON TABLE assignments IS 'User assignments to variants';
 COMMENT ON TABLE platform_installations IS 'Platform installations (WordPress, Shopify, manual snippet)';
 COMMENT ON TABLE traffic_exclusion_rules IS 'Rules to exclude traffic from experiments (internal IPs, etc)';
@@ -534,7 +534,7 @@ COMMENT ON TABLE excluded_sessions IS 'Log of excluded sessions for analytics';
 COMMENT ON TABLE user_onboarding IS 'User onboarding progress';
 COMMENT ON TABLE subscriptions IS 'User subscription and billing information';
 
-COMMENT ON COLUMN element_variants.algorithm_state IS '🔒 ENCRYPTED Thompson Sampling state (BYTEA) - Never expose in API';
+COMMENT ON COLUMN element_variants.algorithm_state IS '🔒 ENCRYPTED Adaptive Choice Strategy state (BYTEA) - Never expose in API';
 COMMENT ON COLUMN element_variants.total_allocations IS 'Public metric: total users assigned to this variant';
 COMMENT ON COLUMN element_variants.total_conversions IS 'Public metric: total conversions for this variant';
 COMMENT ON COLUMN element_variants.conversion_rate IS 'Public metric: observed conversion rate';

@@ -179,7 +179,7 @@ class MultiElementDemoGenerator:
             'notes': [
                 'This is a FACTORIAL experiment',
                 'Each combination is treated as a separate variant',
-                'Thompson Sampling learns the best COMBINATION',
+                'Adaptive Optimization learns the best COMBINATION',
                 'Captures interaction effects between elements',
                 'Example: CTA-B + Copy-Y (4.5%) > CTA-C + Copy-Y (2.8%)'
             ]

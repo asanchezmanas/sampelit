@@ -94,7 +94,7 @@
 │  ↓                                                            │
 │  ExperimentService.allocate_user()                            │
 │  ↓                                                            │
-│  Thompson Sampling →elige variante                           │
+│  Adaptive Strategy →elige variante                           │
 │  ↓                                                            │
 │  AuditService.log_decision()  ← REGISTRA AQUÍ               │
 │  │                                                            │
@@ -172,7 +172,7 @@
 
 ```json
 {
-  "algorithm_version": "adaptive-thompson-v2.1",
+  "algorithm_version": "adaptive-optimizer-v2.1",
   "decision_to_conversion_seconds": 83.0
 }
 ```
@@ -183,7 +183,7 @@
 
 ## ❌ Qué NO se Revela
 
-### 1. Parámetros Thompson Sampling
+### 1. Parámetros Internos
 
 ```python
 # ❌ NUNCA se registra:
@@ -201,7 +201,7 @@
 ```python
 # ❌ NUNCA se registra:
 {
-  "thompson_sample": 0.156,
+  "adaptive_sample": 0.156,
   "expected_value": 0.128,
   "ucb_score": 0.234
 }
@@ -392,7 +392,7 @@ Cliente puede contratar auditor externo para revisar CSV
 **Qué NO puede ver:**
 
 ❌ Cómo funciona el algoritmo internamente  
-❌ Parámetros Thompson Sampling  
+❌ Parámetros Internos  
 ❌ Probabilidades calculadas  
 
 ### 2. Compliance / Regulación
@@ -650,7 +650,7 @@ await samplit.recordConversion({
    - No se necesita ver el algoritmo
 
 3. **Pragmatismo:**
-   - Cliente puede auditar sin entender Thompson Sampling
+   - Cliente puede auditar sin entender Optimización Adaptativa
    - Competencia no puede copiar sin ver parámetros
    - Cumple regulaciones sin revelar secretos
 

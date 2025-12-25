@@ -160,7 +160,7 @@ class ExperimentService:
                         if not variant_name:
                             raise ValueError(f"Variant #{idx+1} missing name")
                         
-                        # Initialize Thompson Sampling state
+                        # Initialize Adaptive Choice Strategy state
                         initial_state = {
                             'alpha': 1.0,  # Prior successes
                             'beta': 1.0,   # Prior failures
@@ -339,7 +339,7 @@ class ExperimentService:
         return updated
     
     # ========================================================================
-    # VARIANT ALLOCATION - Thompson Sampling
+    # VARIANT ALLOCATION - Adaptive Strategy
     # ========================================================================
     
     async def allocate_user_to_variant(
@@ -350,7 +350,7 @@ class ExperimentService:
         context: Optional[Dict[str, Any]] = None
     ) -> Optional[Dict[str, Any]]:
         """
-        Allocate user to variant using Thompson Sampling
+        Allocate user to variant using Adaptive Optimization
         
         Returns variant assignment or None if experiment not found/inactive
         """
@@ -381,7 +381,7 @@ class ExperimentService:
                 'assigned_at': existing['assigned_at']
             }
         
-        # Get active variants with Thompson Sampling state
+        # Get active variants with adaptive state
         variants = await self.variant_repo.get_variants_for_optimization(
             experiment_id
         )
@@ -390,8 +390,8 @@ class ExperimentService:
             self.logger.warning(f"No active variants for experiment {experiment_id}")
             return None
         
-        # Use Thompson Sampling to select variant
-        selected_variant = await self._thompson_sampling_select(variants)
+        # Use Adaptive Strategy to select variant
+        selected_variant = await self._adaptive_selection(variants)
         
         if not selected_variant:
             return None
@@ -433,12 +433,12 @@ class ExperimentService:
             'assigned_at': datetime.utcnow()
         }
     
-    async def _thompson_sampling_select(
+    async def _adaptive_selection(
         self,
         variants: List[Dict[str, Any]]
     ) -> Optional[Dict[str, Any]]:
         """
-        Select variant using Thompson Sampling algorithm
+        Select variant using Adaptive algorithm
         
         Uses encrypted state from variants
         """
@@ -455,7 +455,7 @@ class ExperimentService:
             return variants[selected_idx]
         
         except Exception as e:
-            self.logger.error(f"Thompson Sampling selection error: {e}")
+            self.logger.error(f"Adaptive selection error: {e}")
             # Fallback to random uniform
             import random
             return random.choice(variants)

@@ -66,8 +66,8 @@ async def main():
         await service.start_experiment(experiment_id)
         print("Experiment Status -> 'running'")
         
-        # 5. Simulate Traffic (Thompson Sampling)
-        print("\nSimulating 20 Allocations (Thompson Sampling)...")
+        # 5. Simulate Traffic (Adaptive Optimization)
+        print("\nSimulating 20 Allocations (Adaptive Optimization)...")
         results = {"Control (Blue)": 0, "Variant A (Red)": 0, "Variant B (Green)": 0}
         
         for i in range(20):

@@ -4,7 +4,7 @@
 Compare performance of different allocators
 
 Usage:
-    python scripts/compare_allocators.py thompson ucb --trials 1000
+    python scripts/compare_allocators.py adaptive ucb --trials 1000
 """
 
 import asyncio
@@ -216,7 +216,7 @@ async def main():
     parser.add_argument(
         'strategies',
         nargs='+',
-        help='Allocator strategies to compare (e.g., thompson ucb epsilon_greedy)'
+        help='Allocator strategies to compare (e.g., adaptive ucb epsilon_greedy)'
     )
     parser.add_argument(
         '--rates',

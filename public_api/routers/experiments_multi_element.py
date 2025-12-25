@@ -9,7 +9,7 @@ MODOS DISPONIBLES:
 
 1. FACTORIAL (Recomendado para experimentos pequeños):
    - Trata cada COMBINACIÓN completa como una variante única.
-   - Thompson Sampling aprende la mejor COMBINACIÓN total.
+   - El optimizador ADAPTATIVO aprende la mejor COMBINACIÓN total.
    - Captura efectos de INTERACCIÓN entre elementos (ej: "Green Button" + "Sales Copy" > "Red Button" + "Sales Copy").
    - Recomendado para: <25 combinaciones totales.
 
@@ -121,7 +121,7 @@ async def allocate_high_dim_user(
     """
     Allocates a visitor to the optimal variant combination using real-time Bayesian updating.
     
-    Uses Thompson Sampling to balance Exploration (learning new patterns) and 
+    Uses Adaptive Strategy to balance Exploration (learning new patterns) and 
     Exploitation (serving the current winner).
     """
     try:
@@ -140,7 +140,7 @@ async def allocate_high_dim_user(
     except Exception as e:
         if isinstance(e, APIError): raise
         logger.error(f"High-dim allocation failure for {experiment_id}: {e}")
-        raise APIError("Allocation service interrupted during Bayesian sampling", code=ErrorCodes.INTERNAL_ERROR, status=500)
+        raise APIError("Allocation service interrupted during adaptive selection", code=ErrorCodes.INTERNAL_ERROR, status=500)
 
 
 @router.get("/{experiment_id}/status", response_model=MultiElementStatusResponse)

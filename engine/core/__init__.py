@@ -19,7 +19,7 @@ def _get_allocator(strategy_code: str, config: dict):
     
     Args:
         strategy_code: Strategy identifier:
-            - 'adaptive': Adaptive Bayesian (Thompson Sampling)
+            - 'adaptive': Adaptive Bayesian (Adaptive Bayesian Inference)
             - 'standard': Standard Bayesian
             - 'fast_learning': Low-traffic optimized
             - 'sequential': Multi-step optimization

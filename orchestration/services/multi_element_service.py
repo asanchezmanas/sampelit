@@ -117,7 +117,7 @@ class MultiElementService:
                     # Crear variantes para este elemento
                     variant_ids = []
                     for var_idx, variant_content in enumerate(element_config['variants']):
-                        # Inicializar Thompson Sampling state
+                        # Inicializar Adaptive Strategy state
                         initial_state = {
                             'alpha': 1.0,
                             'beta': 1.0,
@@ -328,7 +328,7 @@ class MultiElementService:
     ) -> Dict[str, Any]:
         """
         MODO INDEPENDIENTE:
-        Cada elemento selecciona su mejor variante usando Thompson Sampling
+        Cada elemento selecciona su mejor variante usando Optimización Adaptativa
         
         ✅ Ventajas:
         - Converge rápido
@@ -358,7 +358,7 @@ class MultiElementService:
         for element in elements:
             element_id = str(element['id'])
             
-            # Obtener variantes con Thompson Sampling state
+            # Obtener variantes con estado adaptativo
             variants = await self.variant_repo.get_variants_for_optimization(
                 element_id
             )
@@ -366,8 +366,8 @@ class MultiElementService:
             if not variants:
                 continue
             
-            # ✅ THOMPSON SAMPLING: Seleccionar mejor variante para este elemento
-            selected_variant = await self._thompson_sampling_select(variants)
+            # ✅ OPTIMIZACIÓN ADAPTATIVA: Seleccionar mejor variante para este elemento
+            selected_variant = await self._adaptive_selection(variants)
             
             if not selected_variant:
                 continue
@@ -463,8 +463,8 @@ class MultiElementService:
                 }
             })
         
-        # ✅ THOMPSON SAMPLING: Seleccionar mejor COMBINACIÓN
-        selected_combination = await self._thompson_sampling_select(
+        # ✅ OPTIMIZACIÓN ADAPTATIVA: Seleccionar mejor COMBINACIÓN
+        selected_combination = await self._adaptive_selection(
             combination_performances
         )
         
@@ -600,12 +600,12 @@ class MultiElementService:
     # HELPERS
     # ========================================================================
     
-    async def _thompson_sampling_select(
+    async def _adaptive_selection(
         self,
         options: List[Dict[str, Any]]
     ) -> Optional[Dict[str, Any]]:
         """
-        Thompson Sampling selection
+        Adaptive selection
         
         Uses encrypted state from variants/combinations
         """
@@ -625,7 +625,7 @@ class MultiElementService:
             return None
         
         except Exception as e:
-            self.logger.error(f"Thompson Sampling error: {e}")
+            self.logger.error(f"Adaptive optimization error: {e}")
             import random
             return random.choice(options)
     

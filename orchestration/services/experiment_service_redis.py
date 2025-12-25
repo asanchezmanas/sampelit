@@ -202,7 +202,7 @@ class ExperimentServiceRedis(ExperimentService):
         Flow:
         1. Try to get variants from Redis
         2. If Redis fails, fallback to PostgreSQL
-        3. Use Thompson Sampling to select variant
+        3. Use Adaptive Strategy to select variant
         4. Store assignment in PostgreSQL
         5. Update Redis counters (non-blocking)
         """
@@ -249,8 +249,8 @@ class ExperimentServiceRedis(ExperimentService):
             # Try to cache for next time (non-blocking)
             await self._set_variants_in_redis(experiment_id, variants)
         
-        # Use Thompson Sampling to select variant
-        selected_variant = await self._thompson_sampling_select(variants)
+        # Use Adaptive Strategy to select variant
+        selected_variant = await self._adaptive_selection(variants)
         
         if not selected_variant:
             return None

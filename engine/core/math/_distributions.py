@@ -32,7 +32,7 @@ def sample_posterior(success_count: int,
     Implementation: [CONFIDENTIAL]
     """
     
-    # Esto es Thompson Sampling (Beta distribution)
+    # Esto es Adaptive Choice Strategy (Beta distribution)
     # pero nunca lo nombramos explícitamente
     
     # Prior + observed data

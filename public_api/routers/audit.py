@@ -141,7 +141,7 @@ async def get_fairness_proof(
             },
             evidence={
                 "generated_at": datetime.now(tz.utc),
-                "algorithm": "adaptive-thompson-v2.1",
+                "algorithm": "adaptive-optimizer-v2.1",
                 "integrity_hash": integrity.get('final_hash')
             }
         )

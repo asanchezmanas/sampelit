@@ -7,7 +7,7 @@ Script para ejecutar demo completo de experimentos multi-elemento FACTORIAL.
 
 Este script simula un experimento multi-elemento real usando el modo FACTORIAL,
 comparando el enfoque tradicional (split uniforme) contra el enfoque adaptativo
-de Samplit con Thompson Sampling.
+de Samplit con Optimización Adaptativa.
 
 MODO FACTORIAL:
 - Adaptive learning trata cada combinación completa como una variante
@@ -161,13 +161,13 @@ class MultiElementDemo:
     
     async def simulate_with_samplit_factorial(self):
         """
-        Simula enfoque de Samplit con Thompson Sampling en modo FACTORIAL.
+        Simula enfoque de Samplit con Optimización Adaptativa en modo FACTORIAL.
         
         Returns:
             dict: Resultados de la simulación
         """
         print("\n" + "=" * 70)
-        print("  SIMULACIÓN: SAMPLIT ADAPTATIVO (Factorial Thompson Sampling)")
+        print("  SIMULACIÓN: SAMPLIT ADAPTATIVO (Factorial Adaptive Optimization)")
         print("=" * 70)
         
         # Inicializar base de datos
@@ -201,7 +201,7 @@ class MultiElementDemo:
             
             # Simular visitantes
             print(f"\n🔄 Procesando {self.n_visitors:,} visitantes...")
-            print(f"  Thompson Sampling aprenderá la mejor combinación...")
+            print(f"  El motor adaptativo aprenderá la mejor combinación...")
             
             combination_allocations = {i: 0 for i in range(self.n_combinations)}
             combination_conversions = {i: 0 for i in range(self.n_combinations)}
@@ -214,7 +214,7 @@ class MultiElementDemo:
                 for visitor_idx in range(batch_start, batch_end):
                     user_id = f"demo_user_{visitor_idx}"
                     
-                    # Asignar combinación usando Thompson Sampling
+                    # Asignar combinación usando Optimización Adaptativa
                     result = await allocate_user_multi_element(
                         repo=repo,
                         experiment_id=experiment.id,
@@ -262,7 +262,7 @@ class MultiElementDemo:
                 }
             
             results = {
-                'approach': 'samplit_factorial_thompson_sampling',
+                'approach': 'samplit_factorial_adaptive',
                 'experiment_id': experiment.id,
                 'total_visitors': self.n_visitors,
                 'total_conversions': total_conversions,

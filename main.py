@@ -520,7 +520,7 @@ if __name__ == "__main__":
     ║   Intelligent A/B Testing Engine      ║
     ║                                       ║
     ║   ✅ 1-Line Installation              ║
-    ║   ✅ Thompson Sampling                ║
+    ║   ✅ Adaptive Strategy                ║
     ║   ✅ Auto-Optimization                ║
     ║                                       ║
     ╚═══════════════════════════════════════╝

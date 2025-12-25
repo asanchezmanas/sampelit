@@ -1,20 +1,20 @@
 # engine/core/allocators/bayesian.py
 """
-Bayesian Allocator - Thompson Sampling
+Bayesian Allocator - Adaptive Choice Strategy
 
-Implementation of Thompson Sampling algorithm for multi-armed bandits.
+Implementation of Adaptive Choice Strategy algorithm for multi-armed bandits.
 
 References:
-- Thompson, W. R. (1933). "On the Likelihood that One Unknown 
+- Adaptive Strategy, W. R. (1933). "On the Likelihood that One Unknown 
   Probability Exceeds Another in View of the Evidence of Two Samples"
 - Chapelle, O., & Li, L. (2011). "An Empirical Evaluation of 
-  Thompson Sampling"
-- Agrawal, S., & Goyal, N. (2012). "Analysis of Thompson Sampling 
+  Adaptive Choice Strategy"
+- Agrawal, S., & Goyal, N. (2012). "Analysis of Adaptive Choice Strategy 
   for the Multi-armed Bandit Problem"
 
 Algorithm Overview:
 ==================
-Thompson Sampling is a Bayesian approach to the multi-armed bandit problem.
+Adaptive Choice Strategy is a Bayesian approach to the multi-armed bandit problem.
 For each variant i:
 1. Maintain Beta(αᵢ, βᵢ) posterior distribution
 2. Sample θᵢ ~ Beta(αᵢ, βᵢ)
@@ -40,7 +40,7 @@ logger = logging.getLogger(__name__)
 
 class BayesianAllocator:
     """
-    Thompson Sampling Allocator
+    Adaptive Choice Strategy Allocator
     
     Uses Beta-Binomial conjugate priors for binary rewards (conversion/no conversion).
     
@@ -104,7 +104,7 @@ class BayesianAllocator:
     
     def select_variant(self, variants: List[Dict[str, Any]]) -> int:
         """
-        Select variant using Thompson Sampling
+        Select variant using Adaptive Choice Strategy
         
         Args:
             variants: List of variants with 'algorithm_state' containing:
@@ -141,7 +141,7 @@ class BayesianAllocator:
             )
             return selected
         
-        # Thompson Sampling: sample from Beta distribution for each variant
+        # Adaptive Choice Strategy: sample from Beta distribution for each variant
         samples = []
         
         for i, variant in enumerate(variants):
@@ -174,7 +174,7 @@ class BayesianAllocator:
         selected = int(np.argmax(samples))
         
         logger.debug(
-            f"Thompson Sampling: selected variant {selected} "
+            f"Adaptive Choice Strategy: selected variant {selected} "
             f"(sample={samples[selected]:.4f})"
         )
         
@@ -376,7 +376,7 @@ class BayesianAllocator:
 
 class AdaptiveBayesianAllocator(BayesianAllocator):
     """
-    Adaptive Thompson Sampling with dynamic exploration
+    Adaptive Choice Strategy with dynamic exploration
     
     Extends BayesianAllocator with adaptive exploration bonus.
     Automatically adjusts exploration based on:
@@ -424,7 +424,7 @@ class AdaptiveBayesianAllocator(BayesianAllocator):
         """
         Select variant with adaptive exploration
         
-        Adds UCB-style exploration bonus to Thompson samples:
+        Adds UCB-style exploration bonus to Adaptive samples:
         sample_i = sample_i + bonus * sqrt(log(N) / n_i)
         
         Where:
@@ -433,7 +433,7 @@ class AdaptiveBayesianAllocator(BayesianAllocator):
         - bonus = exploration_bonus parameter
         
         This encourages exploring variants with fewer samples,
-        similar to UCB algorithm but maintaining Thompson's probabilistic framework.
+        similar to UCB algorithm but maintaining Adaptive Choice Strategy's probabilistic framework.
         """
         if not variants:
             raise ValueError("Variants list cannot be empty")
@@ -457,7 +457,7 @@ class AdaptiveBayesianAllocator(BayesianAllocator):
             beta = state.get('beta', self.beta_prior)
             variant_samples = state.get('samples', 0)
             
-            # Base Thompson sample
+            # Base adaptive sample
             try:
                 sample = np.random.beta(alpha, beta)
             except ValueError:
@@ -481,7 +481,7 @@ class AdaptiveBayesianAllocator(BayesianAllocator):
         selected = int(np.argmax(samples))
         
         logger.debug(
-            f"Adaptive Thompson: selected variant {selected} "
+            f"Adaptive Optimization: selected variant {selected} "
             f"(sample={samples[selected]:.4f})"
         )
         

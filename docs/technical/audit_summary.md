@@ -412,7 +412,7 @@ Es como un blockchain para tus experimentos."
 
 **Respuesta:** Eso revelaría nuestra propiedad intelectual y permitiría a la competencia copiarnos. Con audit trail, das transparencia SIN revelar el "secreto".
 
-### ¿Qué pasa si un cliente pide ver los parámetros Thompson Sampling?
+### ¿Qué pasa si un cliente pide ver los parámetros internos?
 
 **Respuesta:** "Esos son parámetros internos que constituyen nuestra propiedad intelectual. Sin embargo, puedes verificar que el algoritmo funciona correctamente auditando el decision trail completo."
 

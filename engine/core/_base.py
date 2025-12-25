@@ -17,7 +17,7 @@ class BaseAllocator(ABC):
     Base class for all allocation strategies
     
     This is the foundation for all optimization algorithms.
-    Actual implementations (Thompson Sampling, Epsilon-Greedy, etc.)
+    Actual implementations (Adaptive Choice Strategy, Epsilon-Greedy, etc.)
     are in separate modules with obfuscated names.
     """
     
@@ -80,6 +80,6 @@ class BaseAllocator(ABC):
         """Sanitized logging - no algorithm details"""
         safe_kwargs = {
             k: v for k, v in kwargs.items()
-            if k not in ['alpha', 'beta', 'epsilon', 'thompson', 'scores']
+            if k not in ['alpha', 'beta', 'epsilon', 'adaptive_state', 'scores']
         }
         self.logger.info("Decision made", extra=safe_kwargs)

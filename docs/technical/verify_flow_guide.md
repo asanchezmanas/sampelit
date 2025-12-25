@@ -1,8 +1,8 @@
-# 🔍 Verificación Thompson Sampling + Auditoría
+# 🔍 Verificación Optimización Adaptativa + Auditoría
 
 ## 📄 Script Actualizado: `verify_flow.py`
 
-Este script ahora incluye **verificación completa del sistema de auditoría** además de la verificación de Thompson Sampling.
+Este script ahora incluye **verificación completa del sistema de auditoría** además de la verificación de la Optimización Adaptativa.
 
 ---
 
@@ -34,7 +34,7 @@ Este script ahora incluye **verificación completa del sistema de auditoría** a
 
 ## 🎯 Lo Que Verifica
 
-### Thompson Sampling (Original)
+### Optimización Adaptativa (Original)
 
 ```
 ✅ Estado inicial (priors 1,1)
@@ -101,7 +101,7 @@ python /mnt/user-data/outputs/verify_flow.py
 [4/12] Activando experimento...
      ✅ Status: active
      
-[5/12] Verificando estado inicial Thompson Sampling...
+[5/12] Verificando estado inicial de optimización adaptativa...
      Estado inicial (priors):
        • Variant A: alpha=1.0, beta=1.0
        • Variant B: alpha=1.0, beta=1.0
@@ -113,7 +113,7 @@ python /mnt/user-data/outputs/verify_flow.py
 ```
 [6/12] Simulando 30 visitantes con AUDITORÍA...
      → ExperimentService.allocate_user_to_variant()
-     → Thompson Sampling decide (PRIVADO)
+     → El motor adaptativo decide (PRIVADO)
      ✨ AuditService.log_decision() registra (PÚBLICO)
      → Solo registra: visitor_id, variant_id, timestamp
      → NO registra: alpha, beta, probabilidades
@@ -140,15 +140,15 @@ python /mnt/user-data/outputs/verify_flow.py
 ```
 [8/12] Simulando 15 conversiones en Variant B...
      → ExperimentService.record_conversion()
-     → Actualiza Thompson Sampling (PRIVADO)
+     → Actualiza motor adaptativo (PRIVADO)
      ✨ AuditService.log_conversion() registra (PÚBLICO)
      → Solo registra: conversion_timestamp
      → Verifica: decision_timestamp < conversion_timestamp
      ✅ 15 conversiones en Variant B
      ✅ 15 conversiones en audit trail
      
-[9/12] Verificando que Thompson Sampling aprendió...
-     Estado Thompson DESPUÉS de conversiones:
+[9/12] Verificando que la optimización adaptativa aprendió...
+     Estado adaptativo DESPUÉS de conversiones:
        • Variant A: alpha=  1.0, beta= 15.0, score=0.062
        • Variant B: alpha= 16.0, beta=  5.0, score=0.762  👈
        • Variant C: alpha=  1.0, beta= 12.0, score=0.077
@@ -169,7 +169,7 @@ python /mnt/user-data/outputs/verify_flow.py
      ✅ Audit trail mantiene integridad criptográfica
      
 [11/12] Simulando 50 visitantes adicionales...
-     Thompson debería enviar MÁS tráfico a Variant B
+     El motor adaptativo debería enviar MÁS tráfico a Variant B
      → Cada decisión se registra en audit trail
      ✅ 50 visitantes asignados + registrados
      
@@ -193,7 +193,7 @@ python /mnt/user-data/outputs/verify_flow.py
 ║                ✅ VERIFICACIÓN EXITOSA                       ║
 ╚══════════════════════════════════════════════════════════════╝
 
-  Thompson Sampling + Auditoría funcionan CORRECTAMENTE:
+  Optimización Adaptativa + Auditoría funcionan CORRECTAMENTE:
     • Variant B recibió 38/50 visitas (76.0%)
     • El algoritmo aprendió de las conversiones
     • El estado se guarda/carga correctamente
@@ -244,7 +244,7 @@ Audit Trail (En Memoria):
   • sequence_number: 94
 
 ❌ LO QUE NO ESTÁ EN AUDIT TRAIL:
-  • alpha, beta (parámetros Thompson)
+  • alpha, beta (parámetros internos)
   • probabilidades calculadas
   • samples de distribuciones Beta
   • razón de por qué se eligió esta variante
@@ -265,20 +265,20 @@ Audit Trail (En Memoria):
 |------|--------------|---------------|
 | 1-2  | Setup | Conexión BD + Usuario |
 | 3-4  | Experimento | Creación + Activación |
-| 5    | Estado Inicial | Priors Thompson (1,1) |
+| 5    | Estado Inicial | Priors Adaptive (1,1) |
 | **6** | **Asignación + Audit** | **Decisiones registradas** |
 | **7** | **Integridad Audit** | **Hash chain, timestamps** |
 | 8    | Conversiones | Backend + Audit |
-| 9    | Aprendizaje | Thompson actualizado |
+| 9    | Aprendizaje | Estado adaptativo actualizado |
 | **10** | **Audit Completo** | **Integridad mantenida** |
 | 11   | Optimización | Tráfico a ganador |
-| **12** | **Resultado** | **Thompson + Audit OK** |
+| **12** | **Resultado** | **Adaptive + Audit OK** |
 
 ---
 
 ## ✅ Criterios de Éxito
 
-### Thompson Sampling
+### Optimización Adaptativa
 ```python
 ✅ b_traffic >= 20  # >40% del tráfico a B
 ```
@@ -302,7 +302,7 @@ Audit Trail (En Memoria):
 
 ## 🆚 Diferencias con Versión Anterior
 
-### Antes (solo Thompson Sampling)
+### Antes (solo Optimización Adaptativa)
 ```
 ✅ 10 pasos
 ✅ Verificaba algoritmo
@@ -310,7 +310,7 @@ Audit Trail (En Memoria):
 ❌ No demostraba transparencia
 ```
 
-### Ahora (Thompson + Auditoría)
+### Ahora (Adaptativa + Auditoría)
 ```
 ✅ 12 pasos
 ✅ Verifica algoritmo
@@ -344,11 +344,11 @@ class AuditService:
         # Verifica secuencia
 ```
 
-### Integración con Thompson
+### Integración con Optimización Adaptativa
 ```python
 # 1. ALGORITMO DECIDE (privado)
 assignment = await service.allocate_user_to_variant(...)
-# Thompson Sampling calcula alpha/beta, muestrea, etc.
+# El motor adaptativo calcula parámetros, muestrea, etc.
 
 # 2. AUDITORÍA REGISTRA (público)
 audit.log_decision(
@@ -401,7 +401,7 @@ psql -U postgres -d samplit -f migrations/001_initial_schema.sql
 ```
 ┌────────────────────────────────────────────────────────┐
 │                                                        │
-│  THOMPSON SAMPLING                                     │
+│  OPTIMIZACIÓN ADAPTATIVA                                 │
 │  ✅ Funciona correctamente                            │
 │  ✅ Aprende de conversiones                           │
 │  ✅ Optimiza tráfico automáticamente                  │

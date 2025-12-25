@@ -11,7 +11,7 @@ class MultiElementDemoGenerator:
     Genera matriz de conversiones para experimento MULTI-ELEMENTO
     
     2 elementos × 3 variantes = 9 combinaciones
-    Thompson Sampling aprende la MEJOR combinación
+    El motor adaptativo aprende la MEJOR combinación
     """
     
     def __init__(self):
@@ -216,7 +216,7 @@ def generate_multielement_dataset():
     print(f"\n📊 Files generated:")
     print(f"   - {csv_file}")
     print(f"   - demo_multielement_metadata.json")
-    print(f"\n🔍 Thompson Sampling will learn the BEST COMBINATION")
+    print(f"\n🔍 Adaptive Optimization will learn the BEST COMBINATION")
     
     return matrix, metadata
 

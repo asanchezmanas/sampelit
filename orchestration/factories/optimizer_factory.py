@@ -16,7 +16,7 @@ class OptimizerFactory:
     Factory for creating optimization engines
     
     Implementation details are abstracted and proprietary.
-    Clients don't know if it's Thompson, Epsilon, UCB, etc.
+    Clients don't know if it's Adaptive, Epsilon, UCB, etc.
     """
     
     _instances: Dict[str, IOptimizer] = {}  # Singleton per strategy
@@ -63,7 +63,7 @@ class OptimizerFactory:
         Auto-select best strategy based on experiment characteristics
         
         This is where the magic happens - we decide:
-        - Thompson for normal traffic
+        - Adaptive for normal traffic
         - Epsilon for low traffic  
         - Sequential for funnels
         
@@ -86,7 +86,7 @@ class OptimizerFactory:
         if traffic_level == "low":
             return cls.create(OptimizationStrategy.FAST_LEARNING, config)
         
-        # Default: adaptive (Thompson Sampling internally)
+        # Default: adaptive (Adaptive Strategy internally)
         return cls.create(OptimizationStrategy.ADAPTIVE, config)
     
     @classmethod

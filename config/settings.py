@@ -151,16 +151,16 @@ class Settings(BaseSettings):
     )
     
     # ─────────────────────────────────────────────────────────────
-    # Thompson Sampling
+    # Adaptive Strategy Configuration
     # ─────────────────────────────────────────────────────────────
-    THOMPSON_ALPHA_PRIOR: float = Field(
+    ADAPTIVE_ALPHA_PRIOR: float = Field(
         default=1.0,
-        env="THOMPSON_ALPHA_PRIOR"
+        env="ADAPTIVE_ALPHA_PRIOR"
     )
     
-    THOMPSON_BETA_PRIOR: float = Field(
+    ADAPTIVE_BETA_PRIOR: float = Field(
         default=1.0,
-        env="THOMPSON_BETA_PRIOR"
+        env="ADAPTIVE_BETA_PRIOR"
     )
     
     # ─────────────────────────────────────────────────────────────

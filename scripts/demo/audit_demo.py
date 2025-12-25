@@ -409,7 +409,7 @@ async def run_audit_demo():
         print("    • Hash chain para verificar integridad")
         
         print("\n  ❌ LO QUE EL CLIENTE NO VE (Propiedad Intelectual):")
-        print("    • Parámetros alpha/beta de Thompson Sampling")
+        print("    • Parámetros internos de optimización adaptativa")
         print("    • Probabilidades calculadas")
         print("    • Lógica interna del algoritmo")
         print("    • Razón específica de por qué se eligió cada variante")

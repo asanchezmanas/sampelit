@@ -3,8 +3,8 @@
 Optimization Allocators
 
 Implementations of multi-armed bandit algorithms:
-- Thompson Sampling (Bayesian)
-- Adaptive Thompson Sampling
+- Adaptive Choice Strategy (Bayesian)
+- Adaptive Optimization Strategy
 - Epsilon-Greedy (roadmap)
 - UCB (Upper Confidence Bound) (roadmap)
 - Contextual bandits (roadmap)

@@ -83,7 +83,7 @@ class AnalyticsService:
             analysis = self._analyze_variant(variant, overall_cr)
             variant_analysis.append(analysis)
         
-        # Bayesian analysis (Thompson Sampling insights)
+        # Bayesian analysis (Adaptive Choice Strategy insights)
         bayesian = await self._perform_bayesian_analysis(variants)
         
         # Recommendations
@@ -293,7 +293,7 @@ class AnalyticsService:
         best_idx = np.argmax(prob_best)
         
         return {
-            "method": "Thompson Sampling (Beta-Binomial)",
+            "method": "Adaptive Strategy (Beta-Binomial)",
             "monte_carlo_samples": samples,
             "variants": results,
             "winner": {

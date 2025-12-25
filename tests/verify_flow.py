@@ -1,10 +1,10 @@
 # scripts/verify_flow.py
 """
-Script de Verificación del Flujo Thompson Sampling + Auditoría
+Script de Verificación del Flujo de Optimización Adaptativa + Auditoría
 
 Este script ejecuta el flujo completo y verifica que:
 1. Los archivos se llaman en el orden correcto
-2. El estado Thompson se guarda/carga correctamente
+2. El estado adaptativo se guarda/carga correctamente
 3. El allocator usa el estado REAL de la BD
 4. El algoritmo aprende de las conversiones
 5. El tráfico se optimiza automáticamente
@@ -198,15 +198,15 @@ def print_bar_chart(label, value, total, max_bar_length=20):
 # VERIFICACIÓN PRINCIPAL
 # ═══════════════════════════════════════════════════════════════════════
 
-async def verify_thompson_sampling_flow():
+async def verify_adaptive_optimization_flow():
     """
     Main verification function con auditoría integrada
     """
     
-    print_header("🔍 VERIFICACIÓN DEL FLUJO THOMPSON SAMPLING + AUDITORÍA")
+    print_header("🔍 VERIFICACIÓN DEL FLUJO DE OPTIMIZACIÓN ADAPTATIVA + AUDITORÍA")
     print("\nEste script verifica que:")
     print("  • Los archivos se comunican correctamente")
-    print("  • El estado Thompson se encripta/desencripta bien")
+    print("  • El estado adaptativo se encripta/desencripta bien")
     print("  • El allocator usa estado REAL de la base de datos")
     print("  • El algoritmo aprende de las conversiones")
     print("  • El tráfico se optimiza automáticamente")
@@ -258,11 +258,11 @@ async def verify_thompson_sampling_flow():
         print_substep("ExperimentService.create_experiment()")
         print_substep("  → ExperimentRepository.create()")
         print_substep("  → VariantRepository.create_variant() x3")
-        print_substep("  → Encripta estado Thompson inicial")
+        print_substep("  → Encripta estado adaptativo inicial")
         
         result = await service.create_experiment(
             user_id=user_id,
-            name="Verify Thompson Flow + Audit",
+            name="Verify Adaptive Flow + Audit",
             variants_data=[
                 {'name': 'Control (A)', 'description': 'Original', 'content': {'text': 'Sign Up'}},
                 {'name': 'Variant B', 'description': 'Green button', 'content': {'text': 'Get Started'}},
@@ -292,9 +292,9 @@ async def verify_thompson_sampling_flow():
         print_success("Status: active")
         
         # ────────────────────────────────────────
-        # PASO 5: Verificar estado inicial Thompson
+        # PASO 5: Verificar estado inicial de optimización adaptativa
         # ────────────────────────────────────────
-        print_step(5, 12, "Verificando estado inicial Thompson Sampling...")
+        print_step(5, 12, "Verificando estado inicial de optimización adaptativa...")
         print_substep("VariantRepository.get_variant_with_algorithm_state()")
         print_substep("  → Desencripta estado de BD")
         
@@ -314,7 +314,7 @@ async def verify_thompson_sampling_flow():
         # ────────────────────────────────────────
         print_step(6, 12, "Simulando 30 visitantes con AUDITORÍA...")
         print_substep("ExperimentService.allocate_user_to_variant()")
-        print_substep("  → Thompson Sampling decide (PRIVADO)")
+        print_substep("  → El motor adaptativo decide (PRIVADO)")
         print_substep("✨ AuditService.log_decision() registra (PÚBLICO)")
         print_substep("  → Solo registra: visitor_id, variant_id, timestamp")
         print_substep("  → NO registra: alpha, beta, probabilidades")
@@ -387,7 +387,7 @@ async def verify_thompson_sampling_flow():
         # ────────────────────────────────────────
         print_step(8, 12, "Simulando 15 conversiones en Variant B...")
         print_substep("ExperimentService.record_conversion()")
-        print_substep("  → Actualiza Thompson Sampling (PRIVADO)")
+        print_substep("  → Actualiza motor adaptativo (PRIVADO)")
         print_substep("✨ AuditService.log_conversion() registra (PÚBLICO)")
         print_substep("  → Solo registra: conversion_timestamp")
         print_substep("  → Verifica: decision_timestamp < conversion_timestamp")
@@ -435,13 +435,13 @@ async def verify_thompson_sampling_flow():
         print_success(f"{conversions_registered} conversiones en audit trail")
         
         # ────────────────────────────────────────
-        # PASO 9: Verificar estado Thompson actualizado
+        # PASO 9: Verificar estado adaptativo actualizado
         # ────────────────────────────────────────
-        print_step(9, 12, "Verificando que Thompson Sampling aprendió...")
+        print_step(9, 12, "Verificando que la optimización adaptativa aprendió...")
         print_substep("Leyendo estado actualizado de BD...")
         print_substep("(Este estado es PRIVADO - NO está en audit trail)")
         
-        print_info("Estado Thompson DESPUÉS de conversiones:")
+        print_info("Estado adaptativo DESPUÉS de conversiones:")
         for i, var_id in enumerate(variant_ids):
             variant = await var_repo.get_variant_with_algorithm_state(var_id)
             state = variant['algorithm_state_decrypted']
@@ -489,7 +489,7 @@ async def verify_thompson_sampling_flow():
         # PASO 11: Simular tráfico nuevo (optimizado)
         # ────────────────────────────────────────
         print_step(11, 12, "Simulando 50 visitantes adicionales...")
-        print_info("Thompson debería enviar MÁS tráfico a Variant B")
+        print_info("El motor adaptativo debería enviar MÁS tráfico a Variant B")
         print_substep("Cada decisión se registra en audit trail")
         
         new_allocation_counts = {vid: 0 for vid in variant_ids}
@@ -540,12 +540,12 @@ async def verify_thompson_sampling_flow():
         print_info(f"  Integridad: {'✅ VÁLIDA' if final_integrity['is_valid'] else '❌ INVÁLIDA'}")
         
         # Criterios de éxito
-        thompson_works = b_traffic >= 20  # >40%
+        adaptive_works = b_traffic >= 20  # >40%
         audit_works = final_integrity['is_valid']
         
-        if thompson_works and audit_works:
+        if adaptive_works and audit_works:
             print_header("✅ VERIFICACIÓN EXITOSA")
-            print("\n  Thompson Sampling + Auditoría funcionan CORRECTAMENTE:")
+            print("\n  Optimización Adaptativa + Auditoría funcionan CORRECTAMENTE:")
             print(f"    • Variant B recibió {b_traffic}/50 visitas ({b_percentage:.1f}%)")
             print(f"    • El algoritmo aprendió de las conversiones")
             print(f"    • El estado se guarda/carga correctamente")
@@ -554,23 +554,23 @@ async def verify_thompson_sampling_flow():
             print(f"    • ✨ Sin revelar alpha/beta/probabilidades")
             print("\n  🎉 Todo el flujo funciona correctamente!")
             
-        elif thompson_works and not audit_works:
+        elif adaptive_works and not audit_works:
             print_header("⚠️  PROBLEMA EN AUDITORÍA")
-            print(f"\n  Thompson Sampling funciona ({b_traffic}/50 a B)")
+            print(f"\n  La optimización adaptativa funciona ({b_traffic}/50 a B)")
             print(f"  Pero audit trail tiene problemas de integridad")
             print(f"\n  Revisar:")
             print(f"    • Hash chain")
             print(f"    • Timestamps")
             print(f"    • Sequence numbers")
             
-        elif not thompson_works and audit_works:
-            print_header("⚠️  PROBLEMA EN THOMPSON SAMPLING")
+        elif not adaptive_works and audit_works:
+            print_header("⚠️  PROBLEMA EN OPTIMIZACIÓN ADAPTATIVA")
             print(f"\n  Audit trail funciona correctamente")
-            print(f"  Pero Thompson no optimizó ({b_traffic}/50 a B, esperábamos >20)")
+            print(f"  Pero el motor adaptativo no optimizó ({b_traffic}/50 a B, esperábamos >20)")
             
         else:
             print_header("❌ MÚLTIPLES PROBLEMAS")
-            print(f"\n  Thompson: {b_traffic}/50 a B (esperábamos >20)")
+            print(f"\n  Adaptive: {b_traffic}/50 a B (esperábamos >20)")
             print(f"  Audit: integridad {'✅' if audit_works else '❌'}")
         
         # ────────────────────────────────────────
@@ -646,7 +646,7 @@ async def verify_thompson_sampling_flow():
                 print(f"  • conversion_timestamp: {sample['conversion_timestamp']}")
             
             print("\n❌ LO QUE NO ESTÁ EN AUDIT TRAIL:")
-            print("  • alpha, beta (parámetros Thompson)")
+            print("  • alpha, beta (parámetros internos)")
             print("  • probabilidades calculadas")
             print("  • samples de distribuciones Beta")
             print("  • razón de por qué se eligió esta variante")
@@ -698,7 +698,7 @@ async def verify_thompson_sampling_flow():
 def main():
     """Entry point"""
     try:
-        asyncio.run(verify_thompson_sampling_flow())
+        asyncio.run(verify_adaptive_optimization_flow())
     except KeyboardInterrupt:
         print("\n\n⚠️  Verificación interrumpida por el usuario")
     except Exception as e:

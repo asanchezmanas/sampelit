@@ -61,7 +61,7 @@ class AdaptiveBayesianAllocator(BaseAllocator):
             # ✅ USAR ESTADO DE LA BASE DE DATOS
             internal_state = option.get('_internal_state', {})
             
-            # Obtener parámetros Thompson Sampling de BD
+            # Obtener parámetros internos de BD
             success_count = internal_state.get('success_count', 1)
             failure_count = internal_state.get('failure_count', 1)
             samples = internal_state.get('samples', 0)

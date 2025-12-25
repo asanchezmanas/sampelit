@@ -52,7 +52,7 @@ class SequentialAllocator(BayesianAllocator):
         # For MVP: We treat "funnel conversion" as the primary reward signal.
         # Instead of optimizing for "Click to next step", we optimize for "Final Conversion".
         
-        # This simplifies the math to standard Thompson Sampling, 
+        # This simplifies the math to standard Adaptive Strategy, 
         # BUT the reward signal is delayed (credit assignment problem).
         
         # We delegate to standard Bayesian Logic, but the 'beta' parameters

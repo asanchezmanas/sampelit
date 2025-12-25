@@ -6,7 +6,7 @@ El algoritmo registra su decisión ANTES de ver el resultado.
 Esto prueba que no hace trampa.
 
 Qué NO se revela:
-- Parámetros Thompson Sampling (alpha, beta)
+- Parámetros internos de la arquitectura adaptativa
 - Probabilidades internas
 - Lógica de decisión
 - Estado interno del algoritmo
@@ -35,7 +35,7 @@ class AuditService:
     
     def __init__(self, db_manager: DatabaseManager):
         self.db = db_manager
-        self.algorithm_version = "adaptive-thompson-v3.0-enterprise"  # Versión profesional
+        self.algorithm_version = "adaptive-optimizer-v3.0-enterprise"  # Versión profesional
     
     # ═══════════════════════════════════════════════════════════════════════
     # REGISTRO DE DECISIÓN (ANTES de ver el resultado)

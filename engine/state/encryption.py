@@ -26,7 +26,7 @@ class StateEncryption:
     Handles encryption of algorithm state
     
     This ensures that even if someone gets DB access,
-    they can't see our Thompson Sampling parameters, etc.
+    they can't see our internal Adaptive Strategy parameters, etc.
     """
     
     def __init__(self):

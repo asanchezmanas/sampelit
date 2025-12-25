@@ -128,7 +128,7 @@ class VariantRepository(BaseRepository):
         Update algorithm internal state
         
         Called after each allocation/conversion to update
-        Thompson Sampling parameters, etc.
+        Adaptive Strategy parameters, etc.
         """
         
         # Encrypt new state

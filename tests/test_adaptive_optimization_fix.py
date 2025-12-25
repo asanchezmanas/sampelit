@@ -1,4 +1,4 @@
-# tests/test_thompson_sampling_fix.py
+# tests/test_adaptive_optimization_fix.py
 
 import asyncio
 import pytest
@@ -6,9 +6,9 @@ from data_access.database import DatabaseManager
 from orchestration.services.experiment_service import ExperimentService
 
 @pytest.mark.asyncio
-async def test_thompson_sampling_uses_bd_state():
+async def test_adaptive_optimization_uses_bd_state():
     """
-    ✅ TEST: Verificar que Thompson Sampling usa estado de BD
+    ✅ TEST: Verificar que la optimización adaptativa usa estado de BD
     """
     
     db = DatabaseManager()
@@ -20,7 +20,7 @@ async def test_thompson_sampling_uses_bd_state():
         # Crear experimento con 2 variantes
         result = await service.create_experiment(
             user_id="test-user",
-            name="Test Thompson",
+            name="Test Adaptive Optimization",
             variants_data=[
                 {'name': 'Bad', 'content': {}},
                 {'name': 'Good', 'content': {}}
@@ -66,7 +66,7 @@ async def test_thompson_sampling_uses_bd_state():
                     value=1.0
                 )
         
-        # Ahora Good debería tener mejor estado Thompson
+        # Ahora Good debería tener mejor estado adaptativo
         # Verificar que próximos visitantes van mayormente a Good
         
         good_count = 0
@@ -84,14 +84,14 @@ async def test_thompson_sampling_uses_bd_state():
                 bad_count += 1
         
         # ✅ Good debería recibir MUCHO más tráfico (>80%)
-        assert good_count > 80, f"Thompson no está funcionando: Good={good_count}, Bad={bad_count}"
+        assert good_count > 80, f"La optimización adaptativa no está funcionando: Good={good_count}, Bad={bad_count}"
         
         print(f"✅ TEST PASSED: Good={good_count}, Bad={bad_count}")
-        print(f"   Thompson Sampling está usando estado de BD correctamente!")
+        print(f"   La optimización adaptativa está usando estado de BD correctamente!")
         
     finally:
         await db.close()
 
 
 if __name__ == '__main__':
-    asyncio.run(test_thompson_sampling_uses_bd_state())
+    asyncio.run(test_adaptive_optimization_uses_bd_state())
