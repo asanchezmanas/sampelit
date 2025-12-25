@@ -45,7 +45,8 @@ from public_api.routers import (
     demo,
     integrations,
     subscriptions,
-    onboarding
+    onboarding,
+    blog
 )
 
 # ════════════════════════════════════════════════════════════════════════════
@@ -353,6 +354,13 @@ app.include_router(
     onboarding.router,
     prefix=f"{settings.API_V1_PREFIX}/onboarding",
     tags=["Onboarding"]
+)
+
+# ✅ Blog (Public, markdown-based)
+app.include_router(
+    blog.router,
+    prefix=f"{settings.API_V1_PREFIX}/blog",
+    tags=["Blog"]
 )
 
 # ════════════════════════════════════════════════════════════════════════════

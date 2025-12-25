@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog | Samplit</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                extend: {
+                    colors: {
+                        brand: { 50: '#ecf3ff', 500: '#465fff', 600: '#3641f5' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body x-data="blogListing()" x-init="init()">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <include src="./partials/sidebar.html"></include>
+
+        <!-- Content -->
+        <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+            <!-- Header -->
+            <include src="./partials/header.html"></include>
+
+            <!-- Main -->
+            <main>
+                <div class="mx-auto max-w-7xl p-4 md:p-6 pb-20">
+
+                    <!-- Header -->
+                    <div class="mb-8">
+                        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Blog</h1>
+                        <p class="mt-2 text-gray-600 dark:text-gray-400">Research-backed insights on A/B testing and
+                            conversion optimization</p>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div class="mb-6 flex gap-2 flex-wrap">
+                        <button @click="filterCategory(null)"
+                            :class="selectedCategory === null ? 'bg-brand-500 text-white' : 'bg-white text-gray-700 border border-gray-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600'"
+                            class="px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                            All
+                        </button>
+                        <button @click="filterCategory('ab-testing-fundamentals')"
+                            :class="selectedCategory === 'ab-testing-fundamentals' ? 'bg-brand-500 text-white' : 'bg-white text-gray-700 border border-gray-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600'"
+                            class="px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                            Fundamentals
+                        </button>
+                        <button @click="filterCategory('case-studies')"
+                            :class="selectedCategory === 'case-studies' ? 'bg-brand-500 text-white' : 'bg-white text-gray-700 border border-gray-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600'"
+                            class="px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                            Case Studies
+                        </button>
+                        <button @click="filterCategory('copywriting-science')"
+                            :class="selectedCategory === 'copywriting-science' ? 'bg-brand-500 text-white' : 'bg-white text-gray-700 border border-gray-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600'"
+                            class="px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                            Science
+                        </button>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div x-show="loading" class="flex justify-center py-12">
+                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-500"></div>
+                    </div>
+
+                    <!-- Articles Grid -->
+                    <div x-show="!loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <template x-for="post in posts" :key="post.slug">
+                            <article
+                                class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow dark:bg-gray-800 dark:border-gray-700">
+                                <!-- Image -->
+                                <div x-show="post.image" class="aspect-video bg-gray-100 dark:bg-gray-700">
+                                    <img :src="post.image" :alt="post.title" class="w-full h-full object-cover">
+                                </div>
+
+                                <!-- Content -->
+                                <div class="p-6">
+                                    <!-- Category Badge -->
+                                    <span
+                                        class="inline-block px-2 py-1 text-xs font-medium rounded bg-brand-50 text-brand-600 mb-3 dark:bg-brand-900/30 dark:text-brand-400"
+                                        x-text="getCategoryLabel(post.category)"></span>
+
+                                    <!-- Title -->
+                                    <h2 class="text-xl font-semibold text-gray-900 mb-2 dark:text-white"
+                                        x-text="post.title"></h2>
+
+                                    <!-- Excerpt -->
+                                    <p class="text-gray-600 text-sm mb-4 line-clamp-3 dark:text-gray-400"
+                                        x-text="post.excerpt"></p>
+
+                                    <!-- Meta -->
+                                    <div
+                                        class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+                                        <span x-text="formatDate(post.date)"></span>
+                                        <span x-show="post.reading_time"
+                                            x-text="post.reading_time + ' min read'"></span>
+                                    </div>
+
+                                    <!-- Read More -->
+                                    <a :href="'/static/blog-post.html?slug=' + post.slug"
+                                        class="mt-4 inline-block text-brand-600 hover:text-brand-700 font-medium text-sm">
+                                        Read article →
+                                    </a>
+                                </div>
+                            </article>
+                        </template>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div x-show="!loading && posts.length === 0" class="text-center py-12">
+                        <p class="text-gray-500 dark:text-gray-400">No articles found in this category.</p>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div x-show="totalPages > 1" class="mt-8 flex justify-center gap-2">
+                        <button @click="prevPage()" :disabled="currentPage === 1"
+                            class="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed dark:border-gray-600">
+                            Previous
+                        </button>
+                        <span class="px-4 py-2 text-gray-700 dark:text-gray-300"
+                            x-text="`Page ${currentPage} of ${totalPages}`"></span>
+                        <button @click="nextPage()" :disabled="currentPage === totalPages"
+                            class="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed dark:border-gray-600">
+                            Next
+                        </button>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="./js/include.js"></script>
+
+    <script>
+        function blogListing() {
+            return {
+                posts: [],
+                loading: false,
+                selectedCategory: null,
+                currentPage: 1,
+                perPage: 9,
+                totalPages: 1,
+
+                async init() {
+                    await this.loadPosts();
+                },
+
+                async loadPosts() {
+                    this.loading = true;
+                    try {
+                        const params = new URLSearchParams({
+                            page: this.currentPage,
+                            per_page: this.perPage
+                        });
+
+                        if (this.selectedCategory) {
+                            params.append('category', this.selectedCategory);
+                        }
+
+                        const response = await fetch(`/api/v1/blog?${params}`);
+                        const data = await response.json();
+
+                        this.posts = data.items;
+                        this.totalPages = Math.ceil(data.total / this.perPage);
+                    } catch (error) {
+                        console.error('Failed to load blog posts:', error);
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+
+                async filterCategory(category) {
+                    this.selectedCategory = category;
+                    this.currentPage = 1;
+                    await this.loadPosts();
+                },
+
+                async nextPage() {
+                    if (this.currentPage < this.totalPages) {
+                        this.currentPage++;
+                        await this.loadPosts();
+                    }
+                },
+
+                async prevPage() {
+                    if (this.currentPage > 1) {
+                        this.currentPage--;
+                        await this.loadPosts();
+                    }
+                },
+
+                getCategoryLabel(category) {
+                    const labels = {
+                        'ab-testing-fundamentals': 'Fundamentals',
+                        'case-studies': 'Case Study',
+                        'copywriting-science': 'Science'
+                    };
+                    return labels[category] || category;
+                },
+
+                formatDate(dateStr) {
+                    const date = new Date(dateStr);
+                    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
