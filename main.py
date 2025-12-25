@@ -22,7 +22,7 @@ from typing import Callable
 
 from config.settings import get_settings
 from data_access.database import DatabaseManager
-from public_api.middleware.error_handler import ErrorHandlerMiddleware
+from public_api.middleware.error_handler import ErrorHandlerMiddleware, register_exception_handlers
 from public_api.middleware.rate_limit import rate_limiter
 
 # Import routers
@@ -117,8 +117,8 @@ app = FastAPI(
 # MIDDLEWARE
 # ════════════════════════════════════════════════════════════════════════════
 
-# 1. Error Handling (must be first to catch everything)
-app.add_middleware(ErrorHandlerMiddleware)
+# 1. Register exception handlers (proper pattern for FastAPI)
+register_exception_handlers(app)
 
 # 2. CORS
 app.add_middleware(

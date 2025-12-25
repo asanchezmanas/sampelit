@@ -113,9 +113,9 @@ class AssignmentRepository(BaseRepository):
                 SELECT 
                     a.id, a.variant_id, a.user_id as user_identifier,
                     a.assigned_at, a.converted_at, a.conversion_value,
-                    v.name as variant_name
+                    ev.name as variant_name
                 FROM assignments a
-                LEFT JOIN variants v ON a.variant_id = v.id
+                LEFT JOIN element_variants ev ON a.variant_id = ev.id
                 WHERE a.experiment_id = $1
                 ORDER BY a.assigned_at DESC
                 LIMIT $2 OFFSET $3
@@ -124,6 +124,7 @@ class AssignmentRepository(BaseRepository):
             )
         
         return [dict(row) for row in rows]
+
     
     async def get_conversion_timeline(
         self,

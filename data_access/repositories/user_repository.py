@@ -10,19 +10,21 @@ class UserRepository(BaseRepository):
         """Get user by ID"""
         async with self.db.acquire() as conn:
             row = await conn.fetchrow(
-                "SELECT id, email, name, company, created_at FROM users WHERE id = $1",
+                "SELECT id, email, name, company, role, created_at FROM users WHERE id = $1",
                 id
             )
         return dict(row) if row else None
+
     
     async def find_by_email(self, email: str) -> Optional[Dict[str, Any]]:
         """Get user by email"""
         async with self.db.acquire() as conn:
             row = await conn.fetchrow(
-                "SELECT id, email, name, company, password_hash, created_at FROM users WHERE email = $1",
+                "SELECT id, email, name, company, password_hash, role, created_at FROM users WHERE email = $1",
                 email
             )
         return dict(row) if row else None
+
     
     async def create(self, data: Dict[str, Any]) -> str:
         """Create new user"""

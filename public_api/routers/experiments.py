@@ -257,7 +257,7 @@ async def get_experiment(
 @router.patch("/{experiment_id}/status", response_model=APIResponse)
 async def update_experiment_status(
     experiment_id: str,
-    new_status: str = Query(..., regex="^(draft|active|paused|completed)$"),
+    new_status: str = Query(..., pattern="^(draft|active|paused|completed)$"),
     user_id: str = Depends(get_current_user),
     db: DatabaseManager = Depends(get_db)
 ):
