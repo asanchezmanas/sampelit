@@ -10,9 +10,10 @@ from fastapi import Request, HTTPException
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 from typing import Optional, Dict, Any
-from datetime import datetime
+from datetime import datetime, timezone
 import logging
 import traceback
+from public_api.models import ErrorCodes
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +59,7 @@ class ErrorHandlerMiddleware(BaseHTTPMiddleware):
                     "error": e.message,
                     "code": e.code,
                     "details": e.details,
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.now(timezone.utc).isoformat()
                 }
             )
             
@@ -70,13 +71,14 @@ class ErrorHandlerMiddleware(BaseHTTPMiddleware):
                     "success": False,
                     "error": e.detail if isinstance(e.detail, str) else str(e.detail),
                     "code": f"HTTP_{e.status_code}",
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.now(timezone.utc).isoformat()
                 }
             )
             
         except Exception as e:
             # Unexpected errors
-            error_id = f"err_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
+            now = datetime.now(timezone.utc)
+            error_id = f"err_{now.strftime('%Y%m%d%H%M%S')}"
             
             logger.error(
                 f"Unhandled error [{error_id}]: {str(e)}\n{traceback.format_exc()}"
@@ -99,37 +101,3 @@ def error_handler_middleware(app):
     return ErrorHandlerMiddleware(app)
 
 
-# ════════════════════════════════════════════════════════════════════════════
-# ERROR CODES
-# ════════════════════════════════════════════════════════════════════════════
-
-class ErrorCodes:
-    """Standard error codes for consistent error handling"""
-    
-    # Auth errors (401/403)
-    UNAUTHORIZED = "UNAUTHORIZED"
-    FORBIDDEN = "FORBIDDEN"
-    INVALID_TOKEN = "INVALID_TOKEN"
-    TOKEN_EXPIRED = "TOKEN_EXPIRED"
-    
-    # Validation errors (400)
-    VALIDATION_ERROR = "VALIDATION_ERROR"
-    INVALID_INPUT = "INVALID_INPUT"
-    MISSING_FIELD = "MISSING_FIELD"
-    
-    # Resource errors (404)
-    NOT_FOUND = "NOT_FOUND"
-    EXPERIMENT_NOT_FOUND = "EXPERIMENT_NOT_FOUND"
-    USER_NOT_FOUND = "USER_NOT_FOUND"
-    
-    # Rate limit (429)
-    RATE_LIMITED = "RATE_LIMITED"
-    
-    # Payment (402)
-    PAYMENT_REQUIRED = "PAYMENT_REQUIRED"
-    PLAN_LIMIT_REACHED = "PLAN_LIMIT_REACHED"
-    
-    # Server errors (500)
-    INTERNAL_ERROR = "INTERNAL_ERROR"
-    DATABASE_ERROR = "DATABASE_ERROR"
-    EXTERNAL_SERVICE_ERROR = "EXTERNAL_SERVICE_ERROR"

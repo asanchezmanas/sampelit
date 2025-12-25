@@ -8,7 +8,8 @@ Correcciones:
 
 from typing import List, Dict, Any, Optional
 import logging
-from datetime import datetime
+import json
+from datetime import datetime, timezone
 from uuid import uuid4
 
 from data_access.repositories.experiment_repository import ExperimentRepository
@@ -21,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 class ExperimentService:
     """
-    ✅ FIXED: Core experiment service with transaction support
+    FIXED: Core experiment service with transaction support
     
     Changes:
     - create_experiment() now uses transactions
@@ -109,37 +110,46 @@ class ExperimentService:
         elif control_count > 1:
             raise ValueError("Only one control variant allowed")
         
-        # ✅ START TRANSACTION
-        async with self.db.acquire() as conn:
+        # START TRANSACTION
+        async with self.db.pool.acquire() as conn:
             async with conn.transaction():
                 try:
-                    # Create experiment
+                    # 1. Create experiment record
                     experiment_id = await conn.fetchval(
                         """
                         INSERT INTO experiments (
-                            name,
-                            description,
-                            status,
-                            traffic_allocation,
-                            created_by,
-                            metadata,
-                            created_at,
-                            updated_at
+                            user_id, name, description, status, traffic_allocation, config
                         )
-                        VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())
+                        VALUES ($1, $2, $3, $4, $5, $6)
                         RETURNING id
                         """,
+                        user_id,
                         name,
                         description,
                         'draft',  # Start as draft
                         traffic_allocation,
-                        user_id,
-                        metadata or {}
+                        json.dumps(metadata or {})
                     )
                     
                     self.logger.info(f"Created experiment {experiment_id}: {name}")
                     
-                    # Create variants
+                    # 2. Create the core element for this experiment (V1 auto-creation)
+                    # This bridges the gap between simple V1 and multi-element architecture
+                    element_id = await conn.fetchval(
+                        """
+                        INSERT INTO experiment_elements (
+                            experiment_id, element_order, name, 
+                            selector_type, selector_value, element_type, 
+                            original_content
+                        ) 
+                        VALUES ($1, 0, $2, 'id', 'main', 'web', '{}')
+                        RETURNING id
+                        """,
+                        experiment_id,
+                        f"Core Element: {name}"
+                    )
+                    
+                    # 3. Create variants
                     variant_ids = []
                     
                     for idx, variant_data in enumerate(variants_data):
@@ -154,16 +164,18 @@ class ExperimentService:
                         initial_state = {
                             'alpha': 1.0,  # Prior successes
                             'beta': 1.0,   # Prior failures
-                            'version': 1
+                            'samples': 0,
+                            'algorithm_type': 'bayesian'
                         }
                         
-                        # Create variant (with encrypted state)
+                        # Use element_id as the parent for variants
                         variant_id = await self.variant_repo.create_variant(
-                            experiment_id=str(experiment_id),
+                            experiment_id=str(element_id),
                             name=variant_name,
                             content=variant_content,
-                            is_control=is_control,
-                            initial_state=initial_state
+                            initial_algorithm_state=initial_state,
+                            variant_order=idx,
+                            conn=conn
                         )
                         
                         variant_ids.append(variant_id)
@@ -173,10 +185,10 @@ class ExperimentService:
                             f"({'control' if is_control else 'treatment'})"
                         )
                     
-                    # ✅ If we reach here, transaction commits automatically
+                    # If we reach here, transaction commits automatically
                     
                     self.logger.info(
-                        f"✅ Successfully created experiment {experiment_id} "
+                        f"Successfully created experiment {experiment_id} "
                         f"with {len(variant_ids)} variants"
                     )
                     
@@ -185,7 +197,7 @@ class ExperimentService:
                         'variant_ids': variant_ids,
                         'name': name,
                         'status': 'draft',
-                        'created_at': datetime.utcnow()
+                        'created_at': datetime.now(timezone.utc)
                     }
                 
                 except Exception as e:
@@ -199,16 +211,13 @@ class ExperimentService:
     async def get_experiment(self, experiment_id: str) -> Optional[Dict[str, Any]]:
         """Get experiment by ID with variants"""
         
-        experiment = await self.experiment_repo.get_experiment(experiment_id)
+        experiment = await self.experiment_repo.find_by_id(experiment_id)
         
         if not experiment:
             return None
         
-        # Get variants
-        variants = await self.variant_repo.get_variants_for_experiment(
-            experiment_id,
-            active_only=False  # Include inactive for admin view
-        )
+        # Get variants (handles elements automatically)
+        variants = await self.variant_repo.get_variants_for_experiment(experiment_id)
         
         experiment['variants'] = variants
         
@@ -216,19 +225,14 @@ class ExperimentService:
     
     async def list_experiments(
         self,
-        user_id: Optional[str] = None,
+        user_id: str,
         status: Optional[str] = None,
         limit: int = 50,
         offset: int = 0
     ) -> List[Dict[str, Any]]:
-        """List experiments with filters"""
+        """List experiments for user"""
         
-        experiments = await self.experiment_repo.list_experiments(
-            created_by=user_id,
-            status=status,
-            limit=limit,
-            offset=offset
-        )
+        experiments = await self.experiment_repo.find_by_user(user_id)
         
         return experiments
     
@@ -300,37 +304,37 @@ class ExperimentService:
         if len(active_variants) < 2:
             raise ValueError("Experiment needs at least 2 active variants")
         
-        # Update status
-        updated = await self.experiment_repo.update_experiment(
+        user_id = experiment['user_id']
+        updated = await self.experiment_repo.update(
             experiment_id,
-            {'status': 'running', 'started_at': datetime.utcnow()}
+            {'status': 'active', 'started_at': datetime.now(timezone.utc)}
         )
         
-        self.logger.info(f"🚀 Started experiment {experiment_id}")
+        self.logger.info(f"Started experiment {experiment_id}")
         
         return updated
     
     async def pause_experiment(self, experiment_id: str) -> Dict[str, Any]:
         """Pause running experiment"""
         
-        updated = await self.experiment_repo.update_experiment(
+        updated = await self.experiment_repo.update(
             experiment_id,
             {'status': 'paused'}
         )
         
-        self.logger.info(f"⏸️  Paused experiment {experiment_id}")
+        self.logger.info(f"Paused experiment {experiment_id}")
         
         return updated
     
     async def stop_experiment(self, experiment_id: str) -> Dict[str, Any]:
         """Stop experiment (running/paused → completed)"""
         
-        updated = await self.experiment_repo.update_experiment(
+        updated = await self.experiment_repo.update(
             experiment_id,
-            {'status': 'completed', 'completed_at': datetime.utcnow()}
+            {'status': 'completed', 'completed_at': datetime.now(timezone.utc)}
         )
         
-        self.logger.info(f"🏁 Completed experiment {experiment_id}")
+        self.logger.info(f"Completed experiment {experiment_id}")
         
         return updated
     

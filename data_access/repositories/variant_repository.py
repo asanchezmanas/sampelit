@@ -18,46 +18,67 @@ class VariantRepository(BaseRepository):
     Repository for variants 
     
     Handles encryption of algorithm internal state
-    ✅ FIXED: Atomic operations for increment methods
+    FIXED: Atomic operations for increment methods
     """
     
     async def create_variant(self,
                             experiment_id: str,
                             name: str,
                             content: Dict[str, Any],
-                            initial_algorithm_state: Dict[str, Any]) -> str:
+                            initial_algorithm_state: Dict[str, Any],
+                            variant_order: int = 0,
+                            conn: Optional[Any] = None) -> str:
         """
         Create variant with encrypted algorithm state
-        
-        Args:
-            initial_algorithm_state: Dict like:
-                {
-                    'alpha': 1.0,
-                    'beta': 1.0,
-                    'exploration_bonus': 0.0,
-                    'algorithm_type': 'bayesian'  # For internal use
-                }
         """
         
         # Encrypt algorithm state
         encrypted_state = self._encrypt_algorithm_state(initial_algorithm_state)
         
-        async with self.db.acquire() as conn:
+        query = """
+            INSERT INTO element_variants (
+                element_id, name, content, algorithm_state, variant_order
+            ) VALUES ($1, $2, $3, $4, $5)
+            RETURNING id
+        """
+        
+        if conn:
             variant_id = await conn.fetchval(
-                """
-                INSERT INTO element_variants (
-                    element_id, name, content, algorithm_state
-                ) VALUES ($1, $2, $3, $4)
-                RETURNING id
-                """,
-                experiment_id,  # En tu schema, esto sería element_id
+                query,
+                experiment_id,
                 name,
                 json.dumps(content),
-                encrypted_state
+                encrypted_state,
+                variant_order
             )
+        else:
+            async with self.db.acquire() as conn_new:
+                variant_id = await conn_new.fetchval(
+                    query,
+                    experiment_id,
+                    name,
+                    json.dumps(content),
+                    encrypted_state,
+                    variant_order
+                )
         
         return str(variant_id)
     
+    async def get_variants_for_experiment(self, experiment_id: str, active_only: bool = True) -> List[Dict[str, Any]]:
+        """Get all variants for an experiment via its elements"""
+        async with self.db.acquire() as conn:
+            query = """
+                SELECT 
+                    ev.id, ee.id as element_id, ev.name, ev.content,
+                    ev.total_allocations, ev.total_conversions,
+                    ev.conversion_rate, ev.is_active, ev.created_at
+                FROM element_variants ev
+                JOIN experiment_elements ee ON ev.element_id = ee.id
+                WHERE ee.experiment_id = $1
+            """
+            rows = await conn.fetch(query, experiment_id)
+            return [dict(row) for row in rows]
+
     async def get_variant_with_algorithm_state(self, 
                                                variant_id: str) -> Optional[Dict[str, Any]]:
         """

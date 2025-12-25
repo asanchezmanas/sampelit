@@ -32,12 +32,27 @@ class Settings(BaseSettings):
         default=Environment.DEVELOPMENT,
         env="ENVIRONMENT"
     )
+
+    DEBUG: bool = Field(
+        default=True,
+        env="DEBUG"
+    )
+
+    HOST: str = Field(
+        default="0.0.0.0",
+        env="HOST"
+    )
+
+    PORT: int = Field(
+        default=8000,
+        env="PORT"
+    )
     
     # ─────────────────────────────────────────────────────────────
     # Security
     # ─────────────────────────────────────────────────────────────
     SECRET_KEY: str = Field(
-        ...,  # Required
+        default="temporary-secret-key-for-development-32-chars",
         env="SECRET_KEY",
         min_length=32,
         description="Secret key for JWT encoding (min 32 chars)"
@@ -51,6 +66,13 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(
         default=30,
         env="ACCESS_TOKEN_EXPIRE_MINUTES"
+    )
+    
+    ALGORITHM_STATE_SECRET: str = Field(
+        default="temporary-algorithm-secret-key-64-chars-long-for-dev-purpose",
+        env="ALGORITHM_STATE_SECRET",
+        min_length=32,
+        description="Secret key for algorithm state encryption"
     )
     
     # ─────────────────────────────────────────────────────────────
@@ -90,6 +112,21 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = Field(
         default="Samplit A/B Testing API",
         env="PROJECT_NAME"
+    )
+    
+    BASE_URL: str = Field(
+        default="http://localhost:8000",
+        env="BASE_URL"
+    )
+
+    LOG_LEVEL: str = Field(
+        default="INFO",
+        env="LOG_LEVEL"
+    )
+
+    APP_VERSION: str = Field(
+        default="1.0.0",
+        env="APP_VERSION"
     )
     
     # ─────────────────────────────────────────────────────────────

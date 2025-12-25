@@ -1,6 +1,6 @@
 # data-access/repositories/assignment_repository.py
-# ✅ RENAMED: allocation_repository.py → assignment_repository.py
-# ✅ REASON: Table is named 'assignments', should match repository name
+# RENAMED: allocation_repository.py -> assignment_repository.py
+# REASON: Table is named 'assignments', should match repository name
 
 from typing import Optional, Dict, Any, List
 from .base_repository import BaseRepository

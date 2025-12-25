@@ -1,5 +1,5 @@
 -- schema_audit.sql
--- ✅ Audit System Schema
+-- Audit System Schema
 -- Version: 1.0
 
 -- ============================================
@@ -105,5 +105,5 @@ COMMENT ON FUNCTION verify_audit_chain IS 'Verifies the integrity of the audit h
 
 DO $$
 BEGIN
-    RAISE NOTICE '✅ Created algorithm_audit_trail table and verify_audit_chain function';
+    RAISE NOTICE 'Created algorithm_audit_trail table and verify_audit_chain function';
 END $$;

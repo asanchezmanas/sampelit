@@ -16,6 +16,7 @@ from datetime import datetime
 import logging
 
 from data_access.database import DatabaseManager
+from public_api.models import LeadCaptureRequest, LeadCaptureResponse
 
 logger = logging.getLogger(__name__)
 

@@ -12,7 +12,6 @@ import logging
 from typing import Optional
 from .experiment_service import ExperimentService
 from .experiment_service_redis import ExperimentServiceRedis
-from .segmented_experiment_service import SegmentedExperimentService
 from .metrics_service import MetricsService
 from .audit_service import AuditService
 from data_access.repositories.experiment_repository import ExperimentRepository
@@ -85,7 +84,7 @@ class ServiceFactory:
         
         # Caso 1: Redis forzado manualmente
         if force_redis and redis_url:
-            logger.info("🔴 FORCE_REDIS=true → Using Redis implementation")
+            logger.info("FORCE_REDIS=true -> Using Redis implementation")
             cls._service = ExperimentServiceRedis(db_manager, redis_url, audit_service=cls._audit)
             return cls._service
         
@@ -95,7 +94,7 @@ class ServiceFactory:
             
             if should_use_redis:
                 logger.warning(
-                    "🚀 AUTO-SWITCH ACTIVATED: Threshold reached, using Redis implementation"
+                    "AUTO-SWITCH ACTIVATED: Threshold reached, using Redis implementation"
                 )
                 
                 # Crear servicio con Redis
@@ -114,12 +113,12 @@ class ServiceFactory:
         
         # Caso 3: PostgreSQL puro (default)
         if redis_url:
-            logger.info("💡 Redis available but threshold not reached - using PostgreSQL")
+            logger.info("Redis available but threshold not reached - using PostgreSQL")
             logger.info("   → Will auto-switch when reaching 1M requests/day")
         else:
-            logger.info("📦 Using PostgreSQL implementation (Redis not configured)")
+            logger.info("Using PostgreSQL implementation (Redis not configured or below threshold)")
         
-        cls._service = SegmentedExperimentService(
+        cls._service = ExperimentService(
             db_manager,
             experiment_repo=ExperimentRepository(db_manager.pool),
             variant_repo=VariantRepository(db_manager.pool),

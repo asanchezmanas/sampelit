@@ -22,7 +22,7 @@ from typing import Callable
 
 from config.settings import get_settings
 from data_access.database import DatabaseManager
-from public_api.middleware.error_handler import error_handler_middleware
+from public_api.middleware.error_handler import ErrorHandlerMiddleware
 from public_api.middleware.rate_limit import rate_limiter
 
 # Import routers
@@ -42,7 +42,10 @@ from public_api.routers import (
     downloads,
     proxy,
     traffic_filters,
-    demo
+    demo,
+    integrations,
+    subscriptions,
+    onboarding
 )
 
 # ════════════════════════════════════════════════════════════════════════════
@@ -69,7 +72,7 @@ async def lifespan(app: FastAPI):
     # STARTUP
     # ════════════════════════════════════════════════════════════════════════
     
-    logger.info("🚀 Starting Samplit Platform...")
+    logger.info("Starting Samplit Platform...")
     logger.info(f"Environment: {settings.ENVIRONMENT}")
     logger.info(f"Version: {settings.APP_VERSION}")
     
@@ -77,19 +80,12 @@ async def lifespan(app: FastAPI):
     db = DatabaseManager()
     await db.initialize()
     app.state.db = db
-    logger.info("✅ Database initialized")
+    logger.info("Database initialized")
     
     # Auto-detect and create service (PostgreSQL or Redis)
     app.state.experiment_service = await ServiceFactory.create_experiment_service(db)
     
-    # Get metrics for logging
-    metrics = await ServiceFactory.get_metrics()
-    if metrics:
-        logger.info(f"📊 Current metrics:")
-        logger.info(f"   Last 24h: {metrics.get('last_24h', 0):,} requests")
-        logger.info(f"   Threshold: {metrics.get('threshold_percentage', 0):.1f}%")
-    
-    logger.info("✨ Samplit Platform ready!")
+    logger.info("Samplit Platform ready!")
     
     yield
     
@@ -97,13 +93,13 @@ async def lifespan(app: FastAPI):
     # SHUTDOWN
     # ════════════════════════════════════════════════════════════════════════
     
-    logger.info("🛑 Shutting down Samplit Platform...")
+    logger.info("Shutting down Samplit Platform...")
     
     # Shutdown metrics monitoring
     await ServiceFactory.shutdown()
     
     await db.close()
-    logger.info("👋 Samplit Platform stopped")
+    logger.info("Samplit Platform stopped")
 
 # ════════════════════════════════════════════════════════════════════════════
 # CREATE APP
@@ -245,11 +241,11 @@ app.include_router(
     tags=["Analytics"]
 )
 
-# Dashboard (Private Overview)
+# Dashboard (Public Exposure)
 app.include_router(
-    dashboard.router,
+    public_dashboard.router,
     prefix=f"{settings.API_V1_PREFIX}/dashboard",
-    tags=["Dashboard"]
+    tags=["Public Dashboard"]
 )
 
 # System metrics
@@ -321,12 +317,8 @@ app.include_router(
     tags=["Traffic Control"]
 )
 
-# ✅ Segmentation Control
-app.include_router(
-    segmentation.router,
-    prefix=f"{settings.API_V1_PREFIX}/segmentation",
-    tags=["Segmentation"]
-)
+# Segmentation Control (Placeholder for future)
+# app.include_router(...)
 
 # ✅ Simulator (Public Demo)
 app.include_router(
@@ -335,7 +327,7 @@ app.include_router(
     tags=["Simulator"]
 )
 
-# ✅ Lead Capture (Email Collection)
+# Admin Endpoints (Protected)
 app.include_router(
     leads.router,
     prefix=f"{settings.API_V1_PREFIX}/leads",

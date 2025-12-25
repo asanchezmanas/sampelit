@@ -1,5 +1,5 @@
 -- schema_phase1_PRODUCTION_READY.sql
--- ✅ PRODUCTION READY - Optimizado para Samplit A/B Testing
+-- PRODUCTION READY - Optimizado para Samplit A/B Testing
 -- Versión: 1.0
 -- Fecha: 13 Diciembre 2025
 
@@ -52,13 +52,13 @@ CREATE TABLE experiments (
     CONSTRAINT valid_traffic_allocation CHECK (traffic_allocation > 0 AND traffic_allocation <= 1.0)
 );
 
--- ✅ ÍNDICES CRÍTICOS PARA EXPERIMENTS
+-- INDICES CRITICOS PARA EXPERIMENTS
 CREATE INDEX idx_experiments_user ON experiments(user_id);
 CREATE INDEX idx_experiments_status ON experiments(status);
 CREATE INDEX idx_experiments_user_status ON experiments(user_id, status);
 CREATE INDEX idx_experiments_created ON experiments(created_at DESC);
 
--- ✅ ÍNDICE COMPUESTO para tracker (query más común)
+-- INDICE COMPUESTO para tracker (query más común)
 CREATE INDEX idx_experiments_active_lookup ON experiments(user_id, status, url) 
     WHERE status = 'active';
 
@@ -79,7 +79,7 @@ CREATE TABLE experiment_elements (
     created_at TIMESTAMPTZ DEFAULT NOW(),
     
     UNIQUE(experiment_id, element_order),
-    CONSTRAINT valid_selector_type CHECK (selector_type IN ('css', 'xpath', 'id', 'class'))
+    CONSTRAINT valid_selector_type CHECK (selector_type IN ('css', 'xpath', 'id', 'class', 'custom', 'manual'))
 );
 
 -- Índices para experiment_elements
@@ -97,12 +97,12 @@ CREATE TABLE element_variants (
     name VARCHAR(255),
     content JSONB NOT NULL,
     
-    -- ✅ MÉTRICAS PÚBLICAS
+    -- METRICAS PUBLICAS
     total_allocations INTEGER DEFAULT 0,
     total_conversions INTEGER DEFAULT 0,
     conversion_rate DECIMAL(10,6) DEFAULT 0,
     
-    -- ✅ CRÍTICO: Estado cifrado de Thompson Sampling (BYTEA)
+    -- CRITICO: Estado cifrado de Thompson Sampling (BYTEA)
     algorithm_state BYTEA,
     state_version INTEGER DEFAULT 1,
     
@@ -119,15 +119,15 @@ CREATE TABLE element_variants (
     CONSTRAINT conversions_le_allocations CHECK (total_conversions <= total_allocations)
 );
 
--- ✅ ÍNDICES CRÍTICOS PARA ELEMENT_VARIANTS
+-- INDICES CRITICOS PARA ELEMENT_VARIANTS
 CREATE INDEX idx_variants_element ON element_variants(element_id);
 CREATE INDEX idx_variants_element_order ON element_variants(element_id, variant_order);
 
--- ✅ ÍNDICE CRÍTICO para optimization queries
+-- INDICE CRITICO para optimization queries
 CREATE INDEX idx_variants_active ON element_variants(element_id, is_active) 
     WHERE is_active = TRUE;
 
--- ✅ ÍNDICE para analytics
+-- INDICE para analytics
 CREATE INDEX idx_variants_metrics ON element_variants(total_allocations, total_conversions);
 
 -- ============================================
@@ -179,11 +179,11 @@ CREATE TABLE assignments (
     conversion_value DECIMAL(10,2) DEFAULT 0,
     metadata JSONB DEFAULT '{}',
     
-    -- ✅ CONSTRAINT ÚNICO para prevenir duplicados
+    -- CONSTRAINT UNICO para prevenir duplicados
     UNIQUE(experiment_id, user_id)
 );
 
--- ✅ ÍNDICES CRÍTICOS PARA ASSIGNMENTS (Performance crítica del tracker)
+-- INDICES CRITICOS PARA ASSIGNMENTS (Performance crítica del tracker)
 -- Índice principal para lookup de asignaciones
 CREATE UNIQUE INDEX idx_assignments_lookup ON assignments(experiment_id, user_id);
 
@@ -237,7 +237,7 @@ CREATE INDEX idx_installations_api_token ON platform_installations(api_token);
 CREATE INDEX idx_installations_status ON platform_installations(status);
 CREATE INDEX idx_installations_platform ON platform_installations(platform);
 
--- ✅ ÍNDICE para metadata (GIN index para JSONB)
+-- INDICE para metadata (GIN index para JSONB)
 CREATE INDEX idx_installations_metadata ON platform_installations USING gin(metadata);
 
 -- ============================================
@@ -540,7 +540,7 @@ COMMENT ON COLUMN element_variants.total_conversions IS 'Public metric: total co
 COMMENT ON COLUMN element_variants.conversion_rate IS 'Public metric: observed conversion rate';
 
 -- ============================================
--- ✅ VERIFICACIÓN FINAL
+-- VERIFICACION FINAL
 -- ============================================
 
 -- Verificar que algorithm_state es BYTEA
@@ -556,7 +556,7 @@ BEGIN
         RAISE EXCEPTION 'ERROR: algorithm_state debe ser BYTEA, pero es %', col_type;
     END IF;
     
-    RAISE NOTICE '✅ algorithm_state correctamente configurado como BYTEA';
+    RAISE NOTICE 'algorithm_state correctamente configurado como BYTEA';
 END $$;
 
 -- Verificar índices críticos
@@ -578,10 +578,10 @@ BEGIN
         RAISE EXCEPTION 'ERROR: Falta índice crítico idx_variants_active';
     END IF;
     
-    RAISE NOTICE '✅ Todos los índices críticos presentes';
+    RAISE NOTICE 'Todos los índices críticos presentes';
     RAISE NOTICE '';
     RAISE NOTICE '================================================';
-    RAISE NOTICE '✅ Schema Phase 1 creado exitosamente';
+    RAISE NOTICE 'Schema Phase 1 creado exitosamente';
     RAISE NOTICE '================================================';
     RAISE NOTICE '';
     RAISE NOTICE 'Próximos pasos:';

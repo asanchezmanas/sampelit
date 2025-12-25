@@ -9,7 +9,8 @@ from .common import (
     APIResponse,
     ErrorResponse,
     PaginatedResponse,
-    HealthResponse
+    HealthResponse,
+    ErrorCodes
 )
 
 from .leads import (
@@ -19,10 +20,10 @@ from .leads import (
 )
 
 from .tracker import (
-    AssignmentRequest as TrackerAssignmentRequest,
-    AssignmentResponse as TrackerAssignmentResponse,
-    ConversionRequest as TrackerConversionRequest,
-    ConversionResponse as TrackerConversionResponse,
+    TrackerAssignmentRequest,
+    TrackerAssignmentResponse,
+    TrackerConversionRequest,
+    TrackerConversionResponse,
     ExperimentInfo,
     ActiveExperimentsRequest,
     ActiveExperimentsResponse,
@@ -42,7 +43,9 @@ from .experiment_models import (
     AssignmentRequest,
     AssignmentResponse,
     ConversionRequest,
-    ConversionResponse
+    ConversionResponse,
+    ExperimentAnalytics,
+    BayesianInsights
 )
 
 __all__ = [
@@ -51,6 +54,7 @@ __all__ = [
     'ErrorResponse', 
     'PaginatedResponse',
     'HealthResponse',
+    'ErrorCodes',
     # Leads
     'LeadCaptureRequest',
     'LeadCaptureResponse',
@@ -79,4 +83,6 @@ __all__ = [
     'AssignmentResponse',
     'ConversionRequest',
     'ConversionResponse',
+    'ExperimentAnalytics',
+    'BayesianInsights',
 ]

@@ -8,7 +8,7 @@ from typing import Optional, Dict, Any, List
 from datetime import datetime
 
 
-class AssignmentRequest(BaseModel):
+class TrackerAssignmentRequest(BaseModel):
     """Request for variant assignment"""
     installation_token: str = Field(..., min_length=1, max_length=255)
     experiment_id: str = Field(..., min_length=1)
@@ -29,7 +29,7 @@ class AssignmentRequest(BaseModel):
         return v.strip()
 
 
-class ConversionRequest(BaseModel):
+class TrackerConversionRequest(BaseModel):
     """Request to record a conversion"""
     installation_token: str = Field(..., min_length=1, max_length=255)
     experiment_id: str = Field(..., min_length=1)
@@ -50,7 +50,7 @@ class ConversionRequest(BaseModel):
         return v.strip()
 
 
-class AssignmentResponse(BaseModel):
+class TrackerAssignmentResponse(BaseModel):
     """Response with variant assignment"""
     variant_id: str
     variant_name: str
@@ -59,7 +59,7 @@ class AssignmentResponse(BaseModel):
     assigned_at: datetime
 
 
-class ConversionResponse(BaseModel):
+class TrackerConversionResponse(BaseModel):
     """Response after recording conversion"""
     success: bool
     conversion_id: Optional[str] = None

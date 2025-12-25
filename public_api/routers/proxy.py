@@ -6,7 +6,7 @@ Intercepts traffic from the customer's server to inject the tracking snippet dyn
 This endpoint is public and accessed by end-users of the customer's site.
 """
 
-from fastapi import APIRouter, Request, status
+from fastapi import APIRouter, Request, status, Depends
 from fastapi.responses import Response
 import logging
 

@@ -17,9 +17,9 @@ class ExperimentRepository(BaseRepository):
                 (
                     user_id, name, description, 
                     optimization_strategy, config, 
-                    status, target_url, target_type
+                    status, url
                 )
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
                 RETURNING id
                 """,
                 data['user_id'],
@@ -28,8 +28,7 @@ class ExperimentRepository(BaseRepository):
                 data.get('optimization_strategy', 'adaptive'),
                 json.dumps(data.get('config', {})),
                 data.get('status', 'draft'),
-                data.get('target_url'),
-                data.get('target_type', 'web')
+                data.get('url')
             )
         return str(experiment_id)
     
@@ -40,8 +39,8 @@ class ExperimentRepository(BaseRepository):
                 """
                 SELECT 
                     id, user_id, name, description, status,
-                    experiment_type, optimization_strategy,
-                    config, target_url, target_type,
+                    optimization_strategy,
+                    config, url,
                     created_at, started_at, completed_at, updated_at
                 FROM experiments 
                 WHERE id = $1
@@ -78,7 +77,8 @@ class ExperimentRepository(BaseRepository):
                         ELSE 0
                     END as conversion_rate
                 FROM experiments e
-                LEFT JOIN variants v ON e.id = v.experiment_id AND v.is_active = true
+                LEFT JOIN experiment_elements ee ON e.id = ee.experiment_id
+                LEFT JOIN element_variants v ON ee.id = v.element_id
                 WHERE e.user_id = $1
                 GROUP BY e.id
                 ORDER BY e.created_at DESC

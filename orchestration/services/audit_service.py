@@ -20,7 +20,7 @@ Qué SÍ se revela:
 
 import hashlib
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, Dict, Any, List
 from uuid import UUID
 
@@ -73,7 +73,7 @@ class AuditService:
             )
             
             # Timestamp de decisión
-            decision_timestamp = datetime.utcnow()
+            decision_timestamp = datetime.now(timezone.utc)
             
             # Hash del contexto (NO el contexto completo)
             context_hash = None
@@ -151,7 +151,7 @@ class AuditService:
             True si se actualizó correctamente
         """
         async with self.db.pool.acquire() as conn:
-            conversion_timestamp = datetime.utcnow()
+            conversion_timestamp = datetime.now(timezone.utc)
             
             result = await conn.fetchrow("""
                 UPDATE algorithm_audit_trail
@@ -254,7 +254,7 @@ class AuditService:
             
             return results
     
-    def get_audit_stats(self, experiment_id: UUID) -> Dict[str, Any]:
+    async def get_audit_stats(self, experiment_id: UUID) -> Dict[str, Any]:
         """
         Obtiene estadísticas de auditoría para un experimento.
         

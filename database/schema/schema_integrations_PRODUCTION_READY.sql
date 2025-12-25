@@ -1,5 +1,5 @@
 -- schema_integrations_PRODUCTION_READY.sql
--- ✅ PRODUCTION READY - Integraciones WordPress, Shopify, etc
+-- PRODUCTION READY - Integraciones WordPress, Shopify, etc
 -- Versión: 1.0
 -- Fecha: 13 Diciembre 2025
 -- REQUISITO: Ejecutar DESPUÉS de schema_phase1_PRODUCTION.sql
@@ -26,7 +26,7 @@ CREATE INDEX idx_oauth_states_token ON oauth_states(state_token);
 CREATE INDEX idx_oauth_states_user ON oauth_states(user_id);
 CREATE INDEX idx_oauth_states_created ON oauth_states(created_at);
 
--- ✅ Función para limpiar estados expirados (ejecutar con cron)
+-- Función para limpiar estados expirados (ejecutar con cron)
 CREATE OR REPLACE FUNCTION cleanup_expired_oauth_states()
 RETURNS INTEGER AS $$
 DECLARE
@@ -72,7 +72,7 @@ CREATE INDEX idx_webhooks_platform ON integration_webhooks(platform);
 CREATE INDEX idx_webhooks_status ON integration_webhooks(status);
 CREATE INDEX idx_webhooks_topic ON integration_webhooks(topic);
 
--- ✅ Índice para cleanup de webhooks con errores
+-- Índice para cleanup de webhooks con errores
 CREATE INDEX idx_webhooks_errors ON integration_webhooks(error_count, last_triggered) 
     WHERE status = 'error';
 
@@ -101,14 +101,14 @@ CREATE INDEX idx_integration_events_category ON integration_events(event_categor
 CREATE INDEX idx_integration_events_severity ON integration_events(severity);
 CREATE INDEX idx_integration_events_created ON integration_events(created_at DESC);
 
--- ✅ Índice compuesto para queries de debugging
+-- Índice compuesto para queries de debugging
 CREATE INDEX idx_integration_events_debug ON integration_events(installation_id, severity, created_at DESC)
     WHERE severity IN ('error', 'critical');
 
--- ✅ Índice para metadata (JSONB)
+-- Índice para metadata (JSONB)
 CREATE INDEX idx_integration_events_metadata ON integration_events USING gin(metadata);
 
--- ✅ Función helper para loggear eventos
+-- Función helper para loggear eventos
 CREATE OR REPLACE FUNCTION log_integration_event(
     p_installation_id UUID,
     p_event_type VARCHAR,
@@ -143,7 +143,7 @@ $$ LANGUAGE plpgsql;
 
 COMMENT ON FUNCTION log_integration_event IS 'Helper function to log integration events with severity';
 
--- ✅ Función para limpiar eventos viejos (retener solo últimos 30 días)
+-- Función para limpiar eventos viejos (retener solo últimos 30 días)
 CREATE OR REPLACE FUNCTION cleanup_old_integration_events()
 RETURNS INTEGER AS $$
 DECLARE
@@ -185,10 +185,10 @@ CREATE INDEX idx_api_calls_platform ON integration_api_calls(platform);
 CREATE INDEX idx_api_calls_created ON integration_api_calls(created_at DESC);
 CREATE INDEX idx_api_calls_status ON integration_api_calls(status_code);
 
--- ✅ Índice para rate limiting (Optimizado para queries recientes)
+-- Índice para rate limiting (Optimizado para queries recientes)
 CREATE INDEX idx_api_calls_rate_limit ON integration_api_calls(installation_id, created_at DESC);
 
--- ✅ Función para limpiar llamadas API viejas (retener solo últimos 7 días)
+-- Función para limpiar llamadas API viejas (retener solo últimos 7 días)
 CREATE OR REPLACE FUNCTION cleanup_old_api_calls()
 RETURNS INTEGER AS $$
 DECLARE
@@ -240,7 +240,7 @@ CREATE INDEX idx_sync_jobs_status ON platform_sync_jobs(status);
 CREATE INDEX idx_sync_jobs_type ON platform_sync_jobs(job_type);
 CREATE INDEX idx_sync_jobs_created ON platform_sync_jobs(created_at DESC);
 
--- ✅ Índice para jobs activos
+-- Índice para jobs activos
 CREATE INDEX idx_sync_jobs_active ON platform_sync_jobs(installation_id, status)
     WHERE status IN ('pending', 'running');
 
@@ -479,7 +479,7 @@ DO $$
 BEGIN
     RAISE NOTICE '';
     RAISE NOTICE '================================================';
-    RAISE NOTICE '✅ Schema Integraciones creado exitosamente';
+    RAISE NOTICE 'Schema Integraciones creado exitosamente';
     RAISE NOTICE '================================================';
     RAISE NOTICE '';
     RAISE NOTICE 'Tablas creadas:';

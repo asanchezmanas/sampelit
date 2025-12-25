@@ -8,6 +8,8 @@ from typing import Optional, Dict, Any, List
 from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
 
+from config.settings import settings
+
 logger = logging.getLogger(__name__)
 
 
@@ -75,11 +77,11 @@ class DatabaseManager:
     def __init__(self):
         self.pool: Optional[asyncpg.Pool] = None
         
-        self.database_url = os.environ.get("DATABASE_URL")
-        self.service_role_key = os.environ.get("SUPABASE_SERVICE_KEY")
+        self.database_url = settings.DATABASE_URL
+        self.service_role_key = settings.SUPABASE_SERVICE_KEY
         
         if not self.database_url:
-            raise ValueError("DATABASE_URL not set in environment")
+            raise ValueError("DATABASE_URL not set in settings or environment")
         
         # Circuit breaker for connection protection
         self.circuit_breaker = CircuitBreaker(
@@ -118,6 +120,7 @@ class DatabaseManager:
                     max_queries=50000,
                     max_inactive_connection_lifetime=300,
                     command_timeout=60,
+                    statement_cache_size=0,  # Required for Supavisor Transaction Mode
                     ssl='require' if 'supabase.co' in self.database_url else None
                 )
                 
@@ -126,7 +129,7 @@ class DatabaseManager:
                     await conn.fetchval("SELECT 1")
                 
                 self.circuit_breaker.record_success()
-                logger.info("✅ Database pool initialized")
+                logger.info("Database pool initialized")
                 return
                 
             except Exception as e:
@@ -136,12 +139,19 @@ class DatabaseManager:
                     delay = min(self.base_delay * (2 ** attempt), self.max_delay)
                     logger.warning(
                         f"Database connection failed (attempt {attempt + 1}/{retries}), "
-                        f"retrying in {delay}s: {e}"
+                        f"retrying in {delay}s... Error: {e}"
                     )
                     await asyncio.sleep(delay)
                 else:
-                    logger.error(f"❌ Database connection failed after {retries} attempts: {e}")
+                    logger.error(f"Could not connect to database after {retries} attempts: {e}")
                     raise
+    
+    async def disconnect(self):
+        """Close connection pool."""
+        if self.pool:
+            await self.pool.close()
+            self.pool = None
+            logger.info("👋 Database pool closed")
     
     async def reconnect(self):
         """Attempt to reconnect to database"""

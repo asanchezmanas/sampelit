@@ -32,24 +32,20 @@ import httpx
 logger = logging.getLogger(__name__)
 
 
-class ProxyMiddleware(BaseHTTPMiddleware):
+class ProxyMiddleware:
     """
-    ✅ FIXED: Proxy middleware with fast tracker injection
+    ✅ FIXED: Proxy service with fast tracker injection
     
-    Changes:
-    - Uses Regex instead of BeautifulSoup (10x faster)
-    - Better error handling
-    - Connection pooling
+    This class can be used as a standalone service to proxy requests
+    and inject the Samplit tracker into HTML responses.
     """
     
     def __init__(
         self,
-        app,
         api_url: str,
         timeout: int = 30,
         max_connections: int = 100
     ):
-        super().__init__(app)
         self.api_url = api_url
         self.timeout = timeout
         
@@ -64,6 +60,58 @@ class ProxyMiddleware(BaseHTTPMiddleware):
         )
         
         self.logger = logging.getLogger(f"{__name__}.ProxyMiddleware")
+
+    async def process_request(
+        self, 
+        request: Request, 
+        installation_token: str, 
+        original_url: str
+    ) -> Response:
+        """
+        Standalone method to proxy a request and inject the tracker.
+        Used by the proxy router.
+        """
+        try:
+            # 1. Forward request to origin
+            # We filter out some headers that shouldn't be forwarded
+            exclude_headers = {'host', 'connection', 'content-length', 'accept-encoding'}
+            headers = {
+                k: v for k, v in request.headers.items() 
+                if k.lower() not in exclude_headers
+            }
+            
+            # Fetch from origin
+            response = await self.client.get(original_url, headers=headers)
+            
+            # 2. Check if we should inject tracker
+            content_type = response.headers.get('content-type', '')
+            
+            if 'text/html' not in content_type.lower():
+                # Return original response content if not HTML
+                return Response(
+                    content=response.content,
+                    status_code=response.status_code,
+                    headers=dict(response.headers)
+                )
+            
+            # 3. Inject tracker
+            html = response.text
+            modified_html = self.inject_tracker_fast(html, installation_token)
+            
+            # 4. Return modified response
+            return Response(
+                content=modified_html,
+                status_code=response.status_code,
+                headers=dict(response.headers),
+                media_type='text/html'
+            )
+            
+        except Exception as e:
+            self.logger.error(f"Proxy request failed for {original_url}: {e}")
+            return Response(
+                content="Proxy Error: Could not reach origin server",
+                status_code=502
+            )
     
     async def dispatch(self, request: Request, call_next):
         """

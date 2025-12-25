@@ -6,7 +6,7 @@ Enables transparent sharing of experiment performance with external stakeholders
 Returns sanitized, high-level metrics without compromising underlying data or PII.
 """
 
-from fastapi import APIRouter, Request, status
+from fastapi import APIRouter, Request, status, Depends, Path
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from typing import Dict, Any, Optional
@@ -35,7 +35,13 @@ async def fetch_sanitized_experiment(experiment_id: str, db: DatabaseManager) ->
         if not exp: return None
         
         variants = await conn.fetch(
-            "SELECT id, name, total_allocations, total_conversions, observed_conversion_rate FROM variants WHERE experiment_id = $1 ORDER BY created_at",
+            """
+            SELECT ev.id, ev.name, ev.total_allocations, ev.total_conversions, ev.conversion_rate 
+            FROM element_variants ev
+            JOIN experiment_elements ee ON ev.element_id = ee.id
+            WHERE ee.experiment_id = $1 
+            ORDER BY ev.created_at
+            """,
             experiment_id
         )
         
@@ -44,7 +50,7 @@ async def fetch_sanitized_experiment(experiment_id: str, db: DatabaseManager) ->
     if variants:
         qualified = [v for v in variants if v['total_allocations'] >= 100]
         if qualified:
-            winner = max(qualified, key=lambda v: v['observed_conversion_rate'])
+            winner = max(qualified, key=lambda v: v['conversion_rate'])
             
     return {
         'id': str(exp['id']),
@@ -59,7 +65,7 @@ async def fetch_sanitized_experiment(experiment_id: str, db: DatabaseManager) ->
                 'name': v['name'],
                 'allocations': v['total_allocations'],
                 'conversions': v['total_conversions'],
-                'conversion_rate': float(v['observed_conversion_rate']),
+                'conversion_rate': float(v['conversion_rate']),
                 'is_winner': winner and str(v['id']) == str(winner['id'])
             }
             for v in variants

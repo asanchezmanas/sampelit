@@ -3,11 +3,11 @@
 Middleware components for the API.
 """
 
-from .error_handler import error_handler_middleware, APIError
+from .error_handler import ErrorHandlerMiddleware, APIError
 from .rate_limit import RateLimiter
 
 __all__ = [
-    'error_handler_middleware',
+    'ErrorHandlerMiddleware',
     'APIError',
     'RateLimiter'
 ]

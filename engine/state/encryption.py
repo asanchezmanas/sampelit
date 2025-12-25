@@ -19,6 +19,7 @@ import json
 import os
 import base64
 from typing import Dict, Any, List
+from config.settings import settings
 
 class StateEncryption:
     """
@@ -39,10 +40,10 @@ class StateEncryption:
         
         This way key is never in code or DB
         """
-        secret = os.environ.get('ALGORITHM_STATE_SECRET')
+        secret = settings.ALGORITHM_STATE_SECRET
         if not secret:
             raise ValueError(
-                "ALGORITHM_STATE_SECRET environment variable not set. "
+                "ALGORITHM_STATE_SECRET not set in settings or environment. "
                 "This is CRITICAL for protecting algorithm internals."
             )
         

@@ -9,14 +9,14 @@ Correcciones:
 import asyncio
 import logging
 from typing import Dict, Any, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
 
 class MetricsService:
     """
-    ✅ FIXED: Service for monitoring metrics and auto-scaling
+    # FIXED: Service for monitoring metrics and auto-scaling
     
     Features:
     - Monitors request volume
@@ -31,7 +31,7 @@ class MetricsService:
     # Monitoring
     CHECK_INTERVAL = 300  # 5 minutes
     
-    # ✅ NEW: Backoff configuration
+    # NEW: Backoff configuration
     INITIAL_RETRY_DELAY = 60  # 1 minute
     MAX_RETRY_DELAY = 3600  # 1 hour
     BACKOFF_MULTIPLIER = 2
@@ -54,7 +54,7 @@ class MetricsService:
     
     async def start_monitoring(self) -> None:
         """
-        ✅ FIXED: Start monitoring task with auto-restart
+        # FIXED: Start monitoring task with auto-restart
         """
         if self.is_running:
             self.logger.warning("Monitoring already running")
@@ -62,7 +62,7 @@ class MetricsService:
         
         self.is_running = True
         self.monitoring_task = asyncio.create_task(self._monitor_loop())
-        self.logger.info("✅ Metrics monitoring started")
+        self.logger.info("Metrics monitoring started")
     
     async def stop_monitoring(self) -> None:
         """Stop monitoring task gracefully"""
@@ -82,7 +82,7 @@ class MetricsService:
     
     async def _monitor_loop(self) -> None:
         """
-        ✅ FIXED: Monitoring loop with exponential backoff on errors
+        # FIXED: Monitoring loop with exponential backoff on errors
         
         Changes:
         - Auto-restart on failures

@@ -92,7 +92,7 @@ class MultiElementService:
         
         elements_created = []
         
-        async with self.db.acquire() as conn:
+        async with self.db.pool.acquire() as conn:
             async with conn.transaction():
                 # Crear elementos y variantes
                 for elem_idx, element_config in enumerate(elements_config):
@@ -290,7 +290,7 @@ class MultiElementService:
                 )
         
         # Obtener configuración del experimento
-        async with self.db.acquire() as conn:
+        async with self.db.pool.acquire() as conn:
             exp_config = await conn.fetchrow(
                 "SELECT config FROM experiments WHERE id = $1",
                 experiment_id
@@ -340,7 +340,7 @@ class MultiElementService:
         """
         
         # Obtener todos los elementos del experimento
-        async with self.db.acquire() as conn:
+        async with self.db.pool.acquire() as conn:
             elements = await conn.fetch(
                 """
                 SELECT id, name, element_order
@@ -479,7 +479,7 @@ class MultiElementService:
         assignments = []
         variant_assignments_map = {}
         
-        async with self.db.acquire() as conn:
+        async with self.db.pool.acquire() as conn:
             for variant_id in selected_combination['variant_ids']:
                 variant = await conn.fetchrow(
                     """
@@ -643,7 +643,7 @@ class MultiElementService:
         
         import json
         
-        async with self.db.acquire() as conn:
+        async with self.db.pool.acquire() as conn:
             assignment_id = await conn.fetchval(
                 """
                 INSERT INTO assignments (
@@ -684,7 +684,7 @@ class MultiElementService:
         
         assignments = []
         
-        async with self.db.acquire() as conn:
+        async with self.db.pool.acquire() as conn:
             for element_id, variant_id in variant_assignments.items():
                 variant = await conn.fetchrow(
                     """
@@ -733,7 +733,7 @@ class MultiElementService:
         if not variant_id:
             return None
         
-        async with self.db.acquire() as conn:
+        async with self.db.pool.acquire() as conn:
             variant = await conn.fetchrow(
                 """
                 SELECT 

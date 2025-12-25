@@ -16,11 +16,53 @@ Flow:
 import hmac
 import hashlib
 import logging
-from typing import Dict, Any, Optional
+import secrets
+import json
+from typing import Dict, Any, Optional, List
 from fastapi import HTTPException, Request
 import httpx
+from config.settings import settings
 
 logger = logging.getLogger(__name__)
+
+
+def generate_state_token(user_id: str) -> str:
+    """
+    Generate a secure state token for OAuth CSRF protection.
+    Format: random_hex.hmac(random_hex + user_id)
+    """
+    random_part = secrets.token_hex(16)
+    payload = f"{random_part}:{user_id}"
+    
+    signature = hmac.new(
+        settings.SECRET_KEY.encode(),
+        payload.encode(),
+        hashlib.sha256
+    ).hexdigest()
+    
+    return f"{random_part}.{signature}"
+
+
+def verify_state_token(state: str, user_id: str) -> bool:
+    """
+    Verify a state token for OAuth CSRF protection.
+    """
+    try:
+        if '.' not in state:
+            return False
+            
+        random_part, signature = state.split('.', 1)
+        payload = f"{random_part}:{user_id}"
+        
+        expected_signature = hmac.new(
+            settings.SECRET_KEY.encode(),
+            payload.encode(),
+            hashlib.sha256
+        ).hexdigest()
+        
+        return hmac.compare_digest(expected_signature, signature)
+    except Exception:
+        return False
 
 
 class WordPressIntegration:
