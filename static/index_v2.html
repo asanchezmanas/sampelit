@@ -74,6 +74,7 @@
         };
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="js/include.js"></script> <!-- Custom include script -->
 </head>
 
@@ -222,16 +223,32 @@
                                     </div>
                                 </div>
                             </div>
-                            <div
-                                class="h-[300px] flex items-center justify-center bg-slate-50 dark:bg-gray-900 rounded mt-4 border border-dashed border-gray-300 dark:border-gray-700">
-                                <span class="text-text-muted">Chart Area (Requires JS)</span>
-                            </div>
+                            <div id="chartOne" class="min-h-[300px]"></div>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    const chartOneOptions = {
+                                        series: [
+                                            { name: 'Tráfico', data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 45] },
+                                            { name: 'Conversiones', data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51] }
+                                        ],
+                                        chart: { type: 'area', height: 300, toolbar: { show: false } },
+                                        colors: ['#0f172a', '#3b82f6'],
+                                        fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0, stops: [0, 90, 100] } },
+                                        stroke: { curve: 'smooth', width: 2 },
+                                        xaxis: { categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'] },
+                                        legend: { position: 'top', horizontalAlign: 'left' },
+                                        dataLabels: { enabled: false },
+                                        tooltip: { theme: 'dark' }
+                                    };
+                                    new ApexCharts(document.querySelector("#chartOne"), chartOneOptions).render();
+                                });
+                            </script>
                         </div>
 
-                        <!-- Small Card / List -->
+                        <!-- Active Experiments Card -->
                         <div
-                            class="col-span-12 rounded-xl border border-border-light bg-white p-7.5 shadow-soft dark:border-gray-800 dark:bg-gray-800 xl:col-span-4">
-                            <h4 class="mb-4 text-xl font-bold text-text-main dark:text-white">Active Expermients</h4>
+                            class="col-span-12 rounded-xl border border-border-light bg-white p-6 shadow-soft dark:border-gray-800 dark:bg-gray-800 xl:col-span-4">
+                            <h4 class="mb-4 text-lg font-bold text-text-main dark:text-white">Active Experiments</h4>
                             <div class="flex flex-col gap-4">
                                 <!-- Item -->
                                 <div class="flex items-center gap-4">
@@ -239,10 +256,12 @@
                                         class="h-10 w-10 rounded bg-slate-100 flex items-center justify-center dark:bg-gray-700">
                                         <span class="material-symbols-outlined text-accent">science</span>
                                     </div>
-                                    <div>
+                                    <div class="flex-1">
                                         <h5 class="font-medium text-text-main dark:text-white">Homepage Hero</h5>
                                         <span class="text-xs text-text-muted">Running • 2 days left</span>
                                     </div>
+                                    <span
+                                        class="text-xs font-medium text-emerald-500 bg-emerald-50 px-2 py-1 rounded dark:bg-emerald-900/30">+12.4%</span>
                                 </div>
                                 <!-- Item -->
                                 <div class="flex items-center gap-4">
@@ -250,11 +269,56 @@
                                         class="h-10 w-10 rounded bg-slate-100 flex items-center justify-center dark:bg-gray-700">
                                         <span class="material-symbols-outlined text-accent">science</span>
                                     </div>
-                                    <div>
+                                    <div class="flex-1">
                                         <h5 class="font-medium text-text-main dark:text-white">Checkout V2</h5>
                                         <span class="text-xs text-text-muted">Running • 5 days left</span>
                                     </div>
+                                    <span
+                                        class="text-xs font-medium text-emerald-500 bg-emerald-50 px-2 py-1 rounded dark:bg-emerald-900/30">+8.2%</span>
                                 </div>
+                                <!-- Item -->
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="h-10 w-10 rounded bg-slate-100 flex items-center justify-center dark:bg-gray-700">
+                                        <span class="material-symbols-outlined text-amber-500">pending</span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h5 class="font-medium text-text-main dark:text-white">Pricing Page</h5>
+                                        <span class="text-xs text-text-muted">Pending • Starts in 1 day</span>
+                                    </div>
+                                    <span
+                                        class="text-xs font-medium text-amber-600 bg-amber-50 px-2 py-1 rounded dark:bg-amber-900/30">Scheduled</span>
+                                </div>
+                            </div>
+
+                            <!-- Active Users Section -->
+                            <div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center gap-2">
+                                        <span class="relative flex h-3 w-3">
+                                            <span
+                                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                            <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                        </span>
+                                        <span class="text-sm font-medium text-text-main dark:text-white">Live
+                                            Visitors</span>
+                                    </div>
+                                    <span class="text-2xl font-bold text-text-main dark:text-white">364</span>
+                                </div>
+                                <div id="chartActiveUsers" class="h-[80px]"></div>
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        const activeUsersOptions = {
+                                            series: [{ data: [31, 40, 28, 51, 42, 109, 100, 65, 78, 90, 85, 92] }],
+                                            chart: { type: 'area', height: 80, sparkline: { enabled: true } },
+                                            colors: ['#ef4444'],
+                                            fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.3, opacityTo: 0.1 } },
+                                            stroke: { curve: 'smooth', width: 2 },
+                                            tooltip: { enabled: false }
+                                        };
+                                        new ApexCharts(document.querySelector("#chartActiveUsers"), activeUsersOptions).render();
+                                    });
+                                </script>
                             </div>
                         </div>
                     </div>

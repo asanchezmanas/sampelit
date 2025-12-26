@@ -1,0 +1,141 @@
+<!-- 
+  Modal Component System
+  Usage: Include this partial and use Alpine.js events to open modals
+  
+  Example:
+  <button @click="$dispatch('open-modal', 'create-experiment')">Open</button>
+-->
+
+<div x-data="modalSystem()" @open-modal.window="openModal($event.detail)" @close-modal.window="closeModal()">
+
+    <!-- Backdrop -->
+    <div x-show="isOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+        class="fixed inset-0 z-99998 bg-gray-900/50 backdrop-blur-sm" @click="closeModal()"></div>
+
+    <!-- Create Experiment Modal -->
+    <div x-show="activeModal === 'create-experiment'" x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-95" class="fixed inset-0 z-99999 flex items-center justify-center p-4"
+        @click.self="closeModal()">
+        <div class="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800" @click.stop>
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Create New Experiment</h3>
+                <button @click="closeModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <!-- Form -->
+            <form
+                @submit.prevent="$dispatch('close-modal'); $dispatch('show-toast', { type: 'success', message: 'Experiment created successfully!' })">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Experiment
+                            Name</label>
+                        <input type="text" placeholder="e.g., Homepage Hero Test"
+                            class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                            required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Target
+                            Page</label>
+                        <input type="text" placeholder="e.g., /home or /checkout"
+                            class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                            required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Number of
+                            Variants</label>
+                        <select
+                            class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                            <option value="2">2 variants (A/B)</option>
+                            <option value="3">3 variants (A/B/C)</option>
+                            <option value="4">4 variants (A/B/C/D)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Description
+                            (optional)</label>
+                        <textarea rows="3" placeholder="Describe the goal of this experiment..."
+                            class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"></textarea>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="mt-6 flex items-center justify-end gap-3">
+                    <button type="button" @click="closeModal()"
+                        class="rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600">
+                        Create Experiment
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirm Delete Modal -->
+    <div x-show="activeModal === 'confirm-delete'" x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-95" class="fixed inset-0 z-99999 flex items-center justify-center p-4"
+        @click.self="closeModal()">
+        <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800" @click.stop>
+            <!-- Icon -->
+            <div
+                class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-error-50 dark:bg-error-500/10">
+                <span class="material-symbols-outlined text-3xl text-error-500">warning</span>
+            </div>
+
+            <!-- Content -->
+            <div class="mt-4 text-center">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Delete Experiment?</h3>
+                <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                    Are you sure you want to delete this experiment? All data and variants will be permanently removed.
+                    This action cannot be undone.
+                </p>
+            </div>
+
+            <!-- Actions -->
+            <div class="mt-6 flex items-center justify-center gap-3">
+                <button @click="closeModal()"
+                    class="rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300">
+                    Cancel
+                </button>
+                <button
+                    @click="closeModal(); $dispatch('show-toast', { type: 'error', message: 'Experiment deleted.' })"
+                    class="rounded-lg bg-error-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-error-600">
+                    Delete Experiment
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function modalSystem() {
+        return {
+            isOpen: false,
+            activeModal: null,
+
+            openModal(modalId) {
+                this.activeModal = modalId;
+                this.isOpen = true;
+                document.body.classList.add('overflow-hidden');
+            },
+
+            closeModal() {
+                this.isOpen = false;
+                this.activeModal = null;
+                document.body.classList.remove('overflow-hidden');
+            }
+        };
+    }
+</script>
