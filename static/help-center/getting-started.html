@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Getting Started with Samplit | Help Center</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        background: "#FFFFFF",
+                        surface: "#FAFAFA",
+                        "surface-highlight": "#F8FAFC",
+                        primary: "#0f172a",
+                        accent: "#1e3a8a",
+                        "primary-light": "#3b82f6",
+                        "primary-soft": "rgba(30, 58, 138, 0.03)",
+                        text: {
+                            main: "#1E293B",
+                            muted: "#64748B",
+                            dim: "#94A3B8"
+                        },
+                        border: {
+                            light: "#E2E8F0",
+                            subtle: "#F1F5F9"
+                        }
+                    },
+                    fontFamily: {
+                        display: ['"Manrope"', 'sans-serif'],
+                        body: ['"Inter"', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        DEFAULT: "6px",
+                        'lg': "8px",
+                        'xl': "12px",
+                        '2xl': "16px",
+                        '3xl': "24px",
+                    },
+                    backgroundImage: {
+                        'gradient-subtle': 'linear-gradient(to bottom right, #F8FAFC, #FFFFFF)',
+                    },
+                    boxShadow: {
+                        'soft': '0 2px 10px rgba(0, 0, 0, 0.03)',
+                        'card': '0 10px 30px -5px rgba(0, 0, 0, 0.04)',
+                    }
+                },
+            },
+        }
+    </script>
+    <link rel="stylesheet" href="../css/sampelit.css">
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-white dark:bg-gray-900 font-body text-text-main dark:text-gray-100 antialiased min-h-screen flex flex-col transition-colors duration-300">
+    <!-- Include Header -->
+    <include src="../partials/header_landing_v2.html"></include>
+
+    <!-- Main Page Layout -->
+    <div class="flex-1 max-w-7xl mx-auto w-full px-6 py-12 flex gap-12 relative pt-28">
+        <!-- Left Sidebar / Navigation (Desktop) -->
+        <aside
+            class="hidden lg:block w-64 shrink-0 sticky top-28 self-start h-[calc(100vh-8rem)] overflow-y-auto pr-4 scrollbar-hide">
+            <div class="space-y-8">
+                <div>
+                    <h3 class="text-xs font-bold text-text-muted dark:text-gray-500 uppercase tracking-widest mb-4">User
+                        Guides</h3>
+                    <ul class="space-y-1">
+                        <li><a class="block px-3 py-2 text-sm font-medium text-accent dark:text-blue-400 bg-accent/5 dark:bg-blue-400/10 rounded-lg group transition-all"
+                                href="getting-started.html">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">rocket_launch</span>
+                                    Getting Started
+                                </div>
+                            </a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="visual-editor.html">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">edit_square</span>
+                                    Visual Editor
+                                </div>
+                            </a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="experiments.html">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">science</span>
+                                    Experiments Guide
+                                </div>
+                            </a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="analytics.html">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">analytics</span>
+                                    Analytics Guide
+                                </div>
+                            </a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xs font-bold text-text-muted dark:text-gray-500 uppercase tracking-widest mb-4">
+                        Integrations</h3>
+                    <ul class="space-y-1">
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="tracker.html">Tracker Snippet</a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="shopify.html">Shopify</a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="wordpress.html">WordPress</a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="proxy.html">Proxy Middleware</a></li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Column -->
+        <main class="flex-1 min-w-0">
+            <!-- Breadcrumbs -->
+            <div class="flex items-center gap-2 text-sm text-text-muted dark:text-gray-500 mb-8">
+                <a class="hover:text-accent dark:hover:text-blue-400 transition-colors" href="index.html">Help
+                    Center</a>
+                <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+                <span class="text-text-main dark:text-white font-medium">Getting Started</span>
+            </div>
+
+            <!-- Page Header -->
+            <div class="mb-10">
+                <h1
+                    class="text-4xl md:text-5xl font-display font-bold text-text-main dark:text-white tracking-tight leading-[1.15] mb-6">
+                    Getting Started with Samplit
+                </h1>
+                <p class="text-xl text-text-muted dark:text-gray-400 font-light mb-8 leading-relaxed">
+                    Welcome to the Samplit A/B Testing Platform. This guide will help you set up and run your first
+                    data-driven experiments in minutes.
+                </p>
+                <div
+                    class="flex flex-wrap items-center gap-6 text-sm text-text-muted dark:text-gray-500 border-b border-border-light dark:border-gray-800 pb-8">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">schedule</span>
+                        <span>Last updated Dec 26, 2025</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">timer</span>
+                        <span>8 min read</span>
+                    </div>
+                    <div
+                        class="flex items-center gap-2 px-2 py-1 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 rounded text-xs font-medium border border-emerald-100 dark:border-emerald-800">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                        v1.0 Compatible
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Body -->
+            <div
+                class="prose prose-slate dark:prose-invert max-w-none text-text-main dark:text-gray-300 
+                prose-headings:font-display prose-headings:font-bold prose-headings:text-text-main dark:prose-headings:text-white
+                prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:scroll-mt-28
+                prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4
+                prose-p:leading-relaxed prose-p:mb-6
+                prose-a:text-accent dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
+                prose-code:bg-surface dark:prose-code:bg-gray-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-accent dark:prose-code:text-blue-300 prose-code:font-mono prose-code:before:content-none prose-code:after:content-none
+                prose-img:rounded-2xl prose-img:border prose-img:border-border-light dark:prose-img:border-gray-700
+                prose-ul:list-disc prose-ul:pl-6 prose-li:mb-2
+                prose-table:w-full prose-table:border-collapse prose-th:bg-surface dark:prose-th:bg-gray-800 prose-th:px-4 prose-th:py-3 prose-th:text-left prose-td:px-4 prose-td:py-3 prose-td:border-b dark:prose-td:border-gray-800">
+
+                <h2 id="what-is-samplit">What is Samplit?</h2>
+                <p>
+                    Samplit is an intelligent A/B testing platform that helps you optimize your website through
+                    data-driven experimentation. Unlike traditional A/B testing tools, Samplit uses <strong>Adaptive
+                        Optimization</strong> algorithms that automatically allocate more traffic to better-performing
+                    variations, maximizing your conversions while the test runs.
+                </p>
+
+                <h3>Key Benefits</h3>
+                <div class="overflow-x-auto mb-8">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Benefit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-semibold text-text-main dark:text-white">Adaptive Algorithms</td>
+                                <td>Automatically send more traffic to winners</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold text-text-main dark:text-white">Visual Editor</td>
+                                <td>Create tests without coding</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold text-text-main dark:text-white">Multi-Element Testing</td>
+                                <td>Test multiple elements simultaneously</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold text-text-main dark:text-white">Real-time Analytics</td>
+                                <td>See results as they happen</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold text-text-main dark:text-white">Bayesian Statistics</td>
+                                <td>Faster, more accurate decisions</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="key-concepts">Key Concepts</h2>
+                <p>Before you begin, understand these core concepts that drive the Samplit engine:</p>
+
+                <div class="grid md:grid-cols-2 gap-6 not-prose mb-8">
+                    <div
+                        class="p-6 rounded-2xl bg-surface dark:bg-gray-800 border border-slate-100 dark:border-gray-700">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-accent dark:text-blue-400 flex items-center justify-center mb-4">
+                            <span class="material-symbols-outlined text-xl">science</span>
+                        </div>
+                        <h4 class="font-display font-bold text-text-main dark:text-white mb-2">Experiments</h4>
+                        <p class="text-sm text-text-muted dark:text-gray-400">A test comparing different versions of
+                            content with defined goals and traffic allocation.</p>
+                    </div>
+                    <div
+                        class="p-6 rounded-2xl bg-surface dark:bg-gray-800 border border-slate-100 dark:border-gray-700">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-4">
+                            <span class="material-symbols-outlined text-xl">layers</span>
+                        </div>
+                        <h4 class="font-display font-bold text-text-main dark:text-white mb-2">Variations</h4>
+                        <p class="text-sm text-text-muted dark:text-gray-400">Different versions being tested: the
+                            Control (original) and your modified Variants.</p>
+                    </div>
+                </div>
+
+                <h2 id="quick-start">Quick Start (5 Minutes)</h2>
+
+                <h3>1. Add Your Website</h3>
+                <p>Paste the tracker snippet in your website's <code>&lt;head&gt;</code> section. This script is
+                    lightweight and executes asynchronously.</p>
+
+                <div class="bg-slate-900 rounded-2xl overflow-hidden border border-slate-800 mb-8 shadow-xl not-prose">
+                    <div class="flex items-center justify-between px-4 py-3 border-b border-slate-800 bg-slate-900/50">
+                        <div class="flex gap-1.5">
+                            <div class="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
+                        </div>
+                        <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Installation
+                            Snippet</span>
+                        <button
+                            class="text-xs font-bold text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-[14px]">content_copy</span>
+                            Copy
+                        </button>
+                    </div>
+                    <div class="p-6 overflow-x-auto">
+                        <pre
+                            class="font-mono text-xs leading-6 text-slate-300"><code><span class="text-slate-500">&lt;!-- Samplit A/B Testing Tracker --&gt;</span>
+&lt;<span class="text-blue-400">script</span>&gt;
+(<span class="text-purple-400">function</span>() {
+    <span class="text-blue-400">window</span>.SAMPLIT_CONFIG = {
+        installationToken: <span class="text-emerald-400">'YOUR_TOKEN'</span>,
+        apiEndpoint: <span class="text-emerald-400">'https://api.samplit.com/api/v1/tracker'</span>
+    };
+})();
+&lt;/<span class="text-blue-400">script</span>&gt;
+&lt;<span class="text-blue-400">script</span> <span class="text-blue-300">src</span>=<span class="text-emerald-400">"https://api.samplit.com/static/tracker/t.js"</span> <span class="text-blue-300">async</span>&gt;&lt;/<span class="text-blue-400">script</span>&gt;</code></pre>
+                    </div>
+                </div>
+
+                <div
+                    class="flex gap-4 p-5 bg-blue-50/50 dark:bg-blue-900/20 border-l-4 border-accent dark:border-blue-400 rounded-r-2xl mb-10 not-prose">
+                    <span class="material-symbols-outlined text-accent dark:text-blue-400 shrink-0">lightbulb</span>
+                    <div>
+                        <h4 class="font-bold text-primary dark:text-white text-sm mb-1">Expert Tip</h4>
+                        <p class="text-sm text-text-muted dark:text-gray-400 leading-relaxed">Check the <a
+                                href="tracker.html" class="text-accent dark:text-blue-400 hover:underline">Tracker
+                                Installation Guide</a> for specific instructions for Next.js, React, or Vue.</p>
+                    </div>
+                </div>
+
+                <h2 id="your-first-experiment">Your First Experiment</h2>
+                <ol>
+                    <li><strong>Define Your Goal:</strong> Identify a clear KPI, like "Sign Ups" or "Add to Cart".</li>
+                    <li><strong>Launch Visual Editor:</strong> Click "Create Experiment", enter your URL, and use our
+                        point-and-click editor to make changes.</li>
+                    <li><strong>Set Variations:</strong> Create at least one variant (e.g., changing the CTA text from
+                        "Submit" to "Get Started Now").</li>
+                    <li><strong>Start:</strong> Review and launch. Samplit will begin managing traffic automatically.
+                    </li>
+                </ol>
+
+                <h2 id="understanding-results">Understanding Results</h2>
+                <p>Samplit uses Bayesian statistics to provide more accurate results faster than traditional testing.
+                </p>
+                <ul>
+                    <li><strong>Confidence:</strong> The probability that a variant is actually better than the control.
+                        Look for &gt;95%.</li>
+                    <li><strong>Improvement:</strong> The percentage lift in conversion rate compared to the control.
+                    </li>
+                    <li><strong>Estimated Winner:</strong> Our AI engine's prediction of the winning variant based on
+                        current performance data.</li>
+                </ul>
+
+                <h2 id="next-steps">Next Steps</h2>
+                <div class="grid sm:grid-cols-2 gap-4 not-prose mb-12">
+                    <a href="visual-editor.html"
+                        class="group flex items-center justify-between p-4 bg-white dark:bg-gray-800 border border-border-light dark:border-gray-700 rounded-xl hover:border-accent dark:hover:border-blue-400 transition-all shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-accent dark:text-blue-400">edit_square</span>
+                            <span class="font-bold text-text-main dark:text-white">Visual Editor Masterclass</span>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-text-muted group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
+                    <a href="analytics.html"
+                        class="group flex items-center justify-between p-4 bg-white dark:bg-gray-800 border border-border-light dark:border-gray-700 rounded-xl hover:border-accent dark:hover:border-blue-400 transition-all shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-accent dark:text-blue-400">monitoring</span>
+                            <span class="font-bold text-text-main dark:text-white">Deep Dive into Analytics</span>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-text-muted group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Feedback Section -->
+            <div class="border-t border-border-light dark:border-gray-800 pt-10 mt-12 mb-16">
+                <div
+                    class="flex flex-col sm:flex-row items-center justify-between gap-6 bg-surface dark:bg-gray-800/50 p-8 rounded-2xl border border-slate-100 dark:border-gray-700">
+                    <div>
+                        <h3 class="text-text-main dark:text-white font-bold text-lg mb-1">Was this guide helpful?</h3>
+                        <p class="text-sm text-text-muted dark:text-gray-400">Your feedback helps us improve our
+                            documentation.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button
+                            class="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-gray-800 border border-border-light dark:border-gray-700 rounded-xl text-sm font-bold text-text-main dark:text-white hover:border-emerald-500 hover:text-emerald-500 transition-all shadow-sm">
+                            <span class="material-symbols-outlined text-[20px]">thumb_up</span> Yes
+                        </button>
+                        <button
+                            class="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-gray-800 border border-border-light dark:border-gray-700 rounded-xl text-sm font-bold text-text-main dark:text-white hover:border-rose-500 hover:text-rose-500 transition-all shadow-sm">
+                            <span class="material-symbols-outlined text-[20px]">thumb_down</span> No
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar / Table of Contents (Desktop) -->
+        <aside class="hidden xl:block w-64 shrink-0">
+            <div
+                class="sticky top-28 bg-white dark:bg-gray-800 p-6 rounded-2xl border border-slate-100 dark:border-gray-700 shadow-soft">
+                <h4
+                    class="text-xs font-bold text-text-muted dark:text-gray-500 uppercase tracking-widest mb-6 border-b border-slate-50 dark:border-gray-700 pb-4">
+                    On this page</h4>
+                <nav>
+                    <ul class="space-y-4">
+                        <li>
+                            <a class="block text-sm font-bold text-accent dark:text-blue-400 hover:text-primary dark:hover:text-white transition-colors"
+                                href="#what-is-samplit">
+                                What is Samplit?
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white transition-colors"
+                                href="#key-concepts">
+                                Key Concepts
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white transition-colors"
+                                href="#quick-start">
+                                Quick Start
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white transition-colors"
+                                href="#your-first-experiment">
+                                First Experiment
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white transition-colors"
+                                href="#understanding-results">
+                                Results Summary
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="mt-10 pt-8 border-t border-slate-50 dark:border-gray-700">
+                    <p class="text-xs font-bold text-text-muted dark:text-gray-500 uppercase tracking-widest mb-4">Need
+                        help?</p>
+                    <a href="../contact.html"
+                        class="flex items-center gap-2 text-sm font-bold text-text-main dark:text-white hover:text-accent dark:hover:text-blue-400 transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">support_agent</span>
+                        Contact Support
+                    </a>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Include Footer -->
+    <include src="../partials/footer_landing_v2.html"></include>
+
+    <!-- Scripts -->
+    <script src="../js/include.js"></script>
+    <script src="../js/theme.js"></script>
+</body>
+
+</html>

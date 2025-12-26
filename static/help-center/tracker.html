@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Tracker Snippet Installation | Help Center</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        background: "#FFFFFF",
+                        surface: "#FAFAFA",
+                        "surface-highlight": "#F8FAFC",
+                        primary: "#0f172a",
+                        accent: "#1e3a8a",
+                        "primary-light": "#3b82f6",
+                        "primary-soft": "rgba(30, 58, 138, 0.03)",
+                        text: {
+                            main: "#1E293B",
+                            muted: "#64748B",
+                            dim: "#94A3B8"
+                        },
+                        border: {
+                            light: "#E2E8F0",
+                            subtle: "#F1F5F9"
+                        }
+                    },
+                    fontFamily: {
+                        display: ['"Manrope"', 'sans-serif'],
+                        body: ['"Inter"', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        DEFAULT: "6px",
+                        'lg': "8px",
+                        'xl': "12px",
+                        '2xl': "16px",
+                        '3xl': "24px",
+                    },
+                    boxShadow: {
+                        'soft': '0 2px 10px rgba(0, 0, 0, 0.03)',
+                        'card': '0 10px 30px -5px rgba(0, 0, 0, 0.04)',
+                    }
+                },
+            },
+        }
+    </script>
+    <link rel="stylesheet" href="../css/sampelit.css">
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-white dark:bg-gray-900 font-body text-text-main dark:text-gray-100 antialiased min-h-screen flex flex-col transition-colors duration-300">
+    <!-- Include Header -->
+    <include src="../partials/header_landing_v2.html"></include>
+
+    <!-- Main Page Layout -->
+    <div class="flex-1 max-w-7xl mx-auto w-full px-6 py-12 flex gap-12 relative pt-28">
+        <!-- Left Sidebar / Navigation (Desktop) -->
+        <aside
+            class="hidden lg:block w-64 shrink-0 sticky top-28 self-start h-[calc(100vh-8rem)] overflow-y-auto pr-4 scrollbar-hide">
+            <div class="space-y-8">
+                <div>
+                    <h3 class="text-xs font-bold text-text-muted dark:text-gray-500 uppercase tracking-widest mb-4">User
+                        Guides</h3>
+                    <ul class="space-y-1">
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="getting-started.html">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">rocket_launch</span>
+                                    Getting Started
+                                </div>
+                            </a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="visual-editor.html">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">edit_square</span>
+                                    Visual Editor
+                                </div>
+                            </a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="experiments.html">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">science</span>
+                                    Experiments Guide
+                                </div>
+                            </a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="analytics.html">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">analytics</span>
+                                    Analytics Guide
+                                </div>
+                            </a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xs font-bold text-text-muted dark:text-gray-500 uppercase tracking-widest mb-4">
+                        Integrations</h3>
+                    <ul class="space-y-1">
+                        <li><a class="block px-3 py-2 text-sm font-medium text-accent dark:text-blue-400 bg-accent/5 dark:bg-blue-400/10 rounded-lg group transition-all"
+                                href="tracker.html">Tracker Snippet</a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="shopify.html">Shopify</a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="wordpress.html">WordPress</a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="proxy.html">Proxy Middleware</a></li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Column -->
+        <main class="flex-1 min-w-0">
+            <!-- Breadcrumbs -->
+            <div class="flex items-center gap-2 text-sm text-text-muted dark:text-gray-500 mb-8">
+                <a class="hover:text-accent dark:hover:text-blue-400 transition-colors" href="index.html">Help
+                    Center</a>
+                <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+                <span class="text-text-main dark:text-white font-medium">Tracker Snippet Installation</span>
+            </div>
+
+            <!-- Page Header -->
+            <div class="mb-10">
+                <h1
+                    class="text-4xl md:text-5xl font-display font-bold text-text-main dark:text-white tracking-tight leading-[1.15] mb-6">
+                    Tracker Snippet Installation Guide
+                </h1>
+                <p class="text-xl text-text-muted dark:text-gray-400 font-light mb-8 leading-relaxed">
+                    Connecting your website to Samplit is easy. Choose the installation method that works best for
+                    you—from DIY code blocks to hosting provider requests.
+                </p>
+                <div
+                    class="flex flex-wrap items-center gap-6 text-sm text-text-muted dark:text-gray-500 border-b border-border-light dark:border-gray-800 pb-8">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">schedule</span>
+                        <span>Last updated Dec 26, 2025</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">timer</span>
+                        <span>10 min read</span>
+                    </div>
+                    <div
+                        class="flex items-center gap-2 px-2 py-1 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 rounded text-xs font-medium border border-emerald-100 dark:border-emerald-800">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                        Universal SDK v4.1
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Body -->
+            <div
+                class="prose prose-slate dark:prose-invert max-w-none text-text-main dark:text-gray-300 
+                prose-headings:font-display prose-headings:font-bold prose-headings:text-text-main dark:prose-headings:text-white
+                prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:scroll-mt-28
+                prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4
+                prose-p:leading-relaxed prose-p:mb-6
+                prose-a:text-accent dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
+                prose-code:bg-surface dark:prose-code:bg-gray-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-accent dark:prose-code:text-blue-300 prose-code:font-mono prose-code:before:content-none prose-code:after:content-none
+                prose-img:rounded-2xl prose-img:border prose-img:border-border-light dark:prose-img:border-gray-700
+                prose-ul:list-disc prose-ul:pl-6 prose-li:mb-2
+                prose-table:w-full prose-table:border-collapse prose-th:bg-surface dark:prose-th:bg-gray-800 prose-th:px-4 prose-th:py-3 prose-th:text-left prose-td:px-4 prose-td:py-3 prose-td:border-b dark:prose-td:border-gray-800">
+
+                <h2 id="overview">Overview</h2>
+                <p>
+                    The Samplit tracker snippet is a small piece of JavaScript code that enables A/B testing on your
+                    website. This guide covers all the ways you can install it, whether you do it yourself or get help
+                    from your hosting provider or a web professional.
+                </p>
+
+                <div class="bg-slate-900 rounded-2xl overflow-hidden mb-10 not-prose border border-slate-800">
+                    <div class="flex items-center justify-between px-6 py-3 bg-slate-800/50 border-b border-slate-700">
+                        <span class="text-xs font-bold text-slate-400">Head Section Snippet</span>
+                        <button class="text-xs text-blue-400 hover:text-blue-300 font-medium">Copy Code</button>
+                    </div>
+                    <div class="p-6">
+                        <pre
+                            class="font-mono text-sm leading-6 text-blue-400"><code>&lt;!-- Samplit Tracker --&gt;
+&lt;script&gt;
+(function() {
+    window.SAMPLIT_CONFIG = {
+        installationToken: '<span class="text-emerald-400">YOUR_TOKEN_HERE</span>',
+        apiEndpoint: 'https://api.samplit.com/api/v1/tracker'
+    };
+})();
+&lt;/script&gt;
+&lt;script src="https://api.samplit.com/static/tracker/t.js" <span class="text-purple-400">async</span>&gt;&lt;/script&gt;</code></pre>
+                    </div>
+                </div>
+
+                <h2 id="installation-options">Installation Options</h2>
+                <div class="grid md:grid-cols-3 gap-6 not-prose mb-12">
+                    <div
+                        class="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-slate-100 dark:border-gray-700 shadow-sm flex flex-col h-full">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 flex items-center justify-center mb-4">
+                            <span class="material-symbols-outlined">person</span>
+                        </div>
+                        <h4 class="font-bold text-text-main dark:text-white mb-2 underline decoration-orange-500/30">
+                            Option A: DIY</h4>
+                        <p class="text-sm text-text-muted dark:text-gray-400 leading-relaxed mb-4">Fastest way. Simply
+                            paste the code into your site's header settings.</p>
+                        <a href="#option-a"
+                            class="mt-auto text-xs font-bold text-orange-500 uppercase tracking-widest hover:translate-x-1 transition-transform inline-flex items-center gap-1">Learn
+                            More <span class="material-symbols-outlined text-[14px]">arrow_forward</span></a>
+                    </div>
+                    <div
+                        class="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-slate-100 dark:border-gray-700 shadow-sm flex flex-col h-full">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4">
+                            <span class="material-symbols-outlined">dns</span>
+                        </div>
+                        <h4 class="font-bold text-text-main dark:text-white mb-2 underline decoration-blue-500/30">
+                            Option B: Hosting</h4>
+                        <p class="text-sm text-text-muted dark:text-gray-400 leading-relaxed mb-4">Ask your hosting
+                            support (GoDaddy, Wix, Bluehost) to add it for you.</p>
+                        <a href="#option-b"
+                            class="mt-auto text-xs font-bold text-blue-500 uppercase tracking-widest hover:translate-x-1 transition-transform inline-flex items-center gap-1">Learn
+                            More <span class="material-symbols-outlined text-[14px]">arrow_forward</span></a>
+                    </div>
+                    <div
+                        class="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-slate-100 dark:border-gray-700 shadow-sm flex flex-col h-full">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4">
+                            <span class="material-symbols-outlined">engineering</span>
+                        </div>
+                        <h4 class="font-bold text-text-main dark:text-white mb-2 underline decoration-emerald-500/30">
+                            Option C: Agency</h4>
+                        <p class="text-sm text-text-muted dark:text-gray-400 leading-relaxed mb-4">Hire a freelancer or
+                            ask your agency to handle the integration.</p>
+                        <a href="#option-c"
+                            class="mt-auto text-xs font-bold text-emerald-500 uppercase tracking-widest hover:translate-x-1 transition-transform inline-flex items-center gap-1">Learn
+                            More <span class="material-symbols-outlined text-[14px]">arrow_forward</span></a>
+                    </div>
+                </div>
+
+                <h2 id="option-a">Option A: Self-Installation</h2>
+                <p>The tracker snippet must be placed in the <code>&lt;head&gt;</code> section of every page on your
+                    website. Most modern CMS platforms make this very easy.</p>
+                <ul>
+                    <li><strong>WordPress:</strong> Use a plugin like "Insert Headers and Footers" or edit
+                        <code>header.php</code>.</li>
+                    <li><strong>Wix:</strong> Use the "Custom Code" feature in Settings.</li>
+                    <li><strong>Squarespace:</strong> Use "Code Injection" in Advanced Settings.</li>
+                    <li><strong>Shopify:</strong> Edit your <code>theme.liquid</code> file and paste the code before
+                        <code>&lt;/head&gt;</code>.</li>
+                </ul>
+
+                <h2 id="verifying-your-installation">Verifying Your Installation</h2>
+                <ol>
+                    <li>Open your website in a browser.</li>
+                    <li>Right-click and select <strong>View Page Source</strong>.</li>
+                    <li>Search for <code>Samplit</code> using <code>Ctrl+F</code>.</li>
+                    <li>If you see the script, it's installed!</li>
+                    <li>Go back to your Samplit Dashboard and check if the status indicator is 🟢
+                        <strong>Connected</strong>.</li>
+                </ol>
+
+                <h2 id="troubleshooting">Troubleshooting</h2>
+                <div class="overflow-x-auto mb-8">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Issue</th>
+                                <th>Possible Cause</th>
+                                <th>Solution</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-semibold text-text-main dark:text-white">Script not appearing</td>
+                                <td>Caching plugin/service</td>
+                                <td>Clear site and browser cache.</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold text-text-main dark:text-white">Not Connected status</td>
+                                <td>Incorrect token</td>
+                                <td>Re-copy snippet from dashboard.</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold text-text-main dark:text-white">Experiment not firing</td>
+                                <td>Targeting rules</td>
+                                <td>Check URL matching rules.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="grid sm:grid-cols-2 gap-4 not-prose mt-12 mb-12">
+                    <a href="visual-editor.html"
+                        class="group flex items-center justify-between p-4 bg-white dark:bg-gray-800 border border-border-light dark:border-gray-700 rounded-xl hover:border-accent dark:hover:border-blue-400 transition-all shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-accent dark:text-blue-400">edit_square</span>
+                            <span class="font-bold text-text-main dark:text-white">Visual Editor Guide</span>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-text-muted group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
+                    <a href="experiments.html"
+                        class="group flex items-center justify-between p-4 bg-white dark:bg-gray-800 border border-border-light dark:border-gray-700 rounded-xl hover:border-accent dark:hover:border-blue-400 transition-all shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-accent dark:text-blue-400">science</span>
+                            <span class="font-bold text-text-main dark:text-white">Experiments Guide</span>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-text-muted group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Feedback Section -->
+            <div class="border-t border-border-light dark:border-gray-800 pt-10 mt-12 mb-16">
+                <div
+                    class="flex flex-col sm:flex-row items-center justify-between gap-6 bg-surface dark:bg-gray-800/50 p-8 rounded-2xl border border-slate-100 dark:border-gray-700">
+                    <div>
+                        <h3 class="text-text-main dark:text-white font-bold text-lg mb-1">Was this guide helpful?</h3>
+                        <p class="text-sm text-text-muted dark:text-gray-400">Your feedback helps us improve our
+                            documentation.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button
+                            class="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-gray-800 border border-border-light dark:border-gray-700 rounded-xl text-sm font-bold text-text-main dark:text-white hover:border-emerald-500 hover:text-emerald-500 transition-all shadow-sm">
+                            <span class="material-symbols-outlined text-[20px]">thumb_up</span> Yes
+                        </button>
+                        <button
+                            class="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-gray-800 border border-border-light dark:border-gray-700 rounded-xl text-sm font-bold text-text-main dark:text-white hover:border-rose-500 hover:text-rose-500 transition-all shadow-sm">
+                            <span class="material-symbols-outlined text-[20px]">thumb_down</span> No
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar / Table of Contents (Desktop) -->
+        <aside class="hidden xl:block w-64 shrink-0">
+            <div
+                class="sticky top-28 bg-white dark:bg-gray-800 p-6 rounded-2xl border border-slate-100 dark:border-gray-700 shadow-soft">
+                <h4
+                    class="text-xs font-bold text-text-muted dark:text-gray-500 uppercase tracking-widest mb-6 border-b border-slate-50 dark:border-gray-700 pb-4">
+                    On this page</h4>
+                <nav>
+                    <ul class="space-y-4">
+                        <li>
+                            <a class="block text-sm font-bold text-accent dark:text-blue-400 hover:text-primary dark:hover:text-white transition-colors"
+                                href="#overview">
+                                Overview
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white transition-colors"
+                                href="#installation-options">
+                                Options
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white transition-colors"
+                                href="#option-a">
+                                DIY Setup
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white transition-colors"
+                                href="#verifying-your-installation">
+                                Verification
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white transition-colors"
+                                href="#troubleshooting">
+                                Troubleshooting
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="mt-10 pt-8 border-t border-slate-50 dark:border-gray-700">
+                    <p class="text-xs font-bold text-text-muted dark:text-gray-500 uppercase tracking-widest mb-4">
+                        Support</p>
+                    <a href="../contact.html"
+                        class="flex items-center gap-2 text-sm font-bold text-text-main dark:text-white hover:text-accent dark:hover:text-blue-400 transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">support_agent</span>
+                        Contact Support
+                    </a>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Include Footer -->
+    <include src="../partials/footer_landing_v2.html"></include>
+
+    <!-- Scripts -->
+    <script src="../js/include.js"></script>
+    <script src="../js/theme.js"></script>
+</body>
+
+</html>

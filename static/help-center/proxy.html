@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Proxy Middleware | Help Center</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        background: "#FFFFFF",
+                        surface: "#FAFAFA",
+                        "surface-highlight": "#F8FAFC",
+                        primary: "#0f172a",
+                        accent: "#1e3a8a",
+                        "primary-light": "#3b82f6",
+                        "primary-soft": "rgba(30, 58, 138, 0.03)",
+                        text: {
+                            main: "#1E293B",
+                            muted: "#64748B",
+                            dim: "#94A3B8"
+                        },
+                        border: {
+                            light: "#E2E8F0",
+                            subtle: "#F1F5F9"
+                        }
+                    },
+                    fontFamily: {
+                        display: ['"Manrope"', 'sans-serif'],
+                        body: ['"Inter"', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        DEFAULT: "6px",
+                        'lg': "8px",
+                        'xl': "12px",
+                        '2xl': "16px",
+                        '3xl': "24px",
+                    },
+                    boxShadow: {
+                        'soft': '0 2px 10px rgba(0, 0, 0, 0.03)',
+                        'card': '0 10px 30px -5px rgba(0, 0, 0, 0.04)',
+                    }
+                },
+            },
+        }
+    </script>
+    <link rel="stylesheet" href="../css/sampelit.css">
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-white dark:bg-gray-900 font-body text-text-main dark:text-gray-100 antialiased min-h-screen flex flex-col transition-colors duration-300">
+    <!-- Include Header -->
+    <include src="../partials/header_landing_v2.html"></include>
+
+    <!-- Main Page Layout -->
+    <div class="flex-1 max-w-7xl mx-auto w-full px-6 py-12 flex gap-12 relative pt-28">
+        <!-- Left Sidebar / Navigation (Desktop) -->
+        <aside
+            class="hidden lg:block w-64 shrink-0 sticky top-28 self-start h-[calc(100vh-8rem)] overflow-y-auto pr-4 scrollbar-hide">
+            <div class="space-y-8">
+                <div>
+                    <h3 class="text-xs font-bold text-text-muted dark:text-gray-500 uppercase tracking-widest mb-4">User
+                        Guides</h3>
+                    <ul class="space-y-1">
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="getting-started.html">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">rocket_launch</span>
+                                    Getting Started
+                                </div>
+                            </a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="visual-editor.html">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">edit_square</span>
+                                    Visual Editor
+                                </div>
+                            </a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="experiments.html">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">science</span>
+                                    Experiments Guide
+                                </div>
+                            </a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="analytics.html">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">analytics</span>
+                                    Analytics Guide
+                                </div>
+                            </a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xs font-bold text-text-muted dark:text-gray-500 uppercase tracking-widest mb-4">
+                        Integrations</h3>
+                    <ul class="space-y-1">
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="tracker.html">Tracker Snippet</a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="shopify.html">Shopify</a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="wordpress.html">WordPress</a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-accent dark:text-blue-400 bg-accent/5 dark:bg-blue-400/10 rounded-lg group transition-all"
+                                href="proxy.html">Proxy Middleware</a></li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Column -->
+        <main class="flex-1 min-w-0">
+            <!-- Breadcrumbs -->
+            <div class="flex items-center gap-2 text-sm text-text-muted dark:text-gray-500 mb-8">
+                <a class="hover:text-accent dark:hover:text-blue-400 transition-colors" href="index.html">Help
+                    Center</a>
+                <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+                <span class="text-text-main dark:text-white font-medium">Proxy Middleware Integration</span>
+            </div>
+
+            <!-- Page Header -->
+            <div class="mb-10">
+                <h1
+                    class="text-4xl md:text-5xl font-display font-bold text-text-main dark:text-white tracking-tight leading-[1.15] mb-6">
+                    Proxy Middleware Integration Guide
+                </h1>
+                <p class="text-xl text-text-muted dark:text-gray-400 font-light mb-8 leading-relaxed">
+                    Zero-code injection for complex systems. Add Samplit to any web application automatically by
+                    processing traffic at the edge or through a custom middleware.
+                </p>
+                <div
+                    class="flex flex-wrap items-center gap-6 text-sm text-text-muted dark:text-gray-500 border-b border-border-light dark:border-gray-800 pb-8">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">schedule</span>
+                        <span>Last updated Dec 26, 2025</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">timer</span>
+                        <span>12 min read</span>
+                    </div>
+                    <div
+                        class="flex items-center gap-2 px-2 py-1 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 rounded text-xs font-medium border border-emerald-100 dark:border-emerald-800">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                        Proxy Engine v1.2
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Body -->
+            <div
+                class="prose prose-slate dark:prose-invert max-w-none text-text-main dark:text-gray-300 
+                prose-headings:font-display prose-headings:font-bold prose-headings:text-text-main dark:prose-headings:text-white
+                prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:scroll-mt-28
+                prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4
+                prose-p:leading-relaxed prose-p:mb-6
+                prose-a:text-accent dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
+                prose-code:bg-surface dark:prose-code:bg-gray-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-accent dark:prose-code:text-blue-300 prose-code:font-mono prose-code:before:content-none prose-code:after:content-none
+                prose-img:rounded-2xl prose-img:border prose-img:border-border-light dark:prose-img:border-gray-700
+                prose-ul:list-disc prose-ul:pl-6 prose-li:mb-2
+                prose-table:w-full prose-table:border-collapse prose-th:bg-surface dark:prose-th:bg-gray-800 prose-th:px-4 prose-th:py-3 prose-th:text-left prose-td:px-4 prose-td:py-3 prose-td:border-b dark:prose-td:border-gray-800">
+
+                <h2 id="overview">Overview</h2>
+                <p>
+                    The Proxy Middleware allows you to automatically inject the Samplit A/B testing tracker into your
+                    HTML pages without modifying your application code. This is the ideal solution for legacy systems,
+                    secure environments, or complex stacks where manual code editing is impractical.
+                </p>
+
+                <div class="grid sm:grid-cols-2 gap-4 not-prose mb-10">
+                    <div
+                        class="p-4 bg-emerald-50/50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800 rounded-xl flex gap-3">
+                        <span
+                            class="material-symbols-outlined text-emerald-600 dark:text-emerald-400">check_circle</span>
+                        <span class="text-sm font-medium text-emerald-800 dark:text-emerald-300">No application code
+                            changes</span>
+                    </div>
+                    <div
+                        class="p-4 bg-emerald-50/50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800 rounded-xl flex gap-3">
+                        <span
+                            class="material-symbols-outlined text-emerald-600 dark:text-emerald-400">check_circle</span>
+                        <span class="text-sm font-medium text-emerald-800 dark:text-emerald-300">Dynamic tracker
+                            injection</span>
+                    </div>
+                    <div
+                        class="p-4 bg-emerald-50/50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800 rounded-xl flex gap-3">
+                        <span
+                            class="material-symbols-outlined text-emerald-600 dark:text-emerald-400">check_circle</span>
+                        <span class="text-sm font-medium text-emerald-800 dark:text-emerald-300">High-performance regex
+                            engine</span>
+                    </div>
+                    <div
+                        class="p-4 bg-emerald-50/50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800 rounded-xl flex gap-3">
+                        <span
+                            class="material-symbols-outlined text-emerald-600 dark:text-emerald-400">check_circle</span>
+                        <span class="text-sm font-medium text-emerald-800 dark:text-emerald-300">Edge-ready
+                            architecture</span>
+                    </div>
+                </div>
+
+                <h2 id="how-it-works">How It Works</h2>
+                <p>The middleware sits between your users and your origin server. It intercepting the HTML response,
+                    injects the Samplit snippet into the <code>&lt;head&gt;</code>, and serves the modified page to the
+                    browser.</p>
+                <div
+                    class="bg-surface dark:bg-gray-800 p-8 rounded-2xl border border-border-light dark:border-gray-700 not-prose mb-10">
+                    <div
+                        class="flex items-center justify-between gap-4 max-w-lg mx-auto overflow-x-auto pb-4 scrollbar-hide">
+                        <div class="flex flex-col items-center gap-2 min-w-[80px]">
+                            <div
+                                class="w-12 h-12 rounded-full bg-slate-100 dark:bg-gray-700 flex items-center justify-center text-slate-600 dark:text-gray-300">
+                                <span class="material-symbols-outlined">person</span>
+                            </div>
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-text-muted">User</span>
+                        </div>
+                        <div class="h-[2px] w-12 bg-slate-200 dark:bg-gray-700 hidden sm:block"></div>
+                        <div class="flex flex-col items-center gap-2 min-w-[100px]">
+                            <div
+                                class="w-16 h-16 rounded-2xl bg-accent text-white flex items-center justify-center shadow-lg">
+                                <span class="material-symbols-outlined">settings_input_component</span>
+                            </div>
+                            <span
+                                class="text-[10px] font-bold uppercase tracking-widest text-accent dark:text-blue-400">Proxy</span>
+                        </div>
+                        <div class="h-[2px] w-12 bg-slate-200 dark:bg-gray-700 hidden sm:block"></div>
+                        <div class="flex flex-col items-center gap-2 min-w-[80px]">
+                            <div
+                                class="w-12 h-12 rounded-full bg-slate-100 dark:bg-gray-700 flex items-center justify-center text-slate-600 dark:text-gray-300">
+                                <span class="material-symbols-outlined">dns</span>
+                            </div>
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-text-muted">Origin</span>
+                        </div>
+                    </div>
+                    <p class="text-center text-xs text-text-muted dark:text-gray-400 mt-6">Injection adds ~5-10ms of
+                        latency per 1MB of HTML</p>
+                </div>
+
+                <h2 id="installation">Basic Python Implementation</h2>
+                <div class="bg-slate-900 rounded-xl overflow-hidden mb-8 not-prose">
+                    <div class="p-6">
+                        <pre class="font-mono text-xs leading-6 text-blue-400"><code><span class="text-slate-500"># proxy_server.py</span>
+<span class="text-purple-400">from</span> integration.proxy <span class="text-purple-400">import</span> ProxyMiddleware
+
+proxy = ProxyMiddleware(
+    api_url=<span class="text-emerald-400">"https://api.samplit.com"</span>,
+    timeout=<span class="text-purple-400">30</span>,
+    max_connections=<span class="text-purple-400">100</span>
+)
+
+<span class="text-blue-400">async def</span> <span class="text-purple-400">handle_request</span>(request):
+    <span class="text-purple-400">return await</span> proxy.process_request(
+        request=request,
+        installation_token=<span class="text-emerald-400">"YOUR_TOKEN"</span>,
+        original_url=<span class="text-emerald-400">"https://origin-server.com"</span>
+    )</code></pre>
+                    </div>
+                </div>
+
+                <h2 id="integration-methods">Advanced Methods</h2>
+                <ul>
+                    <li><strong>Nginx:</strong> Configure Nginx as a reverse proxy targeting your middleware service.
+                    </li>
+                    <li><strong>FastAPI/Middleware:</strong> Plug the ProxyMiddleware directly into your existing
+                        FastAPI <code>@app.middleware("http")</code> chain.</li>
+                    <li><strong>Edge Functions:</strong> Deploy via Vercel Edge or Cloudflare Workers for global
+                        low-latency.</li>
+                </ul>
+
+                <h2 id="troubleshooting">Troubleshooting</h2>
+                <div class="overflow-x-auto mb-8">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Problem</th>
+                                <th>Reason</th>
+                                <th>Fix</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-semibold text-text-main dark:text-white">502 Gateway Error</td>
+                                <td>Origin unreachable</td>
+                                <td>Check origin URL and firewall settings.</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold text-text-main dark:text-white">No Injection</td>
+                                <td>Wrong Content-Type</td>
+                                <td>Ensure origin is sending <code>text/html</code>.</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold text-text-main dark:text-white">Timeout</td>
+                                <td>Large Page / Slow DNS</td>
+                                <td>Increase <code>timeout</code> in config.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="grid sm:grid-cols-2 gap-4 not-prose mt-12 mb-12">
+                    <a href="tracker.html"
+                        class="group flex items-center justify-between p-4 bg-white dark:bg-gray-800 border border-border-light dark:border-gray-700 rounded-xl hover:border-accent dark:hover:border-blue-400 transition-all shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-accent dark:text-blue-400">code</span>
+                            <span class="font-bold text-text-main dark:text-white">Tracker Script Guide</span>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-text-muted group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
+                    <a href="analytics.html"
+                        class="group flex items-center justify-between p-4 bg-white dark:bg-gray-800 border border-border-light dark:border-gray-700 rounded-xl hover:border-accent dark:hover:border-blue-400 transition-all shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-accent dark:text-blue-400">analytics</span>
+                            <span class="font-bold text-text-main dark:text-white">Analytics Setup</span>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-text-muted group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Feedback Section -->
+            <div class="border-t border-border-light dark:border-gray-800 pt-10 mt-12 mb-16">
+                <div
+                    class="flex flex-col sm:flex-row items-center justify-between gap-6 bg-surface dark:bg-gray-800/50 p-8 rounded-2xl border border-slate-100 dark:border-gray-700">
+                    <div>
+                        <h3 class="text-text-main dark:text-white font-bold text-lg mb-1">Was this guide helpful?</h3>
+                        <p class="text-sm text-text-muted dark:text-gray-400">Your feedback helps us improve our
+                            documentation.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button
+                            class="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-gray-800 border border-border-light dark:border-gray-700 rounded-xl text-sm font-bold text-text-main dark:text-white hover:border-emerald-500 hover:text-emerald-500 transition-all shadow-sm">
+                            <span class="material-symbols-outlined text-[20px]">thumb_up</span> Yes
+                        </button>
+                        <button
+                            class="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-gray-800 border border-border-light dark:border-gray-700 rounded-xl text-sm font-bold text-text-main dark:text-white hover:border-rose-500 hover:text-rose-500 transition-all shadow-sm">
+                            <span class="material-symbols-outlined text-[20px]">thumb_down</span> No
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar / Table of Contents (Desktop) -->
+        <aside class="hidden xl:block w-64 shrink-0">
+            <div
+                class="sticky top-28 bg-white dark:bg-gray-800 p-6 rounded-2xl border border-slate-100 dark:border-gray-700 shadow-soft">
+                <h4
+                    class="text-xs font-bold text-text-muted dark:text-gray-500 uppercase tracking-widest mb-6 border-b border-slate-50 dark:border-gray-700 pb-4">
+                    On this page</h4>
+                <nav>
+                    <ul class="space-y-4">
+                        <li>
+                            <a class="block text-sm font-bold text-accent dark:text-blue-400 hover:text-primary dark:hover:text-white transition-colors"
+                                href="#overview">
+                                Overview
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white transition-colors"
+                                href="#how-it-works">
+                                How It Works
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white transition-colors"
+                                href="#installation">
+                                Installation
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white transition-colors"
+                                href="#integration-methods">
+                                Methods
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white transition-colors"
+                                href="#troubleshooting">
+                                Troubleshooting
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="mt-10 pt-8 border-t border-slate-50 dark:border-gray-700">
+                    <p class="text-xs font-bold text-text-muted dark:text-gray-500 uppercase tracking-widest mb-4">
+                        Support</p>
+                    <a href="../contact.html"
+                        class="flex items-center gap-2 text-sm font-bold text-text-main dark:text-white hover:text-accent dark:hover:text-blue-400 transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">support_agent</span>
+                        Contact Support
+                    </a>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Include Footer -->
+    <include src="../partials/footer_landing_v2.html"></include>
+
+    <!-- Scripts -->
+    <script src="../js/include.js"></script>
+    <script src="../js/theme.js"></script>
+</body>
+
+</html>

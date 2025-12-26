@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Experiments Guide | Help Center</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        background: "#FFFFFF",
+                        surface: "#FAFAFA",
+                        "surface-highlight": "#F8FAFC",
+                        primary: "#0f172a",
+                        accent: "#1e3a8a",
+                        "primary-light": "#3b82f6",
+                        "primary-soft": "rgba(30, 58, 138, 0.03)",
+                        text: {
+                            main: "#1E293B",
+                            muted: "#64748B",
+                            dim: "#94A3B8"
+                        },
+                        border: {
+                            light: "#E2E8F0",
+                            subtle: "#F1F5F9"
+                        }
+                    },
+                    fontFamily: {
+                        display: ['"Manrope"', 'sans-serif'],
+                        body: ['"Inter"', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        DEFAULT: "6px",
+                        'lg': "8px",
+                        'xl': "12px",
+                        '2xl': "16px",
+                        '3xl': "24px",
+                    },
+                    boxShadow: {
+                        'soft': '0 2px 10px rgba(0, 0, 0, 0.03)',
+                        'card': '0 10px 30px -5px rgba(0, 0, 0, 0.04)',
+                    }
+                },
+            },
+        }
+    </script>
+    <link rel="stylesheet" href="../css/sampelit.css">
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-white dark:bg-gray-900 font-body text-text-main dark:text-gray-100 antialiased min-h-screen flex flex-col transition-colors duration-300">
+    <!-- Include Header -->
+    <include src="../partials/header_landing_v2.html"></include>
+
+    <!-- Main Page Layout -->
+    <div class="flex-1 max-w-7xl mx-auto w-full px-6 py-12 flex gap-12 relative pt-28">
+        <!-- Left Sidebar / Navigation (Desktop) -->
+        <aside
+            class="hidden lg:block w-64 shrink-0 sticky top-28 self-start h-[calc(100vh-8rem)] overflow-y-auto pr-4 scrollbar-hide">
+            <div class="space-y-8">
+                <div>
+                    <h3 class="text-xs font-bold text-text-muted dark:text-gray-500 uppercase tracking-widest mb-4">User
+                        Guides</h3>
+                    <ul class="space-y-1">
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="getting-started.html">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">rocket_launch</span>
+                                    Getting Started
+                                </div>
+                            </a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="visual-editor.html">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">edit_square</span>
+                                    Visual Editor
+                                </div>
+                            </a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-accent dark:text-blue-400 bg-accent/5 dark:bg-blue-400/10 rounded-lg group transition-all"
+                                href="experiments.html">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">science</span>
+                                    Experiments Guide
+                                </div>
+                            </a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="analytics.html">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">analytics</span>
+                                    Analytics Guide
+                                </div>
+                            </a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xs font-bold text-text-muted dark:text-gray-500 uppercase tracking-widest mb-4">
+                        Integrations</h3>
+                    <ul class="space-y-1">
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="tracker.html">Tracker Snippet</a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="shopify.html">Shopify</a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="wordpress.html">WordPress</a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="proxy.html">Proxy Middleware</a></li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Column -->
+        <main class="flex-1 min-w-0">
+            <!-- Breadcrumbs -->
+            <div class="flex items-center gap-2 text-sm text-text-muted dark:text-gray-500 mb-8">
+                <a class="hover:text-accent dark:hover:text-blue-400 transition-colors" href="index.html">Help
+                    Center</a>
+                <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+                <span class="text-text-main dark:text-white font-medium">Experiments Guide</span>
+            </div>
+
+            <!-- Page Header -->
+            <div class="mb-10">
+                <h1
+                    class="text-4xl md:text-5xl font-display font-bold text-text-main dark:text-white tracking-tight leading-[1.15] mb-6">
+                    Experiments Guide
+                </h1>
+                <p class="text-xl text-text-muted dark:text-gray-400 font-light mb-8 leading-relaxed">
+                    A comprehensive guide to creating, managing, and optimizing A/B tests with Samplit's advanced
+                    experimentation engine.
+                </p>
+                <div
+                    class="flex flex-wrap items-center gap-6 text-sm text-text-muted dark:text-gray-500 border-b border-border-light dark:border-gray-800 pb-8">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">schedule</span>
+                        <span>Last updated Dec 26, 2025</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">timer</span>
+                        <span>15 min read</span>
+                    </div>
+                    <div
+                        class="flex items-center gap-2 px-2 py-1 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 rounded text-xs font-medium border border-emerald-100 dark:border-emerald-800">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                        Optimization v2.4
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Body -->
+            <div
+                class="prose prose-slate dark:prose-invert max-w-none text-text-main dark:text-gray-300 
+                prose-headings:font-display prose-headings:font-bold prose-headings:text-text-main dark:prose-headings:text-white
+                prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:scroll-mt-28
+                prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4
+                prose-p:leading-relaxed prose-p:mb-6
+                prose-a:text-accent dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
+                prose-code:bg-surface dark:prose-code:bg-gray-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-accent dark:prose-code:text-blue-300 prose-code:font-mono prose-code:before:content-none prose-code:after:content-none
+                prose-img:rounded-2xl prose-img:border prose-img:border-border-light dark:prose-img:border-gray-700
+                prose-ul:list-disc prose-ul:pl-6 prose-li:mb-2
+                prose-table:w-full prose-table:border-collapse prose-th:bg-surface dark:prose-th:bg-gray-800 prose-th:px-4 prose-th:py-3 prose-th:text-left prose-td:px-4 prose-td:py-3 prose-td:border-b dark:prose-td:border-gray-800">
+
+                <h2 id="understanding-experiments">Understanding Experiments</h2>
+                <p>
+                    An experiment in Samplit compares different versions of content to determine which performs best.
+                    The platform uses <strong>Adaptive Optimization</strong> algorithms to automatically allocate more
+                    traffic to better-performing variations while the test runs.
+                </p>
+
+                <div class="flex flex-col gap-4 mb-10 not-prose">
+                    <div
+                        class="flex items-center gap-4 p-4 rounded-xl bg-surface dark:bg-gray-800 border-l-4 border-slate-300 dark:border-gray-600">
+                        <span
+                            class="px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-slate-100 dark:bg-gray-700 rounded">Draft</span>
+                        <p class="text-sm text-text-muted dark:text-gray-400">Configuration phase, not yet visible to
+                            visitors.</p>
+                    </div>
+                    <div
+                        class="flex items-center gap-4 p-4 rounded-xl bg-green-50/30 dark:bg-emerald-900/10 border-l-4 border-emerald-500">
+                        <span
+                            class="px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 rounded">Active</span>
+                        <p class="text-sm text-text-muted dark:text-gray-400">Experiment is live and collecting
+                            real-time behavioral data.</p>
+                    </div>
+                    <div
+                        class="flex items-center gap-4 p-4 rounded-xl bg-blue-50/30 dark:bg-blue-900/10 border-l-4 border-blue-500">
+                        <span
+                            class="px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 rounded">Completed</span>
+                        <p class="text-sm text-text-muted dark:text-gray-400">Winner has been declared and the variation
+                            is implemented.</p>
+                    </div>
+                </div>
+
+                <h2 id="experiment-types">Experiment Types</h2>
+                <div class="grid md:grid-cols-2 gap-6 not-prose mb-10">
+                    <div
+                        class="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-slate-100 dark:border-gray-700 shadow-sm">
+                        <h4
+                            class="font-display font-bold text-text-main dark:text-white mb-2 underline decoration-accent/30">
+                            A/B Test</h4>
+                        <p class="text-sm text-text-muted dark:text-gray-400 leading-relaxed">Classic comparison between
+                            a Control and a single Variant. Best for quick UI tweaks.</p>
+                    </div>
+                    <div
+                        class="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-slate-100 dark:border-gray-700 shadow-sm">
+                        <h4
+                            class="font-display font-bold text-text-main dark:text-white mb-2 underline decoration-accent/30">
+                            Multi-Element</h4>
+                        <p class="text-sm text-text-muted dark:text-gray-400 leading-relaxed">Test several elements
+                            (headings, images, buttons) simultaneously to find the best combination.</p>
+                    </div>
+                    <div
+                        class="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-slate-100 dark:border-gray-700 shadow-sm">
+                        <h4
+                            class="font-display font-bold text-text-main dark:text-white mb-2 underline decoration-accent/30">
+                            Split URL</h4>
+                        <p class="text-sm text-text-muted dark:text-gray-400 leading-relaxed">Send visitors to
+                            completely different URLs. Ideal for testing major page redesigns.</p>
+                    </div>
+                    <div
+                        class="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-slate-100 dark:border-gray-700 shadow-sm">
+                        <h4
+                            class="font-display font-bold text-text-main dark:text-white mb-2 underline decoration-accent/30">
+                            A/B/n</h4>
+                        <p class="text-sm text-text-muted dark:text-gray-400 leading-relaxed">Testing up to 10
+                            variations at once to explore a wide range of creative ideas.</p>
+                    </div>
+                </div>
+
+                <h2 id="creating-an-experiment">Creating an Experiment</h2>
+                <ol>
+                    <li><strong>Basic Setup:</strong> Provide a descriptive name and the target URL.</li>
+                    <li><strong>Method Choice:</strong> Choose the <strong>Visual Editor</strong> for point-and-click
+                        changes, or <strong>Code Editor</strong> for custom scripts.</li>
+                    <li><strong>Define Variations:</strong> Each element needs a Control (original) and at least one
+                        Variant.</li>
+                    <li><strong>Traffic Rules:</strong> Decide what percentage of your total traffic should participate
+                        in the test.</li>
+                </ol>
+
+                <h2 id="traffic-allocation">Traffic Allocation</h2>
+                <div
+                    class="flex gap-4 p-5 bg-blue-50/50 dark:bg-blue-900/20 border-l-4 border-accent dark:border-blue-400 rounded-r-2xl mb-10 not-prose">
+                    <span class="material-symbols-outlined text-accent dark:text-blue-400 shrink-0">bolt</span>
+                    <div>
+                        <h4 class="font-bold text-primary dark:text-white text-sm mb-1">Adaptive Optimization</h4>
+                        <p class="text-sm text-text-muted dark:text-gray-400 leading-relaxed">Unlike traditional tools
+                            that split traffic 50/50 throughout the test, Samplit's <strong>Multi-Armed Bandit</strong>
+                            algorithm shifts traffic to winning variations in real-time. This reduces conversion loss
+                            during the experimentation phase.</p>
+                    </div>
+                </div>
+
+                <h2 id="setting-goals">Setting Goals</h2>
+                <p>Goals are the primary metrics you use to define success. You can set a <strong>Primary Goal</strong>
+                    for optimization and multiple <strong>Secondary Goals</strong> for deeper insights.</p>
+                <div class="overflow-x-auto mb-8">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Goal Type</th>
+                                <th>Trigger</th>
+                                <th>Use Case</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-semibold text-text-main dark:text-white">Click</td>
+                                <td>User clicks a specific element</td>
+                                <td>CTA buttons, navigation links</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold text-text-main dark:text-white">Page View</td>
+                                <td>User reaches a specific URL</td>
+                                <td>Thank you pages, checkout success</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold text-text-main dark:text-white">Form Submit</td>
+                                <td>Successful form submission</td>
+                                <td>Lead generation, newsletters</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold text-text-main dark:text-white">Revenue</td>
+                                <td>Transaction value detected</td>
+                                <td>E-commerce store optimization</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="best-practices">Best Practices</h2>
+                <ul>
+                    <li><strong>Wait for Significance:</strong> Never declare a winner before reaching at least 95%
+                        confidence and 100 conversions per variation.</li>
+                    <li><strong>One Hypothesis:</strong> Focus each experiment on a single clear question (e.g., "Does
+                        scarcity-focused text increase urgency?").</li>
+                    <li><strong>Device Sensitivity:</strong> Always review your variations on mobile. A winning desktop
+                        variation might perform poorly on smaller screens.</li>
+                    <li><strong>Document Everything:</strong> Keep a log of your experiments to build an organizational
+                        knowledge base of what works for your audience.</li>
+                </ul>
+
+                <div class="grid sm:grid-cols-2 gap-4 not-prose mt-12 mb-12">
+                    <a href="visual-editor.html"
+                        class="group flex items-center justify-between p-4 bg-white dark:bg-gray-800 border border-border-light dark:border-gray-700 rounded-xl hover:border-accent dark:hover:border-blue-400 transition-all shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-accent dark:text-blue-400">edit_square</span>
+                            <span class="font-bold text-text-main dark:text-white">Visual Editor Guide</span>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-text-muted group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
+                    <a href="analytics.html"
+                        class="group flex items-center justify-between p-4 bg-white dark:bg-gray-800 border border-border-light dark:border-gray-700 rounded-xl hover:border-accent dark:hover:border-blue-400 transition-all shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-accent dark:text-blue-400">monitoring</span>
+                            <span class="font-bold text-text-main dark:text-white">Analytics Guide</span>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-text-muted group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Feedback Section -->
+            <div class="border-t border-border-light dark:border-gray-800 pt-10 mt-12 mb-16">
+                <div
+                    class="flex flex-col sm:flex-row items-center justify-between gap-6 bg-surface dark:bg-gray-800/50 p-8 rounded-2xl border border-slate-100 dark:border-gray-700">
+                    <div>
+                        <h3 class="text-text-main dark:text-white font-bold text-lg mb-1">Was this guide helpful?</h3>
+                        <p class="text-sm text-text-muted dark:text-gray-400">Your feedback helps us improve our
+                            documentation.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button
+                            class="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-gray-800 border border-border-light dark:border-gray-700 rounded-xl text-sm font-bold text-text-main dark:text-white hover:border-emerald-500 hover:text-emerald-500 transition-all shadow-sm">
+                            <span class="material-symbols-outlined text-[20px]">thumb_up</span> Yes
+                        </button>
+                        <button
+                            class="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-gray-800 border border-border-light dark:border-gray-700 rounded-xl text-sm font-bold text-text-main dark:text-white hover:border-rose-500 hover:text-rose-500 transition-all shadow-sm">
+                            <span class="material-symbols-outlined text-[20px]">thumb_down</span> No
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar / Table of Contents (Desktop) -->
+        <aside class="hidden xl:block w-64 shrink-0">
+            <div
+                class="sticky top-28 bg-white dark:bg-gray-800 p-6 rounded-2xl border border-slate-100 dark:border-gray-700 shadow-soft">
+                <h4
+                    class="text-xs font-bold text-text-muted dark:text-gray-500 uppercase tracking-widest mb-6 border-b border-slate-50 dark:border-gray-700 pb-4">
+                    On this page</h4>
+                <nav>
+                    <ul class="space-y-4">
+                        <li>
+                            <a class="block text-sm font-bold text-accent dark:text-blue-400 hover:text-primary dark:hover:text-white transition-colors"
+                                href="#understanding-experiments">
+                                The Engine
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white transition-colors"
+                                href="#experiment-types">
+                                Types of Tests
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white transition-colors"
+                                href="#traffic-allocation">
+                                Traffic & Rules
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white transition-colors"
+                                href="#setting-goals">
+                                Measuring Success
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white transition-colors"
+                                href="#best-practices">
+                                Best Practices
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="mt-10 pt-8 border-t border-slate-50 dark:border-gray-700">
+                    <p class="text-xs font-bold text-text-muted dark:text-gray-500 uppercase tracking-widest mb-4">
+                        Support</p>
+                    <a href="../contact.html"
+                        class="flex items-center gap-2 text-sm font-bold text-text-main dark:text-white hover:text-accent dark:hover:text-blue-400 transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">support_agent</span>
+                        Contact Support
+                    </a>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Include Footer -->
+    <include src="../partials/footer_landing_v2.html"></include>
+
+    <!-- Scripts -->
+    <script src="../js/include.js"></script>
+    <script src="../js/theme.js"></script>
+</body>
+
+</html>

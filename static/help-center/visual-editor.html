@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Visual Editor Guide | Help Center</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        background: "#FFFFFF",
+                        surface: "#FAFAFA",
+                        "surface-highlight": "#F8FAFC",
+                        primary: "#0f172a",
+                        accent: "#1e3a8a",
+                        "primary-light": "#3b82f6",
+                        "primary-soft": "rgba(30, 58, 138, 0.03)",
+                        text: {
+                            main: "#1E293B",
+                            muted: "#64748B",
+                            dim: "#94A3B8"
+                        },
+                        border: {
+                            light: "#E2E8F0",
+                            subtle: "#F1F5F9"
+                        }
+                    },
+                    fontFamily: {
+                        display: ['"Manrope"', 'sans-serif'],
+                        body: ['"Inter"', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        DEFAULT: "6px",
+                        'lg': "8px",
+                        'xl': "12px",
+                        '2xl': "16px",
+                        '3xl': "24px",
+                    },
+                    boxShadow: {
+                        'soft': '0 2px 10px rgba(0, 0, 0, 0.03)',
+                        'card': '0 10px 30px -5px rgba(0, 0, 0, 0.04)',
+                    }
+                },
+            },
+        }
+    </script>
+    <link rel="stylesheet" href="../css/sampelit.css">
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-white dark:bg-gray-900 font-body text-text-main dark:text-gray-100 antialiased min-h-screen flex flex-col transition-colors duration-300">
+    <!-- Include Header -->
+    <include src="../partials/header_landing_v2.html"></include>
+
+    <!-- Main Page Layout -->
+    <div class="flex-1 max-w-7xl mx-auto w-full px-6 py-12 flex gap-12 relative pt-28">
+        <!-- Left Sidebar / Navigation (Desktop) -->
+        <aside
+            class="hidden lg:block w-64 shrink-0 sticky top-28 self-start h-[calc(100vh-8rem)] overflow-y-auto pr-4 scrollbar-hide">
+            <div class="space-y-8">
+                <div>
+                    <h3 class="text-xs font-bold text-text-muted dark:text-gray-500 uppercase tracking-widest mb-4">User
+                        Guides</h3>
+                    <ul class="space-y-1">
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="getting-started.html">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">rocket_launch</span>
+                                    Getting Started
+                                </div>
+                            </a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-accent dark:text-blue-400 bg-accent/5 dark:bg-blue-400/10 rounded-lg group transition-all"
+                                href="visual-editor.html">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">edit_square</span>
+                                    Visual Editor
+                                </div>
+                            </a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="experiments.html">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">science</span>
+                                    Experiments Guide
+                                </div>
+                            </a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="analytics.html">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">analytics</span>
+                                    Analytics Guide
+                                </div>
+                            </a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xs font-bold text-text-muted dark:text-gray-500 uppercase tracking-widest mb-4">
+                        Integrations</h3>
+                    <ul class="space-y-1">
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="tracker.html">Tracker Snippet</a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="shopify.html">Shopify</a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="wordpress.html">WordPress</a></li>
+                        <li><a class="block px-3 py-2 text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white hover:bg-surface dark:hover:bg-gray-800 rounded-lg transition-all"
+                                href="proxy.html">Proxy Middleware</a></li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Column -->
+        <main class="flex-1 min-w-0">
+            <!-- Breadcrumbs -->
+            <div class="flex items-center gap-2 text-sm text-text-muted dark:text-gray-500 mb-8">
+                <a class="hover:text-accent dark:hover:text-blue-400 transition-colors" href="index.html">Help
+                    Center</a>
+                <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+                <span class="text-text-main dark:text-white font-medium">Visual Editor Guide</span>
+            </div>
+
+            <!-- Page Header -->
+            <div class="mb-10">
+                <h1
+                    class="text-4xl md:text-5xl font-display font-bold text-text-main dark:text-white tracking-tight leading-[1.15] mb-6">
+                    Visual Editor Guide
+                </h1>
+                <p class="text-xl text-text-muted dark:text-gray-400 font-light mb-8 leading-relaxed">
+                    Create powerful experiments without writing a single line of code. Learn how to use our
+                    point-and-click editor to modify your website visually.
+                </p>
+                <div
+                    class="flex flex-wrap items-center gap-6 text-sm text-text-muted dark:text-gray-500 border-b border-border-light dark:border-gray-800 pb-8">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">schedule</span>
+                        <span>Last updated Dec 26, 2025</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">timer</span>
+                        <span>12 min read</span>
+                    </div>
+                    <div
+                        class="flex items-center gap-2 px-2 py-1 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 rounded text-xs font-medium border border-emerald-100 dark:border-emerald-800">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                        Visual Builder v2.0
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Body -->
+            <div
+                class="prose prose-slate dark:prose-invert max-w-none text-text-main dark:text-gray-300 
+                prose-headings:font-display prose-headings:font-bold prose-headings:text-text-main dark:prose-headings:text-white
+                prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:scroll-mt-28
+                prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4
+                prose-p:leading-relaxed prose-p:mb-6
+                prose-a:text-accent dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
+                prose-code:bg-surface dark:prose-code:bg-gray-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-accent dark:prose-code:text-blue-300 prose-code:font-mono prose-code:before:content-none prose-code:after:content-none
+                prose-img:rounded-2xl prose-img:border prose-img:border-border-light dark:prose-img:border-gray-700
+                prose-ul:list-disc prose-ul:pl-6 prose-li:mb-2
+                prose-table:w-full prose-table:border-collapse prose-th:bg-surface dark:prose-th:bg-gray-800 prose-th:px-4 prose-th:py-3 prose-th:text-left prose-td:px-4 prose-td:py-3 prose-td:border-b dark:prose-td:border-gray-800">
+
+                <h2 id="overview">Overview</h2>
+                <p>
+                    The Visual Editor is a point-and-click tool that lets you create A/B test variations without writing
+                    code. Simply load your website, click on elements, and modify them visually.
+                </p>
+
+                <div class="grid sm:grid-cols-2 gap-4 not-prose mb-10">
+                    <div
+                        class="p-4 bg-emerald-50/50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800 rounded-xl flex gap-3">
+                        <span
+                            class="material-symbols-outlined text-emerald-600 dark:text-emerald-400">check_circle</span>
+                        <span class="text-sm font-medium text-emerald-800 dark:text-emerald-300">Point-and-click
+                            selection</span>
+                    </div>
+                    <div
+                        class="p-4 bg-emerald-50/50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800 rounded-xl flex gap-3">
+                        <span
+                            class="material-symbols-outlined text-emerald-600 dark:text-emerald-400">check_circle</span>
+                        <span class="text-sm font-medium text-emerald-800 dark:text-emerald-300">Real-time live
+                            preview</span>
+                    </div>
+                    <div
+                        class="p-4 bg-emerald-50/50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800 rounded-xl flex gap-3">
+                        <span
+                            class="material-symbols-outlined text-emerald-600 dark:text-emerald-400">check_circle</span>
+                        <span class="text-sm font-medium text-emerald-800 dark:text-emerald-300">Multiple element
+                            testing</span>
+                    </div>
+                    <div
+                        class="p-4 bg-emerald-50/50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800 rounded-xl flex gap-3">
+                        <span
+                            class="material-symbols-outlined text-emerald-600 dark:text-emerald-400">check_circle</span>
+                        <span class="text-sm font-medium text-emerald-800 dark:text-emerald-300">CSS/HTML deep
+                            editing</span>
+                    </div>
+                </div>
+
+                <h2 id="accessing-the-visual-editor">Accessing the Visual Editor</h2>
+                <p>You can access the editor through two main paths in the dashboard:</p>
+                <ul>
+                    <li>Click <strong>Visual Editor</strong> in the primary sidebar navigation.</li>
+                    <li>While creating a new experiment: <strong>Experiments</strong> → <strong>Create New</strong> →
+                        <strong>Use Visual Editor</strong>.</li>
+                </ul>
+                <p>Simply enter the full URL of the page you wish to optimize (e.g.,
+                    <code>https://yoursite.com/landing-page</code>) and click <strong>Load Page</strong>.</p>
+
+                <h2 id="the-editor-interface">The Editor Interface</h2>
+                <div
+                    class="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 mb-8 border border-border-light dark:border-gray-700 font-mono text-xs leading-5">
+                    <pre class="overflow-x-auto text-text-muted dark:text-gray-400">
+┌─────────────────────────────────────────────────────────────────────────┐
+│  VISUAL EDITOR                                         [Save] [Cancel] │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  ┌─────────────────┐  ┌─────────────────────────────────────────────┐  │
+│  │ ELEMENTS        │  │                                             │  │
+│  │                 │  │      [Your Website Preview]                  │  │
+│  │ • Headline      │  │                                             │  │
+│  │ • CTA Button    │  │   ┌─────────────────────────────┐           │  │
+│  │ • Hero Image    │  │   │ Welcome to Our Site        │           │  │
+│  │                 │  │   │                             │           │  │
+│  │ [+ Add Element] │  │   │ [Get Started] ← selected   │           │  │
+│  │                 │  │   │                             │           │  │
+│  │ ├─────────────────┤  │   └─────────────────────────────┘           │  │
+│  │ VARIATIONS      │  │                                             │  │
+│  │                 │  │                                             │  │
+│  │ ○ Control       │  │                                             │  │
+│  │ ● Variant A     │  │                                             │  │
+│  │ ○ Variant B     │  │                                             │  │
+│  │                 │  │                                             │  │
+│  │ [+ Add Variant] │  │                                             │  │
+│  └─────────────────┘  └─────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────────┘</pre>
+                </div>
+
+                <h2 id="selecting-elements">Selecting Elements</h2>
+                <p>Simply move your mouse over the page preview. Elements will highlight with a <strong>blue dashed
+                        outline</strong> as you hover. <strong>Click</strong> to select and lock an element for editing.
+                </p>
+
+                <div
+                    class="flex gap-4 p-5 bg-blue-50/50 dark:bg-blue-900/20 border-l-4 border-accent dark:border-blue-400 rounded-r-2xl mb-10 not-prose">
+                    <span class="material-symbols-outlined text-accent dark:text-blue-400 shrink-0">info</span>
+                    <div>
+                        <h4 class="font-bold text-primary dark:text-white text-sm mb-1">Selector Logic</h4>
+                        <p class="text-sm text-text-muted dark:text-gray-400 leading-relaxed">Samplit automatically
+                            generates a robust CSS selector (e.g., <code>button.cta-primary</code>) to ensure your
+                            changes apply correctly even if the underlying HTML structure shifts slightly.</p>
+                    </div>
+                </div>
+
+                <h2 id="creating-variations">Creating Variations</h2>
+                <p>After selecting an element, click <strong>+ Add Variation</strong>. By default, variations are named
+                    Variant A, B, etc. We recommend renaming them (e.g., "Orange CTA") for better tracking in analytics.
+                </p>
+
+                <h2 id="editing-content">Editing Content</h2>
+                <h3>Basic Edits</h3>
+                <ul>
+                    <li><strong>Text:</strong> Directly edit headings, paragraph text, or button labels in the sidebar.
+                    </li>
+                    <li><strong>Styling:</strong> Change colors, font sizes, padding, and borders using the intuitive
+                        sliders and pickers.</li>
+                    <li><strong>Images:</strong> Swap hero images or icons by uploading new files or providing a URL.
+                    </li>
+                    <li><strong>Visibility:</strong> Hide distracting elements with a single click to test a cleaner
+                        layout.</li>
+                </ul>
+
+                <h2 id="advanced-editing">Advanced Editing</h2>
+                <p>For designers and developers who need more control, the Visual Editor provides two powerful tabs:</p>
+
+                <h3>Custom CSS</h3>
+                <div class="bg-slate-900 rounded-xl overflow-hidden mb-6 not-prose">
+                    <div class="p-6">
+                        <pre class="font-mono text-xs leading-6 text-emerald-400"><code><span class="text-slate-500">/* Example: Advanced Glow Effect */</span>
+background: <span class="text-blue-400">linear-gradient</span>(<span class="text-purple-400">135deg</span>, <span class="text-emerald-400">#667eea</span> <span class="text-purple-400">0%</span>, <span class="text-emerald-400">#764ba2</span> <span class="text-purple-400">100%</span>);
+box-shadow: <span class="text-purple-400">0 10px 30px</span> <span class="text-blue-400">rgba</span>(<span class="text-purple-400">118, 75, 162, 0.4</span>);
+transition: <span class="text-purple-400">all 0.3s</span> ease;</code></pre>
+                    </div>
+                </div>
+
+                <h3>Custom HTML</h3>
+                <p>Completely replace an existing element's structure by injecting custom HTML. This is ideal for adding
+                    icons to buttons or testing complex new components.</p>
+
+                <h2 id="troubleshooting">Troubleshooting</h2>
+                <h3>Issue: Page Not Loading</h3>
+                <p>If your site fails to load, it is likely due to <code>X-Frame-Options: DENY</code> headers. Contact
+                    your developer to allow Samplit's domain as a frame ancestor, or use our Proxy Middleware for
+                    seamless integration.</p>
+
+                <div class="grid sm:grid-cols-2 gap-4 not-prose mt-12 mb-12">
+                    <a href="experiments.html"
+                        class="group flex items-center justify-between p-4 bg-white dark:bg-gray-800 border border-border-light dark:border-gray-700 rounded-xl hover:border-accent dark:hover:border-blue-400 transition-all shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-accent dark:text-blue-400">science</span>
+                            <span class="font-bold text-text-main dark:text-white">Experiments Guide</span>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-text-muted group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
+                    <a href="tracker.html"
+                        class="group flex items-center justify-between p-4 bg-white dark:bg-gray-800 border border-border-light dark:border-gray-700 rounded-xl hover:border-accent dark:hover:border-blue-400 transition-all shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-accent dark:text-blue-400">code</span>
+                            <span class="font-bold text-text-main dark:text-white">Tracker Implementation</span>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-text-muted group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Feedback Section -->
+            <div class="border-t border-border-light dark:border-gray-800 pt-10 mt-12 mb-16">
+                <div
+                    class="flex flex-col sm:flex-row items-center justify-between gap-6 bg-surface dark:bg-gray-800/50 p-8 rounded-2xl border border-slate-100 dark:border-gray-700">
+                    <div>
+                        <h3 class="text-text-main dark:text-white font-bold text-lg mb-1">Was this guide helpful?</h3>
+                        <p class="text-sm text-text-muted dark:text-gray-400">Your feedback helps us improve our
+                            documentation.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button
+                            class="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-gray-800 border border-border-light dark:border-gray-700 rounded-xl text-sm font-bold text-text-main dark:text-white hover:border-emerald-500 hover:text-emerald-500 transition-all shadow-sm">
+                            <span class="material-symbols-outlined text-[20px]">thumb_up</span> Yes
+                        </button>
+                        <button
+                            class="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-gray-800 border border-border-light dark:border-gray-700 rounded-xl text-sm font-bold text-text-main dark:text-white hover:border-rose-500 hover:text-rose-500 transition-all shadow-sm">
+                            <span class="material-symbols-outlined text-[20px]">thumb_down</span> No
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar / Table of Contents (Desktop) -->
+        <aside class="hidden xl:block w-64 shrink-0">
+            <div
+                class="sticky top-28 bg-white dark:bg-gray-800 p-6 rounded-2xl border border-slate-100 dark:border-gray-700 shadow-soft">
+                <h4
+                    class="text-xs font-bold text-text-muted dark:text-gray-500 uppercase tracking-widest mb-6 border-b border-slate-50 dark:border-gray-700 pb-4">
+                    On this page</h4>
+                <nav>
+                    <ul class="space-y-4">
+                        <li>
+                            <a class="block text-sm font-bold text-accent dark:text-blue-400 hover:text-primary dark:hover:text-white transition-colors"
+                                href="#overview">
+                                Overview
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white transition-colors"
+                                href="#accessing-the-visual-editor">
+                                Accessing the Tool
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white transition-colors"
+                                href="#the-editor-interface">
+                                Interface Layout
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block text-sm font-medium text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white transition-colors"
+                                href="#selecting-elements">
+                                Selecting Elements
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="mt-10 pt-8 border-t border-slate-50 dark:border-gray-700">
+                    <p class="text-xs font-bold text-text-muted dark:text-gray-500 uppercase tracking-widest mb-4">
+                        Support</p>
+                    <a href="../contact.html"
+                        class="flex items-center gap-2 text-sm font-bold text-text-main dark:text-white hover:text-accent dark:hover:text-blue-400 transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">support_agent</span>
+                        Contact Support
+                    </a>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Include Footer -->
+    <include src="../partials/footer_landing_v2.html"></include>
+
+    <!-- Scripts -->
+    <script src="../js/include.js"></script>
+    <script src="../js/theme.js"></script>
+</body>
+
+</html>
