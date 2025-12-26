@@ -14,6 +14,7 @@
         href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap"
         rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="css/sampelit.css">
     <script>
         tailwind.config = {
             darkMode: "class",
@@ -72,39 +73,7 @@
 <body class="bg-background text-text-main font-body antialiased selection:bg-primary/10">
     <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
         <!-- Header -->
-        <header
-            class="sticky top-0 z-50 w-full border-b border-border-light bg-white/90 backdrop-blur-md transition-all">
-            <div class="mx-auto flex h-20 max-w-[1280px] items-center justify-between px-6 lg:px-8">
-                <a href="index.html" class="flex items-center gap-3">
-                    <div
-                        class="flex size-9 items-center justify-center rounded-lg bg-primary/5 border border-primary/10 text-primary">
-                        <span class="material-symbols-outlined" style="font-size: 24px;">auto_fix_high</span>
-                    </div>
-                    <span class="text-lg font-display font-bold tracking-tight text-text-main">Sampelit<span
-                            class="text-primary">.</span></span>
-                </a>
-                <nav class="hidden md:flex items-center gap-10">
-                    <a class="text-sm font-medium text-text-muted hover:text-primary transition-colors"
-                        href="index.html">Home</a>
-                    <a class="text-sm font-medium text-primary" href="blog.html">Blog</a>
-                    <a class="text-sm font-medium text-text-muted hover:text-primary transition-colors"
-                        href="about.html">About</a>
-                    <a class="text-sm font-medium text-text-muted hover:text-primary transition-colors"
-                        href="faq.html">FAQ</a>
-                    <a class="text-sm font-medium text-text-muted hover:text-primary transition-colors"
-                        href="help-center/index.html">Help</a>
-                </nav>
-                <div class="flex items-center gap-4">
-                    <a href="signin.html"
-                        class="hidden md:flex text-sm font-medium text-text-muted hover:text-primary transition-colors">Log
-                        In</a>
-                    <a href="signup.html"
-                        class="flex cursor-pointer items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">
-                        Get Started
-                    </a>
-                </div>
-            </div>
-        </header>
+        <include src="./partials/header_landing_v2.html"></include>
 
         <main class="flex-grow">
             <!-- Hero Section -->
@@ -426,50 +395,7 @@
         </section>
 
         <!-- Footer -->
-        <footer class="bg-white py-16 text-text-main border-t border-border-light">
-            <div class="mx-auto max-w-[1280px] px-6 lg:px-8">
-                <div class="grid gap-12 lg:grid-cols-4">
-                    <div class="space-y-4">
-                        <a href="index.html" class="flex items-center gap-2">
-                            <span class="material-symbols-outlined text-[28px] text-primary">auto_fix_high</span>
-                            <span class="text-xl font-bold font-display text-text-main">Sampelit<span
-                                    class="text-primary">.</span></span>
-                        </a>
-                        <p class="text-sm text-text-muted leading-relaxed">Empowering growth teams with intelligent A/B
-                            testing and copy optimization.</p>
-                    </div>
-                    <div>
-                        <h4 class="mb-5 font-bold text-text-main font-display">Product</h4>
-                        <ul class="space-y-3 text-sm text-text-muted">
-                            <li><a class="hover:text-primary transition-colors" href="visual-editor.html">Visual
-                                    Editor</a></li>
-                            <li><a class="hover:text-primary transition-colors" href="#">Analytics</a></li>
-                            <li><a class="hover:text-primary transition-colors" href="#">Integrations</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="mb-5 font-bold text-text-main font-display">Resources</h4>
-                        <ul class="space-y-3 text-sm text-text-muted">
-                            <li><a class="hover:text-primary transition-colors" href="help-center/index.html">Help
-                                    Center</a></li>
-                            <li><a class="hover:text-primary transition-colors" href="blog.html">Blog</a></li>
-                            <li><a class="hover:text-primary transition-colors" href="faq.html">FAQ</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="mb-5 font-bold text-text-main font-display">Company</h4>
-                        <ul class="space-y-3 text-sm text-text-muted">
-                            <li><a class="hover:text-primary transition-colors" href="about.html">About</a></li>
-                            <li><a class="hover:text-primary transition-colors" href="contact.html">Contact</a></li>
-                            <li><a class="hover:text-primary transition-colors" href="#">Privacy</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="mt-16 border-t border-border-light pt-8 text-center text-xs text-text-dim font-medium">
-                    © 2025 Sampelit. All rights reserved.
-                </div>
-            </div>
-        </footer>
+        <include src="./partials/footer_landing_v2.html"></include>
     </div>
 </body>
 

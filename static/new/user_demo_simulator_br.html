@@ -23,18 +23,24 @@
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#1414b8",
-                        "background-light": "#f8f8fc",
-                        "background-dark": "#111121",
+                        "primary": "#0651ed",
+                        "accent": "#000080",
+                        "text-main": "#1e293b",
+                        "text-muted": "#64748b",
+                        "text-dim": "#94a3b8",
+                        "background": "#f8fafc",
                         "surface": "#ffffff",
+                        "border-light": "#e2e8f0",
+                        "border-slate": "#cbd5e1"
                     },
                     fontFamily: {
-                        "display": ["Manrope", "sans-serif"]
+                        "display": ["Manrope", "sans-serif"],
+                        "body": ["Inter", "sans-serif"]
                     },
-                    borderRadius: { "DEFAULT": "0.375rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "2xl": "1.5rem", "full": "9999px" },
                     boxShadow: {
-                        'subtle': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-                        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02)',
+                        "soft": "0 2px 15px -3px rgba(0,0,0,0.07), 0 4px 6px -2px rgba(0,0,0,0.05)",
+                        "card": "0 10px 25px -5px rgba(0,0,0,0.04), 0 8px 10px -6px rgba(0,0,0,0.04)"
                     }
                 },
             },
@@ -53,7 +59,7 @@
             height: 16px;
             width: 16px;
             border-radius: 50%;
-            background: #1414b8;
+            background: #0651ed;
             cursor: pointer;
             margin-top: -6px;
             box-shadow: 0 0 0 2px #ffffff;
@@ -108,9 +114,10 @@
         <div class="px-6 md:px-10 h-16 flex items-center justify-between max-w-[1440px] mx-auto w-full">
             <div class="flex items-center gap-3">
                 <div class="size-8 text-primary flex items-center justify-center bg-primary/10 rounded-lg">
-                    <span class="material-symbols-outlined" style="font-size: 20px;">analytics</span>
+                    <span class="material-symbols-outlined" style="font-size: 20px;">auto_fix_high</span>
                 </div>
-                <h2 class="text-slate-900 dark:text-white text-lg font-bold tracking-tight">AlgoSim</h2>
+                <h2 class="text-slate-900 dark:text-white text-lg font-bold tracking-tight font-display">Sampelit<span
+                        class="text-primary">.</span></h2>
             </div>
             <nav class="hidden md:flex items-center gap-8">
                 <a class="text-slate-500 hover:text-primary text-sm font-medium transition-colors"
@@ -355,19 +362,19 @@
                             <!-- Data Line (Bezier Curve) -->
                             <!-- Starts high, fluctuates, then drops below threshold -->
                             <path d="M0,50 C100,60 150,20 250,150 C350,280 400,200 500,320 C600,440 700,360 800,380"
-                                fill="none" stroke="#1414b8" stroke-width="3"></path>
+                                fill="none" stroke="#0651ed" stroke-width="3"></path>
                             <!-- Area under curve (gradient) -->
                             <defs>
                                 <lineargradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
-                                    <stop offset="0%" stop-color="#1414b8" stop-opacity="0.1"></stop>
-                                    <stop offset="100%" stop-color="#1414b8" stop-opacity="0"></stop>
+                                    <stop offset="0%" stop-color="#0651ed" stop-opacity="0.1"></stop>
+                                    <stop offset="100%" stop-color="#0651ed" stop-opacity="0"></stop>
                                 </lineargradient>
                             </defs>
                             <path
                                 d="M0,50 C100,60 150,20 250,150 C350,280 400,200 500,320 C600,440 700,360 800,380 V400 H0 Z"
                                 fill="url(#chartGradient)"></path>
                             <!-- Tooltip Indicator (Simulated) -->
-                            <circle cx="500" cy="320" fill="#1414b8" r="6" stroke="white" stroke-width="2"></circle>
+                            <circle cx="500" cy="320" fill="#0651ed" r="6" stroke="white" stroke-width="2"></circle>
                             <g transform="translate(480, 260)">
                                 <rect fill="#1e293b" height="40" rx="4" width="90"></rect>
                                 <text fill="white" font-size="10" font-weight="bold" text-anchor="middle" x="45"
@@ -405,9 +412,9 @@
                                 <path d="M20,180 Q100,180 140,50 Q180,180 260,180 Z" fill="#94a3b8" fill-opacity="0.1">
                                 </path>
                                 <!-- Variant Curve (Shifted right) -->
-                                <path d="M140,180 Q220,180 260,30 Q300,180 380,180" fill="none" stroke="#1414b8"
+                                <path d="M140,180 Q220,180 260,30 Q300,180 380,180" fill="none" stroke="#0651ed"
                                     stroke-width="2"></path>
-                                <path d="M140,180 Q220,180 260,30 Q300,180 380,180 Z" fill="#1414b8" fill-opacity="0.1">
+                                <path d="M140,180 Q220,180 260,30 Q300,180 380,180 Z" fill="#0651ed" fill-opacity="0.1">
                                 </path>
                                 <!-- Baseline -->
                                 <line stroke="#e2e8f0" stroke-width="1" x1="0" x2="400" y1="180" y2="180"></line>

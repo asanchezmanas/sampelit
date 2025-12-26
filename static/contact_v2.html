@@ -14,6 +14,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link rel="stylesheet" href="css/sampelit.css">
     <script>
         tailwind.config = {
             theme: {
@@ -89,43 +90,7 @@
 
 <body class="font-body antialiased selection:bg-primary/10 selection:text-primary">
     <!-- Navigation -->
-    <nav
-        class="fixed w-full z-50 transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-slate-200/60">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex items-center gap-3">
-                    <a class="flex items-center gap-3" href="index.html">
-                        <div
-                            class="w-8 h-8 rounded-lg bg-primary/5 border border-primary/10 flex items-center justify-center text-primary">
-                            <span class="material-symbols-outlined" style="font-size: 20px;">auto_fix_high</span>
-                        </div>
-                        <span class="font-display font-bold text-xl tracking-tight text-text-main">Sampelit<span
-                                class="text-primary">.</span></span>
-                    </a>
-                </div>
-                <div class="hidden md:flex items-center gap-8">
-                    <a class="text-sm font-medium text-text-muted hover:text-primary transition-colors"
-                        href="index.html">Home</a>
-                    <a class="text-sm font-medium text-text-muted hover:text-primary transition-colors"
-                        href="blog.html">Blog</a>
-                    <a class="text-sm font-medium text-text-muted hover:text-primary transition-colors"
-                        href="about.html">About</a>
-                    <a class="text-sm font-medium text-text-muted hover:text-primary transition-colors"
-                        href="faq.html">FAQ</a>
-                </div>
-                <div class="flex items-center gap-3">
-                    <a class="hidden md:inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-text-main transition-all bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:border-slate-300"
-                        href="signin.html">
-                        Log In
-                    </a>
-                    <a class="inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white transition-all bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 rounded-lg"
-                        href="signup.html">
-                        Get Started
-                    </a>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <include src="./partials/header_landing_v2.html"></include>
 
     <!-- Main Content -->
     <main class="relative pt-32 pb-24 lg:pt-40 lg:pb-32 overflow-hidden bg-gradient-mesh min-h-screen">
@@ -289,27 +254,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 py-12">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="flex items-center gap-3">
-                    <span class="material-symbols-outlined text-primary" style="font-size: 24px;">auto_fix_high</span>
-                    <span class="font-display font-bold text-lg text-text-main">Sampelit<span
-                            class="text-primary">.</span></span>
-                </div>
-                <div class="flex flex-wrap items-center justify-center gap-6 text-sm text-text-muted">
-                    <a class="hover:text-primary transition-colors" href="about.html">About</a>
-                    <a class="hover:text-primary transition-colors" href="blog.html">Blog</a>
-                    <a class="hover:text-primary transition-colors" href="faq.html">FAQ</a>
-                    <a class="hover:text-primary transition-colors" href="help-center/index.html">Help Center</a>
-                    <a class="hover:text-primary transition-colors" href="#">Privacy</a>
-                </div>
-            </div>
-            <div class="mt-8 pt-8 border-t border-slate-100 text-center text-xs text-text-dim">
-                © 2025 Sampelit. All rights reserved.
-            </div>
-        </div>
-    </footer>
+    <include src="./partials/footer_landing_v2.html"></include>
 </body>
 
 </html>

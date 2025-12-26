@@ -23,23 +23,24 @@
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#1754cf",
-                        "primary-hover": "#1c60ea",
-                        "background-light": "#f6f6f8",
-                        "background-dark": "#0f1218", // Deep charcoal/navy base
-                        "surface-dark": "#161b26",    // Slightly lighter for cards/sidebar
-                        "surface-hover": "#1e2532",   // Hover states
-                        "border-dark": "#2a3441",     // Subtle borders
-                        "text-secondary": "#94a3b8",
+                        "primary": "#0651ed",
+                        "accent": "#000080",
+                        "text-main": "#f8fafc",
+                        "text-muted": "#94a3b8",
+                        "text-dim": "#64748b",
+                        "background": "#0f172a",
+                        "surface": "#1e293b",
+                        "border-dark": "#334155"
                     },
                     fontFamily: {
-                        "display": ["Inter", "sans-serif"]
+                        "display": ["Manrope", "sans-serif"],
+                        "body": ["Inter", "sans-serif"]
                     },
                     borderRadius: {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "2xl": "1rem",
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "2xl": "1.5rem",
                         "full": "9999px"
                     },
                 },
@@ -81,13 +82,13 @@
         <div class="p-6">
             <!-- Brand -->
             <div class="flex items-center gap-3 mb-10">
-                <div
-                    class="size-8 rounded-lg bg-gradient-to-br from-primary to-blue-400 flex items-center justify-center shadow-lg shadow-primary/20">
-                    <span class="material-symbols-outlined text-white text-lg font-bold">diamond</span>
+                <div class="size-8 rounded-lg bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
+                    <span class="material-symbols-outlined text-white text-lg font-bold">auto_fix_high</span>
                 </div>
                 <div class="flex flex-col">
-                    <h1 class="text-white text-base font-semibold tracking-tight">Lumina CRM</h1>
-                    <span class="text-xs text-text-secondary font-light">Enterprise Edition</span>
+                    <h1 class="text-white text-base font-semibold tracking-tight font-display">Sampelit<span
+                            class="text-primary">.</span></h1>
+                    <span class="text-xs text-text-muted font-light">Enterprise Edition</span>
                 </div>
             </div>
             <!-- Navigation -->
@@ -140,7 +141,7 @@
                 </div>
                 <div class="flex flex-col overflow-hidden">
                     <span class="text-sm font-medium text-white truncate">Alex Morgan</span>
-                    <span class="text-xs text-text-secondary truncate">alex@lumina.com</span>
+                    <span class="text-xs text-text-muted truncate">alex@sampelit.com</span>
                 </div>
             </div>
         </div>
@@ -643,7 +644,8 @@
                         class="px-6 py-4 border-t border-border-dark flex items-center justify-between bg-surface-dark">
                         <p class="text-sm text-text-secondary">Mostrando <span class="font-medium text-white">1</span> a
                             <span class="font-medium text-white">5</span> de <span
-                                class="font-medium text-white">1,240</span> resultados</p>
+                                class="font-medium text-white">1,240</span> resultados
+                        </p>
                         <div class="flex gap-2">
                             <button
                                 class="px-3 py-1.5 text-sm rounded-lg border border-border-dark text-text-secondary hover:text-white hover:bg-white/5 transition-colors disabled:opacity-50">Anterior</button>

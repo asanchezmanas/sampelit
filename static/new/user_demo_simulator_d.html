@@ -26,21 +26,24 @@
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#1414b8",
-                        "background-light": "#f6f6f8",
-                        "background-dark": "#111121",
-                        "surface-dark": "#1a1a32",
-                        "border-dark": "#343465",
-                        "text-muted": "#9393c8"
+                        "primary": "#0651ed",
+                        "accent": "#000080",
+                        "text-main": "#f8fafc",
+                        "text-muted": "#94a3b8",
+                        "text-dim": "#64748b",
+                        "background": "#0f172a",
+                        "surface": "#1e293b",
+                        "border-dark": "#334155"
                     },
                     fontFamily: {
-                        "display": ["Manrope", "sans-serif"]
+                        "display": ["Manrope", "sans-serif"],
+                        "body": ["Inter", "sans-serif"]
                     },
                     borderRadius: {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "2xl": "1rem",
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "2xl": "1.5rem",
                         "full": "9999px"
                     },
                 },
@@ -120,9 +123,10 @@
         <div class="px-6 md:px-10 py-3 flex items-center justify-between">
             <div class="flex items-center gap-4 text-white">
                 <div class="size-8 flex items-center justify-center bg-primary/20 rounded-lg text-primary">
-                    <span class="material-symbols-outlined text-[20px]">hub</span>
+                    <span class="material-symbols-outlined text-[20px]">auto_fix_high</span>
                 </div>
-                <h2 class="text-white text-lg font-bold tracking-tight">OptiAlgo</h2>
+                <h2 class="text-white text-lg font-bold tracking-tight font-display">Sampelit<span
+                        class="text-primary">.</span></h2>
             </div>
             <div class="hidden md:flex flex-1 justify-center gap-8">
                 <a class="text-text-muted hover:text-white transition-colors text-sm font-medium" href="#">Dashboard</a>
@@ -334,12 +338,12 @@
                             <!-- Starts at 50% (150y), dips slightly for exploration, then climbs to ~85% (45y) -->
                             <defs>
                                 <lineargradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
-                                    <stop offset="0%" stop-color="#1414b8" stop-opacity="0.3"></stop>
-                                    <stop offset="100%" stop-color="#1414b8" stop-opacity="0"></stop>
+                                    <stop offset="0%" stop-color="#0651ed" stop-opacity="0.3"></stop>
+                                    <stop offset="100%" stop-color="#0651ed" stop-opacity="0"></stop>
                                 </lineargradient>
                             </defs>
                             <path class="chart-line" d="M0,150 C50,160 100,140 200,100 C400,20 600,60 800,45"
-                                fill="none" stroke="#1414b8" stroke-width="3"></path>
+                                fill="none" stroke="#0651ed" stroke-width="3"></path>
                             <path class="opacity-0 animate-[fadeInUp_1s_ease-out_0.5s_forwards]"
                                 d="M0,150 C50,160 100,140 200,100 C400,20 600,60 800,45 L800,300 L0,300 Z"
                                 fill="url(#chartGradient)"></path>
