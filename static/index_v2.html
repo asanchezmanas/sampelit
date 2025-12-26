@@ -22,53 +22,35 @@
             theme: {
                 extend: {
                     colors: {
-                        background: "#FFFFFF",
-                        surface: "#FAFAFA",
-                        "surface-highlight": "#F8FAFC",
-                        primary: "#0f172a",
-                        accent: "#1e3a8a",
-                        "primary-light": "#3b82f6",
-                        "primary-soft": "rgba(30, 58, 138, 0.03)",
-                        text: {
-                            main: "#1E293B",
-                            muted: "#64748B",
-                            dim: "#94A3B8"
-                        },
-                        border: {
-                            light: "#E2E8F0",
-                            subtle: "#F1F5F9"
-                        },
-                        // TailAdmin Colors (Mapped to Sampelit where possible, or kept for compatibility)
+                        // Sampelit v1 Brand Colors
+                        "primary": "#1754cf",
+                        "primary-dark": "#0f3a9a",
+                        "background-light": "#f8f9fc",
+                        "surface": "#ffffff",
+                        "text-main": "#0e121b",
+                        "text-secondary": "#5a6b89",
+                        "accent-green": "#07883b",
+                        "border-subtle": "#e7ebf3",
+                        // Gray scale
                         gray: {
-                            50: '#F9FAFB',
-                            100: '#F3F4F6',
-                            200: '#E5E7EB',
-                            300: '#D1D5DB',
-                            400: '#9CA3AF',
-                            500: '#6B7280',
-                            600: '#4B5563',
-                            700: '#374151',
-                            800: '#1F2937',
-                            900: '#111827',
+                            50: '#F9FAFB', 100: '#F3F4F6', 200: '#E5E7EB', 300: '#D1D5DB',
+                            400: '#9CA3AF', 500: '#6B7280', 600: '#4B5563', 700: '#374151',
+                            800: '#1F2937', 900: '#111827'
                         },
-                        brand: {
-                            DEFAULT: '#3b82f6',
-                            50: '#eff6ff',
-                            100: '#dbeafe',
-                            200: '#bfdbfe',
-                            300: '#93c5fd',
-                            400: '#60a5fa',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
-                            800: '#1e40af',
-                            900: '#1e3a8a',
-                        }
+                        // Brand alias for compatibility
+                        brand: { DEFAULT: '#1754cf', 500: '#1754cf', 600: '#0f3a9a' },
+                        success: { 50: '#ecfdf5', 500: '#10b981', 600: '#059669' },
+                        error: { 50: '#fef2f2', 500: '#ef4444', 600: '#dc2626' }
                     },
                     fontFamily: {
-                        display: ['"Manrope"', 'sans-serif'],
-                        body: ['"Inter"', 'sans-serif'],
+                        display: ['Manrope', 'sans-serif'],
+                        sans: ['Manrope', 'sans-serif'],
                     },
+                    borderRadius: { DEFAULT: '0.375rem', lg: '0.5rem', xl: '0.75rem', '2xl': '1rem' },
+                    boxShadow: {
+                        'subtle': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                        'float': '0 10px 30px -10px rgba(23, 84, 207, 0.15)'
+                    }
                 },
             },
         };
@@ -79,7 +61,7 @@
 </head>
 
 <body x-data="{ page: 'ecommerce', 'sidebarToggle': false, 'darkMode': false }" :class="{ 'dark': darkMode === true }"
-    class="font-body text-text-main dark:text-gray-400 dark:bg-gray-900">
+    class="bg-[#f8f9fc] text-text-main font-sans antialiased selection:bg-primary/10 selection:text-primary">
     <!-- ===== Page Wrapper Start ===== -->
     <div class="flex h-screen overflow-hidden">
         <!-- ===== Sidebar Start ===== -->
@@ -99,99 +81,82 @@
 
                     <!-- Dashboard Title & Breadcrumb -->
                     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                        <h2 class="text-2xl font-bold font-display text-text-main dark:text-white">
+                        <h2 class="text-3xl font-bold font-display text-text-main tracking-tight">
                             Dashboard
                         </h2>
-                        <div class="flex items-center gap-2">
-                            <span class="text-sm text-text-muted">Home</span>
-                            <span class="text-sm text-text-muted">/</span>
-                            <span class="text-sm text-accent font-medium">Dashboard</span>
-                        </div>
+                        <nav class="flex items-center text-sm font-medium text-text-secondary">
+                            <a class="hover:text-primary transition-colors" href="/">Home</a>
+                            <span class="material-symbols-outlined text-[16px] mx-2 text-gray-400">chevron_right</span>
+                            <span class="text-text-main font-semibold">Dashboard</span>
+                        </nav>
                     </div>
 
-                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-                        <!-- Metric Item: Total Views -->
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4">
+                        <!-- Metric Card: Total Visitors -->
                         <div
-                            class="rounded-xl border border-border-light bg-white p-6 shadow-soft dark:border-gray-800 dark:bg-gray-800">
-                            <div
-                                class="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-slate-50 dark:bg-gray-700 text-accent dark:text-blue-400">
-                                <span class="material-symbols-outlined">visibility</span>
+                            class="group bg-surface p-6 rounded-xl border border-border-subtle hover:shadow-subtle transition-shadow">
+                            <div class="flex justify-between items-start mb-2">
+                                <p class="text-text-secondary text-xs font-bold uppercase tracking-wider">Total Visitors
+                                </p>
+                                <span
+                                    class="material-symbols-outlined text-text-secondary text-[20px] opacity-50 group-hover:text-primary group-hover:opacity-100 transition-all">group</span>
                             </div>
-                            <div class="mt-4 flex items-end justify-between">
-                                <div>
-                                    <h4 class="text-2xl font-bold text-text-main dark:text-white">
-                                        24.5k
-                                    </h4>
-                                    <span class="text-sm font-medium text-text-muted">Total Views</span>
-                                </div>
-                                <span class="flex items-center gap-1 text-sm font-medium text-emerald-500">
-                                    4.35%
-                                    <span class="material-symbols-outlined text-base">trending_up</span>
-                                </span>
+                            <p class="text-2xl font-bold text-text-main tracking-tight">24,892</p>
+                            <div class="flex items-center gap-1 mt-1 text-sm text-accent-green font-medium">
+                                <span class="material-symbols-outlined text-[16px]">trending_up</span>
+                                <span>+5.2%</span>
+                                <span class="text-gray-400 font-normal ml-1">vs last week</span>
                             </div>
                         </div>
 
-                        <!-- Metric Item: Total Profit -->
+                        <!-- Metric Card: Conversions -->
                         <div
-                            class="rounded-xl border border-border-light bg-white p-6 shadow-soft dark:border-gray-800 dark:bg-gray-800">
-                            <div
-                                class="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-slate-50 dark:bg-gray-700 text-accent dark:text-blue-400">
-                                <span class="material-symbols-outlined">attach_money</span>
+                            class="group bg-surface p-6 rounded-xl border border-border-subtle hover:shadow-subtle transition-shadow">
+                            <div class="flex justify-between items-start mb-2">
+                                <p class="text-text-secondary text-xs font-bold uppercase tracking-wider">Conversions
+                                </p>
+                                <span
+                                    class="material-symbols-outlined text-text-secondary text-[20px] opacity-50 group-hover:text-primary group-hover:opacity-100 transition-all">shopping_cart</span>
                             </div>
-                            <div class="mt-4 flex items-end justify-between">
-                                <div>
-                                    <h4 class="text-2xl font-bold text-text-main dark:text-white">
-                                        $4,350
-                                    </h4>
-                                    <span class="text-sm font-medium text-text-muted">Total Revenue</span>
-                                </div>
-                                <span class="flex items-center gap-1 text-sm font-medium text-emerald-500">
-                                    2.59%
-                                    <span class="material-symbols-outlined text-base">trending_up</span>
-                                </span>
+                            <p class="text-2xl font-bold text-text-main tracking-tight">1,048</p>
+                            <div class="flex items-center gap-1 mt-1 text-sm text-accent-green font-medium">
+                                <span class="material-symbols-outlined text-[16px]">trending_up</span>
+                                <span>+12.5%</span>
+                                <span class="text-gray-400 font-normal ml-1">uplift</span>
                             </div>
                         </div>
 
-                        <!-- Metric Item: Product -->
+                        <!-- Metric Card: Conversion Rate (Highlighted) -->
                         <div
-                            class="rounded-xl border border-border-light bg-white p-6 shadow-soft dark:border-gray-800 dark:bg-gray-800">
-                            <div
-                                class="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-slate-50 dark:bg-gray-700 text-accent dark:text-blue-400">
-                                <span class="material-symbols-outlined">shopping_cart</span>
+                            class="group bg-surface p-6 rounded-xl border border-border-subtle hover:shadow-subtle transition-shadow border-l-4 border-l-primary">
+                            <div class="flex justify-between items-start mb-2">
+                                <p class="text-text-secondary text-xs font-bold uppercase tracking-wider">Conversion
+                                    Rate</p>
+                                <span
+                                    class="material-symbols-outlined text-text-secondary text-[20px] opacity-50 group-hover:text-primary group-hover:opacity-100 transition-all">percent</span>
                             </div>
-                            <div class="mt-4 flex items-end justify-between">
-                                <div>
-                                    <h4 class="text-2xl font-bold text-text-main dark:text-white">
-                                        3.5k
-                                    </h4>
-                                    <span class="text-sm font-medium text-text-muted">Experiments</span>
-                                </div>
-                                <span class="flex items-center gap-1 text-sm font-medium text-emerald-500">
-                                    0.95%
-                                    <span class="material-symbols-outlined text-base">trending_up</span>
-                                </span>
+                            <p class="text-2xl font-bold text-text-main tracking-tight">4.21%</p>
+                            <div class="flex items-center gap-1 mt-1 text-sm text-accent-green font-medium">
+                                <span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+                                <span>0.4%</span>
+                                <span class="text-gray-400 font-normal ml-1">absolute</span>
                             </div>
                         </div>
 
-                        <!-- Metric Item: Users -->
+                        <!-- Metric Card: Confidence Level -->
                         <div
-                            class="rounded-xl border border-border-light bg-white p-6 shadow-soft dark:border-gray-800 dark:bg-gray-800">
-                            <div
-                                class="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-slate-50 dark:bg-gray-700 text-accent dark:text-blue-400">
-                                <span class="material-symbols-outlined">group</span>
+                            class="group bg-surface p-6 rounded-xl border border-border-subtle hover:shadow-subtle transition-shadow">
+                            <div class="flex justify-between items-start mb-2">
+                                <p class="text-text-secondary text-xs font-bold uppercase tracking-wider">Confidence
+                                    Level</p>
+                                <span
+                                    class="material-symbols-outlined text-text-secondary text-[20px] opacity-50 group-hover:text-primary group-hover:opacity-100 transition-all">verified</span>
                             </div>
-                            <div class="mt-4 flex items-end justify-between">
-                                <div>
-                                    <h4 class="text-2xl font-bold text-text-main dark:text-white">
-                                        2.450
-                                    </h4>
-                                    <span class="text-sm font-medium text-text-muted">Total Users</span>
-                                </div>
-                                <span class="flex items-center gap-1 text-sm font-medium text-red-500">
-                                    0.43%
-                                    <span class="material-symbols-outlined text-base">trending_down</span>
-                                </span>
+                            <p class="text-2xl font-bold text-text-main tracking-tight">98.4%</p>
+                            <div class="w-full bg-gray-100 rounded-full h-1.5 mt-3 overflow-hidden">
+                                <div class="bg-primary h-1.5 rounded-full" style="width: 98.4%"></div>
                             </div>
+                            <p class="text-xs text-text-secondary mt-2">Statistically significant result.</p>
                         </div>
                     </div>
 

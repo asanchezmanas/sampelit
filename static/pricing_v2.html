@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sampelit | Pricing</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+    <link rel="stylesheet" href="css/sampelit.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        background: "#FFFFFF", surface: "#FAFAFA", primary: "#0f172a", accent: "#1e3a8a", "primary-light": "#3b82f6",
+                        text: { main: "#1E293B", muted: "#64748B", dim: "#94A3B8" },
+                        border: { light: "#E2E8F0", subtle: "#F1F5F9" },
+                        gray: { 50: '#F9FAFB', 100: '#F3F4F6', 200: '#E5E7EB', 300: '#D1D5DB', 400: '#9CA3AF', 500: '#6B7280', 600: '#4B5563', 700: '#374151', 800: '#1F2937', 900: '#111827' },
+                        brand: { DEFAULT: '#3b82f6', 50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd', 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 800: '#1e40af', 900: '#1e3a8a' },
+                        success: { 50: '#ecfdf5', 500: '#10b981', 600: '#059669' },
+                        error: { 50: '#fef2f2', 500: '#ef4444', 600: '#dc2626' }
+                    },
+                    fontFamily: { display: ['"Manrope"', 'sans-serif'], body: ['"Inter"', 'sans-serif'] },
+                },
+            },
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="js/include.js"></script>
+</head>
+
+<body x-data="{ page: 'pricing', sidebarToggle: false, darkMode: false }" :class="{ 'dark': darkMode }"
+    class="font-body text-text-main dark:text-gray-400 dark:bg-gray-900">
+    <div class="flex h-screen overflow-hidden">
+        <include src="./partials/sidebar_v2.html"></include>
+
+        <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden bg-surface dark:bg-gray-900">
+            <include src="./partials/header_v2.html"></include>
+
+            <main>
+                <div class="mx-auto max-w-screen-xl p-4 md:p-6 2xl:p-10">
+                    <!-- Header -->
+                    <div class="mb-10 text-center">
+                        <h1 class="text-3xl font-bold font-display text-gray-900 dark:text-white md:text-4xl">
+                            Simple, Transparent Pricing
+                        </h1>
+                        <p class="mt-3 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                            Choose the plan that fits your optimization needs. All plans include our core A/B testing
+                            features.
+                        </p>
+                    </div>
+
+                    <!-- Billing Toggle -->
+                    <div x-data="{ monthly: true }" class="mb-12">
+                        <div class="flex justify-center mb-8">
+                            <div class="relative inline-flex rounded-full bg-gray-100 p-1 dark:bg-gray-800">
+                                <span :class="monthly ? 'translate-x-0' : 'translate-x-full'"
+                                    class="absolute top-1/2 -z-1 flex h-10 w-[110px] -translate-y-1/2 rounded-full bg-white shadow-md transition-transform duration-300 dark:bg-gray-700"></span>
+                                <button @click="monthly = true"
+                                    :class="monthly ? 'text-gray-900 dark:text-white' : 'text-gray-500'"
+                                    class="relative z-10 flex h-10 w-[110px] items-center justify-center text-sm font-medium transition-colors">
+                                    Monthly
+                                </button>
+                                <button @click="monthly = false"
+                                    :class="!monthly ? 'text-gray-900 dark:text-white' : 'text-gray-500'"
+                                    class="relative z-10 flex h-10 w-[110px] items-center justify-center text-sm font-medium transition-colors">
+                                    Annually
+                                    <span
+                                        class="ml-1.5 rounded-full bg-success-500 px-1.5 py-0.5 text-[10px] font-bold text-white">-20%</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Pricing Cards -->
+                        <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                            <!-- Starter Plan -->
+                            <div
+                                class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+                                <div class="mb-5">
+                                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">Starter</h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">For small websites getting
+                                        started</p>
+                                </div>
+                                <div class="mb-5">
+                                    <span class="text-4xl font-bold text-gray-900 dark:text-white"
+                                        x-text="monthly ? '$29' : '$23'"></span>
+                                    <span class="text-gray-500 dark:text-gray-400">/month</span>
+                                </div>
+                                <ul class="mb-6 space-y-3 text-sm text-gray-600 dark:text-gray-300">
+                                    <li class="flex items-center gap-2"><span
+                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                        Up to 10,000 visitors/mo</li>
+                                    <li class="flex items-center gap-2"><span
+                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                        3 active experiments</li>
+                                    <li class="flex items-center gap-2"><span
+                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                        Basic analytics</li>
+                                    <li class="flex items-center gap-2"><span
+                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                        Email support</li>
+                                    <li class="flex items-center gap-2 text-gray-400"><span
+                                            class="material-symbols-outlined text-lg">cancel</span> Visual editor</li>
+                                    <li class="flex items-center gap-2 text-gray-400"><span
+                                            class="material-symbols-outlined text-lg">cancel</span> Multi-Armed Bandit
+                                    </li>
+                                </ul>
+                                <button
+                                    class="w-full rounded-lg border border-gray-300 bg-white py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-transparent dark:text-gray-300 dark:hover:bg-gray-700">
+                                    Get Started
+                                </button>
+                            </div>
+
+                            <!-- Pro Plan (Featured) -->
+                            <div
+                                class="relative rounded-2xl border-2 border-brand-500 bg-white p-6 shadow-lg dark:bg-gray-800">
+                                <span
+                                    class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand-500 px-3 py-1 text-xs font-bold text-white">MOST
+                                    POPULAR</span>
+                                <div class="mb-5">
+                                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">Pro</h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">For growing businesses</p>
+                                </div>
+                                <div class="mb-5">
+                                    <span class="text-4xl font-bold text-gray-900 dark:text-white"
+                                        x-text="monthly ? '$79' : '$63'"></span>
+                                    <span class="text-gray-500 dark:text-gray-400">/month</span>
+                                </div>
+                                <ul class="mb-6 space-y-3 text-sm text-gray-600 dark:text-gray-300">
+                                    <li class="flex items-center gap-2"><span
+                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                        Up to 100,000 visitors/mo</li>
+                                    <li class="flex items-center gap-2"><span
+                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                        Unlimited experiments</li>
+                                    <li class="flex items-center gap-2"><span
+                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                        Advanced analytics</li>
+                                    <li class="flex items-center gap-2"><span
+                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                        Priority support</li>
+                                    <li class="flex items-center gap-2"><span
+                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                        Visual editor</li>
+                                    <li class="flex items-center gap-2"><span
+                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                        Multi-Armed Bandit</li>
+                                </ul>
+                                <button
+                                    class="w-full rounded-lg bg-brand-500 py-3 text-sm font-medium text-white hover:bg-brand-600">
+                                    Get Started
+                                </button>
+                            </div>
+
+                            <!-- Enterprise Plan -->
+                            <div
+                                class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+                                <div class="mb-5">
+                                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">Enterprise</h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">For large organizations</p>
+                                </div>
+                                <div class="mb-5">
+                                    <span class="text-4xl font-bold text-gray-900 dark:text-white">Custom</span>
+                                </div>
+                                <ul class="mb-6 space-y-3 text-sm text-gray-600 dark:text-gray-300">
+                                    <li class="flex items-center gap-2"><span
+                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                        Unlimited visitors</li>
+                                    <li class="flex items-center gap-2"><span
+                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                        Unlimited experiments</li>
+                                    <li class="flex items-center gap-2"><span
+                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                        Custom integrations</li>
+                                    <li class="flex items-center gap-2"><span
+                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                        Dedicated support</li>
+                                    <li class="flex items-center gap-2"><span
+                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                        SLA guarantee</li>
+                                    <li class="flex items-center gap-2"><span
+                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                        On-premise option</li>
+                                </ul>
+                                <button
+                                    class="w-full rounded-lg border border-gray-300 bg-white py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-transparent dark:text-gray-300 dark:hover:bg-gray-700">
+                                    Contact Sales
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Section -->
+                    <div class="mt-16 text-center">
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Frequently Asked Questions
+                        </h2>
+                        <p class="text-gray-600 dark:text-gray-400 mb-8">Have questions? We've got answers.</p>
+                        <a href="faq_v2.html"
+                            class="inline-flex items-center gap-2 text-brand-500 hover:text-brand-600 font-medium">
+                            View all FAQs <span class="material-symbols-outlined">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+
+</html>

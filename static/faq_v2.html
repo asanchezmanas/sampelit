@@ -2,311 +2,159 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>FAQ | Sampelit</title>
-    <meta name="description" content="Frequently asked questions about Sampelit's AI-powered A/B testing platform." />
-    <!-- Fonts -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sampelit | FAQ</title>
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
         rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
     <link rel="stylesheet" href="css/sampelit.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        background: "#FFFFFF",
-                        surface: "#FAFAFA",
-                        "surface-highlight": "#F8FAFC",
-                        primary: "#0f172a",
-                        accent: "#1e3a8a",
-                        "primary-light": "#3b82f6",
-                        "primary-soft": "rgba(30, 58, 138, 0.03)",
-                        text: {
-                            main: "#1E293B",
-                            muted: "#64748B",
-                            dim: "#94A3B8"
-                        },
-                        border: {
-                            light: "#E2E8F0",
-                            subtle: "#F1F5F9"
-                        }
+                        background: "#FFFFFF", surface: "#FAFAFA", primary: "#0f172a", accent: "#1e3a8a", "primary-light": "#3b82f6",
+                        text: { main: "#1E293B", muted: "#64748B", dim: "#94A3B8" },
+                        gray: { 50: '#F9FAFB', 100: '#F3F4F6', 200: '#E5E7EB', 300: '#D1D5DB', 400: '#9CA3AF', 500: '#6B7280', 600: '#4B5563', 700: '#374151', 800: '#1F2937', 900: '#111827' },
+                        brand: { DEFAULT: '#3b82f6', 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb' },
                     },
-                    fontFamily: {
-                        display: ['"Manrope"', 'sans-serif'],
-                        body: ['"Inter"', 'sans-serif'],
-                    },
-                    borderRadius: {
-                        DEFAULT: "6px",
-                        'lg': "8px",
-                        'xl': "12px",
-                        '2xl': "16px",
-                    },
-                    boxShadow: {
-                        'soft': '0 2px 10px rgba(0, 0, 0, 0.03)',
-                        'card': '0 10px 30px -5px rgba(0, 0, 0, 0.04)',
-                    }
+                    fontFamily: { display: ['"Manrope"', 'sans-serif'], body: ['"Inter"', 'sans-serif'] },
                 },
             },
-        }
+        };
     </script>
-    <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-    </style>
-    <script src="./js/theme.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="js/include.js"></script>
 </head>
 
-<body
-    class="bg-white dark:bg-gray-900 font-body text-text-main dark:text-gray-100 antialiased min-h-screen flex flex-col transition-colors duration-300">
-    <!-- Include Header -->
-    <include src="./partials/header_landing_v2.html"></include>
+<body x-data="{ page: 'faq', sidebarToggle: false, darkMode: false }" :class="{ 'dark': darkMode }"
+    class="font-body text-text-main dark:text-gray-400 dark:bg-gray-900">
+    <div class="flex h-screen overflow-hidden">
+        <include src="./partials/sidebar_v2.html"></include>
 
-    <main class="flex-grow">
-        <!-- Hero Section -->
-        <section class="bg-surface dark:bg-gray-800 border-b border-border-light dark:border-gray-700 py-16 px-6 pt-28">
-            <div class="max-w-3xl mx-auto text-center">
-                <h1
-                    class="text-4xl md:text-5xl font-display font-bold text-text-main dark:text-white tracking-tight mb-4">
-                    Frequently Asked <span class="text-accent dark:text-blue-400">Questions</span>
-                </h1>
-                <p class="text-lg text-text-muted dark:text-gray-400 max-w-xl mx-auto">
-                    Find quick answers to the most common questions about Sampelit's features, pricing, and
-                    implementation.
-                </p>
-            </div>
-        </section>
+        <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden bg-surface dark:bg-gray-900">
+            <include src="./partials/header_v2.html"></include>
 
-        <!-- FAQ Categories Tabs -->
-        <section class="py-12 px-6" x-data="{ activeTab: 'general' }">
-            <div class="max-w-3xl mx-auto">
-                <!-- Tab Navigation -->
-                <div class="flex flex-wrap gap-2 mb-10 justify-center">
-                    <button @click="activeTab = 'general'"
-                        :class="activeTab === 'general' ? 'bg-primary text-white' : 'bg-white text-text-muted hover:bg-surface-alt'"
-                        class="px-5 py-2 rounded-full text-sm font-semibold border border-border-light transition-all">
-                        General
-                    </button>
-                    <button @click="activeTab = 'pricing'"
-                        :class="activeTab === 'pricing' ? 'bg-primary text-white' : 'bg-white text-text-muted hover:bg-surface-alt'"
-                        class="px-5 py-2 rounded-full text-sm font-semibold border border-border-light transition-all">
-                        Pricing & Plans
-                    </button>
-                    <button @click="activeTab = 'technical'"
-                        :class="activeTab === 'technical' ? 'bg-primary text-white' : 'bg-white text-text-muted hover:bg-surface-alt'"
-                        class="px-5 py-2 rounded-full text-sm font-semibold border border-border-light transition-all">
-                        Technical
-                    </button>
-                    <button @click="activeTab = 'integrations'"
-                        :class="activeTab === 'integrations' ? 'bg-primary text-white' : 'bg-white text-text-muted hover:bg-surface-alt'"
-                        class="px-5 py-2 rounded-full text-sm font-semibold border border-border-light transition-all">
-                        Integrations
-                    </button>
-                </div>
+            <main>
+                <div class="mx-auto max-w-screen-lg p-4 md:p-6 2xl:p-10">
+                    <!-- Header -->
+                    <div class="mb-10 text-center">
+                        <h1 class="text-3xl font-bold font-display text-gray-900 dark:text-white md:text-4xl">Frequently
+                            Asked Questions</h1>
+                        <p class="mt-3 text-lg text-gray-600 dark:text-gray-400">Everything you need to know about
+                            Sampelit</p>
+                    </div>
 
-                <!-- General FAQs -->
-                <div x-show="activeTab === 'general'" x-transition class="space-y-4">
-                    <div x-data="{ open: true }" class="bg-white border border-border-light rounded-xl overflow-hidden">
-                        <button @click="open = !open" class="flex items-center justify-between w-full p-5 text-left">
-                            <span class="font-semibold text-text-main">What is Sampelit?</span>
-                            <span class="material-symbols-outlined text-text-muted transition-transform"
-                                :class="{ 'rotate-180': open }">expand_more</span>
-                        </button>
-                        <div x-show="open" x-collapse class="px-5 pb-5 text-text-muted leading-relaxed">
-                            Sampelit is an AI-powered A/B testing platform that helps teams make data-driven decisions.
-                            Our adaptive algorithms automatically optimize traffic allocation between variants, reducing
-                            the time needed to reach statistical significance by up to 40%.
+                    <!-- FAQ Accordion -->
+                    <div x-data="{ openItem: null }" class="space-y-4">
+                        <!-- Getting Started -->
+                        <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                            <button @click="openItem = openItem === 1 ? null : 1"
+                                class="flex w-full items-center justify-between p-5 text-left">
+                                <span class="text-lg font-semibold text-gray-900 dark:text-white">What is
+                                    Sampelit?</span>
+                                <span class="material-symbols-outlined text-gray-500 transition-transform"
+                                    :class="openItem === 1 ? 'rotate-180' : ''">expand_more</span>
+                            </button>
+                            <div x-show="openItem === 1" x-collapse
+                                class="border-t border-gray-100 px-5 pb-5 dark:border-gray-700">
+                                <p class="text-gray-600 dark:text-gray-300">Sampelit is an intelligent A/B testing
+                                    platform that uses Multi-Armed Bandit algorithms to automatically optimize your
+                                    experiments. Unlike traditional A/B testing, our adaptive algorithms shift traffic
+                                    to winning variants in real-time, maximizing conversions while gathering
+                                    statistically significant data.</p>
+                            </div>
+                        </div>
+
+                        <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                            <button @click="openItem = openItem === 2 ? null : 2"
+                                class="flex w-full items-center justify-between p-5 text-left">
+                                <span class="text-lg font-semibold text-gray-900 dark:text-white">How do I install the
+                                    tracking snippet?</span>
+                                <span class="material-symbols-outlined text-gray-500 transition-transform"
+                                    :class="openItem === 2 ? 'rotate-180' : ''">expand_more</span>
+                            </button>
+                            <div x-show="openItem === 2" x-collapse
+                                class="border-t border-gray-100 px-5 pb-5 dark:border-gray-700">
+                                <p class="text-gray-600 dark:text-gray-300 mb-3">Simply add our lightweight JavaScript
+                                    snippet to your website's &lt;head&gt; tag. The snippet is less than 3KB and loads
+                                    asynchronously.</p>
+                                <pre
+                                    class="bg-gray-900 text-gray-100 p-4 rounded-lg text-sm overflow-x-auto"><code>&lt;script src="https://cdn.sampelit.com/s.js" data-id="YOUR_ID" async&gt;&lt;/script&gt;</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                            <button @click="openItem = openItem === 3 ? null : 3"
+                                class="flex w-full items-center justify-between p-5 text-left">
+                                <span class="text-lg font-semibold text-gray-900 dark:text-white">What is a Multi-Armed
+                                    Bandit algorithm?</span>
+                                <span class="material-symbols-outlined text-gray-500 transition-transform"
+                                    :class="openItem === 3 ? 'rotate-180' : ''">expand_more</span>
+                            </button>
+                            <div x-show="openItem === 3" x-collapse
+                                class="border-t border-gray-100 px-5 pb-5 dark:border-gray-700">
+                                <p class="text-gray-600 dark:text-gray-300">Multi-Armed Bandit (MAB) balances
+                                    exploration with exploitation. Unlike A/B tests that show variants equally, MAB
+                                    dynamically allocates more traffic to winners, reducing opportunity cost while
+                                    achieving statistical significance.</p>
+                            </div>
+                        </div>
+
+                        <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                            <button @click="openItem = openItem === 4 ? null : 4"
+                                class="flex w-full items-center justify-between p-5 text-left">
+                                <span class="text-lg font-semibold text-gray-900 dark:text-white">How long should I run
+                                    an experiment?</span>
+                                <span class="material-symbols-outlined text-gray-500 transition-transform"
+                                    :class="openItem === 4 ? 'rotate-180' : ''">expand_more</span>
+                            </button>
+                            <div x-show="openItem === 4" x-collapse
+                                class="border-t border-gray-100 px-5 pb-5 dark:border-gray-700">
+                                <p class="text-gray-600 dark:text-gray-300">Run experiments until you reach 95%
+                                    statistical significance (at least 100 conversions per variant). Our dashboard shows
+                                    real-time confidence levels and notifies you when results are conclusive.</p>
+                            </div>
+                        </div>
+
+                        <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                            <button @click="openItem = openItem === 5 ? null : 5"
+                                class="flex w-full items-center justify-between p-5 text-left">
+                                <span class="text-lg font-semibold text-gray-900 dark:text-white">Is Sampelit GDPR
+                                    compliant?</span>
+                                <span class="material-symbols-outlined text-gray-500 transition-transform"
+                                    :class="openItem === 5 ? 'rotate-180' : ''">expand_more</span>
+                            </button>
+                            <div x-show="openItem === 5" x-collapse
+                                class="border-t border-gray-100 px-5 pb-5 dark:border-gray-700">
+                                <p class="text-gray-600 dark:text-gray-300">Yes. We don't use cookies by default, all
+                                    data is processed in EU data centers, and we provide tools for consent-based
+                                    tracking and DSAR handling.</p>
+                            </div>
                         </div>
                     </div>
 
-                    <div x-data="{ open: false }"
-                        class="bg-white border border-border-light rounded-xl overflow-hidden">
-                        <button @click="open = !open" class="flex items-center justify-between w-full p-5 text-left">
-                            <span class="font-semibold text-text-main">How does the AI optimization work?</span>
-                            <span class="material-symbols-outlined text-text-muted transition-transform"
-                                :class="{ 'rotate-180': open }">expand_more</span>
+                    <!-- Contact Section -->
+                    <div class="mt-12 rounded-2xl bg-brand-50 p-8 text-center dark:bg-brand-900/20">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Still have questions?</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">Reach out to our friendly support team.</p>
+                        <button
+                            class="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600">
+                            <span class="material-symbols-outlined text-lg">mail</span> Contact Support
                         </button>
-                        <div x-show="open" x-collapse class="px-5 pb-5 text-text-muted leading-relaxed">
-                            Our AI uses adaptive optimization strategies to dynamically allocate more traffic to
-                            better-performing variants. This means you get statistically significant results faster
-                            while minimizing exposure to underperforming variations.
-                        </div>
-                    </div>
-
-                    <div x-data="{ open: false }"
-                        class="bg-white border border-border-light rounded-xl overflow-hidden">
-                        <button @click="open = !open" class="flex items-center justify-between w-full p-5 text-left">
-                            <span class="font-semibold text-text-main">Do I need technical knowledge to use
-                                Sampelit?</span>
-                            <span class="material-symbols-outlined text-text-muted transition-transform"
-                                :class="{ 'rotate-180': open }">expand_more</span>
-                        </button>
-                        <div x-show="open" x-collapse class="px-5 pb-5 text-text-muted leading-relaxed">
-                            No! Our visual editor allows you to create variations without writing any code. Simply point
-                            and click to modify text, images, buttons, and more. For advanced use cases, we also offer a
-                            powerful JavaScript API.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pricing FAQs -->
-                <div x-show="activeTab === 'pricing'" x-transition class="space-y-4">
-                    <div x-data="{ open: true }" class="bg-white border border-border-light rounded-xl overflow-hidden">
-                        <button @click="open = !open" class="flex items-center justify-between w-full p-5 text-left">
-                            <span class="font-semibold text-text-main">Is there a free trial?</span>
-                            <span class="material-symbols-outlined text-text-muted transition-transform"
-                                :class="{ 'rotate-180': open }">expand_more</span>
-                        </button>
-                        <div x-show="open" x-collapse class="px-5 pb-5 text-text-muted leading-relaxed">
-                            Yes! We offer a 14-day free trial with full access to all features. No credit card required
-                            to start. You can test unlimited experiments during your trial period.
-                        </div>
-                    </div>
-
-                    <div x-data="{ open: false }"
-                        class="bg-white border border-border-light rounded-xl overflow-hidden">
-                        <button @click="open = !open" class="flex items-center justify-between w-full p-5 text-left">
-                            <span class="font-semibold text-text-main">What happens when I exceed my plan limits?</span>
-                            <span class="material-symbols-outlined text-text-muted transition-transform"
-                                :class="{ 'rotate-180': open }">expand_more</span>
-                        </button>
-                        <div x-show="open" x-collapse class="px-5 pb-5 text-text-muted leading-relaxed">
-                            We'll notify you when you're approaching your limits. Your experiments will continue
-                            running, and we'll work with you to upgrade your plan. We never stop your experiments
-                            mid-flight.
-                        </div>
-                    </div>
-
-                    <div x-data="{ open: false }"
-                        class="bg-white border border-border-light rounded-xl overflow-hidden">
-                        <button @click="open = !open" class="flex items-center justify-between w-full p-5 text-left">
-                            <span class="font-semibold text-text-main">Can I change my plan anytime?</span>
-                            <span class="material-symbols-outlined text-text-muted transition-transform"
-                                :class="{ 'rotate-180': open }">expand_more</span>
-                        </button>
-                        <div x-show="open" x-collapse class="px-5 pb-5 text-text-muted leading-relaxed">
-                            Absolutely. You can upgrade or downgrade your plan at any time. When upgrading, you'll be
-                            prorated for the remainder of your billing cycle. When downgrading, the change takes effect
-                            at your next billing date.
-                        </div>
                     </div>
                 </div>
-
-                <!-- Technical FAQs -->
-                <div x-show="activeTab === 'technical'" x-transition class="space-y-4">
-                    <div x-data="{ open: true }" class="bg-white border border-border-light rounded-xl overflow-hidden">
-                        <button @click="open = !open" class="flex items-center justify-between w-full p-5 text-left">
-                            <span class="font-semibold text-text-main">How do I install the tracking script?</span>
-                            <span class="material-symbols-outlined text-text-muted transition-transform"
-                                :class="{ 'rotate-180': open }">expand_more</span>
-                        </button>
-                        <div x-show="open" x-collapse class="px-5 pb-5 text-text-muted leading-relaxed">
-                            Simply copy and paste a single line of JavaScript into your website's <code
-                                class="bg-surface px-1.5 py-0.5 rounded text-sm">&lt;head&gt;</code> tag. The script is
-                            lightweight (under 12kb) and loads asynchronously to avoid impacting page performance.
-                        </div>
-                    </div>
-
-                    <div x-data="{ open: false }"
-                        class="bg-white border border-border-light rounded-xl overflow-hidden">
-                        <button @click="open = !open" class="flex items-center justify-between w-full p-5 text-left">
-                            <span class="font-semibold text-text-main">Does Sampelit affect page load speed?</span>
-                            <span class="material-symbols-outlined text-text-muted transition-transform"
-                                :class="{ 'rotate-180': open }">expand_more</span>
-                        </button>
-                        <div x-show="open" x-collapse class="px-5 pb-5 text-text-muted leading-relaxed">
-                            No. Our script is designed to be non-blocking and loads asynchronously. We use a global CDN
-                            to ensure minimal latency. Typical load time overhead is less than 50ms.
-                        </div>
-                    </div>
-
-                    <div x-data="{ open: false }"
-                        class="bg-white border border-border-light rounded-xl overflow-hidden">
-                        <button @click="open = !open" class="flex items-center justify-between w-full p-5 text-left">
-                            <span class="font-semibold text-text-main">Is my data secure?</span>
-                            <span class="material-symbols-outlined text-text-muted transition-transform"
-                                :class="{ 'rotate-180': open }">expand_more</span>
-                        </button>
-                        <div x-show="open" x-collapse class="px-5 pb-5 text-text-muted leading-relaxed">
-                            Yes. We use bank-level encryption (AES-256) for data at rest and TLS 1.3 for data in
-                            transit. We're GDPR compliant and never sell or share your data with third parties.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Integrations FAQs -->
-                <div x-show="activeTab === 'integrations'" x-transition class="space-y-4">
-                    <div x-data="{ open: true }" class="bg-white border border-border-light rounded-xl overflow-hidden">
-                        <button @click="open = !open" class="flex items-center justify-between w-full p-5 text-left">
-                            <span class="font-semibold text-text-main">Which platforms do you integrate with?</span>
-                            <span class="material-symbols-outlined text-text-muted transition-transform"
-                                :class="{ 'rotate-180': open }">expand_more</span>
-                        </button>
-                        <div x-show="open" x-collapse class="px-5 pb-5 text-text-muted leading-relaxed">
-                            We integrate with Shopify, WordPress, Webflow, Next.js, React, Vue, and any custom website.
-                            We also connect with analytics tools like Google Analytics, Segment, Mixpanel, and
-                            Amplitude.
-                        </div>
-                    </div>
-
-                    <div x-data="{ open: false }"
-                        class="bg-white border border-border-light rounded-xl overflow-hidden">
-                        <button @click="open = !open" class="flex items-center justify-between w-full p-5 text-left">
-                            <span class="font-semibold text-text-main">Do you have an API?</span>
-                            <span class="material-symbols-outlined text-text-muted transition-transform"
-                                :class="{ 'rotate-180': open }">expand_more</span>
-                        </button>
-                        <div x-show="open" x-collapse class="px-5 pb-5 text-text-muted leading-relaxed">
-                            Yes! We offer a comprehensive REST API for advanced integrations. You can create
-                            experiments, track conversions, and retrieve results programmatically. Full API
-                            documentation is available in our developer portal.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Still have questions CTA -->
-        <section
-            class="py-16 px-6 bg-surface-highlight dark:bg-gray-800 border-t border-border-light dark:border-gray-700">
-            <div class="max-w-2xl mx-auto text-center">
-                <span
-                    class="material-symbols-outlined text-5xl text-accent/50 dark:text-blue-400/50 mb-4">help_center</span>
-                <h2 class="text-2xl font-display font-bold text-text-main dark:text-white mb-3">Still have questions?
-                </h2>
-                <p class="text-text-muted dark:text-gray-400 mb-6">
-                    Our support team is ready to help you get started with Sampelit.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="help-center/index.html"
-                        class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white font-bold rounded-xl hover:bg-accent transition-colors shadow-lg shadow-primary/20">
-                        <span class="material-symbols-outlined">menu_book</span>
-                        Browse Help Center
-                    </a>
-                    <a href="contact_v2.html"
-                        class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 text-text-main dark:text-white font-bold rounded-xl border border-border-light dark:border-gray-700 hover:bg-surface dark:hover:bg-gray-700 transition-colors">
-                        <span class="material-symbols-outlined">mail</span>
-                        Contact Support
-                    </a>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Include Footer -->
-    <include src="./partials/footer_landing_v2.html"></include>
-
-    <!-- Scripts -->
-    <script src="./js/include.js"></script>
+            </main>
+        </div>
+    </div>
 </body>
 
 </html>
