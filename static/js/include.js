@@ -27,6 +27,9 @@ async function processIncludes() {
                     // Replace include tag with content
                     include.replaceWith(...div.childNodes);
 
+                    // Execute any scripts that were inserted
+                    executeScriptsInElement(document);
+
                     // Recursively process new includes
                     processIncludes();
                 } else {
@@ -38,4 +41,32 @@ async function processIncludes() {
             }
         }
     }
+}
+
+/**
+ * Execute scripts that were inserted via innerHTML
+ * Scripts inserted via innerHTML don't execute automatically
+ */
+function executeScriptsInElement(element) {
+    const scripts = element.querySelectorAll('script');
+    scripts.forEach(oldScript => {
+        // Skip already executed scripts (those with src attribute or data-executed)
+        if (oldScript.hasAttribute('data-executed')) return;
+
+        const newScript = document.createElement('script');
+
+        // Copy all attributes
+        Array.from(oldScript.attributes).forEach(attr => {
+            newScript.setAttribute(attr.name, attr.value);
+        });
+
+        // Copy the script content
+        newScript.textContent = oldScript.textContent;
+
+        // Mark as executed to avoid re-running
+        oldScript.setAttribute('data-executed', 'true');
+
+        // Replace old script with new one (this causes execution)
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+    });
 }
