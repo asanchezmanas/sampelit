@@ -1,239 +1,459 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html class="dark" lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blog | Samplit</title>
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700&display=swap" rel="stylesheet">
-
-    <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Blog | Sampelit</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
         tailwind.config = {
-            darkMode: 'class',
+            darkMode: "class",
             theme: {
-                fontFamily: { sans: ['Inter', 'sans-serif'] },
                 extend: {
                     colors: {
-                        brand: { 50: '#ecf3ff', 500: '#465fff', 600: '#3641f5' }
-                    }
-                }
-            }
+                        "primary": "#3b82f6", "accent-navy": "#1e3a8a",
+                        "bg-dark": "#0f1115", "bg-card": "#181b21",
+                        "text-main": "#f3f4f6",
+                        "text-muted": "#9ca3af",
+                        "border-subtle": "#272a30",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem" },
+                },
+            },
         }
     </script>
-
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
+            background-color: #0f1115;
+            color: #f3f4f6;
         }
 
-        [x-cloak] {
-            display: none !important;
+        .search-input-wrapper:focus-within {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+        }
+
+        .filter-btn.active {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border-color: rgba(59, 130, 246, 0.2);
         }
     </style>
 </head>
 
-<body x-data="blogListing()" x-init="init()">
-    <div class="flex h-screen overflow-hidden">
-        <!-- Sidebar -->
-        <include src="./partials/sidebar.html"></include>
-
-        <!-- Content -->
-        <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-            <!-- Header -->
-            <include src="./partials/header.html"></include>
-
-            <!-- Main -->
-            <main>
-                <div class="mx-auto max-w-7xl p-4 md:p-6 pb-20">
-
-                    <!-- Header -->
-                    <div class="mb-8">
-                        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Blog</h1>
-                        <p class="mt-2 text-gray-600 dark:text-gray-400">Research-backed insights on A/B testing and
-                            conversion optimization</p>
+<body class="bg-bg-dark text-text-main font-body antialiased selection:bg-primary/20 selection:text-white">
+    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+        <!-- Header -->
+        <header
+            class="sticky top-0 z-50 w-full border-b border-border-subtle bg-bg-dark/95 backdrop-blur-md transition-all">
+            <div class="mx-auto flex h-20 max-w-[1280px] items-center justify-between px-6 lg:px-8">
+                <a href="index.html" class="flex items-center gap-3">
+                    <div class="flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                        <span class="material-symbols-outlined" style="font-size: 24px;">auto_fix_high</span>
                     </div>
+                    <span class="text-lg font-display font-bold tracking-tight text-white">Sampelit<span
+                            class="text-primary">.</span></span>
+                </a>
+                <nav class="hidden md:flex items-center gap-10">
+                    <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors"
+                        href="index.html">Home</a>
+                    <a class="text-sm font-medium text-white" href="blog.html">Blog</a>
+                    <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors"
+                        href="about.html">About</a>
+                    <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors"
+                        href="faq.html">FAQ</a>
+                    <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors"
+                        href="help-center/index.html">Help</a>
+                </nav>
+                <div class="flex items-center gap-4">
+                    <a href="signin.html"
+                        class="hidden md:flex text-sm font-medium text-gray-300 hover:text-white transition-colors">
+                        Log In
+                    </a>
+                    <a href="signup.html"
+                        class="flex cursor-pointer items-center justify-center rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-bg-dark hover:bg-gray-100 transition-colors">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+        </header>
 
-                    <!-- Category Filter -->
-                    <div class="mb-6 flex gap-2 flex-wrap">
-                        <button @click="filterCategory(null)"
-                            :class="selectedCategory === null ? 'bg-brand-500 text-white' : 'bg-white text-gray-700 border border-gray-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600'"
-                            class="px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                            All
-                        </button>
-                        <button @click="filterCategory('ab-testing-fundamentals')"
-                            :class="selectedCategory === 'ab-testing-fundamentals' ? 'bg-brand-500 text-white' : 'bg-white text-gray-700 border border-gray-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600'"
-                            class="px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                            Fundamentals
-                        </button>
-                        <button @click="filterCategory('case-studies')"
-                            :class="selectedCategory === 'case-studies' ? 'bg-brand-500 text-white' : 'bg-white text-gray-700 border border-gray-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600'"
-                            class="px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                            Case Studies
-                        </button>
-                        <button @click="filterCategory('copywriting-science')"
-                            :class="selectedCategory === 'copywriting-science' ? 'bg-brand-500 text-white' : 'bg-white text-gray-700 border border-gray-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600'"
-                            class="px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                            Science
-                        </button>
+        <main class="flex-grow">
+            <!-- Hero Section -->
+            <section class="relative pt-20 pb-16 px-6 lg:px-8">
+                <div class="mx-auto max-w-[1280px]">
+                    <div class="max-w-2xl">
+                        <h1 class="font-display text-4xl font-bold tracking-tight text-white sm:text-5xl mb-6">
+                            Insights &amp; Updates
+                        </h1>
+                        <p class="text-lg text-text-muted mb-10 leading-relaxed font-light">
+                            Explore the latest strategies in A/B testing, copywriting science, and data-driven growth.
+                        </p>
                     </div>
-
-                    <!-- Loading State -->
-                    <div x-show="loading" class="flex justify-center py-12">
-                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-500"></div>
+                    <!-- Search and Filters -->
+                    <div
+                        class="flex flex-col lg:flex-row gap-6 lg:items-center justify-between mt-8 border-b border-border-subtle pb-8">
+                        <div
+                            class="search-input-wrapper flex items-center w-full lg:w-[420px] bg-bg-card border border-border-subtle rounded-xl px-4 py-3 transition-all duration-200">
+                            <span class="material-symbols-outlined text-gray-500 mr-3">search</span>
+                            <input
+                                class="bg-transparent border-none outline-none text-white placeholder-gray-500 w-full focus:ring-0 p-0 font-display text-sm"
+                                placeholder="Search articles..." type="text" />
+                        </div>
+                        <div class="flex flex-wrap gap-2 overflow-x-auto pb-2 lg:pb-0 no-scrollbar">
+                            <button
+                                class="filter-btn active whitespace-nowrap rounded-full border border-border-subtle px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:border-gray-500 transition-all">All</button>
+                            <button
+                                class="filter-btn whitespace-nowrap rounded-full border border-border-subtle px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:border-gray-500 transition-all">A/B
+                                Testing</button>
+                            <button
+                                class="filter-btn whitespace-nowrap rounded-full border border-border-subtle px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:border-gray-500 transition-all">Copywriting</button>
+                            <button
+                                class="filter-btn whitespace-nowrap rounded-full border border-border-subtle px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:border-gray-500 transition-all">Case
+                                Studies</button>
+                            <button
+                                class="filter-btn whitespace-nowrap rounded-full border border-border-subtle px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:border-gray-500 transition-all">Tutorials</button>
+                        </div>
                     </div>
+                </div>
+            </section>
 
-                    <!-- Articles Grid -->
-                    <div x-show="!loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <template x-for="post in posts" :key="post.slug">
-                            <article
-                                class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow dark:bg-gray-800 dark:border-gray-700">
-                                <!-- Image -->
-                                <div x-show="post.image" class="aspect-video bg-gray-100 dark:bg-gray-700">
-                                    <img :src="post.image" :alt="post.title" class="w-full h-full object-cover">
+            <!-- Featured Story -->
+            <section class="px-6 lg:px-8 pb-16">
+                <div class="mx-auto max-w-[1280px]">
+                    <h2 class="text-xs font-bold uppercase tracking-widest text-primary mb-6">Featured Story</h2>
+                    <a class="group grid lg:grid-cols-2 gap-8 lg:gap-12 items-center bg-bg-card rounded-2xl p-6 lg:p-8 border border-border-subtle hover:border-gray-700 transition-all duration-300"
+                        href="blog-post.html?slug=copy-testing-psychology">
+                        <div class="aspect-[16/10] w-full overflow-hidden rounded-xl bg-gray-800">
+                            <div class="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100"
+                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBJiDtPfDJzoTuWZVkkJzAQkE4pl-1dVuBCUUh9NSRl-_kNtmmAHLxk0ztNxo7LZBZZ0mBMYhA3p-lSXqyHeeFaLruAYphWSqYyhm6m15_OOYUVG-9ZesUhY6flKbQJ60aHcGuKPzDjRbk7DaarIM0G6OS6zYw70MlZvrmQUrhwp14RMoDytw8CfNUW3ASeBLxBOce7IcsDvujqpe7LbF-d9QBz_IqeDjlTnczmZfJhW0gvfKbJo7wy37rDCsqeOBe_QFeQaxnW");'>
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-center">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span
+                                    class="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">Copywriting
+                                    Science</span>
+                                <span class="text-xs text-text-muted">Dec 20, 2024 • 8 min read</span>
+                            </div>
+                            <h3
+                                class="font-display text-2xl lg:text-3xl font-bold text-white mb-4 group-hover:text-primary transition-colors">
+                                The Psychology Behind High-Converting Copy</h3>
+                            <p class="text-text-muted mb-6 leading-relaxed line-clamp-3">
+                                Discover the cognitive principles that make certain headlines and CTAs outperform
+                                others.
+                                Learn how to apply behavioral psychology to your A/B tests for measurable results.
+                            </p>
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="h-8 w-8 overflow-hidden rounded-full border border-gray-700 bg-primary/20 flex items-center justify-center">
+                                    <span class="text-primary text-xs font-bold">S</span>
                                 </div>
+                                <span class="text-sm font-medium text-white">Sampelit Team</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </section>
 
-                                <!-- Content -->
-                                <div class="p-6">
-                                    <!-- Category Badge -->
-                                    <span
-                                        class="inline-block px-2 py-1 text-xs font-medium rounded bg-brand-50 text-brand-600 mb-3 dark:bg-brand-900/30 dark:text-brand-400"
-                                        x-text="getCategoryLabel(post.category)"></span>
-
-                                    <!-- Title -->
-                                    <h2 class="text-xl font-semibold text-gray-900 mb-2 dark:text-white"
-                                        x-text="post.title"></h2>
-
-                                    <!-- Excerpt -->
-                                    <p class="text-gray-600 text-sm mb-4 line-clamp-3 dark:text-gray-400"
-                                        x-text="post.excerpt"></p>
-
-                                    <!-- Meta -->
-                                    <div
-                                        class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
-                                        <span x-text="formatDate(post.date)"></span>
-                                        <span x-show="post.reading_time"
-                                            x-text="post.reading_time + ' min read'"></span>
-                                    </div>
-
-                                    <!-- Read More -->
-                                    <a :href="'/static/blog-post.html?slug=' + post.slug"
-                                        class="mt-4 inline-block text-brand-600 hover:text-brand-700 font-medium text-sm">
-                                        Read article →
-                                    </a>
+            <!-- Articles Grid -->
+            <section class="px-6 lg:px-8 pb-24">
+                <div class="mx-auto max-w-[1280px]">
+                    <div class="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+                        <!-- Article 1 -->
+                        <article class="flex flex-col group">
+                            <a class="block overflow-hidden rounded-xl bg-gray-800 mb-5"
+                                href="blog-post.html?slug=ab-testing-basics">
+                                <div
+                                    class="aspect-[3/2] w-full bg-gradient-to-br from-primary/20 to-accent-navy/20 flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
+                                    <span class="material-symbols-outlined text-gray-600 text-6xl">science</span>
                                 </div>
-                            </article>
-                        </template>
-                    </div>
+                            </a>
+                            <div class="flex flex-col flex-1">
+                                <div class="flex items-center gap-3 text-xs mb-3">
+                                    <span class="text-primary font-semibold">Fundamentals</span>
+                                    <span class="text-text-muted">•</span>
+                                    <span class="text-text-muted">Dec 15, 2024</span>
+                                </div>
+                                <a class="block group-hover:text-primary transition-colors"
+                                    href="blog-post.html?slug=ab-testing-basics">
+                                    <h3 class="font-display text-xl font-bold text-white mb-3">A/B Testing 101: Getting
+                                        Started</h3>
+                                </a>
+                                <p class="text-sm text-text-muted leading-relaxed line-clamp-2 mb-4">
+                                    Everything you need to know to run your first successful A/B test, from hypothesis
+                                    to analysis.
+                                </p>
+                                <div
+                                    class="mt-auto pt-4 border-t border-border-subtle/50 flex items-center justify-between">
+                                    <span class="text-xs font-medium text-gray-300">Sampelit Team</span>
+                                    <span class="text-xs text-text-muted">5 min read</span>
+                                </div>
+                            </div>
+                        </article>
 
-                    <!-- Empty State -->
-                    <div x-show="!loading && posts.length === 0" class="text-center py-12">
-                        <p class="text-gray-500 dark:text-gray-400">No articles found in this category.</p>
+                        <!-- Article 2 -->
+                        <article class="flex flex-col group">
+                            <a class="block overflow-hidden rounded-xl bg-gray-800 mb-5"
+                                href="blog-post.html?slug=headline-formulas">
+                                <div
+                                    class="aspect-[3/2] w-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
+                                    <span class="material-symbols-outlined text-gray-600 text-6xl">edit_note</span>
+                                </div>
+                            </a>
+                            <div class="flex flex-col flex-1">
+                                <div class="flex items-center gap-3 text-xs mb-3">
+                                    <span class="text-primary font-semibold">Copywriting</span>
+                                    <span class="text-text-muted">•</span>
+                                    <span class="text-text-muted">Dec 10, 2024</span>
+                                </div>
+                                <a class="block group-hover:text-primary transition-colors"
+                                    href="blog-post.html?slug=headline-formulas">
+                                    <h3 class="font-display text-xl font-bold text-white mb-3">5 Headline Formulas That
+                                        Convert</h3>
+                                </a>
+                                <p class="text-sm text-text-muted leading-relaxed line-clamp-2 mb-4">
+                                    Proven headline structures backed by data from thousands of tests across industries.
+                                </p>
+                                <div
+                                    class="mt-auto pt-4 border-t border-border-subtle/50 flex items-center justify-between">
+                                    <span class="text-xs font-medium text-gray-300">Sampelit Team</span>
+                                    <span class="text-xs text-text-muted">7 min read</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Article 3 -->
+                        <article class="flex flex-col group">
+                            <a class="block overflow-hidden rounded-xl bg-gray-800 mb-5"
+                                href="blog-post.html?slug=statistical-significance">
+                                <div
+                                    class="aspect-[3/2] w-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
+                                    <span class="material-symbols-outlined text-gray-600 text-6xl">bar_chart</span>
+                                </div>
+                            </a>
+                            <div class="flex flex-col flex-1">
+                                <div class="flex items-center gap-3 text-xs mb-3">
+                                    <span class="text-primary font-semibold">Analytics</span>
+                                    <span class="text-text-muted">•</span>
+                                    <span class="text-text-muted">Dec 05, 2024</span>
+                                </div>
+                                <a class="block group-hover:text-primary transition-colors"
+                                    href="blog-post.html?slug=statistical-significance">
+                                    <h3 class="font-display text-xl font-bold text-white mb-3">Understanding Statistical
+                                        Significance</h3>
+                                </a>
+                                <p class="text-sm text-text-muted leading-relaxed line-clamp-2 mb-4">
+                                    What p-values really mean and why Bayesian methods might be better for your tests.
+                                </p>
+                                <div
+                                    class="mt-auto pt-4 border-t border-border-subtle/50 flex items-center justify-between">
+                                    <span class="text-xs font-medium text-gray-300">Sampelit Team</span>
+                                    <span class="text-xs text-text-muted">10 min read</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Article 4 -->
+                        <article class="flex flex-col group">
+                            <a class="block overflow-hidden rounded-xl bg-gray-800 mb-5"
+                                href="blog-post.html?slug=cta-optimization">
+                                <div
+                                    class="aspect-[3/2] w-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
+                                    <span class="material-symbols-outlined text-gray-600 text-6xl">ads_click</span>
+                                </div>
+                            </a>
+                            <div class="flex flex-col flex-1">
+                                <div class="flex items-center gap-3 text-xs mb-3">
+                                    <span class="text-primary font-semibold">Case Study</span>
+                                    <span class="text-text-muted">•</span>
+                                    <span class="text-text-muted">Nov 28, 2024</span>
+                                </div>
+                                <a class="block group-hover:text-primary transition-colors"
+                                    href="blog-post.html?slug=cta-optimization">
+                                    <h3 class="font-display text-xl font-bold text-white mb-3">CTA Button Tests: What We
+                                        Learned</h3>
+                                </a>
+                                <p class="text-sm text-text-muted leading-relaxed line-clamp-2 mb-4">
+                                    Real results from testing button colors, copy, and placement across 50+ websites.
+                                </p>
+                                <div
+                                    class="mt-auto pt-4 border-t border-border-subtle/50 flex items-center justify-between">
+                                    <span class="text-xs font-medium text-gray-300">Sampelit Team</span>
+                                    <span class="text-xs text-text-muted">6 min read</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Article 5 -->
+                        <article class="flex flex-col group">
+                            <a class="block overflow-hidden rounded-xl bg-gray-800 mb-5"
+                                href="blog-post.html?slug=sample-size-calculator">
+                                <div
+                                    class="aspect-[3/2] w-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
+                                    <span class="material-symbols-outlined text-gray-600 text-6xl">calculate</span>
+                                </div>
+                            </a>
+                            <div class="flex flex-col flex-1">
+                                <div class="flex items-center gap-3 text-xs mb-3">
+                                    <span class="text-primary font-semibold">Tutorial</span>
+                                    <span class="text-text-muted">•</span>
+                                    <span class="text-text-muted">Nov 20, 2024</span>
+                                </div>
+                                <a class="block group-hover:text-primary transition-colors"
+                                    href="blog-post.html?slug=sample-size-calculator">
+                                    <h3 class="font-display text-xl font-bold text-white mb-3">How to Calculate Sample
+                                        Size</h3>
+                                </a>
+                                <p class="text-sm text-text-muted leading-relaxed line-clamp-2 mb-4">
+                                    Stop ending tests too early. Learn to calculate the right sample size for reliable
+                                    results.
+                                </p>
+                                <div
+                                    class="mt-auto pt-4 border-t border-border-subtle/50 flex items-center justify-between">
+                                    <span class="text-xs font-medium text-gray-300">Sampelit Team</span>
+                                    <span class="text-xs text-text-muted">8 min read</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Article 6 -->
+                        <article class="flex flex-col group">
+                            <a class="block overflow-hidden rounded-xl bg-gray-800 mb-5"
+                                href="blog-post.html?slug=multivariate-testing">
+                                <div
+                                    class="aspect-[3/2] w-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
+                                    <span class="material-symbols-outlined text-gray-600 text-6xl">grid_view</span>
+                                </div>
+                            </a>
+                            <div class="flex flex-col flex-1">
+                                <div class="flex items-center gap-3 text-xs mb-3">
+                                    <span class="text-primary font-semibold">Advanced</span>
+                                    <span class="text-text-muted">•</span>
+                                    <span class="text-text-muted">Nov 15, 2024</span>
+                                </div>
+                                <a class="block group-hover:text-primary transition-colors"
+                                    href="blog-post.html?slug=multivariate-testing">
+                                    <h3 class="font-display text-xl font-bold text-white mb-3">Multivariate vs A/B
+                                        Testing</h3>
+                                </a>
+                                <p class="text-sm text-text-muted leading-relaxed line-clamp-2 mb-4">
+                                    When to use MVT and how to set up experiments that test multiple variables at once.
+                                </p>
+                                <div
+                                    class="mt-auto pt-4 border-t border-border-subtle/50 flex items-center justify-between">
+                                    <span class="text-xs font-medium text-gray-300">Sampelit Team</span>
+                                    <span class="text-xs text-text-muted">12 min read</span>
+                                </div>
+                            </div>
+                        </article>
                     </div>
 
                     <!-- Pagination -->
-                    <div x-show="totalPages > 1" class="mt-8 flex justify-center gap-2">
-                        <button @click="prevPage()" :disabled="currentPage === 1"
-                            class="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed dark:border-gray-600">
-                            Previous
+                    <div class="mt-16 flex items-center justify-center gap-2">
+                        <button
+                            class="flex h-10 w-10 items-center justify-center rounded-lg border border-border-subtle text-gray-400 hover:bg-white hover:text-bg-dark transition-colors">
+                            <span class="material-symbols-outlined text-sm">chevron_left</span>
                         </button>
-                        <span class="px-4 py-2 text-gray-700 dark:text-gray-300"
-                            x-text="`Page ${currentPage} of ${totalPages}`"></span>
-                        <button @click="nextPage()" :disabled="currentPage === totalPages"
-                            class="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed dark:border-gray-600">
-                            Next
+                        <button
+                            class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white font-medium hover:bg-blue-600 transition-colors">1</button>
+                        <button
+                            class="flex h-10 w-10 items-center justify-center rounded-lg border border-border-subtle text-gray-400 hover:bg-white hover:text-bg-dark transition-colors">2</button>
+                        <button
+                            class="flex h-10 w-10 items-center justify-center rounded-lg border border-border-subtle text-gray-400 hover:bg-white hover:text-bg-dark transition-colors">3</button>
+                        <button
+                            class="flex h-10 w-10 items-center justify-center rounded-lg border border-border-subtle text-gray-400 hover:bg-white hover:text-bg-dark transition-colors">
+                            <span class="material-symbols-outlined text-sm">chevron_right</span>
                         </button>
                     </div>
-
                 </div>
-            </main>
-        </div>
+            </section>
+        </main>
+
+        <!-- Newsletter CTA -->
+        <section class="border-t border-border-subtle bg-bg-card py-20">
+            <div class="mx-auto max-w-[1280px] px-6 lg:px-8">
+                <div
+                    class="relative overflow-hidden rounded-2xl bg-[#13161c] px-6 py-16 sm:px-12 xl:py-20 border border-border-subtle">
+                    <div class="relative z-10 mx-auto max-w-2xl text-center">
+                        <h3 class="mb-4 text-3xl font-bold tracking-tight text-white font-display">Stay in the loop</h3>
+                        <p class="mb-8 text-gray-400 text-lg font-light">Get weekly insights on A/B testing,
+                            copywriting, and conversion optimization delivered to your inbox.</p>
+                        <form class="mx-auto flex max-w-md flex-col gap-3 sm:flex-row">
+                            <input
+                                class="flex-1 rounded-lg border border-border-subtle bg-bg-dark px-4 py-3 text-sm text-white outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder-gray-600"
+                                placeholder="Enter your email" required="" type="email" />
+                            <button
+                                class="rounded-lg bg-white px-6 py-3 text-sm font-bold text-bg-dark shadow-lg hover:bg-gray-200 transition-colors"
+                                type="submit">Subscribe</button>
+                        </form>
+                    </div>
+                    <div
+                        class="absolute left-1/2 top-1/2 -z-10 h-[300px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/5 blur-3xl">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-bg-dark py-16 text-white border-t border-border-subtle">
+            <div class="mx-auto max-w-[1280px] px-6 lg:px-8">
+                <div class="grid gap-12 lg:grid-cols-4">
+                    <div class="space-y-4">
+                        <a href="index.html" class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[28px] text-primary">auto_fix_high</span>
+                            <span class="text-xl font-bold font-display">Sampelit<span
+                                    class="text-primary">.</span></span>
+                        </a>
+                        <p class="text-sm text-gray-500 leading-relaxed">Empowering growth teams with intelligent A/B
+                            testing and copy optimization.</p>
+                    </div>
+                    <div>
+                        <h4 class="mb-5 font-bold text-white font-display">Product</h4>
+                        <ul class="space-y-3 text-sm text-gray-500">
+                            <li><a class="hover:text-primary transition-colors" href="visual-editor.html">Visual
+                                    Editor</a></li>
+                            <li><a class="hover:text-primary transition-colors" href="#">Analytics</a></li>
+                            <li><a class="hover:text-primary transition-colors" href="#">Integrations</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="mb-5 font-bold text-white font-display">Resources</h4>
+                        <ul class="space-y-3 text-sm text-gray-500">
+                            <li><a class="hover:text-primary transition-colors" href="help-center/index.html">Help
+                                    Center</a></li>
+                            <li><a class="hover:text-primary transition-colors" href="blog.html">Blog</a></li>
+                            <li><a class="hover:text-primary transition-colors" href="faq.html">FAQ</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="mb-5 font-bold text-white font-display">Company</h4>
+                        <ul class="space-y-3 text-sm text-gray-500">
+                            <li><a class="hover:text-primary transition-colors" href="about.html">About</a></li>
+                            <li><a class="hover:text-primary transition-colors" href="contact.html">Contact</a></li>
+                            <li><a class="hover:text-primary transition-colors" href="#">Privacy</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-16 border-t border-border-subtle pt-8 text-center text-xs text-gray-600 font-medium">
+                    © 2025 Sampelit. All rights reserved.
+                </div>
+            </div>
+        </footer>
     </div>
-
-    <!-- Scripts -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="./js/include.js"></script>
-
-    <script>
-        function blogListing() {
-            return {
-                posts: [],
-                loading: false,
-                selectedCategory: null,
-                currentPage: 1,
-                perPage: 9,
-                totalPages: 1,
-
-                async init() {
-                    await this.loadPosts();
-                },
-
-                async loadPosts() {
-                    this.loading = true;
-                    try {
-                        const params = new URLSearchParams({
-                            page: this.currentPage,
-                            per_page: this.perPage
-                        });
-
-                        if (this.selectedCategory) {
-                            params.append('category', this.selectedCategory);
-                        }
-
-                        const response = await fetch(`/api/v1/blog?${params}`);
-                        const data = await response.json();
-
-                        this.posts = data.items;
-                        this.totalPages = Math.ceil(data.total / this.perPage);
-                    } catch (error) {
-                        console.error('Failed to load blog posts:', error);
-                    } finally {
-                        this.loading = false;
-                    }
-                },
-
-                async filterCategory(category) {
-                    this.selectedCategory = category;
-                    this.currentPage = 1;
-                    await this.loadPosts();
-                },
-
-                async nextPage() {
-                    if (this.currentPage < this.totalPages) {
-                        this.currentPage++;
-                        await this.loadPosts();
-                    }
-                },
-
-                async prevPage() {
-                    if (this.currentPage > 1) {
-                        this.currentPage--;
-                        await this.loadPosts();
-                    }
-                },
-
-                getCategoryLabel(category) {
-                    const labels = {
-                        'ab-testing-fundamentals': 'Fundamentals',
-                        'case-studies': 'Case Study',
-                        'copywriting-science': 'Science'
-                    };
-                    return labels[category] || category;
-                },
-
-                formatDate(dateStr) {
-                    const date = new Date(dateStr);
-                    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-                }
-            }
-        }
-    </script>
 </body>
 
 </html>

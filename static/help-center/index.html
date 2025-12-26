@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Help Center | Sampelit</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f172a",
+                        "accent": "#1e3a8a",
+                        "primary-light": "#3b82f6",
+                        "background": "#ffffff",
+                        "surface": "#f8fafc",
+                        "surface-alt": "#f1f5f9",
+                        text: {
+                            main: "#1e293b",
+                            muted: "#64748b",
+                        },
+                        border: {
+                            light: "#e2e8f0",
+                        }
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'card': '0 2px 10px rgba(0, 0, 0, 0.03)',
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+
+<body class="bg-background font-body text-text-main antialiased min-h-screen flex flex-col">
+    <!-- Include Header -->
+    <include src="../partials/header_landing.html"></include>
+
+    <main class="flex-grow">
+        <!-- Hero Section with Search -->
+        <section class="bg-surface border-b border-border-light pt-24 pb-16 px-6">
+            <div class="max-w-3xl mx-auto flex flex-col items-center text-center">
+                <!-- Breadcrumb -->
+                <div class="mb-8 flex items-center gap-2 text-sm text-text-muted">
+                    <a class="hover:text-accent transition-colors" href="../index.html">Home</a>
+                    <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+                    <span class="font-medium text-text-main">Help Center</span>
+                </div>
+
+                <h1
+                    class="text-4xl md:text-5xl font-display font-bold text-text-main tracking-tight mb-4 leading-tight">
+                    How can we <span class="text-accent">help</span> you today?
+                </h1>
+                <p class="text-lg text-text-muted font-normal max-w-xl mb-10 leading-relaxed">
+                    Find quick answers, step-by-step tutorials, and technical support for optimizing your A/B tests with
+                    AI.
+                </p>
+
+                <!-- Search Bar -->
+                <div class="w-full max-w-2xl relative group">
+                    <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                        <span
+                            class="material-symbols-outlined text-text-muted group-focus-within:text-accent transition-colors">search</span>
+                    </div>
+                    <input
+                        class="w-full h-14 pl-12 pr-4 bg-white border border-border-light rounded-xl text-text-main placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent shadow-soft transition-all text-base"
+                        placeholder="Search articles, tutorials, errors..." type="text" />
+                    <div class="absolute inset-y-0 right-4 flex items-center">
+                        <kbd
+                            class="hidden sm:inline-block px-2 py-1 text-xs font-medium text-text-muted border border-border-light rounded bg-surface">⌘K</kbd>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section class="py-16 px-6 max-w-5xl mx-auto w-full">
+            <div class="flex items-center justify-between mb-10">
+                <h2 class="text-2xl font-display font-bold text-text-main tracking-tight">Browse by Topic</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Category Card 1 -->
+                <a class="group p-6 bg-white border border-border-light rounded-xl hover:shadow-soft hover:border-accent/30 transition-all duration-300 flex flex-col gap-4 h-full"
+                    href="#">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-blue-50 text-accent flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined text-2xl">rocket_launch</span>
+                    </div>
+                    <div>
+                        <h3
+                            class="text-lg font-display font-bold text-text-main mb-2 group-hover:text-accent transition-colors">
+                            Getting Started</h3>
+                        <p class="text-text-muted text-sm leading-relaxed">Essential guides to set up your account and
+                            launch your first experiment in minutes.</p>
+                    </div>
+                </a>
+
+                <!-- Category Card 2 -->
+                <a class="group p-6 bg-white border border-border-light rounded-xl hover:shadow-soft hover:border-accent/30 transition-all duration-300 flex flex-col gap-4 h-full"
+                    href="#">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined text-2xl">tune</span>
+                    </div>
+                    <div>
+                        <h3
+                            class="text-lg font-display font-bold text-text-main mb-2 group-hover:text-purple-600 transition-colors">
+                            Experiment Setup</h3>
+                        <p class="text-text-muted text-sm leading-relaxed">Learn to define variables, segment audiences,
+                            and set conversion goals.</p>
+                    </div>
+                </a>
+
+                <!-- Category Card 3 -->
+                <a class="group p-6 bg-white border border-border-light rounded-xl hover:shadow-soft hover:border-accent/30 transition-all duration-300 flex flex-col gap-4 h-full"
+                    href="#">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-green-50 text-green-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined text-2xl">analytics</span>
+                    </div>
+                    <div>
+                        <h3
+                            class="text-lg font-display font-bold text-text-main mb-2 group-hover:text-green-600 transition-colors">
+                            Analytics & AI</h3>
+                        <p class="text-text-muted text-sm leading-relaxed">Interpret results, statistical significance,
+                            and AI-powered recommendations.</p>
+                    </div>
+                </a>
+
+                <!-- Category Card 4 -->
+                <a class="group p-6 bg-white border border-border-light rounded-xl hover:shadow-soft hover:border-accent/30 transition-all duration-300 flex flex-col gap-4 h-full"
+                    href="#">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined text-2xl">integration_instructions</span>
+                    </div>
+                    <div>
+                        <h3
+                            class="text-lg font-display font-bold text-text-main mb-2 group-hover:text-orange-600 transition-colors">
+                            Integrations & API</h3>
+                        <p class="text-text-muted text-sm leading-relaxed">Connect Sampelit with your tech stack:
+                            Shopify, WordPress, Segment, and more.</p>
+                    </div>
+                </a>
+
+                <!-- Category Card 5 -->
+                <a class="group p-6 bg-white border border-border-light rounded-xl hover:shadow-soft hover:border-accent/30 transition-all duration-300 flex flex-col gap-4 h-full"
+                    href="#">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined text-2xl">credit_card</span>
+                    </div>
+                    <div>
+                        <h3
+                            class="text-lg font-display font-bold text-text-main mb-2 group-hover:text-rose-600 transition-colors">
+                            Billing & Plans</h3>
+                        <p class="text-text-muted text-sm leading-relaxed">Manage your subscription, payment methods,
+                            and download invoices.</p>
+                    </div>
+                </a>
+
+                <!-- Category Card 6 -->
+                <a class="group p-6 bg-white border border-border-light rounded-xl hover:shadow-soft hover:border-accent/30 transition-all duration-300 flex flex-col gap-4 h-full"
+                    href="#">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined text-2xl">build</span>
+                    </div>
+                    <div>
+                        <h3
+                            class="text-lg font-display font-bold text-text-main mb-2 group-hover:text-teal-600 transition-colors">
+                            Troubleshooting</h3>
+                        <p class="text-text-muted text-sm leading-relaxed">Solutions for common errors, display issues,
+                            and debugging tips.</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Popular Articles -->
+        <section class="bg-surface py-16 px-6 border-y border-border-light">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-2xl font-display font-bold text-text-main tracking-tight mb-8">Popular Articles</h2>
+                <div
+                    class="bg-white rounded-2xl shadow-card border border-border-light divide-y divide-border-light overflow-hidden">
+                    <a class="flex items-center justify-between p-5 hover:bg-surface transition-colors group"
+                        href="article.html">
+                        <div class="flex items-start gap-4">
+                            <span
+                                class="material-symbols-outlined text-text-muted mt-0.5 group-hover:text-accent">description</span>
+                            <div>
+                                <p class="text-text-main font-semibold group-hover:text-accent transition-colors">How to
+                                    install the tracking script in Next.js</p>
+                                <p class="text-sm text-text-muted mt-1">Tutorials • 5 min read</p>
+                            </div>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-text-muted/50 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
+                    <a class="flex items-center justify-between p-5 hover:bg-surface transition-colors group"
+                        href="article.html">
+                        <div class="flex items-start gap-4">
+                            <span
+                                class="material-symbols-outlined text-text-muted mt-0.5 group-hover:text-accent">description</span>
+                            <div>
+                                <p class="text-text-main font-semibold group-hover:text-accent transition-colors">
+                                    Understanding statistical confidence levels</p>
+                                <p class="text-sm text-text-muted mt-1">Analytics • 8 min read</p>
+                            </div>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-text-muted/50 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
+                    <a class="flex items-center justify-between p-5 hover:bg-surface transition-colors group"
+                        href="article.html">
+                        <div class="flex items-start gap-4">
+                            <span
+                                class="material-symbols-outlined text-text-muted mt-0.5 group-hover:text-accent">description</span>
+                            <div>
+                                <p class="text-text-main font-semibold group-hover:text-accent transition-colors">
+                                    Troubleshooting: Visual editor not loading</p>
+                                <p class="text-sm text-text-muted mt-1">Support • 3 min read</p>
+                            </div>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-text-muted/50 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
+                    <a class="flex items-center justify-between p-5 hover:bg-surface transition-colors group"
+                        href="article.html">
+                        <div class="flex items-start gap-4">
+                            <span
+                                class="material-symbols-outlined text-text-muted mt-0.5 group-hover:text-accent">description</span>
+                            <div>
+                                <p class="text-text-main font-semibold group-hover:text-accent transition-colors">Best
+                                    practices for mobile A/B testing</p>
+                                <p class="text-sm text-text-muted mt-1">Strategy • 10 min read</p>
+                            </div>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-text-muted/50 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
+                </div>
+                <div class="mt-6 text-center">
+                    <a class="inline-flex items-center gap-2 text-accent font-semibold hover:text-primary-light transition-colors"
+                        href="#">
+                        View all documentation
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Support CTA -->
+        <section class="py-16 px-6 max-w-5xl mx-auto">
+            <div
+                class="bg-primary rounded-2xl p-10 md:p-14 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+                <!-- Abstract decorative element -->
+                <div
+                    class="absolute -top-24 -right-24 w-64 h-64 bg-accent/30 rounded-full blur-3xl pointer-events-none">
+                </div>
+                <div class="relative z-10 max-w-lg">
+                    <h3 class="text-2xl md:text-3xl font-display font-bold text-white mb-3">Can't find what you're
+                        looking for?</h3>
+                    <p class="text-slate-300 text-lg">Our support team is available 24/7 to help you with any technical
+                        or billing questions.</p>
+                </div>
+                <div class="relative z-10 shrink-0">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-primary font-bold rounded-lg hover:bg-gray-100 transition-colors"
+                            href="#">
+                            <span class="material-symbols-outlined">chat</span>
+                            Live Chat
+                        </a>
+                        <a class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-transparent border border-white/20 text-white font-bold rounded-lg hover:bg-white/10 transition-colors"
+                            href="../contact.html">
+                            <span class="material-symbols-outlined">mail</span>
+                            Send Ticket
+                        </a>
+                    </div>
+                    <div class="mt-3 text-center sm:text-right">
+                        <span class="text-slate-400 text-sm">Avg. response time: &lt; 2 hrs</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Include Footer -->
+    <include src="../partials/footer_landing.html"></include>
+
+    <!-- Scripts -->
+    <script src="../js/include.js"></script>
+</body>
+
+</html>

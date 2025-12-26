@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Centro de Ayuda - A/B AI</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Theme Config -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1754cf",
+                        "background-light": "#ffffff",
+                        "background-subtle": "#f8f9fc",
+                        "background-dark": "#111621",
+                        "slate-text": "#0e121b",
+                        "slate-muted": "#64748b",
+                        "border-color": "#e7ebf3"
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.375rem", // rounded-md
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'card': '0 2px 10px rgba(0, 0, 0, 0.03)',
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Manrope', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 300,
+                'GRAD' 0,
+                'opsz' 24
+        }
+
+        .icon-light {
+            font-variation-settings: 'wght' 200;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-text flex flex-col min-h-screen">
+    <!-- Top Navigation -->
+    <header class="w-full border-b border-border-color bg-white/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 text-primary flex items-center justify-center">
+                    <span class="material-symbols-outlined text-3xl">smart_toy</span>
+                </div>
+                <h1 class="text-slate-text text-lg font-bold tracking-tight">A/B AI</h1>
+            </div>
+            <div class="flex items-center gap-8">
+                <nav class="hidden md:flex items-center gap-6">
+                    <a class="text-sm font-medium text-slate-text hover:text-primary transition-colors"
+                        href="#">Docs</a>
+                    <a class="text-sm font-medium text-slate-text hover:text-primary transition-colors" href="#">API</a>
+                    <a class="text-sm font-medium text-slate-text hover:text-primary transition-colors"
+                        href="#">Status</a>
+                </nav>
+                <div class="flex items-center gap-4">
+                    <a class="hidden sm:block text-sm font-medium text-slate-text hover:text-primary" href="#">Log
+                        in</a>
+                    <button
+                        class="bg-primary hover:bg-blue-700 text-white text-sm font-bold px-5 py-2.5 rounded-lg transition-colors shadow-sm">
+                        Go to App
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="flex-grow">
+        <!-- Hero Section with Search -->
+        <section class="bg-background-subtle border-b border-border-color pt-16 pb-20 px-6">
+            <div class="max-w-[800px] mx-auto flex flex-col items-center text-center">
+                <!-- Breadcrumb -->
+                <div class="mb-8 flex items-center gap-2 text-sm text-slate-muted">
+                    <a class="hover:text-primary transition-colors" href="#">Home</a>
+                    <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+                    <span class="font-medium text-slate-text">Centro de Ayuda</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-text tracking-tight mb-4 leading-tight">
+                    ¿Cómo podemos ayudarte hoy?
+                </h2>
+                <p class="text-lg text-slate-muted font-normal max-w-xl mb-10 leading-relaxed">
+                    Encuentra respuestas rápidas, tutoriales paso a paso y soporte técnico para optimizar tus tests A/B
+                    con nuestra IA.
+                </p>
+                <!-- Prominent Search Bar -->
+                <div class="w-full max-w-2xl relative group">
+                    <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                        <span class="material-symbols-outlined text-slate-400">search</span>
+                    </div>
+                    <input
+                        class="w-full h-14 pl-12 pr-4 bg-white border border-border-color rounded-xl text-slate-text placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary shadow-soft transition-all text-base"
+                        placeholder="Buscar artículos, tutoriales, errores..." type="text" />
+                    <div class="absolute inset-y-0 right-4 flex items-center">
+                        <kbd
+                            class="hidden sm:inline-block px-2 py-1 text-xs font-medium text-slate-400 border border-border-color rounded bg-slate-50">⌘K</kbd>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Categories Section -->
+        <section class="py-20 px-6 max-w-[1200px] mx-auto w-full">
+            <div class="flex items-center justify-between mb-10">
+                <h3 class="text-2xl font-bold text-slate-text tracking-tight">Explorar por temas</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Category Card 1 -->
+                <a class="group p-6 bg-white border border-border-color rounded-xl hover:shadow-soft hover:border-primary/30 transition-all duration-300 flex flex-col gap-4 h-full"
+                    href="#">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-blue-50 text-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined icon-light text-3xl">rocket_launch</span>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold text-slate-text mb-2 group-hover:text-primary transition-colors">
+                            Primeros Pasos</h4>
+                        <p class="text-slate-muted text-sm leading-relaxed">Guías esenciales para configurar tu cuenta e
+                            iniciar tu primer experimento en minutos.</p>
+                    </div>
+                </a>
+                <!-- Category Card 2 -->
+                <a class="group p-6 bg-white border border-border-color rounded-xl hover:shadow-soft hover:border-primary/30 transition-all duration-300 flex flex-col gap-4 h-full"
+                    href="#">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-blue-50 text-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined icon-light text-3xl">tune</span>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold text-slate-text mb-2 group-hover:text-primary transition-colors">
+                            Configuración de Tests</h4>
+                        <p class="text-slate-muted text-sm leading-relaxed">Aprende a definir variables, segmentar
+                            audiencias y establecer objetivos de conversión.</p>
+                    </div>
+                </a>
+                <!-- Category Card 3 -->
+                <a class="group p-6 bg-white border border-border-color rounded-xl hover:shadow-soft hover:border-primary/30 transition-all duration-300 flex flex-col gap-4 h-full"
+                    href="#">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-blue-50 text-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined icon-light text-3xl">analytics</span>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold text-slate-text mb-2 group-hover:text-primary transition-colors">
+                            Analítica e IA</h4>
+                        <p class="text-slate-muted text-sm leading-relaxed">Interpretación de resultados, significancia
+                            estadística y sugerencias automáticas de la IA.</p>
+                    </div>
+                </a>
+                <!-- Category Card 4 -->
+                <a class="group p-6 bg-white border border-border-color rounded-xl hover:shadow-soft hover:border-primary/30 transition-all duration-300 flex flex-col gap-4 h-full"
+                    href="#">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-blue-50 text-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined icon-light text-3xl">integration_instructions</span>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold text-slate-text mb-2 group-hover:text-primary transition-colors">
+                            Integraciones y API</h4>
+                        <p class="text-slate-muted text-sm leading-relaxed">Conecta A/B AI con tu stack tecnológico:
+                            CRM, CMS y herramientas de análisis.</p>
+                    </div>
+                </a>
+                <!-- Category Card 5 -->
+                <a class="group p-6 bg-white border border-border-color rounded-xl hover:shadow-soft hover:border-primary/30 transition-all duration-300 flex flex-col gap-4 h-full"
+                    href="#">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-blue-50 text-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined icon-light text-3xl">credit_card</span>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold text-slate-text mb-2 group-hover:text-primary transition-colors">
+                            Facturación</h4>
+                        <p class="text-slate-muted text-sm leading-relaxed">Gestiona tu suscripción, métodos de pago y
+                            descarga facturas.</p>
+                    </div>
+                </a>
+                <!-- Category Card 6 -->
+                <a class="group p-6 bg-white border border-border-color rounded-xl hover:shadow-soft hover:border-primary/30 transition-all duration-300 flex flex-col gap-4 h-full"
+                    href="#">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-blue-50 text-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined icon-light text-3xl">shield_person</span>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold text-slate-text mb-2 group-hover:text-primary transition-colors">
+                            Cuenta y Seguridad</h4>
+                        <p class="text-slate-muted text-sm leading-relaxed">Administra permisos de equipo, autenticación
+                            en dos pasos y privacidad.</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+        <!-- Featured Articles -->
+        <section class="bg-background-subtle py-20 px-6 border-y border-border-color">
+            <div class="max-w-[1000px] mx-auto">
+                <h3 class="text-2xl font-bold text-slate-text tracking-tight mb-8">Artículos Populares</h3>
+                <div
+                    class="bg-white rounded-2xl shadow-card border border-border-color divide-y divide-border-color overflow-hidden">
+                    <a class="flex items-center justify-between p-5 hover:bg-slate-50 transition-colors group" href="#">
+                        <div class="flex items-start gap-4">
+                            <span
+                                class="material-symbols-outlined text-slate-400 mt-0.5 group-hover:text-primary">description</span>
+                            <div>
+                                <p class="text-slate-text font-semibold group-hover:text-primary transition-colors">Cómo
+                                    instalar el script de seguimiento en Next.js</p>
+                                <p class="text-sm text-slate-muted mt-1">Tutoriales • 5 min de lectura</p>
+                            </div>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-slate-300 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
+                    <a class="flex items-center justify-between p-5 hover:bg-slate-50 transition-colors group" href="#">
+                        <div class="flex items-start gap-4">
+                            <span
+                                class="material-symbols-outlined text-slate-400 mt-0.5 group-hover:text-primary">description</span>
+                            <div>
+                                <p class="text-slate-text font-semibold group-hover:text-primary transition-colors">
+                                    Entendiendo el nivel de confianza estadística</p>
+                                <p class="text-sm text-slate-muted mt-1">Analítica • 8 min de lectura</p>
+                            </div>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-slate-300 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
+                    <a class="flex items-center justify-between p-5 hover:bg-slate-50 transition-colors group" href="#">
+                        <div class="flex items-start gap-4">
+                            <span
+                                class="material-symbols-outlined text-slate-400 mt-0.5 group-hover:text-primary">description</span>
+                            <div>
+                                <p class="text-slate-text font-semibold group-hover:text-primary transition-colors">
+                                    Solución de problemas: El editor visual no carga</p>
+                                <p class="text-sm text-slate-muted mt-1">Soporte Técnico • 3 min de lectura</p>
+                            </div>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-slate-300 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
+                    <a class="flex items-center justify-between p-5 hover:bg-slate-50 transition-colors group" href="#">
+                        <div class="flex items-start gap-4">
+                            <span
+                                class="material-symbols-outlined text-slate-400 mt-0.5 group-hover:text-primary">description</span>
+                            <div>
+                                <p class="text-slate-text font-semibold group-hover:text-primary transition-colors">
+                                    Mejores prácticas para tests A/B en móviles</p>
+                                <p class="text-sm text-slate-muted mt-1">Estrategia • 10 min de lectura</p>
+                            </div>
+                        </div>
+                        <span
+                            class="material-symbols-outlined text-slate-300 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
+                </div>
+                <div class="mt-6 text-center">
+                    <a class="inline-flex items-center gap-2 text-primary font-semibold hover:text-blue-700 transition-colors"
+                        href="#">
+                        Ver toda la documentación
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- Contact Support CTA -->
+        <section class="py-20 px-6 max-w-[1200px] mx-auto">
+            <div
+                class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-10 md:p-14 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+                <!-- Abstract decorative element -->
+                <div
+                    class="absolute -top-24 -right-24 w-64 h-64 bg-primary/20 rounded-full blur-3xl pointer-events-none">
+                </div>
+                <div class="relative z-10 max-w-lg">
+                    <h3 class="text-2xl md:text-3xl font-bold text-white mb-3">¿No encuentras lo que buscas?</h3>
+                    <p class="text-slate-300 text-lg">Nuestro equipo de soporte está disponible para ayudarte a resolver
+                        cualquier duda técnica o de facturación.</p>
+                </div>
+                <div class="relative z-10 shrink-0">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-slate-900 font-bold rounded-lg hover:bg-gray-100 transition-colors"
+                            href="#">
+                            <span class="material-symbols-outlined">chat</span>
+                            Chat en vivo
+                        </a>
+                        <a class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-transparent border border-white/20 text-white font-bold rounded-lg hover:bg-white/10 transition-colors"
+                            href="#">
+                            <span class="material-symbols-outlined">mail</span>
+                            Enviar ticket
+                        </a>
+                    </div>
+                    <div class="mt-3 text-center sm:text-right">
+                        <span class="text-slate-400 text-sm">Tiempo de respuesta prom.: &lt; 2 hrs</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer class="border-t border-border-color bg-white py-12 px-6">
+        <div class="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2 text-slate-text">
+                <div class="w-6 h-6 text-slate-400 flex items-center justify-center">
+                    <span class="material-symbols-outlined">smart_toy</span>
+                </div>
+                <span class="font-bold text-sm">A/B AI © 2024</span>
+            </div>
+            <div class="flex gap-8 flex-wrap justify-center">
+                <a class="text-slate-500 hover:text-slate-900 text-sm transition-colors" href="#">Términos de
+                    servicio</a>
+                <a class="text-slate-500 hover:text-slate-900 text-sm transition-colors" href="#">Política de
+                    privacidad</a>
+                <a class="text-slate-500 hover:text-slate-900 text-sm transition-colors" href="#">Status</a>
+                <a class="text-slate-500 hover:text-slate-900 text-sm transition-colors" href="#">Twitter</a>
+                <a class="text-slate-500 hover:text-slate-900 text-sm transition-colors" href="#">GitHub</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

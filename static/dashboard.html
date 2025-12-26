@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Experiment Details - A/B AI Labs</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Tailwind Config -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1754cf",
+                        "primary-dark": "#0f3a9a",
+                        "background-light": "#f6f6f8", // Slightly off-white for main bg
+                        "background-dark": "#111621",
+                        "surface": "#ffffff",
+                        "text-main": "#0e121b",
+                        "text-secondary": "#5a6b89",
+                        "accent-green": "#07883b",
+                        "border-subtle": "#e7ebf3",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "sans": ["Manrope", "sans-serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.375rem", // 6px - refined
+                        "lg": "0.5rem",       // 8px
+                        "xl": "0.75rem",      // 12px
+                        "2xl": "1rem",        // 16px
+                        "full": "9999px",
+                    },
+                    boxShadow: {
+                        'subtle': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                        'float': '0 10px 30px -10px rgba(23, 84, 207, 0.15)',
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #f8f9fc;
+        }
+
+        .refined-border {
+            border: 1px solid #e7ebf3;
+        }
+
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+    </style>
+</head>
+
+<body class="bg-[#f8f9fc] text-text-main antialiased selection:bg-primary/10 selection:text-primary">
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-surface/90 backdrop-blur-md border-b border-border-subtle">
+        <div class="max-w-[1440px] mx-auto px-6 h-16 flex items-center justify-between">
+            <!-- Left: Logo & Nav -->
+            <div class="flex items-center gap-10">
+                <div class="flex items-center gap-3 text-text-main group cursor-pointer">
+                    <div class="w-8 h-8 text-primary flex items-center justify-center bg-primary/10 rounded-lg">
+                        <span class="material-symbols-outlined text-[20px]">science</span>
+                    </div>
+                    <span class="text-lg font-bold tracking-tight">A/B AI Labs</span>
+                </div>
+                <nav class="hidden md:flex items-center gap-1">
+                    <a class="px-3 py-2 text-sm font-medium text-text-secondary hover:text-primary transition-colors rounded-md hover:bg-background-light"
+                        href="dashboard.html">Dashboard</a>
+                    <a class="px-3 py-2 text-sm font-medium text-primary bg-primary/5 rounded-md"
+                        href="dashboard.html">Experiments</a>
+                    <a class="px-3 py-2 text-sm font-medium text-text-secondary hover:text-primary transition-colors rounded-md hover:bg-background-light"
+                        href="#">Audiences</a>
+                    <a class="px-3 py-2 text-sm font-medium text-text-secondary hover:text-primary transition-colors rounded-md hover:bg-background-light"
+                        href="#">Settings</a>
+                </nav>
+            </div>
+            <!-- Right: Search & Profile -->
+            <div class="flex items-center gap-4">
+                <div class="relative hidden sm:flex items-center">
+                    <span
+                        class="material-symbols-outlined absolute left-3 text-text-secondary text-[20px]">search</span>
+                    <input
+                        class="pl-10 pr-4 py-2 bg-background-light border-none rounded-lg text-sm text-text-main placeholder-text-secondary focus:ring-1 focus:ring-primary w-64 transition-all"
+                        placeholder="Search experiments..." type="text" />
+                </div>
+                <div class="h-8 w-[1px] bg-border-subtle mx-1"></div>
+                <button
+                    class="relative p-2 text-text-secondary hover:text-primary transition-colors rounded-full hover:bg-background-light">
+                    <span class="material-symbols-outlined text-[22px]">notifications</span>
+                    <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-surface"></span>
+                </button>
+                <div class="w-9 h-9 rounded-full bg-cover bg-center border border-border-subtle cursor-pointer ring-2 ring-transparent hover:ring-primary/20 transition-all"
+                    data-alt="User profile avatar"
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDek6zmyu0U4NOd_xZ-AeIXG-YP4AX52yMrAvLhzMU8O5m6lSUfnvFsEYbDie08ub_0spNk8Ng9ieuLUiMTi0WOtr5ezkBB4AW9VH8CDnmnnccve4yUIQIeFmHVb6t2aZnWNiF3evThnq2lomD-FQtCZgy03GHwp0vDP4kw-Ou8LR9LiSW-m7r_yuETiO5_qozeGA6vxBi9rUu1FwJ0za-IlmXM587Qaa-wZ51blXw0xcGQFebBPdxqkZsuy7o-f3ZQMlW3Aj0d");'>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Main Content Area -->
+    <main class="max-w-[1200px] mx-auto px-6 py-8 flex flex-col gap-8">
+        <!-- Breadcrumbs -->
+        <nav class="flex items-center text-sm font-medium text-text-secondary animate-fade-in-up">
+            <a class="hover:text-primary transition-colors" href="/">Home</a>
+            <span class="material-symbols-outlined text-[16px] mx-2 text-gray-400">chevron_right</span>
+            <a class="hover:text-primary transition-colors" href="dashboard.html">Experiments</a>
+            <span class="material-symbols-outlined text-[16px] mx-2 text-gray-400">chevron_right</span>
+            <span class="text-text-main font-semibold">Checkout Flow Optimization #42</span>
+        </nav>
+        <!-- Page Header -->
+        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+            <div class="flex flex-col gap-2">
+                <div class="flex items-center gap-3">
+                    <h1 class="text-3xl md:text-4xl font-bold text-text-main tracking-tight leading-tight">Checkout Flow
+                        Optimization</h1>
+                    <span
+                        class="px-2.5 py-0.5 rounded-full border border-green-200 bg-green-50 text-accent-green text-xs font-bold uppercase tracking-wide flex items-center gap-1.5">
+                        <span class="relative flex h-2 w-2">
+                            <span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                        </span>
+                        Running
+                    </span>
+                </div>
+                <div class="flex items-center gap-4 text-sm text-text-secondary">
+                    <span class="flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                        Started Oct 12, 2023
+                    </span>
+                    <span class="w-1 h-1 rounded-full bg-gray-300"></span>
+                    <span class="flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-[18px]">schedule</span>
+                        Running for 14 days
+                    </span>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <button
+                    class="flex items-center justify-center gap-2 h-10 px-4 rounded-lg border border-border-subtle bg-surface text-text-main text-sm font-semibold hover:bg-background-light transition-all shadow-subtle">
+                    <span class="material-symbols-outlined text-[20px]">edit</span>
+                    Edit Setup
+                </button>
+                <button
+                    class="flex items-center justify-center gap-2 h-10 px-5 rounded-lg bg-primary hover:bg-primary-dark text-white text-sm font-semibold shadow-lg shadow-primary/25 transition-all">
+                    <span class="material-symbols-outlined text-[20px]">stop_circle</span>
+                    Stop Experiment
+                </button>
+            </div>
+        </div>
+        <!-- Key Metrics Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Metric Card 1 -->
+            <div class="group bg-surface p-6 rounded-xl refined-border hover:shadow-subtle transition-shadow">
+                <div class="flex justify-between items-start mb-2">
+                    <p class="text-text-secondary text-xs font-bold uppercase tracking-wider">Total Visitors</p>
+                    <span
+                        class="material-symbols-outlined text-text-secondary text-[20px] opacity-50 group-hover:text-primary group-hover:opacity-100 transition-all">group</span>
+                </div>
+                <p class="text-2xl font-bold text-text-main tracking-tight">24,892</p>
+                <div class="flex items-center gap-1 mt-1 text-sm text-accent-green font-medium">
+                    <span class="material-symbols-outlined text-[16px]">trending_up</span>
+                    <span>+5.2%</span>
+                    <span class="text-gray-400 font-normal ml-1">vs last week</span>
+                </div>
+            </div>
+            <!-- Metric Card 2 -->
+            <div class="group bg-surface p-6 rounded-xl refined-border hover:shadow-subtle transition-shadow">
+                <div class="flex justify-between items-start mb-2">
+                    <p class="text-text-secondary text-xs font-bold uppercase tracking-wider">Conversions</p>
+                    <span
+                        class="material-symbols-outlined text-text-secondary text-[20px] opacity-50 group-hover:text-primary group-hover:opacity-100 transition-all">shopping_cart</span>
+                </div>
+                <p class="text-2xl font-bold text-text-main tracking-tight">1,048</p>
+                <div class="flex items-center gap-1 mt-1 text-accent-green font-medium">
+                    <span class="material-symbols-outlined text-[16px]">trending_up</span>
+                    <span>+12.5%</span>
+                    <span class="text-gray-400 font-normal ml-1">uplift</span>
+                </div>
+            </div>
+            <!-- Metric Card 3 -->
+            <div
+                class="group bg-surface p-6 rounded-xl refined-border hover:shadow-subtle transition-shadow border-l-4 border-l-primary">
+                <div class="flex justify-between items-start mb-2">
+                    <p class="text-text-secondary text-xs font-bold uppercase tracking-wider">Conversion Rate</p>
+                    <span
+                        class="material-symbols-outlined text-text-secondary text-[20px] opacity-50 group-hover:text-primary group-hover:opacity-100 transition-all">percent</span>
+                </div>
+                <p class="text-2xl font-bold text-text-main tracking-tight">4.21%</p>
+                <div class="flex items-center gap-1 mt-1 text-accent-green font-medium">
+                    <span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+                    <span>0.4%</span>
+                    <span class="text-gray-400 font-normal ml-1">absolute</span>
+                </div>
+            </div>
+            <!-- Metric Card 4 -->
+            <div class="group bg-surface p-6 rounded-xl refined-border hover:shadow-subtle transition-shadow">
+                <div class="flex justify-between items-start mb-2">
+                    <p class="text-text-secondary text-xs font-bold uppercase tracking-wider">Confidence Level</p>
+                    <span
+                        class="material-symbols-outlined text-text-secondary text-[20px] opacity-50 group-hover:text-primary group-hover:opacity-100 transition-all">verified</span>
+                </div>
+                <p class="text-2xl font-bold text-text-main tracking-tight">98.4%</p>
+                <div class="w-full bg-gray-100 rounded-full h-1.5 mt-3 overflow-hidden">
+                    <div class="bg-primary h-1.5 rounded-full" style="width: 98.4%"></div>
+                </div>
+                <p class="text-xs text-text-secondary mt-2">Statistically significant result.</p>
+            </div>
+        </div>
+        <!-- Main Chart Section -->
+        <div class="bg-surface rounded-xl refined-border p-6 md:p-8 shadow-sm">
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+                <div>
+                    <h3 class="text-lg font-bold text-text-main">Conversion Performance</h3>
+                    <p class="text-sm text-text-secondary mt-1">Daily conversion rate comparison between Control and
+                        Variant B.</p>
+                </div>
+                <div class="flex items-center gap-2 bg-background-light p-1 rounded-lg">
+                    <button
+                        class="px-3 py-1 text-xs font-bold text-primary bg-white shadow-sm rounded-md transition-all">Rate
+                        %</button>
+                    <button
+                        class="px-3 py-1 text-xs font-medium text-text-secondary hover:text-text-main transition-all">Total</button>
+                </div>
+            </div>
+            <div class="relative w-full h-[300px] w-full">
+                <!-- Decorative SVG Chart -->
+                <svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 1000 300">
+                    <!-- Grid Lines -->
+                    <line stroke="#f1f5f9" stroke-width="1" x1="0" x2="1000" y1="250" y2="250"></line>
+                    <line stroke="#f1f5f9" stroke-width="1" x1="0" x2="1000" y1="190" y2="190"></line>
+                    <line stroke="#f1f5f9" stroke-width="1" x1="0" x2="1000" y1="130" y2="130"></line>
+                    <line stroke="#f1f5f9" stroke-width="1" x1="0" x2="1000" y1="70" y2="70"></line>
+                    <!-- Control Line (Grey/Dotted) -->
+                    <path
+                        d="M0,220 C100,215 200,230 300,210 C400,190 500,200 600,180 C700,170 800,175 900,165 L1000,160"
+                        fill="none" stroke="#cbd5e1" stroke-dasharray="6,4" stroke-width="2"></path>
+                    <!-- Variant B Line (Primary Color/Solid) -->
+                    <defs>
+                        <lineargradient id="gradientPrimary" x1="0" x2="0" y1="0" y2="1">
+                            <stop offset="0%" stop-color="#1754cf" stop-opacity="0.1"></stop>
+                            <stop offset="100%" stop-color="#1754cf" stop-opacity="0"></stop>
+                        </lineargradient>
+                    </defs>
+                    <path
+                        d="M0,220 C100,210 200,200 300,160 C400,120 500,140 600,100 C700,80 800,90 900,60 L1000,50 L1000,300 L0,300 Z"
+                        fill="url(#gradientPrimary)"></path>
+                    <path d="M0,220 C100,210 200,200 300,160 C400,120 500,140 600,100 C700,80 800,90 900,60 L1000,50"
+                        fill="none" stroke="#1754cf" stroke-linecap="round" stroke-width="3"></path>
+                    <!-- Tooltip Point -->
+                    <circle class="hover:scale-125 transition-transform cursor-pointer shadow-lg" cx="600" cy="100"
+                        fill="#ffffff" r="6" stroke="#1754cf" stroke-width="3"></circle>
+                </svg>
+                <!-- Tooltip Overlay (Mock) -->
+                <div
+                    class="absolute top-[80px] left-[55%] transform -translate-x-1/2 bg-text-main text-white text-xs py-1.5 px-3 rounded shadow-lg pointer-events-none">
+                    Variant B: 4.8%
+                </div>
+            </div>
+            <div class="flex justify-between mt-4 text-xs font-medium text-text-secondary px-2">
+                <span>Oct 12</span>
+                <span>Oct 14</span>
+                <span>Oct 16</span>
+                <span>Oct 18</span>
+                <span>Oct 20</span>
+                <span>Oct 22</span>
+                <span>Today</span>
+            </div>
+            <div class="flex items-center justify-center gap-8 mt-6">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-gray-300"></span>
+                    <span class="text-sm text-text-secondary font-medium">Control (Original)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-primary"></span>
+                    <span class="text-sm text-text-main font-bold">Variant B (Simplified Form)</span>
+                </div>
+            </div>
+        </div>
+        <!-- Layout for Variants and Insights -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Variants Table Section -->
+            <div class="lg:col-span-2 bg-surface rounded-xl refined-border overflow-hidden">
+                <div class="px-6 py-5 border-b border-border-subtle flex justify-between items-center bg-gray-50/50">
+                    <h3 class="text-lg font-bold text-text-main">Performance Breakdown</h3>
+                    <button class="text-primary text-sm font-semibold hover:underline">Export Data</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr
+                                class="text-xs font-bold text-text-secondary uppercase tracking-wider border-b border-border-subtle">
+                                <th class="px-6 py-4">Variant</th>
+                                <th class="px-6 py-4">Traffic</th>
+                                <th class="px-6 py-4 text-right">Conversions</th>
+                                <th class="px-6 py-4 text-right">Rate</th>
+                                <th class="px-6 py-4 text-right">Improv.</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm text-text-main divide-y divide-border-subtle">
+                            <!-- Control Row -->
+                            <tr class="group hover:bg-background-light transition-colors">
+                                <td class="px-6 py-5">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="w-8 h-8 rounded bg-gray-100 border border-gray-200 flex items-center justify-center font-bold text-gray-500 text-xs">
+                                            A</div>
+                                        <div>
+                                            <p class="font-semibold">Original</p>
+                                            <p class="text-xs text-text-secondary mt-0.5">Control</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-5">
+                                    <p>12,446</p>
+                                    <p class="text-xs text-text-secondary">50%</p>
+                                </td>
+                                <td class="px-6 py-5 text-right font-medium">476</td>
+                                <td class="px-6 py-5 text-right font-medium text-text-secondary">3.82%</td>
+                                <td class="px-6 py-5 text-right text-gray-400">—</td>
+                            </tr>
+                            <!-- Variant B Row (Winner) -->
+                            <tr class="bg-primary/5 hover:bg-primary/10 transition-colors">
+                                <td class="px-6 py-5">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="w-8 h-8 rounded bg-primary text-white flex items-center justify-center font-bold text-xs shadow-sm">
+                                            B</div>
+                                        <div>
+                                            <p class="font-bold text-primary">Simplified Form</p>
+                                            <div class="flex items-center gap-1 mt-0.5">
+                                                <span
+                                                    class="material-symbols-outlined text-[14px] text-accent-green">emoji_events</span>
+                                                <p class="text-xs text-accent-green font-bold uppercase tracking-wide">
+                                                    Winning</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-5">
+                                    <p>12,446</p>
+                                    <p class="text-xs text-text-secondary">50%</p>
+                                </td>
+                                <td class="px-6 py-5 text-right font-bold text-text-main">572</td>
+                                <td class="px-6 py-5 text-right font-bold text-text-main">4.60%</td>
+                                <td class="px-6 py-5 text-right">
+                                    <span
+                                        class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-green-100 text-green-700">
+                                        +20.4%
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- AI Insights Panel -->
+            <div
+                class="bg-gradient-to-br from-surface to-background-light rounded-xl refined-border p-6 flex flex-col gap-6 h-full border border-border-subtle relative overflow-hidden group">
+                <!-- Subtle Gradient Accent -->
+                <div
+                    class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none">
+                </div>
+                <div class="relative z-10">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="p-1.5 bg-gradient-to-br from-indigo-500 to-primary rounded-lg shadow-md text-white">
+                            <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-text-main">AI Analysis</h3>
+                    </div>
+                    <p class="text-sm text-text-main leading-relaxed mb-4">
+                        <strong class="text-primary">Variant B is outperforming</strong> the control with a
+                        <strong>98.4% probability</strong>. The removal of the "Company Name" field reduced friction
+                        significantly for mobile users.
+                    </p>
+                    <div class="space-y-3">
+                        <div
+                            class="flex gap-3 items-start p-3 bg-white rounded-lg border border-border-subtle shadow-sm">
+                            <span
+                                class="material-symbols-outlined text-green-600 text-[18px] mt-0.5">check_circle</span>
+                            <div>
+                                <p class="text-xs font-bold text-text-main uppercase mb-0.5">Recommendation</p>
+                                <p class="text-sm text-text-secondary">Deploy Variant B to 100% of traffic immediately.
+                                </p>
+                            </div>
+                        </div>
+                        <div
+                            class="flex gap-3 items-start p-3 bg-white rounded-lg border border-border-subtle shadow-sm">
+                            <span class="material-symbols-outlined text-amber-500 text-[18px] mt-0.5">lightbulb</span>
+                            <div>
+                                <p class="text-xs font-bold text-text-main uppercase mb-0.5">Next Steps</p>
+                                <p class="text-sm text-text-secondary">Test button color next to further optimize CTA
+                                    visibility.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-auto relative z-10">
+                    <button
+                        class="w-full py-2.5 text-sm font-semibold text-primary bg-primary/5 hover:bg-primary/10 rounded-lg transition-colors border border-primary/10">
+                        Generate Full Report
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Configuration Footer Details -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 pt-6 border-t border-border-subtle text-sm">
+            <div>
+                <p class="text-xs text-text-secondary font-bold uppercase mb-1">Target URL</p>
+                <p class="font-medium text-text-main truncate">/checkout/payment</p>
+            </div>
+            <div>
+                <p class="text-xs text-text-secondary font-bold uppercase mb-1">Device Category</p>
+                <div class="flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-[16px] text-text-secondary">smartphone</span>
+                    <p class="font-medium text-text-main">Mobile Only</p>
+                </div>
+            </div>
+            <div>
+                <p class="text-xs text-text-secondary font-bold uppercase mb-1">Goal Metric</p>
+                <p class="font-medium text-text-main">Purchase Completion</p>
+            </div>
+            <div>
+                <p class="text-xs text-text-secondary font-bold uppercase mb-1">Traffic Allocation</p>
+                <p class="font-medium text-text-main">50% / 50%</p>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

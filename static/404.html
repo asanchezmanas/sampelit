@@ -1,66 +1,136 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page Not Found | Samplit</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>404 - Page Not Found | Sampelit</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
   <script>
     tailwind.config = {
-      darkMode: 'class',
+      darkMode: "class",
       theme: {
-        fontFamily: {
-          sans: ['Inter', 'sans-serif'],
-        },
         extend: {
           colors: {
-            brand: {
-              50: '#ecf3ff',
-              100: '#dde9ff',
-              200: '#c2d6ff',
-              300: '#9cb9ff',
-              400: '#7592ff',
-              500: '#465fff',
-              600: '#3641f5',
-              700: '#2a31d8',
-              800: '#252dae',
-              900: '#262e89',
-              950: '#161950',
-            }
-          }
-        }
-      }
+            "primary": "#3b82f6",
+            "primary-dark": "#2563eb",
+            "background-light": "#f8f9fa",
+            "background-dark": "#0f1115",
+            "surface-dark": "#181b21",
+            "text-main": "#f3f4f6",
+            "text-muted": "#9ca3af",
+            "border-subtle": "#272a30",
+          },
+          fontFamily: {
+            "display": ["Manrope", "sans-serif"]
+          },
+        },
+      },
     }
   </script>
-  <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700&display=swap" rel="stylesheet">
+  <script>
+    // Theme detection
+    if (localStorage.theme === 'dark' || (!localStorage.theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
   <style>
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Manrope', sans-serif;
     }
   </style>
 </head>
 
-<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col justify-center items-center">
-
-  <div class="text-center max-w-md px-6">
-    <div class="text-9xl font-bold text-gray-200 mb-2">404</div>
-    <h1 class="text-3xl font-bold text-gray-900 mb-4">Page Not Found</h1>
-    <p class="text-gray-600 mb-8">
-      The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
-    </p>
-
-    <div class="flex flex-col sm:flex-row justify-center gap-4">
-      <a href="/"
-        class="px-6 py-3 bg-brand-600 text-white rounded-lg font-medium hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/30">
-        Back to Dashboard
+<body
+  class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-text-main antialiased selection:bg-primary/30">
+  <div class="relative flex min-h-screen w-full flex-col overflow-hidden">
+    <!-- Header -->
+    <header class="flex items-center justify-between px-6 py-6 md:px-12 lg:px-20">
+      <a href="index.html" class="flex items-center gap-3 group">
+        <div
+          class="flex items-center justify-center size-10 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
+          <span class="material-symbols-outlined text-2xl">auto_fix_high</span>
+        </div>
+        <h2 class="text-gray-900 dark:text-white text-xl font-bold tracking-tight">Sampelit<span
+            class="text-primary">.</span></h2>
       </a>
-    </div>
-  </div>
+      <nav class="hidden md:flex gap-6">
+        <a class="text-sm font-medium text-gray-600 dark:text-text-muted hover:text-primary transition-colors"
+          href="help-center/index.html">Help Center</a>
+        <a class="text-sm font-medium text-gray-600 dark:text-text-muted hover:text-primary transition-colors"
+          href="contact.html">Contact</a>
+      </nav>
+    </header>
 
-  <footer class="absolute bottom-6 text-sm text-gray-500">
-    &copy; 2025 Samplit. All rights reserved.
-  </footer>
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col items-center justify-center px-6 py-12 md:px-12 lg:px-20 relative z-10">
+      <div class="flex w-full max-w-[600px] flex-col items-center text-center">
+        <!-- Large 404 -->
+        <h1
+          class="text-[120px] md:text-[180px] font-light tracking-tighter text-gray-200 dark:text-gray-800 leading-none select-none">
+          404
+        </h1>
+
+        <!-- Message -->
+        <div class="flex flex-col items-center gap-4 -mt-8">
+          <h2 class="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white tracking-tight">
+            Page not found
+          </h2>
+          <p class="text-gray-600 dark:text-text-muted text-lg leading-relaxed max-w-md">
+            The page you're looking for doesn't exist or has been moved. Let's get you back on track.
+          </p>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row gap-4 mt-10">
+          <a href="index.html"
+            class="flex items-center justify-center gap-2 h-12 px-8 rounded-lg bg-primary hover:bg-primary-dark text-white font-semibold transition-all shadow-lg shadow-primary/20 active:scale-95">
+            <span class="material-symbols-outlined text-[20px]">home</span>
+            <span>Go Home</span>
+          </a>
+          <a href="javascript:history.back()"
+            class="flex items-center justify-center gap-2 h-12 px-8 rounded-lg border border-gray-300 dark:border-border-subtle hover:bg-gray-100 dark:hover:bg-surface-dark text-gray-900 dark:text-white font-semibold transition-all active:scale-95">
+            <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+            <span>Go Back</span>
+          </a>
+        </div>
+
+        <!-- Helpful Links -->
+        <div
+          class="mt-12 pt-8 border-t border-gray-200 dark:border-border-subtle flex flex-wrap gap-6 justify-center text-sm text-gray-600 dark:text-text-muted">
+          <a class="hover:text-primary transition-colors flex items-center gap-1" href="dashboard.html">
+            <span class="material-symbols-outlined text-[18px]">dashboard</span>
+            Dashboard
+          </a>
+          <a class="hover:text-primary transition-colors flex items-center gap-1" href="help-center/index.html">
+            <span class="material-symbols-outlined text-[18px]">help</span>
+            Help Center
+          </a>
+          <a class="hover:text-primary transition-colors flex items-center gap-1" href="contact.html">
+            <span class="material-symbols-outlined text-[18px]">mail</span>
+            Contact Support
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="flex flex-col gap-6 px-6 py-8 text-center border-t border-gray-200 dark:border-border-subtle">
+      <div class="flex flex-wrap items-center justify-center gap-8 md:gap-12">
+        <a class="text-gray-600 dark:text-text-muted hover:text-primary text-sm font-medium transition-colors"
+          href="help-center/index.html">Help Center</a>
+        <a class="text-gray-600 dark:text-text-muted hover:text-primary text-sm font-medium transition-colors"
+          href="#">Status Page</a>
+        <a class="text-gray-600 dark:text-text-muted hover:text-primary text-sm font-medium transition-colors"
+          href="#">Privacy Policy</a>
+      </div>
+      <p class="text-gray-400 dark:text-gray-600 text-xs font-medium">© 2025 Sampelit. All rights reserved.</p>
+    </footer>
+  </div>
 </body>
 
 </html>

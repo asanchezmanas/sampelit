@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Setting Up Your First A/B Test | Sampelit Help Center</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f172a",
+                        "accent": "#1e3a8a",
+                        "primary-light": "#3b82f6",
+                        "background": "#ffffff",
+                        "surface": "#f8fafc",
+                        "surface-alt": "#f1f5f9",
+                        text: {
+                            main: "#1e293b",
+                            muted: "#64748b",
+                        },
+                        border: {
+                            light: "#e2e8f0",
+                        }
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "mono": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "monospace"]
+                    },
+                    maxWidth: {
+                        "content": "720px"
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Syntax highlighting */
+        .code-keyword {
+            color: #cf222e;
+        }
+
+        .code-string {
+            color: #0a3069;
+        }
+
+        .code-function {
+            color: #8250df;
+        }
+
+        .code-comment {
+            color: #6e7781;
+        }
+    </style>
+</head>
+
+<body class="bg-background font-body text-text-main antialiased min-h-screen flex flex-col">
+    <!-- Include Header -->
+    <include src="../partials/header_landing.html"></include>
+
+    <!-- Main Page Layout -->
+    <div class="flex-1 max-w-7xl mx-auto w-full px-6 py-12 flex gap-12 relative pt-28">
+        <!-- Left Sidebar / Navigation (Desktop) -->
+        <aside class="hidden lg:block w-56 shrink-0 sticky top-28 self-start h-[calc(100vh-8rem)] overflow-y-auto pr-4">
+            <h3 class="text-xs font-bold text-text-muted uppercase tracking-wider mb-4">Getting Started</h3>
+            <ul class="space-y-1 mb-8">
+                <li><a class="block px-3 py-2 text-sm font-medium text-text-muted hover:text-primary hover:bg-surface rounded-md transition-colors"
+                        href="#">Introduction</a></li>
+                <li><a class="block px-3 py-2 text-sm font-medium text-text-muted hover:text-primary hover:bg-surface rounded-md transition-colors"
+                        href="#">Quick Start Guide</a></li>
+                <li><a class="block px-3 py-2 text-sm font-medium text-accent bg-accent/5 rounded-md"
+                        href="#">Implementation</a></li>
+                <li><a class="block px-3 py-2 text-sm font-medium text-text-muted hover:text-primary hover:bg-surface rounded-md transition-colors"
+                        href="#">Best Practices</a></li>
+            </ul>
+            <h3 class="text-xs font-bold text-text-muted uppercase tracking-wider mb-4">Core Concepts</h3>
+            <ul class="space-y-1">
+                <li><a class="block px-3 py-2 text-sm font-medium text-text-muted hover:text-primary hover:bg-surface rounded-md transition-colors"
+                        href="#">Statistical Significance</a></li>
+                <li><a class="block px-3 py-2 text-sm font-medium text-text-muted hover:text-primary hover:bg-surface rounded-md transition-colors"
+                        href="#">AI Models</a></li>
+                <li><a class="block px-3 py-2 text-sm font-medium text-text-muted hover:text-primary hover:bg-surface rounded-md transition-colors"
+                        href="#">Conversion Events</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content Column -->
+        <main class="flex-1 min-w-0">
+            <!-- Breadcrumbs -->
+            <div class="flex items-center gap-2 text-sm text-text-muted mb-8">
+                <a class="hover:text-accent transition-colors" href="index.html">Help Center</a>
+                <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+                <a class="hover:text-accent transition-colors" href="#">Getting Started</a>
+                <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+                <span class="text-text-main font-medium">Implementation</span>
+            </div>
+
+            <!-- Page Header -->
+            <div class="mb-10">
+                <h1 class="text-4xl md:text-5xl font-display font-bold text-primary tracking-tight leading-[1.15] mb-6">
+                    Setting Up Your First A/B Test with AI
+                </h1>
+                <div
+                    class="flex flex-wrap items-center gap-6 text-sm text-text-muted border-b border-border-light pb-8">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">schedule</span>
+                        <span>Last updated 2 days ago</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">timer</span>
+                        <span>5 min read</span>
+                    </div>
+                    <div class="flex items-center gap-2 px-2 py-1 bg-surface rounded text-xs font-medium">
+                        <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                        v2.4.0 Compatible
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Body -->
+            <div
+                class="prose prose-slate max-w-none text-text-main prose-headings:font-semibold prose-headings:text-primary prose-a:text-accent prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl">
+                <p class="text-lg leading-relaxed text-text-muted mb-10">
+                    Learn how to launch your first automated experiment in minutes using our AI-driven engine. This
+                    guide covers installation, goal setting, and parameter configuration to ensure your data is
+                    statistically significant from day one.
+                </p>
+
+                <h2 class="scroll-mt-24 text-2xl font-bold mb-4" id="installation">1. Installation</h2>
+                <p class="mb-6 leading-relaxed">
+                    The first step is to include the tracking snippet in the <code
+                        class="bg-surface px-1.5 py-0.5 rounded text-sm text-accent font-mono border border-border-light">&lt;head&gt;</code>
+                    of your application. This lightweight script (12kb) initializes the AI engine without blocking the
+                    main thread.
+                </p>
+
+                <!-- Code Block -->
+                <div class="bg-surface rounded-xl border border-border-light overflow-hidden mb-10">
+                    <div class="flex items-center justify-between px-4 py-2 border-b border-border-light bg-white">
+                        <span class="text-xs font-mono text-text-muted">index.html</span>
+                        <button
+                            class="text-xs font-medium text-accent hover:text-primary transition-colors flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[14px]">content_copy</span> Copy
+                        </button>
+                    </div>
+                    <div class="p-6 overflow-x-auto">
+                        <pre class="font-mono text-sm leading-6"><code><span class="code-comment">&lt;!-- Sampelit SDK --&gt;</span>
+<span class="code-keyword">&lt;script</span> <span class="code-function">src</span>=<span class="code-string">"https://cdn.sampelit.com/sdk/v2/loader.js"</span> <span class="code-function">data-api-key</span>=<span class="code-string">"YOUR_PUBLIC_KEY"</span> <span class="code-keyword">async</span>&gt;&lt;/script&gt;
+<span class="code-keyword">&lt;script&gt;</span>
+  <span class="code-function">window</span>.sampelit = <span class="code-function">window</span>.sampelit || [];
+  <span class="code-function">sampelit</span>.<span class="code-function">init</span>({
+    mode: <span class="code-string">'auto'</span>,
+    trafficAllocation: <span class="code-string">0.5</span> <span class="code-comment">// 50% traffic</span>
+  });
+<span class="code-keyword">&lt;/script&gt;</span></code></pre>
+                    </div>
+                </div>
+
+                <!-- Callout -->
+                <div class="flex gap-4 p-5 bg-blue-50/50 border-l-4 border-accent rounded-r-lg mb-10">
+                    <span class="material-symbols-outlined text-accent shrink-0">info</span>
+                    <div>
+                        <h4 class="font-bold text-primary text-sm mb-1">Important Note</h4>
+                        <p class="text-sm text-text-muted leading-relaxed">Ensure you replace <code
+                                class="font-mono text-xs">YOUR_PUBLIC_KEY</code> with the key found in your project
+                            settings dashboard. Do not use your secret key on the client side.</p>
+                    </div>
+                </div>
+
+                <h2 class="scroll-mt-24 text-2xl font-bold mb-4" id="conversion-goals">2. Conversion Goals</h2>
+                <p class="mb-6 leading-relaxed">
+                    Once the script is active, you need to define what success looks like. You can track button clicks,
+                    page views, or custom events. The visual editor allows you to tag elements without writing code.
+                </p>
+
+                <!-- Image -->
+                <figure class="mb-10">
+                    <div class="rounded-xl overflow-hidden border border-border-light shadow-sm bg-surface">
+                        <div
+                            class="aspect-video bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-6xl text-text-muted/30">image</span>
+                        </div>
+                    </div>
+                    <figcaption class="mt-3 text-center text-sm text-text-muted">
+                        Figure 1: Setting up a 'Sign Up' conversion goal in the visual editor.
+                    </figcaption>
+                </figure>
+
+                <h2 class="scroll-mt-24 text-2xl font-bold mb-4" id="ai-parameters">3. AI Parameters</h2>
+                <p class="mb-4 leading-relaxed">
+                    Configure how aggressive the AI should be when declaring a winner. Lower confidence thresholds yield
+                    faster results but higher risk of false positives.
+                </p>
+
+                <ul class="list-none pl-0 space-y-3 mb-12">
+                    <li class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-accent text-[20px] mt-0.5">check_circle</span>
+                        <div>
+                            <strong class="text-primary">Conservative (99% confidence):</strong>
+                            <span class="text-text-muted">Best for critical checkout flows where revenue is at
+                                risk.</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-accent text-[20px] mt-0.5">check_circle</span>
+                        <div>
+                            <strong class="text-primary">Balanced (95% confidence):</strong>
+                            <span class="text-text-muted">Recommended for most UI/UX experiments.</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-accent text-[20px] mt-0.5">check_circle</span>
+                        <div>
+                            <strong class="text-primary">Aggressive (90% confidence):</strong>
+                            <span class="text-text-muted">Useful for low-traffic pages or rapid iteration cycles.</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Feedback Section -->
+            <div class="border-t border-border-light pt-10 mt-12 mb-16">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-6 bg-surface p-6 rounded-xl">
+                    <div>
+                        <h3 class="text-primary font-bold mb-1">Was this article helpful?</h3>
+                        <p class="text-sm text-text-muted">Your feedback helps us improve our documentation.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button
+                            class="flex items-center gap-2 px-4 py-2 bg-white border border-border-light rounded-lg text-sm font-medium text-text-muted hover:text-accent hover:border-accent/30 transition-all shadow-sm">
+                            <span class="material-symbols-outlined text-[18px]">thumb_up</span> Yes
+                        </button>
+                        <button
+                            class="flex items-center gap-2 px-4 py-2 bg-white border border-border-light rounded-lg text-sm font-medium text-text-muted hover:text-red-600 hover:border-red-200 transition-all shadow-sm">
+                            <span class="material-symbols-outlined text-[18px]">thumb_down</span> No
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Articles -->
+            <div>
+                <h3 class="text-xl font-display font-bold text-primary mb-6">Related Articles</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <a class="group block p-6 bg-white border border-border-light rounded-xl hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5 transition-all"
+                        href="#">
+                        <div class="flex items-center gap-2 text-accent mb-3">
+                            <span class="material-symbols-outlined text-[20px]">api</span>
+                            <span class="text-xs font-bold uppercase tracking-wider">API Reference</span>
+                        </div>
+                        <h4 class="font-bold text-primary text-lg mb-2 group-hover:text-accent transition-colors">
+                            Server-side Implementation</h4>
+                        <p class="text-sm text-text-muted line-clamp-2">Learn how to implement A/B testing on the server
+                            side using Node.js or Python SDKs.</p>
+                    </a>
+                    <a class="group block p-6 bg-white border border-border-light rounded-xl hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5 transition-all"
+                        href="#">
+                        <div class="flex items-center gap-2 text-accent mb-3">
+                            <span class="material-symbols-outlined text-[20px]">analytics</span>
+                            <span class="text-xs font-bold uppercase tracking-wider">Analytics</span>
+                        </div>
+                        <h4 class="font-bold text-primary text-lg mb-2 group-hover:text-accent transition-colors">
+                            Understanding Bayesian Stats</h4>
+                        <p class="text-sm text-text-muted line-clamp-2">A deep dive into the mathematical models used by
+                            our engine to determine winning variations.</p>
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar / Table of Contents (Desktop) -->
+        <aside class="hidden xl:block w-56 shrink-0">
+            <div class="sticky top-28">
+                <h4 class="text-xs font-bold text-text-muted uppercase tracking-wider mb-4 pl-3">On this page</h4>
+                <nav class="relative">
+                    <!-- Active Indicator Line -->
+                    <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-border-light rounded-full"></div>
+                    <div class="absolute left-0 top-0 h-8 w-[2px] bg-accent rounded-full transition-all duration-300">
+                    </div>
+                    <ul class="space-y-1">
+                        <li>
+                            <a class="block pl-4 py-1.5 text-sm font-medium text-primary border-l-2 border-transparent hover:text-accent transition-colors"
+                                href="#installation">
+                                1. Installation
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block pl-4 py-1.5 text-sm font-medium text-text-muted border-l-2 border-transparent hover:text-primary transition-colors"
+                                href="#conversion-goals">
+                                2. Conversion Goals
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block pl-4 py-1.5 text-sm font-medium text-text-muted border-l-2 border-transparent hover:text-primary transition-colors"
+                                href="#ai-parameters">
+                                3. AI Parameters
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- Support Card -->
+                <div class="mt-12 p-5 bg-primary rounded-xl text-white">
+                    <div class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center mb-4">
+                        <span class="material-symbols-outlined">support_agent</span>
+                    </div>
+                    <h5 class="font-bold mb-2">Need help?</h5>
+                    <p class="text-sm text-white/70 mb-4 leading-relaxed">Our support team is available 24/7 to help you
+                        with your setup.</p>
+                    <a class="block w-full py-2 bg-white text-primary text-center text-sm font-bold rounded-lg hover:bg-white/90 transition-colors"
+                        href="../contact.html">
+                        Contact Support
+                    </a>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Include Footer -->
+    <include src="../partials/footer_landing.html"></include>
+
+    <!-- Scripts -->
+    <script src="../js/include.js"></script>
+</body>
+
+</html>

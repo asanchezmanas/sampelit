@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>OptiTest AI - Intelligent A/B Testing</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1754cf",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                        "text-main": "#0e121b",
+                        "text-muted": "#4e6797",
+                        "surface": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "body": ["Manrope", "sans-serif"],
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Manrope', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body class="bg-surface text-text-main">
+    <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+        <!-- Navbar -->
+        <header class="sticky top-0 z-50 w-full border-b border-gray-100 bg-surface/90 backdrop-blur-md">
+            <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center gap-3">
+                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                        <span class="material-symbols-outlined text-[24px]">science</span>
+                    </div>
+                    <span class="text-lg font-bold tracking-tight text-text-main">OptiTest AI</span>
+                </div>
+                <nav class="hidden md:flex items-center gap-8">
+                    <a class="text-sm font-medium text-text-main hover:text-primary transition-colors"
+                        href="#">Features</a>
+                    <a class="text-sm font-medium text-text-main hover:text-primary transition-colors"
+                        href="#">Methodology</a>
+                    <a class="text-sm font-medium text-text-main hover:text-primary transition-colors"
+                        href="#">Pricing</a>
+                    <a class="text-sm font-medium text-text-main hover:text-primary transition-colors"
+                        href="#">Enterprise</a>
+                </nav>
+                <div class="flex items-center gap-4">
+                    <a class="hidden text-sm font-semibold text-text-main hover:text-primary sm:block" href="#">Log
+                        in</a>
+                    <button
+                        class="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-5 text-sm font-bold text-white transition-all hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                        Start Trial
+                    </button>
+                </div>
+            </div>
+        </header>
+        <main class="flex-grow">
+            <!-- Hero Section -->
+            <section class="relative overflow-hidden pt-16 pb-20 lg:pt-24 lg:pb-32">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div class="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+                        <div class="max-w-2xl">
+                            <h1
+                                class="text-4xl font-extrabold tracking-tight text-text-main sm:text-5xl md:text-6xl lg:leading-[1.1]">
+                                Scientific A/B Testing.<br />
+                                <span class="text-primary">Powered by AI.</span>
+                            </h1>
+                            <p class="mt-6 text-lg leading-8 text-text-muted">
+                                Automate your optimization workflow. Let algorithms find the winning variation while you
+                                focus on high-level strategy.
+                            </p>
+                            <div class="mt-10 flex flex-col sm:flex-row gap-4 max-w-lg">
+                                <label class="relative flex-grow">
+                                    <div
+                                        class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-text-muted">
+                                        <span class="material-symbols-outlined text-[20px]">mail</span>
+                                    </div>
+                                    <input
+                                        class="block w-full rounded-lg border-0 bg-background-light py-3.5 pl-10 text-text-main shadow-sm ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                                        placeholder="work@email.com" type="email" />
+                                </label>
+                                <button
+                                    class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3.5 text-sm font-bold text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary w-full sm:w-auto">
+                                    Start Free Trial
+                                </button>
+                            </div>
+                            <p class="mt-4 text-xs text-text-muted">No credit card required. 14-day free trial.</p>
+                        </div>
+                        <div class="relative lg:ml-auto w-full max-w-lg lg:max-w-none">
+                            <div class="relative w-full rounded-xl bg-surface shadow-2xl ring-1 ring-gray-900/10 overflow-hidden aspect-[4/3]"
+                                data-alt="Clean minimalist interface of an A/B testing dashboard showing graphs and conversion metrics">
+                                <!-- Abstract UI representation -->
+                                <div class="absolute inset-0 bg-gradient-to-br from-blue-50 to-white p-6 flex flex-col">
+                                    <div
+                                        class="h-8 w-full border-b border-gray-100 flex items-center justify-between mb-6">
+                                        <div class="h-3 w-24 bg-gray-200 rounded-full"></div>
+                                        <div class="flex gap-2">
+                                            <div class="h-3 w-3 bg-gray-200 rounded-full"></div>
+                                            <div class="h-3 w-3 bg-gray-200 rounded-full"></div>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 flex gap-6">
+                                        <div class="w-2/3 flex flex-col gap-4">
+                                            <div
+                                                class="h-32 rounded-lg bg-white border border-blue-100 shadow-sm p-4 relative overflow-hidden">
+                                                <div
+                                                    class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-blue-500/10 to-transparent">
+                                                </div>
+                                                <div
+                                                    class="w-full h-full flex items-end justify-between px-2 pb-2 gap-1">
+                                                    <div class="w-full bg-primary/20 rounded-t-sm h-[40%]"></div>
+                                                    <div class="w-full bg-primary/40 rounded-t-sm h-[60%]"></div>
+                                                    <div class="w-full bg-primary/60 rounded-t-sm h-[30%]"></div>
+                                                    <div class="w-full bg-primary rounded-t-sm h-[85%]"></div>
+                                                    <div class="w-full bg-primary/30 rounded-t-sm h-[50%]"></div>
+                                                </div>
+                                            </div>
+                                            <div class="flex gap-4">
+                                                <div
+                                                    class="h-20 w-1/2 rounded-lg bg-white border border-gray-100 shadow-sm">
+                                                </div>
+                                                <div
+                                                    class="h-20 w-1/2 rounded-lg bg-white border border-gray-100 shadow-sm">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="w-1/3 flex flex-col gap-3">
+                                            <div class="h-8 w-full bg-blue-600 rounded-md opacity-10"></div>
+                                            <div class="h-4 w-3/4 bg-gray-100 rounded-full"></div>
+                                            <div class="h-4 w-1/2 bg-gray-100 rounded-full"></div>
+                                            <div
+                                                class="mt-auto h-24 w-full rounded-lg bg-gray-50 border border-gray-100">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Logo Strip -->
+            <section class="border-y border-gray-100 bg-background-light/50 py-12">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <p class="text-center text-sm font-semibold text-text-muted mb-8 uppercase tracking-widest">Trusted
+                        by leading product teams</p>
+                    <div
+                        class="flex flex-wrap justify-center items-center gap-12 md:gap-20 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+                        <!-- Logo Placeholders -->
+                        <div class="h-8 flex items-center font-bold text-xl text-text-main"><span
+                                class="material-symbols-outlined mr-2">token</span> Acme Corp</div>
+                        <div class="h-8 flex items-center font-bold text-xl text-text-main"><span
+                                class="material-symbols-outlined mr-2">diamond</span> GemStone</div>
+                        <div class="h-8 flex items-center font-bold text-xl text-text-main"><span
+                                class="material-symbols-outlined mr-2">rocket_launch</span> StarShip</div>
+                        <div class="h-8 flex items-center font-bold text-xl text-text-main"><span
+                                class="material-symbols-outlined mr-2">stadia_controller</span> PlaySoft</div>
+                        <div class="h-8 flex items-center font-bold text-xl text-text-main"><span
+                                class="material-symbols-outlined mr-2">savings</span> FinBank</div>
+                    </div>
+                </div>
+            </section>
+            <!-- Feature Section -->
+            <section class="py-24 bg-surface" id="features">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col md:flex-row gap-16">
+                        <div class="md:w-1/3 flex flex-col gap-6">
+                            <h2 class="text-3xl font-bold tracking-tight text-text-main sm:text-4xl">
+                                Engineered for precision
+                            </h2>
+                            <p class="text-lg text-text-muted">
+                                Our platform handles the statistical heavy lifting so you can iterate faster without
+                                breaking your site.
+                            </p>
+                            <a class="inline-flex items-center text-primary font-bold hover:text-blue-700 mt-2"
+                                href="#">
+                                Explore all features
+                                <span class="material-symbols-outlined ml-1 text-sm">arrow_forward</span>
+                            </a>
+                        </div>
+                        <div class="md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div
+                                class="group relative rounded-2xl border border-gray-100 bg-background-light p-8 transition-all hover:bg-white hover:shadow-lg hover:border-transparent hover:-translate-y-1">
+                                <div
+                                    class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-white text-primary shadow-sm border border-gray-100 group-hover:bg-primary group-hover:text-white transition-colors">
+                                    <span class="material-symbols-outlined">bolt</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-text-main">Zero Latency</h3>
+                                <p class="mt-2 text-text-muted">Implementation that doesn't slow down your site speed.
+                                    Edge network delivery ensures &lt; 50ms load times.</p>
+                            </div>
+                            <div
+                                class="group relative rounded-2xl border border-gray-100 bg-background-light p-8 transition-all hover:bg-white hover:shadow-lg hover:border-transparent hover:-translate-y-1">
+                                <div
+                                    class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-white text-primary shadow-sm border border-gray-100 group-hover:bg-primary group-hover:text-white transition-colors">
+                                    <span class="material-symbols-outlined">verified_user</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-text-main">Significance Guardrails</h3>
+                                <p class="mt-2 text-text-muted">Never call a test too early. Our Bayesian engine ensures
+                                    statistical validity before declaring a winner.</p>
+                            </div>
+                            <div
+                                class="group relative rounded-2xl border border-gray-100 bg-background-light p-8 transition-all hover:bg-white hover:shadow-lg hover:border-transparent hover:-translate-y-1">
+                                <div
+                                    class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-white text-primary shadow-sm border border-gray-100 group-hover:bg-primary group-hover:text-white transition-colors">
+                                    <span class="material-symbols-outlined">trending_up</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-text-main">Auto-allocation</h3>
+                                <p class="mt-2 text-text-muted">Traffic is automatically shifted to winning variations
+                                    in real-time, maximizing revenue during the test.</p>
+                            </div>
+                            <div
+                                class="group relative rounded-2xl border border-gray-100 bg-background-light p-8 transition-all hover:bg-white hover:shadow-lg hover:border-transparent hover:-translate-y-1">
+                                <div
+                                    class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-white text-primary shadow-sm border border-gray-100 group-hover:bg-primary group-hover:text-white transition-colors">
+                                    <span class="material-symbols-outlined">hub</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-text-main">Audience Targeting</h3>
+                                <p class="mt-2 text-text-muted">Precise segmentation allows you to test experiences for
+                                    specific user cohorts based on behavior or source.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Image Showcase -->
+            <section class="py-12 bg-background-light/30">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div
+                            class="aspect-video md:aspect-auto md:h-64 w-full rounded-2xl overflow-hidden relative group shadow-sm">
+                            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                                data-alt="Data analysts looking at screens with charts"
+                                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCYbQXtUOVpKNqOJMw70m2bQZmx2aVaNLuy3XBaoDcW3Beywt9HWmb1BKPzQGcTttFIq0oMOUS7UZNKXWgZIPjm7J5ZHru7BtUmfTPa67IEdYnfbZGYzqaODawQ-Lvz3hXExnAajxD2SpC6-QfV2tkZEW87KxiTo0Y22pQHKUNiUQW3hVmtj38bhFUgSWU1c6P6WbtpZaD30P_nlqX4-Vaz2UZIcUy8dXNoXLwNgnjfrrkBT8KE91pXZiKGJm1J914odjLKi1bo');">
+                            </div>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                                <p class="text-white font-semibold">Real-time Analytics</p>
+                            </div>
+                        </div>
+                        <div
+                            class="aspect-video md:aspect-auto md:h-64 w-full rounded-2xl overflow-hidden relative group shadow-sm">
+                            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                                data-alt="Close up of digital marketing strategy graphs on a screen"
+                                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD63RMh2dl8FwM5XbYcD_k1kTHUzYQrM6Iw7aMz6v9ngZ0ilNTsJ4xMQt6v6EebJ-Igshln86nhyx2K_5sKAPWN358sKms7WxEwb5YirumALm9yzDPHZiZVJ52iXeTmYxS9XyyZ6vpnpU3Hb85tTKwkqPYciJ_bc5IvOgH1hhBU4HCChXSdHgiZ8kruobWG7fPUhgdiTEHW0_x5T9w8k8DBJHOrgoxomdAXAvVJLijV1ui_RxPcOTDPs89V5aqM-pgyWm17IYy_');">
+                            </div>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                                <p class="text-white font-semibold">Campaign Management</p>
+                            </div>
+                        </div>
+                        <div
+                            class="aspect-video md:aspect-auto md:h-64 w-full rounded-2xl overflow-hidden relative group shadow-sm">
+                            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                                data-alt="Team collaborating in a modern bright office"
+                                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAF-VrS3ShdB4Tz8VgEEWKsIE2flhdG9JgoWR-yohgoy0TAvYK6h6TlxodiygBM2XXdprIngulq7okuVmv1IzjtmVQuKitF_YiYSgP0M2bqHtoHQ3M4YsJOST6ZBskW1yhDGbr5kWdTTmrIXHIeVod0IGFoVMseZ_1va4ZpOeUsLOLm9HEquKZ-mpU0Zh9ShIfXxh8EMy7OoHQqP7vEy7kVJt3mOPCgSfJBBszS7NJQm1C1oac-aYxYFe5JTj4ggGYsUyF_uBDG');">
+                            </div>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                                <p class="text-white font-semibold">Collaborative Workflows</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Testimonials -->
+            <section class="py-24 overflow-hidden bg-surface">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div class="mb-12 md:text-center max-w-3xl mx-auto">
+                        <h2 class="text-3xl font-bold tracking-tight text-text-main">Loved by growth teams</h2>
+                        <p class="mt-4 text-lg text-text-muted">Join 5,000+ companies optimizing their digital
+                            experience.</p>
+                    </div>
+                    <div class="flex overflow-x-auto gap-6 pb-8 hide-scrollbar snap-x">
+                        <!-- Testimonial 1 -->
+                        <div
+                            class="min-w-[300px] md:min-w-[380px] snap-center rounded-2xl bg-white border border-gray-100 p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col justify-between h-auto">
+                            <div>
+                                <div class="flex gap-1 text-primary mb-4">
+                                    <span class="material-symbols-outlined text-sm fill-current">star</span>
+                                    <span class="material-symbols-outlined text-sm fill-current">star</span>
+                                    <span class="material-symbols-outlined text-sm fill-current">star</span>
+                                    <span class="material-symbols-outlined text-sm fill-current">star</span>
+                                    <span class="material-symbols-outlined text-sm fill-current">star</span>
+                                </div>
+                                <p class="text-text-main text-lg font-medium leading-relaxed">"The cleanest testing
+                                    suite we've used. It feels invisible but the results are obvious. We increased
+                                    conversions by 24% in the first month."</p>
+                            </div>
+                            <div class="mt-8 flex items-center gap-4">
+                                <div class="h-12 w-12 rounded-full bg-gray-200 bg-cover bg-center"
+                                    data-alt="Portrait of a male executive smiling"
+                                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBgVdR__BZ6lN3vUdZ5Dn7DGkwMj8RQFqKlLGUVnbPk-kiIztj44zDN8J5vgJbU3vHCSJROzXLQgYXd2XwJRsoIZRsRMnSneqxdWvMdiDYp8F7uJ6j1cDQS31d762DMUk_3sFSzzStw5o9iwfpMvxkv_a1ZX9y8oU0tPuS_Cb93PTlRfMFlhgUK_Bwrlw1r-AiznLv-R_kCkXQx7vgWgOQERpeQ4tNc13jfARQoc6MgkytMoACm6DyRUxKGoCo2kqcNJNzxDvEa');">
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-text-main">Alex Rivera</p>
+                                    <p class="text-xs text-text-muted">Head of Growth, FinTech Co.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Testimonial 2 -->
+                        <div
+                            class="min-w-[300px] md:min-w-[380px] snap-center rounded-2xl bg-white border border-gray-100 p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col justify-between h-auto">
+                            <div>
+                                <div class="flex gap-1 text-primary mb-4">
+                                    <span class="material-symbols-outlined text-sm fill-current">star</span>
+                                    <span class="material-symbols-outlined text-sm fill-current">star</span>
+                                    <span class="material-symbols-outlined text-sm fill-current">star</span>
+                                    <span class="material-symbols-outlined text-sm fill-current">star</span>
+                                    <span class="material-symbols-outlined text-sm fill-current">star</span>
+                                </div>
+                                <p class="text-text-main text-lg font-medium leading-relaxed">"Finally, a tool that
+                                    respects our design system while optimizing it. The AI suggestions are actually
+                                    usable."</p>
+                            </div>
+                            <div class="mt-8 flex items-center gap-4">
+                                <div class="h-12 w-12 rounded-full bg-gray-200 bg-cover bg-center"
+                                    data-alt="Portrait of a female product manager smiling"
+                                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB6m7GULaRiMbq8kn72nFpVLACGEY5LEasDjMisg5xzjvHlzI85ta_vMKxnTZRA-71Jg3Art86rz-c_dh5986KKLP2whvusAmPpWPX4Gh87nHwuwTyNAqw0zW_QLF8UEgxOLvwl7FD5TOtWOgn7RBi6ltcbft1dBt_IeLZ9TqZ4UzHd5xgFTRpPyZWS6Ktxu40DoBbIPtFkUUTXAcanbjDU1gHXe6jXsjyZadQlrPqucpWqFLPSBmb2cSuN9apPQ90EKkImvNUt');">
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-text-main">Sarah Chen</p>
+                                    <p class="text-xs text-text-muted">Product Manager, SaaS Corp</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Testimonial 3 -->
+                        <div
+                            class="min-w-[300px] md:min-w-[380px] snap-center rounded-2xl bg-white border border-gray-100 p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col justify-between h-auto">
+                            <div>
+                                <div class="flex gap-1 text-primary mb-4">
+                                    <span class="material-symbols-outlined text-sm fill-current">star</span>
+                                    <span class="material-symbols-outlined text-sm fill-current">star</span>
+                                    <span class="material-symbols-outlined text-sm fill-current">star</span>
+                                    <span class="material-symbols-outlined text-sm fill-current">star</span>
+                                    <span class="material-symbols-outlined text-sm fill-current">star</span>
+                                </div>
+                                <p class="text-text-main text-lg font-medium leading-relaxed">"Implementation took
+                                    minutes, not days. The AI insights are genuinely useful for our marketing team."</p>
+                            </div>
+                            <div class="mt-8 flex items-center gap-4">
+                                <div class="h-12 w-12 rounded-full bg-gray-200 bg-cover bg-center"
+                                    data-alt="Portrait of a male CTO in a suit"
+                                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB_RbNzIn5YjqJfgMXhrmXO31SJNjcciQO15pX1TpEOx8SmC94lTE7Y9ydsotiP2VSG_IJjGxNPPcbKb1rzdpk_Fc7VCeFI-TV8WKts52PLSnyrnHTfIH2vCTCZXc1SbvXN4eAw4o-57tMQkiwkxY-WY30UFsXpjKFr2dD960Ob_725cMoY-zyWwuq2WaRNuaovNRMATgEPYPtX1iSTbiyP5kpdAKriSXaaQJULSqnn2hUMs59WdFJP39TWAajcGiaUFFWoAYyo');">
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-text-main">James Wilson</p>
+                                    <p class="text-xs text-text-muted">CTO, E-commerce Giant</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Final CTA -->
+            <section class="relative py-24 bg-background-light">
+                <div class="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+                    <h2 class="text-4xl font-extrabold tracking-tight text-text-main sm:text-5xl">
+                        Ready to stop guessing?
+                    </h2>
+                    <p class="mx-auto mt-6 max-w-xl text-lg text-text-muted">
+                        Join the data-driven companies using OptiTest AI to grow faster. Start your 14-day free trial
+                        today.
+                    </p>
+                    <div class="mt-10 flex justify-center gap-4">
+                        <button
+                            class="inline-flex h-12 items-center justify-center rounded-lg bg-primary px-8 text-base font-bold text-white shadow-lg shadow-blue-500/30 transition-all hover:bg-blue-700 hover:-translate-y-0.5">
+                            Get Started Free
+                        </button>
+                        <button
+                            class="inline-flex h-12 items-center justify-center rounded-lg border border-gray-300 bg-white px-8 text-base font-bold text-text-main transition-all hover:bg-gray-50 hover:border-gray-400">
+                            Book Demo
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer class="bg-surface border-t border-gray-100 pt-16 pb-8">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5">
+                    <div class="col-span-2 lg:col-span-2">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                                <span class="material-symbols-outlined text-[20px]">science</span>
+                            </div>
+                            <span class="text-lg font-bold text-text-main">OptiTest AI</span>
+                        </div>
+                        <p class="text-sm text-text-muted max-w-xs mb-6">
+                            The intelligent platform for modern A/B testing and experimentation.
+                        </p>
+                        <div class="flex gap-4">
+                            <!-- Social Icons Placeholders -->
+                            <a class="text-gray-400 hover:text-primary" href="#"><span
+                                    class="material-symbols-outlined">public</span></a>
+                            <a class="text-gray-400 hover:text-primary" href="#"><span
+                                    class="material-symbols-outlined">alternate_email</span></a>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-text-main mb-4">Product</h3>
+                        <ul class="space-y-3">
+                            <li><a class="text-sm text-text-muted hover:text-primary" href="#">Features</a></li>
+                            <li><a class="text-sm text-text-muted hover:text-primary" href="#">Integrations</a></li>
+                            <li><a class="text-sm text-text-muted hover:text-primary" href="#">Pricing</a></li>
+                            <li><a class="text-sm text-text-muted hover:text-primary" href="#">Changelog</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-text-main mb-4">Resources</h3>
+                        <ul class="space-y-3">
+                            <li><a class="text-sm text-text-muted hover:text-primary" href="#">Documentation</a></li>
+                            <li><a class="text-sm text-text-muted hover:text-primary" href="#">API Reference</a></li>
+                            <li><a class="text-sm text-text-muted hover:text-primary" href="#">Community</a></li>
+                            <li><a class="text-sm text-text-muted hover:text-primary" href="#">Blog</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-text-main mb-4">Company</h3>
+                        <ul class="space-y-3">
+                            <li><a class="text-sm text-text-muted hover:text-primary" href="#">About</a></li>
+                            <li><a class="text-sm text-text-muted hover:text-primary" href="#">Careers</a></li>
+                            <li><a class="text-sm text-text-muted hover:text-primary" href="#">Legal</a></li>
+                            <li><a class="text-sm text-text-muted hover:text-primary" href="#">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div
+                    class="mt-16 border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <p class="text-xs text-gray-400">© 2024 OptiTest AI Inc. All rights reserved.</p>
+                    <div class="flex gap-6">
+                        <a class="text-xs text-gray-400 hover:text-text-main" href="#">Privacy Policy</a>
+                        <a class="text-xs text-gray-400 hover:text-text-main" href="#">Terms of Service</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>

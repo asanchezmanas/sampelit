@@ -2,6 +2,28 @@
 
 Welcome to the project documentation.
 
+## 📖 User Guides
+
+Guides for end-users on how to install and use Samplit:
+
+| Guide | Description |
+|-------|-------------|
+| **[Getting Started](guides/users/getting_started.md)** | Quick start guide for new users. Key concepts, first experiment. |
+| **[Experiments Guide](guides/users/experiments_guide.md)** | Complete guide to creating and managing A/B tests. |
+| **[Visual Editor Guide](guides/users/visual_editor_guide.md)** | Point-and-click experiment builder. No code required. |
+| **[Analytics Guide](guides/users/analytics_guide.md)** | Understanding results, Bayesian statistics, making decisions. |
+
+### Integration Guides
+
+| Guide | Description |
+|-------|-------------|
+| **[Tracker Snippet](guides/users/tracker_guide.md)** | Universal installation for any website (DIY or with help). |
+| **[Shopify Integration](guides/users/shopify_guide.md)** | OAuth-based Shopify store integration. |
+| **[WordPress Integration](guides/users/wordpress_guide.md)** | Plugin and OAuth integration for WordPress sites. |
+| **[Proxy Middleware](guides/users/proxy_guide.md)** | Automatic tracker injection for any web application. |
+
+---
+
 ## 🛠 Technical Documentation
 
 | Document | Description |

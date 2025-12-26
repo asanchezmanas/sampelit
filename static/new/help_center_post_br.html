@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Help Article - A/B AI Tester</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1754cf",
+                        "navy": "#0f172a",
+                        "background-light": "#ffffff",
+                        "background-off": "#f9fafb",
+                        "border-subtle": "#e5e7eb",
+                        "text-main": "#1e293b",
+                        "text-secondary": "#64748b",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "mono": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.375rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                    },
+                    maxWidth: {
+                        "content": "680px"
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Manrope', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Custom scrollbar for European minimal feel */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #cbd5e1;
+        }
+
+        .code-syntax-keyword {
+            color: #cf222e;
+        }
+
+        .code-syntax-string {
+            color: #0a3069;
+        }
+
+        .code-syntax-function {
+            color: #8250df;
+        }
+
+        .code-syntax-comment {
+            color: #6e7781;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light text-text-main flex flex-col min-h-screen">
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-border-subtle">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-8">
+                <!-- Logo -->
+                <a class="flex items-center gap-3 group" href="#">
+                    <div
+                        class="w-8 h-8 flex items-center justify-center bg-primary/10 rounded-lg text-primary transition-colors group-hover:bg-primary group-hover:text-white">
+                        <span class="material-symbols-outlined text-2xl">science</span>
+                    </div>
+                    <span class="text-navy font-bold text-lg tracking-tight">A/B AI Tester</span>
+                </a>
+                <!-- Desktop Nav Links -->
+                <nav class="hidden md:flex items-center gap-6">
+                    <a class="text-sm font-medium text-text-secondary hover:text-primary transition-colors"
+                        href="#">Documentation</a>
+                    <a class="text-sm font-medium text-text-secondary hover:text-primary transition-colors" href="#">API
+                        Reference</a>
+                    <a class="text-sm font-medium text-text-secondary hover:text-primary transition-colors"
+                        href="#">Support</a>
+                </nav>
+            </div>
+            <div class="flex items-center gap-4">
+                <!-- Search -->
+                <div class="hidden sm:flex items-center relative w-64 group/search">
+                    <span
+                        class="material-symbols-outlined absolute left-3 text-text-secondary text-[20px] transition-colors group-focus-within/search:text-primary">search</span>
+                    <input
+                        class="w-full h-10 pl-10 pr-4 bg-background-off border border-transparent rounded-lg text-sm focus:bg-white focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all outline-none placeholder:text-text-secondary/70"
+                        placeholder="Search documentation..." type="text" />
+                    <div class="absolute right-3 top-2.5 flex items-center gap-1 pointer-events-none">
+                        <kbd
+                            class="hidden lg:inline-flex h-5 items-center gap-1 rounded border border-border-subtle bg-white px-1.5 font-mono text-[10px] font-medium text-text-secondary opacity-100">
+                            <span class="text-xs">⌘</span>K
+                        </kbd>
+                    </div>
+                </div>
+                <!-- CTA -->
+                <a class="h-10 px-5 bg-navy hover:bg-primary text-white text-sm font-semibold rounded-lg flex items-center justify-center transition-colors"
+                    href="#">
+                    Go to App
+                </a>
+            </div>
+        </div>
+    </header>
+    <!-- Main Page Layout -->
+    <div class="flex-1 max-w-7xl mx-auto w-full px-6 py-12 flex gap-12 relative">
+        <!-- Left Sidebar / Navigation (Desktop) -->
+        <aside class="hidden lg:block w-64 shrink-0 sticky top-28 self-start h-[calc(100vh-8rem)] overflow-y-auto pr-4">
+            <h3 class="text-xs font-bold text-text-secondary uppercase tracking-wider mb-4">Getting Started</h3>
+            <ul class="space-y-1 mb-8">
+                <li><a class="block px-3 py-2 text-sm font-medium text-text-secondary hover:text-navy hover:bg-background-off rounded-md transition-colors"
+                        href="#">Introduction</a></li>
+                <li><a class="block px-3 py-2 text-sm font-medium text-text-secondary hover:text-navy hover:bg-background-off rounded-md transition-colors"
+                        href="#">Quick Start Guide</a></li>
+                <li><a class="block px-3 py-2 text-sm font-medium text-primary bg-primary/5 rounded-md transition-colors"
+                        href="#">Implementation</a></li>
+                <li><a class="block px-3 py-2 text-sm font-medium text-text-secondary hover:text-navy hover:bg-background-off rounded-md transition-colors"
+                        href="#">Best Practices</a></li>
+            </ul>
+            <h3 class="text-xs font-bold text-text-secondary uppercase tracking-wider mb-4">Core Concepts</h3>
+            <ul class="space-y-1">
+                <li><a class="block px-3 py-2 text-sm font-medium text-text-secondary hover:text-navy hover:bg-background-off rounded-md transition-colors"
+                        href="#">Statistical Significance</a></li>
+                <li><a class="block px-3 py-2 text-sm font-medium text-text-secondary hover:text-navy hover:bg-background-off rounded-md transition-colors"
+                        href="#">AI Models</a></li>
+                <li><a class="block px-3 py-2 text-sm font-medium text-text-secondary hover:text-navy hover:bg-background-off rounded-md transition-colors"
+                        href="#">Conversion Events</a></li>
+            </ul>
+        </aside>
+        <!-- Main Content Column -->
+        <main class="flex-1 min-w-0">
+            <!-- Breadcrumbs -->
+            <div class="flex items-center gap-2 text-sm text-text-secondary mb-8">
+                <a class="hover:text-primary transition-colors" href="#">Help Center</a>
+                <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+                <a class="hover:text-primary transition-colors" href="#">Getting Started</a>
+                <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+                <span class="text-text-main font-medium">Implementation</span>
+            </div>
+            <!-- Page Header -->
+            <div class="mb-10">
+                <h1 class="text-4xl md:text-5xl font-bold text-navy tracking-tight leading-[1.15] mb-6">
+                    Setting up your first A/B Test with AI
+                </h1>
+                <div
+                    class="flex flex-wrap items-center gap-6 text-sm text-text-secondary border-b border-border-subtle pb-8">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">schedule</span>
+                        <span>Last updated 2 days ago</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">timer</span>
+                        <span>5 min read</span>
+                    </div>
+                    <div class="flex items-center gap-2 px-2 py-1 bg-background-off rounded text-xs font-medium">
+                        <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                        v2.4.0 Compatible
+                    </div>
+                </div>
+            </div>
+            <!-- Content Body -->
+            <div
+                class="prose prose-slate max-w-none text-text-main prose-headings:font-semibold prose-headings:text-navy prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl">
+                <p class="text-lg leading-relaxed text-text-secondary mb-10">
+                    Learn how to launch your first automated experiment in minutes using our AI-driven engine. This
+                    guide covers installation, goal setting, and parameter configuration to ensure your data is
+                    statistically significant from day one.
+                </p>
+                <h2 class="scroll-mt-24 text-2xl font-bold mb-4" id="installation">1. Installation</h2>
+                <p class="mb-6 leading-relaxed">
+                    The first step is to include the tracking snippet in the <code
+                        class="bg-background-off px-1.5 py-0.5 rounded text-sm text-primary font-mono border border-border-subtle">&lt;head&gt;</code>
+                    of your application. This lightweight script (12kb) initializes the AI engine without blocking the
+                    main thread.
+                </p>
+                <!-- Code Block -->
+                <div class="bg-[#f8f9fc] rounded-xl border border-border-subtle overflow-hidden mb-10">
+                    <div class="flex items-center justify-between px-4 py-2 border-b border-border-subtle bg-white">
+                        <span class="text-xs font-mono text-text-secondary">index.html</span>
+                        <button
+                            class="text-xs font-medium text-primary hover:text-navy transition-colors flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[14px]">content_copy</span> Copy
+                        </button>
+                    </div>
+                    <div class="p-6 overflow-x-auto">
+                        <pre class="font-mono text-sm leading-6"><code><span class="code-syntax-comment">&lt;!-- A/B AI Tester SDK --&gt;</span>
+<span class="code-syntax-keyword">script</span> <span class="code-syntax-function">src</span>=<span class="code-syntax-string">"https://cdn.ab-tester.ai/sdk/v2/loader.js"</span> <span class="code-syntax-function">data-api-key</span>=<span class="code-syntax-string">"YOUR_PUBLIC_KEY"</span> <span class="code-syntax-keyword">async</span>&gt;&lt;/<span class="code-syntax-keyword">script</span>&gt;
+<span class="code-syntax-keyword">script</span>&gt;
+  <span class="code-syntax-function">window</span>.abTester = <span class="code-syntax-function">window</span>.abTester || [];
+  <span class="code-syntax-function">abTester</span>.<span class="code-syntax-function">init</span>({
+    mode: <span class="code-syntax-string">'auto'</span>,
+    trafficAllocation: <span class="code-syntax-string">0.5</span> <span class="code-syntax-comment">// 50% traffic</span>
+  });
+&lt;/<span class="code-syntax-keyword">script</span>&gt;</code></pre>
+                    </div>
+                </div>
+                <!-- Callout -->
+                <div class="flex gap-4 p-5 bg-blue-50/50 border-l-4 border-primary rounded-r-lg mb-10">
+                    <span class="material-symbols-outlined text-primary shrink-0">info</span>
+                    <div>
+                        <h4 class="font-bold text-navy text-sm mb-1">Important Note</h4>
+                        <p class="text-sm text-text-secondary leading-relaxed">Ensure you replace <code
+                                class="font-mono text-xs">YOUR_PUBLIC_KEY</code> with the key found in your project
+                            settings dashboard. Do not use your secret key on the client side.</p>
+                    </div>
+                </div>
+                <h2 class="scroll-mt-24 text-2xl font-bold mb-4" id="conversion-goals">2. Conversion Goals</h2>
+                <p class="mb-6 leading-relaxed">
+                    Once the script is active, you need to define what success looks like. You can track button clicks,
+                    page views, or custom events. The visual editor allows you to tag elements without writing code.
+                </p>
+                <!-- Image -->
+                <figure class="mb-10">
+                    <div class="rounded-xl overflow-hidden border border-border-subtle shadow-sm bg-background-off">
+                        <img alt="Dashboard interface showing analytics graphs and conversion metrics"
+                            class="w-full h-auto object-cover opacity-90 hover:opacity-100 transition-opacity duration-500"
+                            data-alt="Dashboard interface showing analytics graphs and conversion metrics"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCA_kng2i-MKaT__cMP5CrxrbUkOOrgutl9cDbR4GCTtv2SYNv7kP9woXxDQOrn3voyU1o-AXKI83bbhDYMXH5TW92XsxScPVsBQG6yAQPhgZJsGPXXiluImFLwZSenuu7sWsyavIAUIW8thSyuMlf73cdGfHDU3sut9powjscsnMWG9NOpPol6HNCFBXE5enmxe8BZHt-eeiIEMzfWcLEbIGgOlvq9ow4DTSu9p9wEfXv1tZwfhY-vqe1Qnaa4zIu9xr5NnHte" />
+                    </div>
+                    <figcaption class="mt-3 text-center text-sm text-text-secondary">
+                        Figure 1: Setting up a 'Sign Up' conversion goal in the visual editor.
+                    </figcaption>
+                </figure>
+                <h2 class="scroll-mt-24 text-2xl font-bold mb-4" id="ai-parameters">3. AI Parameters</h2>
+                <p class="mb-4 leading-relaxed">
+                    Configure how aggressive the AI should be when declaring a winner. Lower confidence thresholds yield
+                    faster results but higher risk of false positives.
+                </p>
+                <ul class="list-none pl-0 space-y-3 mb-12">
+                    <li class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-primary text-[20px] mt-0.5">check_circle</span>
+                        <div>
+                            <strong class="text-navy">Conservative (99% confidence):</strong>
+                            <span class="text-text-secondary">Best for critical checkout flows where revenue is at
+                                risk.</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-primary text-[20px] mt-0.5">check_circle</span>
+                        <div>
+                            <strong class="text-navy">Balanced (95% confidence):</strong>
+                            <span class="text-text-secondary">Recommended for most UI/UX experiments.</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-primary text-[20px] mt-0.5">check_circle</span>
+                        <div>
+                            <strong class="text-navy">Aggressive (90% confidence):</strong>
+                            <span class="text-text-secondary">Useful for low-traffic pages or rapid iteration
+                                cycles.</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- Feedback Section -->
+            <div class="border-t border-border-subtle pt-10 mt-12 mb-16">
+                <div
+                    class="flex flex-col sm:flex-row items-center justify-between gap-6 bg-background-off p-6 rounded-xl">
+                    <div>
+                        <h3 class="text-navy font-bold mb-1">Was this article helpful?</h3>
+                        <p class="text-sm text-text-secondary">Your feedback helps us improve our documentation.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button
+                            class="flex items-center gap-2 px-4 py-2 bg-white border border-border-subtle rounded-lg text-sm font-medium text-text-secondary hover:text-primary hover:border-primary/30 transition-all shadow-sm">
+                            <span class="material-symbols-outlined text-[18px]">thumb_up</span> Yes
+                        </button>
+                        <button
+                            class="flex items-center gap-2 px-4 py-2 bg-white border border-border-subtle rounded-lg text-sm font-medium text-text-secondary hover:text-red-600 hover:border-red-200 transition-all shadow-sm">
+                            <span class="material-symbols-outlined text-[18px]">thumb_down</span> No
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Related Articles -->
+            <div>
+                <h3 class="text-xl font-bold text-navy mb-6">Related Articles</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <a class="group block p-6 bg-white border border-border-subtle rounded-xl hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 transition-all"
+                        href="#">
+                        <div class="flex items-center gap-2 text-primary mb-3">
+                            <span class="material-symbols-outlined text-[20px]">api</span>
+                            <span class="text-xs font-bold uppercase tracking-wider">API Reference</span>
+                        </div>
+                        <h4 class="font-bold text-navy text-lg mb-2 group-hover:text-primary transition-colors">
+                            Server-side Implementation</h4>
+                        <p class="text-sm text-text-secondary line-clamp-2">Learn how to implement A/B testing on the
+                            server side using Node.js or Python SDKs.</p>
+                    </a>
+                    <a class="group block p-6 bg-white border border-border-subtle rounded-xl hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 transition-all"
+                        href="#">
+                        <div class="flex items-center gap-2 text-primary mb-3">
+                            <span class="material-symbols-outlined text-[20px]">analytics</span>
+                            <span class="text-xs font-bold uppercase tracking-wider">Analytics</span>
+                        </div>
+                        <h4 class="font-bold text-navy text-lg mb-2 group-hover:text-primary transition-colors">
+                            Understanding Bayesian Stats</h4>
+                        <p class="text-sm text-text-secondary line-clamp-2">A deep dive into the mathematical models
+                            used by our engine to determine winning variations.</p>
+                    </a>
+                </div>
+            </div>
+        </main>
+        <!-- Right Sidebar / Table of Contents (Desktop) -->
+        <aside class="hidden xl:block w-64 shrink-0">
+            <div class="sticky top-28">
+                <h4 class="text-xs font-bold text-text-secondary uppercase tracking-wider mb-4 pl-3">On this page</h4>
+                <nav class="relative">
+                    <!-- Active Indicator Line (Visual only for mockup) -->
+                    <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-border-subtle rounded-full"></div>
+                    <div class="absolute left-0 top-0 h-8 w-[2px] bg-primary rounded-full transition-all duration-300">
+                    </div>
+                    <ul class="space-y-1">
+                        <li>
+                            <a class="block pl-4 py-1.5 text-sm font-medium text-navy border-l-2 border-transparent hover:text-primary transition-colors"
+                                href="#installation">
+                                1. Installation
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block pl-4 py-1.5 text-sm font-medium text-text-secondary border-l-2 border-transparent hover:text-navy transition-colors"
+                                href="#conversion-goals">
+                                2. Conversion Goals
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block pl-4 py-1.5 text-sm font-medium text-text-secondary border-l-2 border-transparent hover:text-navy transition-colors"
+                                href="#ai-parameters">
+                                3. AI Parameters
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- Support Card -->
+                <div class="mt-12 p-5 bg-navy rounded-xl text-white">
+                    <div class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center mb-4">
+                        <span class="material-symbols-outlined">support_agent</span>
+                    </div>
+                    <h5 class="font-bold mb-2">Need help?</h5>
+                    <p class="text-sm text-white/70 mb-4 leading-relaxed">Our support team is available 24/7 to help you
+                        with your setup.</p>
+                    <a class="block w-full py-2 bg-white text-navy text-center text-sm font-bold rounded-lg hover:bg-white/90 transition-colors"
+                        href="#">
+                        Contact Support
+                    </a>
+                </div>
+            </div>
+        </aside>
+    </div>
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-border-subtle bg-white">
+        <div class="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
+            <p class="text-sm text-text-secondary">© 2023 A/B AI Tester Inc. All rights reserved.</p>
+            <div class="flex items-center gap-8">
+                <a class="text-sm text-text-secondary hover:text-navy transition-colors" href="#">Privacy Policy</a>
+                <a class="text-sm text-text-secondary hover:text-navy transition-colors" href="#">Terms of Service</a>
+                <a class="text-sm text-text-secondary hover:text-navy transition-colors" href="#">Status</a>
+                <div class="flex items-center gap-4 ml-4">
+                    <a class="text-text-secondary hover:text-navy transition-colors" href="#"><span
+                            class="material-symbols-outlined text-xl">dataset</span></a>
+                    <a class="text-text-secondary hover:text-navy transition-colors" href="#"><span
+                            class="material-symbols-outlined text-xl">rss_feed</span></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

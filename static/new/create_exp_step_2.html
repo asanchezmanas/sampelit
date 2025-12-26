@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Create Experiment - Audience - OptiFlow AI</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1754cf",
+                        "primary-dark": "#0f3a9a",
+                        "background-light": "#ffffff",
+                        "background-subtle": "#f8f9fc",
+                        "background-dark": "#111621",
+                        "text-main": "#0f172a",
+                        "text-secondary": "#475569",
+                        "border-subtle": "#e2e8f0",
+                        "navy-accent": "#1e293b",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    boxShadow: {
+                        "subtle": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+                        "elegant": "0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02)",
+                        "float": "0 10px 15px -3px rgba(23, 84, 207, 0.08), 0 4px 6px -2px rgba(23, 84, 207, 0.04)",
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Manrope', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .step-connector {
+            flex-grow: 1;
+            width: 1px;
+            background-color: #e2e8f0;
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #1754cf;
+            cursor: pointer;
+            margin-top: -8px;
+            box-shadow: 0 0 0 4px rgba(23, 84, 207, 0.1);
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+
+        input[type=range]:focus::-webkit-slider-thumb {
+            box-shadow: 0 0 0 6px rgba(23, 84, 207, 0.15);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-subtle dark:bg-background-dark text-text-main font-display min-h-screen flex flex-col overflow-x-hidden">
+    <header
+        class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-subtle bg-white px-10 py-4 sticky top-0 z-50">
+        <div class="flex items-center gap-4 text-text-main">
+            <div class="size-6 text-primary">
+                <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z"
+                        fill="currentColor"></path>
+                </svg>
+            </div>
+            <h2 class="text-text-main text-lg font-bold leading-tight tracking-[-0.015em]">OptiFlow AI</h2>
+        </div>
+        <nav class="flex flex-1 justify-center gap-12 hidden md:flex">
+            <a class="text-text-secondary hover:text-primary transition-colors text-sm font-medium leading-normal"
+                href="#">Dashboard</a>
+            <a class="text-primary text-sm font-semibold leading-normal" href="#">Experiments</a>
+            <a class="text-text-secondary hover:text-primary transition-colors text-sm font-medium leading-normal"
+                href="#">Reports</a>
+            <a class="text-text-secondary hover:text-primary transition-colors text-sm font-medium leading-normal"
+                href="#">Settings</a>
+        </nav>
+        <div class="flex items-center gap-6">
+            <button class="text-text-secondary hover:text-primary transition-colors">
+                <span class="material-symbols-outlined text-[20px]">notifications</span>
+            </button>
+            <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 ring-2 ring-white shadow-sm"
+                data-alt="User profile picture placeholder"
+                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBn3-q5be73zeWds_5wJ0VuiwiCjtq4D5iZGqNLFqgXweD2CxWYnnYTUXS8JWQcd4twGhd_cqgdRcUxHotBo9plL_ECjdyotl-sSlLDmf9dV2ynOdgaxKRdz0-gKxm-WWgSzxsEKnyqpQIQaVeanvyXUqvF_XnQ8X_qXcWLwuv-EGiPIu084y7x_TuTxrY6YNv_PfYtBL07wz5Bkm3AP5THUCip7kAVceqCepdJInthUAEg-zSeviG2b20Hs-6xLPTF6AAlxUd2");'>
+            </div>
+        </div>
+    </header>
+    <div class="flex flex-1 max-w-[1440px] mx-auto w-full">
+        <aside class="w-72 hidden lg:flex flex-col border-r border-border-subtle bg-white pt-10 px-6 fixed h-full z-10">
+            <div class="flex flex-col gap-1 mb-10">
+                <a class="text-text-secondary hover:text-primary flex items-center gap-2 text-sm font-medium leading-normal mb-4 transition-colors"
+                    href="#">
+                    <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                    Back to Experiments
+                </a>
+                <p class="text-text-secondary text-xs uppercase tracking-wider font-semibold">Progress</p>
+            </div>
+            <div class="flex flex-col relative h-[400px]">
+                <div class="flex gap-4 group">
+                    <div class="flex flex-col items-center">
+                        <div
+                            class="flex items-center justify-center size-8 rounded-full bg-green-500 text-white shadow-sm transition-all">
+                            <span class="material-symbols-outlined text-[18px]">check</span>
+                        </div>
+                        <div class="w-px h-full bg-primary/20 my-2 group-last:hidden"></div>
+                    </div>
+                    <div class="pb-10 pt-1">
+                        <p class="text-text-main text-sm font-medium">1. Define Hypothesis</p>
+                        <p class="text-text-secondary text-xs mt-1">Goal setting &amp; description</p>
+                    </div>
+                </div>
+                <div class="flex gap-4 group">
+                    <div class="flex flex-col items-center">
+                        <div
+                            class="flex items-center justify-center size-8 rounded-full bg-primary text-white shadow-md ring-4 ring-primary/10 transition-all">
+                            <span class="material-symbols-outlined text-[18px]">group</span>
+                        </div>
+                        <div class="w-px h-full bg-border-subtle my-2 group-last:hidden"></div>
+                    </div>
+                    <div class="pb-10 pt-1">
+                        <p class="text-primary-dark text-sm font-bold">2. Audience</p>
+                        <p class="text-text-secondary text-xs mt-1">Targeting &amp; allocation</p>
+                    </div>
+                </div>
+                <div class="flex gap-4 group opacity-60">
+                    <div class="flex flex-col items-center">
+                        <div
+                            class="flex items-center justify-center size-8 rounded-full bg-white border border-border-subtle text-text-secondary shadow-sm">
+                            <span class="material-symbols-outlined text-[18px]">layers</span>
+                        </div>
+                        <div class="w-px h-full bg-border-subtle my-2 group-last:hidden"></div>
+                    </div>
+                    <div class="pb-10 pt-1">
+                        <p class="text-text-main text-sm font-semibold">3. Variations</p>
+                        <p class="text-text-secondary text-xs mt-1">Design changes</p>
+                    </div>
+                </div>
+                <div class="flex gap-4 group opacity-60">
+                    <div class="flex flex-col items-center">
+                        <div
+                            class="flex items-center justify-center size-8 rounded-full bg-white border border-border-subtle text-text-secondary shadow-sm">
+                            <span class="material-symbols-outlined text-[18px]">verified</span>
+                        </div>
+                    </div>
+                    <div class="pb-10 pt-1">
+                        <p class="text-text-main text-sm font-semibold">4. Review &amp; Launch</p>
+                        <p class="text-text-secondary text-xs mt-1">Final check</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <main class="flex-1 lg:ml-72 flex flex-col min-h-screen bg-background-subtle">
+            <div class="lg:hidden px-6 py-4 border-b border-border-subtle bg-white">
+                <div class="flex flex-wrap gap-2 items-center text-sm">
+                    <a class="text-text-secondary font-medium" href="#">Experiments</a>
+                    <span class="material-symbols-outlined text-[14px] text-text-secondary">chevron_right</span>
+                    <span class="text-text-main font-semibold">Audience</span>
+                </div>
+            </div>
+            <div class="flex flex-col lg:flex-row h-full">
+                <div class="flex-1 px-6 lg:px-12 py-10 max-w-4xl mx-auto w-full">
+                    <div class="mb-10">
+                        <h1 class="text-text-main text-3xl lg:text-4xl font-bold tracking-tight mb-2">Configure Audience
+                        </h1>
+                        <p class="text-text-secondary text-lg">Define who sees your experiment and how traffic is
+                            distributed.</p>
+                    </div>
+                    <form class="space-y-8">
+                        <div class="bg-white p-8 rounded-xl border border-border-subtle shadow-elegant">
+                            <div class="flex items-start gap-4 mb-6">
+                                <div class="p-2 bg-primary/5 rounded-lg text-primary">
+                                    <span class="material-symbols-outlined">link</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-primary-dark">Target Pages</h3>
+                                    <p class="text-sm text-text-secondary">Specify the URLs where this experiment should
+                                        run.</p>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <div class="w-full sm:w-48 relative">
+                                        <select
+                                            class="w-full rounded-lg border-border-subtle bg-background-subtle px-4 py-3 text-sm text-text-main focus:border-primary focus:ring-1 focus:ring-primary outline-none appearance-none transition-all font-medium">
+                                            <option>Simple Match</option>
+                                            <option>Exact Match</option>
+                                            <option>Substring</option>
+                                            <option>Regex</option>
+                                        </select>
+                                        <span
+                                            class="absolute right-4 top-3 text-text-secondary pointer-events-none material-symbols-outlined text-[20px]">expand_more</span>
+                                    </div>
+                                    <div class="flex-1 relative">
+                                        <input
+                                            class="w-full rounded-lg border-border-subtle bg-background-subtle px-4 py-3 text-sm text-text-main placeholder:text-text-secondary/50 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                                            placeholder="https://yoursite.com/page" type="text"
+                                            value="https://yoursite.com/pricing" />
+                                    </div>
+                                    <button
+                                        class="p-3 text-text-secondary hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                        type="button">
+                                        <span class="material-symbols-outlined">delete</span>
+                                    </button>
+                                </div>
+                                <button
+                                    class="flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary-dark transition-colors mt-2"
+                                    type="button">
+                                    <span class="material-symbols-outlined text-[18px]">add_circle</span>
+                                    Add another page
+                                </button>
+                            </div>
+                        </div>
+                        <div class="bg-white p-8 rounded-xl border border-border-subtle shadow-elegant">
+                            <div class="flex items-start gap-4 mb-6">
+                                <div class="p-2 bg-primary/5 rounded-lg text-primary">
+                                    <span class="material-symbols-outlined">filter_alt</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-primary-dark">Audience Segments</h3>
+                                    <p class="text-sm text-text-secondary">Choose which visitors are eligible for this
+                                        test.</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                <label class="cursor-pointer relative group">
+                                    <input checked="" class="peer sr-only" name="audience_segment" type="radio" />
+                                    <div
+                                        class="p-4 rounded-lg border border-border-subtle peer-checked:border-primary peer-checked:bg-primary/5 hover:border-primary/50 transition-all h-full">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span
+                                                class="material-symbols-outlined text-text-secondary peer-checked:text-primary group-hover:text-primary transition-colors">public</span>
+                                            <div
+                                                class="size-4 rounded-full border border-border-subtle peer-checked:border-primary peer-checked:bg-primary">
+                                            </div>
+                                        </div>
+                                        <p class="font-bold text-text-main text-sm">All Visitors</p>
+                                        <p class="text-xs text-text-secondary mt-1">100% of eligible traffic</p>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer relative group">
+                                    <input class="peer sr-only" name="audience_segment" type="radio" />
+                                    <div
+                                        class="p-4 rounded-lg border border-border-subtle peer-checked:border-primary peer-checked:bg-primary/5 hover:border-primary/50 transition-all h-full">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span
+                                                class="material-symbols-outlined text-text-secondary peer-checked:text-primary group-hover:text-primary transition-colors">smartphone</span>
+                                            <div
+                                                class="size-4 rounded-full border border-border-subtle peer-checked:border-primary peer-checked:bg-primary">
+                                            </div>
+                                        </div>
+                                        <p class="font-bold text-text-main text-sm">Mobile Only</p>
+                                        <p class="text-xs text-text-secondary mt-1">Smartphone users</p>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer relative group">
+                                    <input class="peer sr-only" name="audience_segment" type="radio" />
+                                    <div
+                                        class="p-4 rounded-lg border border-border-subtle peer-checked:border-primary peer-checked:bg-primary/5 hover:border-primary/50 transition-all h-full">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span
+                                                class="material-symbols-outlined text-text-secondary peer-checked:text-primary group-hover:text-primary transition-colors">tune</span>
+                                            <div
+                                                class="size-4 rounded-full border border-border-subtle peer-checked:border-primary peer-checked:bg-primary">
+                                            </div>
+                                        </div>
+                                        <p class="font-bold text-text-main text-sm">Custom Rules</p>
+                                        <p class="text-xs text-text-secondary mt-1">Define specific logic</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="bg-white p-8 rounded-xl border border-border-subtle shadow-elegant">
+                            <div class="flex items-start gap-4 mb-8">
+                                <div class="p-2 bg-primary/5 rounded-lg text-primary">
+                                    <span class="material-symbols-outlined">traffic</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-primary-dark">Traffic Allocation</h3>
+                                    <p class="text-sm text-text-secondary">Limit the total number of users who enter the
+                                        experiment.</p>
+                                </div>
+                            </div>
+                            <div class="space-y-8">
+                                <div>
+                                    <div class="flex justify-between items-end mb-4">
+                                        <label class="text-sm font-bold text-text-main">Total Traffic
+                                            Participation</label>
+                                        <span class="text-2xl font-bold text-primary">100%</span>
+                                    </div>
+                                    <div class="relative h-6 flex items-center">
+                                        <input class="w-full z-20 opacity-0 cursor-pointer absolute inset-0" max="100"
+                                            min="0" type="range" value="100" />
+                                        <div
+                                            class="w-full h-2 bg-background-subtle rounded-full overflow-hidden absolute">
+                                            <div class="h-full bg-primary w-full"></div>
+                                        </div>
+                                        <div
+                                            class="size-6 bg-white border-2 border-primary rounded-full shadow-md absolute right-0 z-10 flex items-center justify-center cursor-pointer pointer-events-none">
+                                            <div class="size-2 bg-primary rounded-full"></div>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-text-secondary mt-3">Reducing this percentage minimizes risk
+                                        but extends the test duration.</p>
+                                </div>
+                                <div class="h-px bg-border-subtle w-full"></div>
+                                <div>
+                                    <div class="flex justify-between items-end mb-4">
+                                        <label class="text-sm font-bold text-text-main">Variant Split</label>
+                                        <button class="text-xs font-semibold text-primary hover:underline"
+                                            type="button">Reset to equal split</button>
+                                    </div>
+                                    <div
+                                        class="flex w-full h-12 rounded-lg overflow-hidden border border-border-subtle text-sm font-semibold">
+                                        <div
+                                            class="bg-white flex-1 flex items-center justify-center text-text-main hover:bg-gray-50 transition-colors border-r border-border-subtle relative group cursor-pointer">
+                                            <span>Control (50%)</span>
+                                            <div
+                                                class="absolute inset-x-0 bottom-0 h-1 bg-gray-300 group-hover:h-1.5 transition-all">
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="bg-white flex-1 flex items-center justify-center text-text-main hover:bg-gray-50 transition-colors relative group cursor-pointer">
+                                            <span>Variant A (50%)</span>
+                                            <div
+                                                class="absolute inset-x-0 bottom-0 h-1 bg-primary group-hover:h-1.5 transition-all">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <aside class="hidden xl:block w-80 p-8 border-l border-border-subtle bg-white">
+                    <div class="sticky top-28">
+                        <h3 class="text-sm font-bold text-text-main mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary text-[20px]">lightbulb</span>
+                            Audience Insights
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="bg-background-subtle p-4 rounded-lg border border-border-subtle">
+                                <p class="text-xs font-semibold text-primary mb-1">ESTIMATED REACH</p>
+                                <div class="flex items-baseline gap-2 mb-1">
+                                    <span class="text-2xl font-bold text-text-main">~12.5k</span>
+                                    <span class="text-xs text-text-secondary">users/week</span>
+                                </div>
+                                <p class="text-sm text-text-secondary leading-relaxed">Based on your "Pricing" page
+                                    traffic over the last 30 days.</p>
+                            </div>
+                            <div class="bg-background-subtle p-4 rounded-lg border border-border-subtle">
+                                <p class="text-xs font-semibold text-primary mb-1">DURATION ESTIMATE</p>
+                                <p class="text-sm text-text-secondary leading-relaxed mb-2">At 100% traffic allocation,
+                                    you need approx. <strong>14 days</strong> to reach significance.</p>
+                                <div
+                                    class="w-full bg-white rounded-full h-1.5 overflow-hidden border border-border-subtle">
+                                    <div class="bg-green-500 h-full w-3/4"></div>
+                                </div>
+                                <p class="text-[10px] text-text-secondary mt-1 text-right">Healthy Duration</p>
+                            </div>
+                        </div>
+                        <div class="mt-8 pt-8 border-t border-border-subtle">
+                            <h4 class="text-xs font-bold text-text-secondary uppercase tracking-wider mb-3">Saved
+                                Segments</h4>
+                            <ul class="space-y-3">
+                                <li class="flex items-center gap-3 group cursor-pointer">
+                                    <div
+                                        class="size-8 rounded bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                                        <span class="material-symbols-outlined text-[16px]">loyalty</span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p
+                                            class="text-sm font-medium text-text-main group-hover:text-primary transition-colors">
+                                            Returning Users</p>
+                                        <p class="text-xs text-text-secondary">Visits &gt; 1</p>
+                                    </div>
+                                    <span
+                                        class="material-symbols-outlined text-text-secondary text-[16px] opacity-0 group-hover:opacity-100 transition-opacity">add</span>
+                                </li>
+                                <li class="flex items-center gap-3 group cursor-pointer">
+                                    <div
+                                        class="size-8 rounded bg-purple-50 text-purple-600 flex items-center justify-center group-hover:bg-purple-100 transition-colors">
+                                        <span class="material-symbols-outlined text-[16px]">flag</span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p
+                                            class="text-sm font-medium text-text-main group-hover:text-primary transition-colors">
+                                            US Traffic</p>
+                                        <p class="text-xs text-text-secondary">Geo: United States</p>
+                                    </div>
+                                    <span
+                                        class="material-symbols-outlined text-text-secondary text-[16px] opacity-0 group-hover:opacity-100 transition-opacity">add</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+            <div
+                class="sticky bottom-0 z-40 w-full bg-white/90 backdrop-blur-md border-t border-border-subtle px-6 py-4 flex justify-between items-center lg:pl-80 lg:pr-12">
+                <button
+                    class="text-text-secondary hover:text-text-main font-semibold text-sm px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                    Back
+                </button>
+                <div class="flex items-center gap-4">
+                    <span class="text-xs text-text-secondary hidden sm:inline-block">
+                        <span class="material-symbols-outlined text-[14px] align-middle mr-1">check_circle</span>
+                        Changes auto-saved
+                    </span>
+                    <button
+                        class="bg-primary hover:bg-primary-dark text-white text-sm font-bold px-8 py-2.5 rounded-lg shadow-float transition-all flex items-center gap-2">
+                        Next: Variations
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+
+</html>

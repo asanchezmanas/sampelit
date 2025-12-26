@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Experiment Details - Aura A/B</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1754cf",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#0f1115",
+                        "surface-dark": "#161b22",
+                        "border-dark": "#30363d",
+                        "text-main": "#e6edf3",
+                        "text-muted": "#848d97",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for refined look */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f1115;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #30363d;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #484f58;
+        }
+    </style>
+</head>
+
+<body class="bg-background-dark text-text-main font-display antialiased min-h-screen flex flex-col overflow-x-hidden">
+    <!-- Top Navigation -->
+    <header
+        class="flex items-center justify-between whitespace-nowrap border-b border-border-dark bg-surface-dark/50 backdrop-blur-md px-6 lg:px-12 py-4 sticky top-0 z-50">
+        <div class="flex items-center gap-4">
+            <div class="size-6 text-primary">
+                <span class="material-symbols-outlined text-2xl">science</span>
+            </div>
+            <h2 class="text-text-main text-lg font-bold tracking-tight">Aura A/B</h2>
+        </div>
+        <nav class="hidden md:flex flex-1 justify-center gap-8">
+            <a class="text-text-muted hover:text-white transition-colors text-sm font-medium" href="#">Dashboard</a>
+            <a class="text-white text-sm font-medium" href="#">Experiments</a>
+            <a class="text-text-muted hover:text-white transition-colors text-sm font-medium" href="#">Audiences</a>
+            <a class="text-text-muted hover:text-white transition-colors text-sm font-medium" href="#">Settings</a>
+        </nav>
+        <div class="flex items-center gap-6">
+            <button class="text-text-muted hover:text-white">
+                <span class="material-symbols-outlined">notifications</span>
+            </button>
+            <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8 ring-2 ring-border-dark"
+                data-alt="User profile avatar gradient"
+                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB0RlW5k0pExnCpkrPvJryOacObRQSqPTVQFCU4A6AjFLWFIGeLJh1e3078fRV8o5_TloQN10Il0064Qp7ux6Rh57DwobN8ug0CnrvGU7GdOHRbpnVyJb3VAZqfU-ElGFqzhqUBYKP8kBDD_HfxMqFqRw7wL8HjzEbGyGYewbOxeHRFbnrZLmsKrXvJq7ZCm6WK7ZDDZcY80JXkNlh-5dpjlq9xEkqTfkwxRo8l3V922aalkEznuBDgjgCzhQL1u85QH3mMsVzp");'>
+            </div>
+        </div>
+    </header>
+    <!-- Main Content -->
+    <main class="flex-1 w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-8">
+        <!-- Breadcrumbs -->
+        <div class="flex items-center gap-2 mb-6 text-sm">
+            <a class="text-text-muted hover:text-primary transition-colors" href="#">Experiments</a>
+            <span class="text-text-muted font-light">/</span>
+            <a class="text-text-muted hover:text-primary transition-colors" href="#">Checkout Flow</a>
+            <span class="text-text-muted font-light">/</span>
+            <span class="text-text-main font-medium">Test #402</span>
+        </div>
+        <!-- Header Section -->
+        <div class="flex flex-wrap justify-between items-end gap-6 mb-10 pb-6 border-b border-border-dark">
+            <div class="flex flex-col gap-3 max-w-2xl">
+                <div class="flex items-center gap-3">
+                    <span
+                        class="px-2 py-0.5 rounded text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/20 uppercase tracking-wider">Active</span>
+                    <span class="text-text-muted text-xs uppercase tracking-wider">Started 12 days ago</span>
+                </div>
+                <h1 class="text-4xl md:text-5xl font-light tracking-tight text-white">New Checkout Button Color</h1>
+                <p class="text-text-muted text-base font-light max-w-lg">Testing the impact of a high-contrast action
+                    button on the final checkout step to improve conversion rates.</p>
+            </div>
+            <div class="flex gap-3">
+                <button
+                    class="flex items-center justify-center gap-2 rounded-lg h-10 px-6 bg-surface-dark border border-border-dark text-text-main text-sm font-medium hover:bg-border-dark/50 hover:border-text-muted transition-all">
+                    <span class="material-symbols-outlined text-[18px]">settings</span>
+                    <span>Configure</span>
+                </button>
+                <button
+                    class="flex items-center justify-center gap-2 rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold shadow-[0_0_15px_-3px_rgba(23,84,207,0.4)] hover:bg-primary/90 transition-all">
+                    <span class="material-symbols-outlined text-[18px]">stop_circle</span>
+                    <span>Stop Experiment</span>
+                </button>
+            </div>
+        </div>
+        <!-- KPI Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            <!-- Card 1 -->
+            <div
+                class="bg-surface-dark rounded-xl p-6 border border-border-dark flex flex-col justify-between h-32 hover:border-primary/30 transition-colors group">
+                <div class="flex justify-between items-start">
+                    <p
+                        class="text-text-muted text-xs font-bold uppercase tracking-widest group-hover:text-primary transition-colors">
+                        Total Visitors</p>
+                    <span class="material-symbols-outlined text-text-muted/50 text-lg">group</span>
+                </div>
+                <div>
+                    <p class="text-3xl font-light text-white mb-1">45,230</p>
+                    <p class="text-green-400 text-xs font-medium flex items-center gap-1">
+                        <span class="material-symbols-outlined text-sm">trending_up</span>
+                        +2.1% vs last week
+                    </p>
+                </div>
+            </div>
+            <!-- Card 2 -->
+            <div
+                class="bg-surface-dark rounded-xl p-6 border border-border-dark flex flex-col justify-between h-32 hover:border-primary/30 transition-colors group">
+                <div class="flex justify-between items-start">
+                    <p
+                        class="text-text-muted text-xs font-bold uppercase tracking-widest group-hover:text-primary transition-colors">
+                        Conversion Rate</p>
+                    <span class="material-symbols-outlined text-text-muted/50 text-lg">percent</span>
+                </div>
+                <div>
+                    <p class="text-3xl font-light text-white mb-1">14.2%</p>
+                    <p class="text-green-400 text-xs font-medium flex items-center gap-1">
+                        <span class="material-symbols-outlined text-sm">arrow_upward</span>
+                        +1.5% improvement
+                    </p>
+                </div>
+            </div>
+            <!-- Card 3 -->
+            <div
+                class="bg-surface-dark rounded-xl p-6 border border-border-dark flex flex-col justify-between h-32 hover:border-primary/30 transition-colors group relative overflow-hidden">
+                <div class="absolute right-0 top-0 w-16 h-16 bg-primary/10 rounded-bl-full -mr-4 -mt-4"></div>
+                <div class="flex justify-between items-start relative z-10">
+                    <p
+                        class="text-text-muted text-xs font-bold uppercase tracking-widest group-hover:text-primary transition-colors">
+                        Stat. Significance</p>
+                    <span class="material-symbols-outlined text-primary text-lg">verified</span>
+                </div>
+                <div class="relative z-10">
+                    <p class="text-3xl font-light text-white mb-1">98%</p>
+                    <p class="text-text-muted text-xs font-medium">Confidence Level Reached</p>
+                </div>
+            </div>
+            <!-- Card 4 -->
+            <div
+                class="bg-surface-dark rounded-xl p-6 border border-border-dark flex flex-col justify-between h-32 hover:border-primary/30 transition-colors group">
+                <div class="flex justify-between items-start">
+                    <p
+                        class="text-text-muted text-xs font-bold uppercase tracking-widest group-hover:text-primary transition-colors">
+                        Improvement</p>
+                    <span class="material-symbols-outlined text-text-muted/50 text-lg">trending_up</span>
+                </div>
+                <div>
+                    <p class="text-3xl font-light text-white mb-1">+13.6%</p>
+                    <p class="text-text-muted text-xs font-medium">Lift over control</p>
+                </div>
+            </div>
+        </div>
+        <!-- Main Layout: Chart & Variants vs Sidebar -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column: Chart & Table (2/3 width) -->
+            <div class="lg:col-span-2 flex flex-col gap-8">
+                <!-- Chart Section -->
+                <div class="bg-surface-dark rounded-xl border border-border-dark p-6 md:p-8">
+                    <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+                        <div>
+                            <h3 class="text-lg font-medium text-white">Conversion Performance</h3>
+                            <p class="text-text-muted text-sm mt-1">Cumulative conversion rate over the last 14 days</p>
+                        </div>
+                        <div class="flex bg-[#0f1115] p-1 rounded-lg border border-border-dark">
+                            <button
+                                class="px-3 py-1 text-xs font-medium text-white bg-surface-dark rounded shadow-sm">Rate</button>
+                            <button
+                                class="px-3 py-1 text-xs font-medium text-text-muted hover:text-white transition-colors">Visitors</button>
+                            <button
+                                class="px-3 py-1 text-xs font-medium text-text-muted hover:text-white transition-colors">Revenue</button>
+                        </div>
+                    </div>
+                    <!-- Chart SVG Placeholder Area -->
+                    <div class="relative w-full h-[300px] mb-4">
+                        <!-- Custom grid lines -->
+                        <div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
+                            <div class="w-full h-px bg-border-dark/30"></div>
+                            <div class="w-full h-px bg-border-dark/30"></div>
+                            <div class="w-full h-px bg-border-dark/30"></div>
+                            <div class="w-full h-px bg-border-dark/30"></div>
+                            <div class="w-full h-px bg-border-dark/30"></div>
+                        </div>
+                        <!-- Chart SVG -->
+                        <svg class="absolute inset-0 w-full h-full overflow-visible" preserveaspectratio="none"
+                            viewbox="0 0 800 300">
+                            <defs>
+                                <lineargradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+                                    <stop offset="0%" stop-color="#1754cf" stop-opacity="0.2"></stop>
+                                    <stop offset="100%" stop-color="#1754cf" stop-opacity="0"></stop>
+                                </lineargradient>
+                            </defs>
+                            <!-- Control Line (Gray) -->
+                            <path d="M0,250 C100,240 200,245 300,230 C400,215 500,220 600,210 C700,200 800,195"
+                                fill="none" stroke="#484f58" stroke-dasharray="4 4" stroke-width="2"></path>
+                            <!-- Variant B Line (Blue - Winner) -->
+                            <path d="M0,250 C100,230 200,200 300,150 C400,100 500,80 600,60 C700,40 800,35"
+                                fill="url(#chartGradient)" stroke="#1754cf" stroke-width="3"></path>
+                            <!-- Data Point Tooltip (Mock) -->
+                            <circle cx="600" cy="60" fill="#161b22" r="5" stroke="#1754cf" stroke-width="2"></circle>
+                            <g transform="translate(560, 10)">
+                                <rect fill="#1754cf" height="30" rx="4" width="80"></rect>
+                                <text fill="white" font-family="Manrope" font-size="12" font-weight="bold"
+                                    text-anchor="middle" x="40" y="20">14.2%</text>
+                            </g>
+                        </svg>
+                    </div>
+                    <!-- X-Axis Labels -->
+                    <div
+                        class="flex justify-between text-xs text-text-muted font-mono mt-4 pt-4 border-t border-border-dark/50">
+                        <span>Oct 12</span>
+                        <span>Oct 14</span>
+                        <span>Oct 16</span>
+                        <span>Oct 18</span>
+                        <span>Oct 20</span>
+                        <span>Oct 22</span>
+                        <span>Oct 24</span>
+                    </div>
+                    <!-- Legend -->
+                    <div class="flex gap-6 justify-center mt-6">
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-full bg-text-muted/50"></div>
+                            <span class="text-sm text-text-muted">Control (Original)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-full bg-primary"></div>
+                            <span class="text-sm text-white font-medium">Variant B (Blue Button)</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Variants Breakdown Table -->
+                <div class="bg-surface-dark rounded-xl border border-border-dark overflow-hidden">
+                    <div class="p-6 border-b border-border-dark flex justify-between items-center">
+                        <h3 class="text-lg font-medium text-white">Variants Breakdown</h3>
+                        <button class="text-primary text-sm font-medium hover:text-primary/80 transition-colors">Export
+                            CSV</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-[#0f1115] text-xs uppercase tracking-wider text-text-muted font-semibold">
+                                    <th class="px-6 py-4 font-medium">Variant Name</th>
+                                    <th class="px-6 py-4 font-medium">Traffic</th>
+                                    <th class="px-6 py-4 font-medium">Conversions</th>
+                                    <th class="px-6 py-4 font-medium">Conv. Rate</th>
+                                    <th class="px-6 py-4 font-medium">Chance to Win</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-border-dark">
+                                <!-- Variant B (Winner) -->
+                                <tr class="group hover:bg-white/5 transition-colors">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-1 h-8 bg-primary rounded-full"></div>
+                                            <div>
+                                                <p class="text-white font-medium text-sm">Variant B</p>
+                                                <p class="text-text-muted text-xs">Blue Button #1754cf</p>
+                                            </div>
+                                            <span
+                                                class="ml-2 px-2 py-0.5 rounded text-[10px] font-bold bg-primary/20 text-primary border border-primary/30 uppercase tracking-wide">Winner</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-text-muted font-mono">50%</td>
+                                    <td class="px-6 py-4 text-sm text-text-main font-mono">3,211</td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-sm text-white font-bold font-mono">14.2%</span>
+                                            <span
+                                                class="text-xs text-green-400 bg-green-400/10 px-1 rounded font-mono">+13.6%</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-2 w-32">
+                                            <div class="flex-1 h-1.5 bg-border-dark rounded-full overflow-hidden">
+                                                <div class="h-full bg-primary w-[98%] rounded-full"></div>
+                                            </div>
+                                            <span class="text-xs font-bold text-primary w-8 text-right">98%</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- Control -->
+                                <tr class="group hover:bg-white/5 transition-colors opacity-70">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-1 h-8 bg-text-muted rounded-full"></div>
+                                            <div>
+                                                <p class="text-white font-medium text-sm">Control</p>
+                                                <p class="text-text-muted text-xs">Original Design</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-text-muted font-mono">50%</td>
+                                    <td class="px-6 py-4 text-sm text-text-main font-mono">2,827</td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-sm text-text-muted font-medium font-mono">12.5%</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-2 w-32">
+                                            <div class="flex-1 h-1.5 bg-border-dark rounded-full overflow-hidden">
+                                                <div class="h-full bg-text-muted w-[2%] rounded-full"></div>
+                                            </div>
+                                            <span class="text-xs font-medium text-text-muted w-8 text-right">2%</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Right Column: Sidebar (1/3 width) -->
+            <div class="flex flex-col gap-6">
+                <!-- Configuration Card -->
+                <div class="bg-surface-dark rounded-xl border border-border-dark p-6">
+                    <div class="flex items-center gap-2 mb-6 text-primary">
+                        <span class="material-symbols-outlined">tune</span>
+                        <h3 class="text-sm font-bold uppercase tracking-widest text-white">Experiment Config</h3>
+                    </div>
+                    <div class="space-y-6">
+                        <div>
+                            <p class="text-xs font-medium text-text-muted uppercase tracking-wider mb-2">Primary Metric
+                            </p>
+                            <div
+                                class="flex items-center justify-between p-3 rounded-lg bg-[#0f1115] border border-border-dark">
+                                <span class="text-sm text-white">Completed Checkout</span>
+                                <span class="material-symbols-outlined text-green-400 text-sm">flag</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-text-muted uppercase tracking-wider mb-2">Audience</p>
+                            <div
+                                class="flex items-center justify-between p-3 rounded-lg bg-[#0f1115] border border-border-dark mb-2">
+                                <span class="text-sm text-white">All Mobile Users</span>
+                                <span class="material-symbols-outlined text-text-muted text-sm">smartphone</span>
+                            </div>
+                            <div
+                                class="flex items-center justify-between p-3 rounded-lg bg-[#0f1115] border border-border-dark">
+                                <span class="text-sm text-white">Returning Visitors</span>
+                                <span class="material-symbols-outlined text-text-muted text-sm">history</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-text-muted uppercase tracking-wider mb-2">Traffic
+                                Allocation</p>
+                            <div class="relative pt-1">
+                                <div class="flex mb-2 items-center justify-between">
+                                    <div>
+                                        <span class="text-xs font-semibold inline-block text-primary">
+                                            100% of Total Traffic
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-border-dark">
+                                    <div class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"
+                                        style="width:100%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-6 border-t border-border-dark">
+                        <a class="text-xs font-medium text-primary hover:text-white transition-colors flex items-center gap-1 justify-end"
+                            href="#">
+                            View Full Settings
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+                <!-- Insights/AI Summary -->
+                <div
+                    class="bg-gradient-to-br from-surface-dark to-primary/5 rounded-xl border border-primary/20 p-6 relative overflow-hidden">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="material-symbols-outlined text-primary text-lg">auto_awesome</span>
+                        <h3 class="text-sm font-bold text-white">AI Insight</h3>
+                    </div>
+                    <p class="text-sm text-text-main leading-relaxed mb-4">
+                        <span class="font-bold text-white">Variant B</span> is significantly outperforming the Control.
+                        The high confidence (98%) suggests stabilizing trend.
+                    </p>
+                    <p class="text-sm text-text-muted leading-relaxed">
+                        Recommendation: Conclude experiment and deploy Variant B to 100% of traffic within 48 hours.
+                    </p>
+                    <button
+                        class="mt-4 w-full py-2 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-bold uppercase tracking-wider rounded border border-primary/20 transition-all">
+                        Apply Recommendation
+                    </button>
+                </div>
+                <!-- Activity Log Preview -->
+                <div class="bg-surface-dark rounded-xl border border-border-dark p-6">
+                    <h3 class="text-sm font-bold uppercase tracking-widest text-text-muted mb-4">Recent Activity</h3>
+                    <div class="border-l border-border-dark ml-2 space-y-6">
+                        <div class="relative pl-6">
+                            <div
+                                class="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full bg-primary ring-4 ring-surface-dark">
+                            </div>
+                            <p class="text-sm text-white font-medium">Confidence Reached 95%</p>
+                            <p class="text-xs text-text-muted mt-0.5">Today, 10:23 AM</p>
+                        </div>
+                        <div class="relative pl-6">
+                            <div
+                                class="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full bg-border-dark ring-4 ring-surface-dark">
+                            </div>
+                            <p class="text-sm text-white font-medium">Traffic Increased to 100%</p>
+                            <p class="text-xs text-text-muted mt-0.5">Oct 20, 09:00 AM</p>
+                        </div>
+                        <div class="relative pl-6">
+                            <div
+                                class="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full bg-border-dark ring-4 ring-surface-dark">
+                            </div>
+                            <p class="text-sm text-white font-medium">Experiment Started</p>
+                            <p class="text-xs text-text-muted mt-0.5">Oct 12, 02:15 PM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

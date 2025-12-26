@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Create Experiment | Sampelit</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1754cf",
+                        "primary-dark": "#0f3a9a",
+                        "background-light": "#ffffff",
+                        "background-subtle": "#f8f9fc",
+                        "background-dark": "#111621",
+                        "text-main": "#0f172a",
+                        "text-secondary": "#475569",
+                        "border-subtle": "#e2e8f0",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    boxShadow: {
+                        "subtle": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+                        "elegant": "0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02)",
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Manrope', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Custom scrollbar for refined feel */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .step-connector {
+            flex-grow: 1;
+            width: 1px;
+            background-color: #e2e8f0;
+        }
+
+        .step-active .step-connector {
+            background-color: #1754cf;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-subtle dark:bg-background-dark text-text-main font-display min-h-screen flex flex-col overflow-x-hidden">
+    <!-- Top Navigation -->
+    <header
+        class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-subtle bg-white px-10 py-4 sticky top-0 z-50">
+        <a href="dashboard.html" class="flex items-center gap-3 text-text-main">
+            <div class="size-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined" style="font-size: 20px;">auto_fix_high</span>
+            </div>
+            <h2 class="text-text-main text-lg font-bold leading-tight tracking-[-0.015em]">Sampelit<span
+                    class="text-primary">.</span></h2>
+        </a>
+        <nav class="flex flex-1 justify-center gap-12 hidden md:flex">
+            <a class="text-text-secondary hover:text-primary transition-colors text-sm font-medium leading-normal"
+                href="#">Dashboard</a>
+            <a class="text-primary text-sm font-semibold leading-normal" href="#">Experiments</a>
+            <a class="text-text-secondary hover:text-primary transition-colors text-sm font-medium leading-normal"
+                href="#">Reports</a>
+            <a class="text-text-secondary hover:text-primary transition-colors text-sm font-medium leading-normal"
+                href="#">Settings</a>
+        </nav>
+        <div class="flex items-center gap-6">
+            <button class="text-text-secondary hover:text-primary transition-colors">
+                <span class="material-symbols-outlined text-[20px]">notifications</span>
+            </button>
+            <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 ring-2 ring-white shadow-sm"
+                data-alt="User profile picture placeholder"
+                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBn3-q5be73zeWds_5wJ0VuiwiCjtq4D5iZGqNLFqgXweD2CxWYnnYTUXS8JWQcd4twGhd_cqgdRcUxHotBo9plL_ECjdyotl-sSlLDmf9dV2ynOdgaxKRdz0-gKxm-WWgSzxsEKnyqpQIQaVeanvyXUqvF_XnQ8X_qXcWLwuv-EGiPIu084y7x_TuTxrY6YNv_PfYtBL07wz5Bkm3AP5THUCip7kAVceqCepdJInthUAEg-zSeviG2b20Hs-6xLPTF6AAlxUd2");'>
+            </div>
+        </div>
+    </header>
+    <div class="flex flex-1 max-w-[1440px] mx-auto w-full">
+        <!-- Sidebar / Timeline -->
+        <aside class="w-72 hidden lg:flex flex-col border-r border-border-subtle bg-white pt-10 px-6 fixed h-full z-10">
+            <div class="flex flex-col gap-1 mb-10">
+                <a class="text-text-secondary hover:text-primary flex items-center gap-2 text-sm font-medium leading-normal mb-4 transition-colors"
+                    href="#">
+                    <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                    Back to Experiments
+                </a>
+                <p class="text-text-secondary text-xs uppercase tracking-wider font-semibold">Progress</p>
+            </div>
+            <div class="flex flex-col relative h-[400px]">
+                <!-- Step 1 (Active) -->
+                <div class="flex gap-4 group">
+                    <div class="flex flex-col items-center">
+                        <div
+                            class="flex items-center justify-center size-8 rounded-full bg-primary text-white shadow-md ring-4 ring-primary/10 transition-all">
+                            <span class="material-symbols-outlined text-[18px]">edit_note</span>
+                        </div>
+                        <div class="w-px h-full bg-border-subtle my-2 group-last:hidden"></div>
+                    </div>
+                    <div class="pb-10 pt-1">
+                        <p class="text-text-main text-sm font-bold">1. Define Hypothesis</p>
+                        <p class="text-text-secondary text-xs mt-1">Goal setting &amp; description</p>
+                    </div>
+                </div>
+                <!-- Step 2 -->
+                <div class="flex gap-4 group opacity-60">
+                    <div class="flex flex-col items-center">
+                        <div
+                            class="flex items-center justify-center size-8 rounded-full bg-white border border-border-subtle text-text-secondary shadow-sm">
+                            <span class="material-symbols-outlined text-[18px]">group</span>
+                        </div>
+                        <div class="w-px h-full bg-border-subtle my-2 group-last:hidden"></div>
+                    </div>
+                    <div class="pb-10 pt-1">
+                        <p class="text-text-main text-sm font-semibold">2. Audience</p>
+                        <p class="text-text-secondary text-xs mt-1">Targeting &amp; allocation</p>
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="flex gap-4 group opacity-60">
+                    <div class="flex flex-col items-center">
+                        <div
+                            class="flex items-center justify-center size-8 rounded-full bg-white border border-border-subtle text-text-secondary shadow-sm">
+                            <span class="material-symbols-outlined text-[18px]">layers</span>
+                        </div>
+                        <div class="w-px h-full bg-border-subtle my-2 group-last:hidden"></div>
+                    </div>
+                    <div class="pb-10 pt-1">
+                        <p class="text-text-main text-sm font-semibold">3. Variations</p>
+                        <p class="text-text-secondary text-xs mt-1">Design changes</p>
+                    </div>
+                </div>
+                <!-- Step 4 -->
+                <div class="flex gap-4 group opacity-60">
+                    <div class="flex flex-col items-center">
+                        <div
+                            class="flex items-center justify-center size-8 rounded-full bg-white border border-border-subtle text-text-secondary shadow-sm">
+                            <span class="material-symbols-outlined text-[18px]">verified</span>
+                        </div>
+                    </div>
+                    <div class="pb-10 pt-1">
+                        <p class="text-text-main text-sm font-semibold">4. Review &amp; Launch</p>
+                        <p class="text-text-secondary text-xs mt-1">Final check</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <!-- Main Content -->
+        <main class="flex-1 lg:ml-72 flex flex-col min-h-screen bg-background-subtle">
+            <!-- Breadcrumbs Mobile/Tablet -->
+            <div class="lg:hidden px-6 py-4 border-b border-border-subtle bg-white">
+                <div class="flex flex-wrap gap-2 items-center text-sm">
+                    <a class="text-text-secondary font-medium" href="#">Experiments</a>
+                    <span class="material-symbols-outlined text-[14px] text-text-secondary">chevron_right</span>
+                    <span class="text-text-main font-semibold">New Experiment</span>
+                </div>
+            </div>
+            <div class="flex flex-col lg:flex-row h-full">
+                <!-- Form Area -->
+                <div class="flex-1 px-6 lg:px-12 py-10 max-w-4xl mx-auto w-full">
+                    <div class="mb-10">
+                        <h1 class="text-text-main text-3xl lg:text-4xl font-bold tracking-tight mb-2">Define your
+                            Hypothesis</h1>
+                        <p class="text-text-secondary text-lg">Start by establishing what you want to achieve and why.
+                        </p>
+                    </div>
+                    <form class="space-y-8">
+                        <!-- Card 1: Basic Info -->
+                        <div class="bg-white p-8 rounded-xl border border-border-subtle shadow-subtle">
+                            <div class="grid gap-6">
+                                <div class="grid gap-2">
+                                    <label class="text-sm font-semibold text-text-main" for="exp-name">Experiment
+                                        Name</label>
+                                    <input
+                                        class="w-full rounded-lg border-border-subtle bg-background-subtle px-4 py-3 text-sm text-text-main placeholder:text-text-secondary/50 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                                        id="exp-name" placeholder="e.g., Homepage Hero CTA Redesign" type="text" />
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="grid gap-2">
+                                        <label class="text-sm font-semibold text-text-main" for="exp-page">Target Page
+                                            URL</label>
+                                        <div class="relative">
+                                            <span
+                                                class="absolute left-4 top-3 text-text-secondary/50 material-symbols-outlined text-[20px]">link</span>
+                                            <input
+                                                class="w-full rounded-lg border-border-subtle bg-background-subtle pl-11 pr-4 py-3 text-sm text-text-main placeholder:text-text-secondary/50 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                                                id="exp-page" placeholder="https://yoursite.com/pricing" type="url" />
+                                        </div>
+                                    </div>
+                                    <div class="grid gap-2">
+                                        <label class="text-sm font-semibold text-text-main" for="exp-metric">Primary
+                                            Metric</label>
+                                        <div class="relative">
+                                            <select
+                                                class="w-full rounded-lg border-border-subtle bg-background-subtle px-4 py-3 text-sm text-text-main focus:border-primary focus:ring-1 focus:ring-primary outline-none appearance-none transition-all"
+                                                id="exp-metric">
+                                                <option>Conversion Rate</option>
+                                                <option>Click Through Rate</option>
+                                                <option>Revenue Per User</option>
+                                                <option>Bounce Rate</option>
+                                            </select>
+                                            <span
+                                                class="absolute right-4 top-3 text-text-secondary pointer-events-none material-symbols-outlined text-[20px]">expand_more</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Card 2: AI Assistance -->
+                        <div
+                            class="bg-white p-8 rounded-xl border border-border-subtle shadow-subtle relative overflow-hidden">
+                            <!-- Decorative accent -->
+                            <div class="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                                <span class="material-symbols-outlined text-[120px] text-primary">auto_fix_high</span>
+                            </div>
+                            <div class="flex items-center justify-between mb-4">
+                                <label class="text-sm font-semibold text-text-main"
+                                    for="exp-hypothesis">Hypothesis</label>
+                                <button
+                                    class="flex items-center gap-1.5 text-xs font-bold text-primary hover:text-primary-dark transition-colors bg-primary/5 hover:bg-primary/10 px-3 py-1.5 rounded-full"
+                                    type="button">
+                                    <span class="material-symbols-outlined text-[16px]">colors_spark</span>
+                                    Generate with AI
+                                </button>
+                            </div>
+                            <textarea
+                                class="w-full rounded-lg border-border-subtle bg-background-subtle px-4 py-3 text-sm text-text-main placeholder:text-text-secondary/50 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all resize-none"
+                                id="exp-hypothesis"
+                                placeholder="If we change [variable], then [result] will happen because [rationale]..."
+                                rows="4"></textarea>
+                            <div class="mt-4 flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                                <button
+                                    class="whitespace-nowrap rounded-md border border-border-subtle bg-white px-3 py-1.5 text-xs font-medium text-text-secondary hover:border-primary hover:text-primary transition-colors"
+                                    type="button">
+                                    Improve clarity
+                                </button>
+                                <button
+                                    class="whitespace-nowrap rounded-md border border-border-subtle bg-white px-3 py-1.5 text-xs font-medium text-text-secondary hover:border-primary hover:text-primary transition-colors"
+                                    type="button">
+                                    Focus on urgency
+                                </button>
+                                <button
+                                    class="whitespace-nowrap rounded-md border border-border-subtle bg-white px-3 py-1.5 text-xs font-medium text-text-secondary hover:border-primary hover:text-primary transition-colors"
+                                    type="button">
+                                    Make it shorter
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Traffic Allocation Preview (Mini) -->
+                        <div
+                            class="bg-white p-6 rounded-xl border border-border-subtle shadow-subtle flex items-center justify-between gap-6 opacity-80 hover:opacity-100 transition-opacity cursor-pointer">
+                            <div class="flex items-center gap-4">
+                                <div class="bg-primary/10 p-2.5 rounded-lg text-primary">
+                                    <span class="material-symbols-outlined">traffic</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-text-main">Traffic Allocation</p>
+                                    <p class="text-xs text-text-secondary">Default: 50% Control / 50% Variant</p>
+                                </div>
+                            </div>
+                            <span class="material-symbols-outlined text-text-secondary">chevron_right</span>
+                        </div>
+                    </form>
+                </div>
+                <!-- Right Sidebar / Contextual Help -->
+                <aside class="hidden xl:block w-80 p-8 border-l border-border-subtle bg-white">
+                    <div class="sticky top-28">
+                        <h3 class="text-sm font-bold text-text-main mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary text-[20px]">lightbulb</span>
+                            Sampelit Tips
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="bg-background-subtle p-4 rounded-lg border border-border-subtle">
+                                <p class="text-xs font-semibold text-primary mb-1">PRO TIP</p>
+                                <p class="text-sm text-text-secondary leading-relaxed">Hypotheses grounded in user
+                                    research have a <strong>25% higher win rate</strong>. Try referencing specific user
+                                    feedback in your rationale.</p>
+                            </div>
+                            <div class="bg-background-subtle p-4 rounded-lg border border-border-subtle">
+                                <p class="text-xs font-semibold text-primary mb-1">METRIC SELECTION</p>
+                                <p class="text-sm text-text-secondary leading-relaxed">For checkout pages, "Revenue Per
+                                    User" is often more insightful than simple conversion rate.</p>
+                            </div>
+                        </div>
+                        <div class="mt-8 pt-8 border-t border-border-subtle">
+                            <h4 class="text-xs font-bold text-text-secondary uppercase tracking-wider mb-3">Recent
+                                Experiments</h4>
+                            <ul class="space-y-3">
+                                <li class="flex items-center gap-3 text-sm text-text-secondary">
+                                    <div class="size-2 rounded-full bg-green-500"></div>
+                                    Homepage Banner V2
+                                </li>
+                                <li class="flex items-center gap-3 text-sm text-text-secondary">
+                                    <div class="size-2 rounded-full bg-orange-400"></div>
+                                    Pricing Table Sort
+                                </li>
+                                <li class="flex items-center gap-3 text-sm text-text-secondary">
+                                    <div class="size-2 rounded-full bg-gray-300"></div>
+                                    Mobile Menu Test
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+            <!-- Sticky Footer Action Bar -->
+            <div
+                class="sticky bottom-0 z-40 w-full bg-white/90 backdrop-blur-md border-t border-border-subtle px-6 py-4 flex justify-between items-center lg:pl-80 lg:pr-12">
+                <button
+                    class="text-text-secondary hover:text-text-main font-semibold text-sm px-4 py-2 rounded-lg transition-colors">
+                    Save as Draft
+                </button>
+                <div class="flex items-center gap-4">
+                    <span class="text-xs text-text-secondary hidden sm:inline-block">
+                        <span class="material-symbols-outlined text-[14px] align-middle mr-1">check_circle</span>
+                        Auto-saved 2m ago
+                    </span>
+                    <button
+                        class="bg-primary hover:bg-primary-dark text-white text-sm font-bold px-8 py-2.5 rounded-lg shadow-lg shadow-primary/20 transition-all flex items-center gap-2">
+                        Next: Audience
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Filtros de Tráfico (Exclusión) - A/B Tester AI</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1e40af", "primary-light": "#3b82f6",
+                        "accent": "#60a5fa",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#0f1218", "surface-dark": "#181e2b", "surface-border": "#273142",
+                        "danger": "#ef4444",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.375rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f1218;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #273142;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #364152;
+        }
+
+        select,
+        input[type="text"] {
+            transition: all 0.2s ease;
+        }
+
+        select:focus,
+        input[type="text"]:focus {
+            box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.5);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-200 font-display overflow-x-hidden antialiased">
+    <div class="relative flex h-screen w-full flex-col overflow-hidden">
+        <header
+            class="flex items-center justify-between whitespace-nowrap border-b border-solid border-surface-border bg-[#0f1218] px-6 py-3 z-20 shrink-0">
+            <div class="flex items-center gap-4 text-white">
+                <div class="size-8 flex items-center justify-center rounded bg-primary/20 text-blue-400">
+                    <span class="material-symbols-outlined text-xl">science</span>
+                </div>
+                <h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">A/B Tester AI</h2>
+            </div>
+            <div class="flex flex-1 justify-end gap-8 items-center">
+                <nav class="hidden md:flex items-center gap-6">
+                    <a class="text-slate-400 hover:text-white text-sm font-medium leading-normal transition-colors"
+                        href="#">Dashboard</a>
+                    <a class="text-white text-sm font-medium leading-normal transition-colors" href="#">Experimentos</a>
+                    <a class="text-slate-400 hover:text-white text-sm font-medium leading-normal transition-colors"
+                        href="#">Reportes</a>
+                    <a class="text-slate-400 hover:text-white text-sm font-medium leading-normal transition-colors"
+                        href="#">Configuración</a>
+                </nav>
+                <div class="h-6 w-px bg-surface-border"></div>
+                <div class="flex items-center gap-4">
+                    <button class="text-slate-400 hover:text-white transition-colors">
+                        <span class="material-symbols-outlined">notifications</span>
+                    </button>
+                    <div class="bg-center bg-no-repeat bg-cover rounded-full size-9 border border-surface-border"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBUPAYmYG3FTsKa9wtFgeetv0UNt1EfJYRoEmVaS5uavzyPBl_haJhX9FRjU9xvDZpnmW-PsAuUlOXe0wSeZyqaA3JPY-tWSKSgQdI2lU0AtpxDxgmKWECf-B7qQv-0G8YHE-b5Q1amp0f2r-R8trzm4ucaPn0d4UdkIy7jDzEU0ZltyK2MrCbuwxQXDn_gGydGkOOWMRRXGmhSNFOTzKFM2RPCIVK8rHxaGdY2hntdqlyefb1UYUub_QsRBPMEQf8iNNT8GoCf");'>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="flex flex-1 overflow-hidden">
+            <aside class="w-64 hidden lg:flex flex-col border-r border-surface-border bg-[#11151e] py-6 px-4 shrink-0">
+                <div class="flex flex-col gap-2">
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 pl-3">Experimento
+                        Actual</p>
+                    <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:bg-surface-dark hover:text-white transition-all group"
+                        href="#">
+                        <span class="material-symbols-outlined text-lg group-hover:text-primary-light">tune</span>
+                        <span class="text-sm font-medium">General</span>
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-dark text-white transition-all border border-surface-border shadow-sm"
+                        href="#">
+                        <span class="material-symbols-outlined text-lg text-primary-light">filter_alt_off</span>
+                        <span class="text-sm font-medium">Filtros de Exclusión</span>
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:bg-surface-dark hover:text-white transition-all group"
+                        href="#">
+                        <span class="material-symbols-outlined text-lg group-hover:text-primary-light">code</span>
+                        <span class="text-sm font-medium">Editor Visual</span>
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:bg-surface-dark hover:text-white transition-all group"
+                        href="#">
+                        <span class="material-symbols-outlined text-lg group-hover:text-primary-light">flag</span>
+                        <span class="text-sm font-medium">Metas</span>
+                    </a>
+                </div>
+                <div class="mt-auto">
+                    <div
+                        class="p-4 rounded-xl bg-gradient-to-br from-surface-dark to-[#0f1218] border border-surface-border">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-medium text-slate-400">Estado</span>
+                            <span
+                                class="flex h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]"></span>
+                        </div>
+                        <p class="text-sm font-semibold text-white">Activo: Filtrando tráfico</p>
+                    </div>
+                </div>
+            </aside>
+            <main class="flex-1 overflow-y-auto bg-background-dark scroll-smooth relative">
+                <div class="mx-auto max-w-[1200px] px-6 lg:px-12 py-8 flex flex-col gap-8">
+                    <div class="flex flex-col gap-6">
+                        <div class="flex items-center gap-2 text-sm">
+                            <a class="text-slate-400 hover:text-primary-light transition-colors"
+                                href="#">Experimentos</a>
+                            <span class="text-slate-600">/</span>
+                            <a class="text-slate-400 hover:text-primary-light transition-colors" href="#">Optimización
+                                Homepage Q3</a>
+                            <span class="text-slate-600">/</span>
+                            <span class="text-primary-light font-medium">Filtros de Tráfico</span>
+                        </div>
+                        <div class="flex flex-wrap items-end justify-between gap-4">
+                            <div class="max-w-2xl">
+                                <h1 class="text-3xl lg:text-4xl font-bold text-white tracking-tight mb-2">Filtros de
+                                    Exclusión</h1>
+                                <p class="text-slate-400 font-light text-lg">Garantiza la integridad de tus datos
+                                    excluyendo tráfico interno, bots y sesiones de prueba.</p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <button
+                                    class="px-5 h-10 rounded-lg border border-surface-border text-slate-300 font-medium text-sm hover:bg-surface-dark hover:text-white transition-colors">
+                                    Descartar
+                                </button>
+                                <button
+                                    class="px-5 h-10 rounded-lg bg-primary hover:bg-blue-700 text-white font-bold text-sm shadow-[0_0_20px_rgba(30,64,175,0.2)] transition-all flex items-center gap-2 border border-blue-800">
+                                    <span class="material-symbols-outlined text-lg">save</span>
+                                    Guardar Cambios
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div
+                            class="bg-surface-dark border border-surface-border rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm hover:border-slate-600 transition-colors">
+                            <div class="flex justify-between items-start">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-2 rounded bg-indigo-500/10 text-indigo-400">
+                                        <span class="material-symbols-outlined text-xl">smart_toy</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-white text-sm font-semibold">Bots y Crawlers</h3>
+                                        <p class="text-slate-500 text-xs mt-0.5">Filtrado automático por UA</p>
+                                    </div>
+                                </div>
+                                <button
+                                    class="relative inline-flex h-5 w-9 items-center rounded-full bg-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 focus:ring-offset-[#181e2b]">
+                                    <span
+                                        class="translate-x-4 inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-surface-dark border border-surface-border rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm hover:border-slate-600 transition-colors">
+                            <div class="flex justify-between items-start">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-2 rounded bg-emerald-500/10 text-emerald-400">
+                                        <span class="material-symbols-outlined text-xl">lan</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-white text-sm font-semibold">IPs de la Organización</h3>
+                                        <p class="text-slate-500 text-xs mt-0.5">Basado en lista global</p>
+                                    </div>
+                                </div>
+                                <button
+                                    class="relative inline-flex h-5 w-9 items-center rounded-full bg-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 focus:ring-offset-[#181e2b]">
+                                    <span
+                                        class="translate-x-4 inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-surface-dark border border-surface-border rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm hover:border-slate-600 transition-colors">
+                            <div class="flex justify-between items-start">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-2 rounded bg-orange-500/10 text-orange-400">
+                                        <span class="material-symbols-outlined text-xl">admin_panel_settings</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-white text-sm font-semibold">Usuarios Admin</h3>
+                                        <p class="text-slate-500 text-xs mt-0.5">Sesiones autenticadas</p>
+                                    </div>
+                                </div>
+                                <button
+                                    class="relative inline-flex h-5 w-9 items-center rounded-full bg-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 focus:ring-offset-[#181e2b]">
+                                    <span
+                                        class="translate-x-1 inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 items-start">
+                        <div class="xl:col-span-2 flex flex-col gap-6">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-slate-400">block</span>
+                                    Reglas de Bloqueo Personalizadas
+                                </h3>
+                                <button
+                                    class="text-primary-light hover:text-white text-sm font-bold flex items-center gap-1 transition-colors bg-primary/10 px-3 py-1.5 rounded-md border border-primary/20 hover:bg-primary/20">
+                                    <span class="material-symbols-outlined text-lg">add</span>
+                                    Nueva Regla
+                                </button>
+                            </div>
+                            <div
+                                class="group relative flex flex-col gap-4 p-6 bg-surface-dark border border-surface-border rounded-xl transition-all hover:border-slate-500 shadow-sm">
+                                <div
+                                    class="absolute left-0 top-6 bottom-6 w-[3px] bg-indigo-500 rounded-r shadow-[2px_0_10px_rgba(99,102,241,0.2)]">
+                                </div>
+                                <div
+                                    class="flex items-center justify-between mb-4 pb-4 border-b border-surface-border/50">
+                                    <div class="flex items-center gap-4">
+                                        <div class="flex flex-col">
+                                            <span class="text-white font-semibold text-base">Equipo QA y
+                                                Desarrollo</span>
+                                            <span class="text-slate-500 text-xs mt-0.5">Excluir dispositivos de prueba
+                                                internos</span>
+                                        </div>
+                                        <span
+                                            class="bg-indigo-500/10 text-indigo-300 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border border-indigo-500/20">Activo</span>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <button
+                                            class="size-8 flex items-center justify-center rounded hover:bg-[#273142] text-slate-400 transition-colors"
+                                            title="Editar Nombre">
+                                            <span class="material-symbols-outlined text-lg">edit</span>
+                                        </button>
+                                        <button
+                                            class="size-8 flex items-center justify-center rounded hover:bg-red-500/10 text-slate-400 hover:text-red-400 transition-colors"
+                                            title="Eliminar">
+                                            <span class="material-symbols-outlined text-lg">delete</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex flex-col sm:flex-row gap-3 items-start sm:items-center bg-[#11151e] p-3 rounded-lg border border-surface-border">
+                                    <div class="w-full sm:w-40 shrink-0">
+                                        <div class="relative group/input">
+                                            <select
+                                                class="w-full bg-[#181e2b] border-none rounded text-slate-200 text-sm focus:ring-1 focus:ring-primary pl-9 py-2 cursor-pointer">
+                                                <option>Dirección IP</option>
+                                                <option>Cookie</option>
+                                                <option>Parámetro URL</option>
+                                            </select>
+                                            <span
+                                                class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-lg group-hover/input:text-indigo-400 transition-colors">dns</span>
+                                        </div>
+                                    </div>
+                                    <div class="w-full sm:w-36 shrink-0">
+                                        <select
+                                            class="w-full bg-[#181e2b] border-none rounded text-slate-200 text-sm focus:ring-1 focus:ring-primary py-2 cursor-pointer">
+                                            <option>es igual a</option>
+                                            <option>empieza con</option>
+                                            <option>está en rango</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex-1 w-full">
+                                        <input
+                                            class="w-full bg-[#181e2b] border-none rounded text-white text-sm focus:ring-1 focus:ring-primary placeholder-slate-600 py-2 font-mono"
+                                            placeholder="Valor..." type="text" value="192.168.1.50" />
+                                    </div>
+                                    <button class="shrink-0 text-slate-600 hover:text-white transition-colors p-1">
+                                        <span class="material-symbols-outlined text-lg">close</span>
+                                    </button>
+                                </div>
+                                <div class="flex items-center gap-4 px-4 py-1">
+                                    <div class="h-px bg-surface-border flex-1"></div>
+                                    <span
+                                        class="text-[10px] font-bold text-slate-500 uppercase tracking-widest bg-[#181e2b] px-2 py-0.5 rounded border border-surface-border">O</span>
+                                    <div class="h-px bg-surface-border flex-1"></div>
+                                </div>
+                                <div
+                                    class="flex flex-col sm:flex-row gap-3 items-start sm:items-center bg-[#11151e] p-3 rounded-lg border border-surface-border">
+                                    <div class="w-full sm:w-40 shrink-0">
+                                        <div class="relative group/input">
+                                            <select
+                                                class="w-full bg-[#181e2b] border-none rounded text-slate-200 text-sm focus:ring-1 focus:ring-primary pl-9 py-2 cursor-pointer">
+                                                <option>Parámetro URL</option>
+                                                <option>Dirección IP</option>
+                                            </select>
+                                            <span
+                                                class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-lg group-hover/input:text-indigo-400 transition-colors">link</span>
+                                        </div>
+                                    </div>
+                                    <div class="w-full sm:w-36 shrink-0">
+                                        <select
+                                            class="w-full bg-[#181e2b] border-none rounded text-slate-200 text-sm focus:ring-1 focus:ring-primary py-2 cursor-pointer">
+                                            <option>contiene</option>
+                                            <option>es igual a</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex-1 w-full">
+                                        <input
+                                            class="w-full bg-[#181e2b] border-none rounded text-white text-sm focus:ring-1 focus:ring-primary placeholder-slate-600 py-2 font-mono text-indigo-300"
+                                            placeholder="Valor..." type="text" value="qa_mode=true" />
+                                    </div>
+                                    <button class="shrink-0 text-slate-600 hover:text-white transition-colors p-1">
+                                        <span class="material-symbols-outlined text-lg">close</span>
+                                    </button>
+                                </div>
+                                <button
+                                    class="mt-2 w-full py-2 border border-dashed border-surface-border rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-[#11151e] hover:border-indigo-500/30 transition-all text-xs font-semibold uppercase tracking-wide flex items-center justify-center gap-2">
+                                    <span class="material-symbols-outlined text-sm">add</span> Añadir Condición
+                                </button>
+                            </div>
+                            <div
+                                class="group relative flex flex-col gap-4 p-6 bg-surface-dark border border-surface-border rounded-xl transition-all hover:border-slate-500 shadow-sm opacity-100">
+                                <div class="absolute left-0 top-6 bottom-6 w-[3px] bg-slate-600 rounded-r"></div>
+                                <div
+                                    class="flex items-center justify-between mb-4 pb-4 border-b border-surface-border/50">
+                                    <div class="flex items-center gap-4">
+                                        <div class="flex flex-col">
+                                            <span class="text-white font-semibold text-base">Bloqueo de VPNs
+                                                Conocidas</span>
+                                            <span class="text-slate-500 text-xs mt-0.5">Evitar tráfico
+                                                enmascarado</span>
+                                        </div>
+                                        <span
+                                            class="bg-slate-700/30 text-slate-400 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border border-slate-700/50">Inactivo</span>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <button
+                                            class="size-8 flex items-center justify-center rounded hover:bg-[#273142] text-slate-400 transition-colors">
+                                            <span class="material-symbols-outlined text-lg">toggle_off</span>
+                                        </button>
+                                        <button
+                                            class="size-8 flex items-center justify-center rounded hover:bg-[#273142] text-slate-400 transition-colors">
+                                            <span class="material-symbols-outlined text-lg">expand_more</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="xl:col-span-1">
+                            <div class="sticky top-6 flex flex-col gap-6">
+                                <div
+                                    class="bg-surface-dark border border-surface-border rounded-xl p-6 shadow-sm relative overflow-hidden">
+                                    <div class="absolute top-0 right-0 p-4 opacity-5">
+                                        <span class="material-symbols-outlined text-8xl">filter_alt_off</span>
+                                    </div>
+                                    <h3 class="text-white font-bold text-lg mb-6 flex items-center gap-2 relative z-10">
+                                        <span class="material-symbols-outlined text-primary-light">analytics</span>
+                                        Proyección de Limpieza
+                                    </h3>
+                                    <div class="space-y-5 relative z-10">
+                                        <div>
+                                            <div class="flex justify-between items-end mb-1">
+                                                <span
+                                                    class="text-slate-400 text-xs font-semibold uppercase tracking-wide">Tráfico
+                                                    Bruto</span>
+                                                <span class="text-white font-mono text-sm">125,400</span>
+                                            </div>
+                                            <div class="h-1.5 w-full bg-[#11151e] rounded-full overflow-hidden">
+                                                <div class="h-full bg-slate-600 w-full"></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex justify-between items-end mb-1">
+                                                <span
+                                                    class="text-indigo-300 text-xs font-semibold uppercase tracking-wide flex items-center gap-1">
+                                                    Excluido
+                                                    <span class="material-symbols-outlined text-[10px]">info</span>
+                                                </span>
+                                                <span class="text-indigo-300 font-mono text-sm">- 18,200 (14.5%)</span>
+                                            </div>
+                                            <div class="h-1.5 w-full bg-[#11151e] rounded-full overflow-hidden">
+                                                <div class="h-full bg-indigo-500 w-[14.5%]"></div>
+                                            </div>
+                                        </div>
+                                        <div class="pt-4 border-t border-surface-border">
+                                            <div class="flex justify-between items-center">
+                                                <span class="text-white font-semibold">Tráfico Limpio</span>
+                                                <span
+                                                    class="text-emerald-400 font-mono font-bold text-xl">107,200</span>
+                                            </div>
+                                            <p class="text-xs text-slate-500 mt-2">
+                                                Volumen estimado de usuarios elegibles para experimentos tras aplicar
+                                                filtros.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-[#11151e] border border-surface-border rounded-xl p-5 shadow-sm">
+                                    <h4 class="text-white font-semibold text-sm mb-3 flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-amber-400 text-lg">lightbulb</span>
+                                        Recomendaciones
+                                    </h4>
+                                    <ul class="space-y-3 text-sm text-slate-400">
+                                        <li class="flex gap-3 items-start">
+                                            <span
+                                                class="block h-1.5 w-1.5 rounded-full bg-slate-600 mt-1.5 shrink-0"></span>
+                                            <span>Excluye la IP de tu oficina para no sesgar las conversiones durante
+                                                pruebas internas.</span>
+                                        </li>
+                                        <li class="flex gap-3 items-start">
+                                            <span
+                                                class="block h-1.5 w-1.5 rounded-full bg-slate-600 mt-1.5 shrink-0"></span>
+                                            <span>Usa un parámetro de URL como <code
+                                                    class="bg-[#181e2b] px-1 py-0.5 rounded text-xs border border-surface-border text-slate-300">?internal=true</code>
+                                                para marcar dispositivos móviles de testeo.</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="h-20"></div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+
+</html>

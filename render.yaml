@@ -1,15 +1,123 @@
+# Sampelit Render Deployment Configuration
+# Architecture: Private API + Static Frontend + Supabase
+
 services:
+  # ============================================
+  # SERVICE 1: Private API (Backend + Engine)
+  # ============================================
+  # This service is INTERNAL ONLY - not publicly accessible
+  # Contains proprietary A/B testing algorithms
   - type: web
-    name: samplit-platform
-    env: python
+    name: sampelit-api
+    runtime: python
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PYTHON_VERSION
-        value: 3.10.0
-      - key: POETRY_VERSION
-        value: 1.6.1
-      - key: WEB_CONCURRENCY
-        value: 2
+        value: "3.11"
+      - key: IS_DEVELOPMENT
+        value: "false"
+      # Database (Supabase)
+      - key: DATABASE_URL
+        sync: false  # Set manually in Render dashboard
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      # Auth
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_ALGORITHM
+        value: "HS256"
+      # API Security
+      - key: ALLOWED_ORIGINS
+        value: "https://sampelit.com,https://www.sampelit.com"
+      - key: API_RATE_LIMIT
+        value: "100"
     autoDeploy: false
-    plan: free
+    plan: starter  # $7/month - private service needs at least starter
+    # CRITICAL: This setting makes the service private
+    # Only accessible from other Render services, not the public internet
+    # privateService: true  # Uncomment when Render supports this in YAML
+
+  # ============================================
+  # SERVICE 2: Static Frontend
+  # ============================================
+  # Public-facing website served as static files
+  - type: static
+    name: sampelit-web
+    buildCommand: echo "No build needed - pure static site"
+    staticPublishPath: ./static
+    pullRequestPreviewsEnabled: true
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+    routes:
+      # SPA-style routing for HTML5 history
+      - type: rewrite
+        source: /dashboard/*
+        destination: /dashboard.html
+      - type: rewrite
+        source: /experiments/*
+        destination: /experiment-detail.html
+      - type: rewrite
+        source: /help-center/*
+        destination: /help-center/index.html
+      # API Proxy - routes /api/* to private backend
+      - type: proxy
+        source: /api/*
+        destination: https://sampelit-api.onrender.com/*
+    envVars:
+      - key: API_BASE_URL
+        value: https://sampelit-api.onrender.com
+
+# ============================================
+# ENVIRONMENT GROUPS
+# ============================================
+# These are shared across services
+envVarGroups:
+  - name: production-secrets
+    envVars:
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: SENDGRID_API_KEY
+        sync: false
+
+# ============================================
+# DEPLOYMENT NOTES
+# ============================================
+# 
+# 1. SUPABASE CONNECTION:
+#    - Go to Supabase Dashboard > Settings > Database
+#    - Copy the "Connection string" (URI format)
+#    - Paste into DATABASE_URL in Render dashboard
+#
+# 2. DOMAIN SETUP:
+#    - sampelit.com → sampelit-web (static frontend)
+#    - api.sampelit.com → sampelit-api (backend) [optional, for direct API access]
+#
+# 3. PROTECTING THE ENGINE:
+#    - The sampelit-api service should be marked as "Private"
+#    - Only the static frontend can access it via the proxy
+#    - External users cannot directly call the API
+#
+# 4. COST ESTIMATION (Monthly):
+#    - sampelit-api (Starter): $7
+#    - sampelit-web (Static): Free
+#    - Supabase (Free tier): $0
+#    - Total: ~$7/month
+#
+# 5. SCALING:
+#    - For high traffic, upgrade sampelit-api to Standard ($25/month)
+#    - Consider adding Redis for session caching

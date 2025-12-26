@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>404 - Page Not Found | Sampelit</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1754cf",
+                        "background-light": "#ffffff",
+                        "background-dark": "#111621",
+                        "neutral-light": "#f6f6f8",
+                        "navy-accent": "#0e121b",
+                        "text-secondary": "#4e6797"
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "body": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-navy-accent dark:text-white font-display antialiased flex flex-col min-h-screen overflow-x-hidden">
+    <!-- Top Navigation -->
+    <header
+        class="w-full border-b border-[#e7ebf3] dark:border-gray-800 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-[1200px] mx-auto px-6 md:px-10 h-16 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 text-navy-accent dark:text-white">
+                <div class="size-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">auto_fix_high</span>
+                </div>
+                <h2 class="text-lg font-bold tracking-tight">Sampelit<span class="text-primary">.</span></h2>
+            </a>
+            <div class="hidden md:flex flex-1 justify-end gap-8 items-center">
+                <nav class="flex items-center gap-8">
+                    <a class="text-sm font-medium text-navy-accent/70 hover:text-primary transition-colors duration-200"
+                        href="#">Platform</a>
+                    <a class="text-sm font-medium text-navy-accent/70 hover:text-primary transition-colors duration-200"
+                        href="#">Experiments</a>
+                    <a class="text-sm font-medium text-navy-accent/70 hover:text-primary transition-colors duration-200"
+                        href="#">Documentation</a>
+                </nav>
+                <button
+                    class="bg-primary hover:bg-primary/90 transition-colors duration-200 text-white text-sm font-bold px-5 py-2.5 rounded-lg flex items-center justify-center min-w-[84px]">
+                    <span class="truncate">Login</span>
+                </button>
+            </div>
+            <button class="md:hidden p-2 text-navy-accent">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+        </div>
+    </header>
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col justify-center items-center relative overflow-hidden px-4 py-12 md:py-0">
+        <!-- Abstract Background Decoration -->
+        <div
+            class="absolute -top-[10%] -left-[5%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px] pointer-events-none">
+        </div>
+        <div
+            class="absolute bottom-[10%] -right-[5%] w-[35%] h-[35%] bg-primary/5 rounded-full blur-[100px] pointer-events-none">
+        </div>
+        <div class="w-full max-w-[680px] flex flex-col items-center justify-center relative z-10 text-center space-y-8">
+            <!-- Headline "404" -->
+            <div class="relative">
+                <h1
+                    class="text-navy-accent dark:text-white text-[120px] md:text-[180px] font-bold leading-none tracking-tighter select-none opacity-90">
+                    404
+                </h1>
+                <!-- Small decorative visual representing broken experiment -->
+                <div
+                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center opacity-10 pointer-events-none">
+                    <span class="material-symbols-outlined text-[150px] md:text-[220px]">science</span>
+                </div>
+            </div>
+            <!-- Contextual Text -->
+            <div class="space-y-4 max-w-lg mx-auto">
+                <h2 class="text-2xl md:text-3xl font-bold text-navy-accent dark:text-white tracking-tight">
+                    Untested Variable Detected
+                </h2>
+                <p class="text-text-secondary text-base md:text-lg font-normal leading-relaxed">
+                    It looks like you've ventured into an empty dataset. The experiment page you are looking for has
+                    concluded or never existed.
+                </p>
+            </div>
+            <!-- Search Bar -->
+            <div class="w-full max-w-md pt-4">
+                <form class="relative group">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <span
+                            class="material-symbols-outlined text-text-secondary group-focus-within:text-primary transition-colors">search</span>
+                    </div>
+                    <input
+                        class="block w-full pl-12 pr-4 py-3.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm md:text-base text-navy-accent dark:text-white placeholder-text-secondary focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all shadow-sm hover:border-gray-300 dark:hover:border-gray-600"
+                        placeholder="Search for active experiments or docs..." type="text" />
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                        <kbd
+                            class="hidden md:inline-flex items-center px-2 py-0.5 border border-gray-200 dark:border-gray-600 rounded text-xs font-medium text-gray-400">⌘K</kbd>
+                    </div>
+                </form>
+            </div>
+            <!-- Actions -->
+            <div class="pt-4 flex flex-col md:flex-row gap-4 w-full justify-center items-center">
+                <button
+                    class="flex items-center justify-center h-12 px-8 bg-primary hover:bg-blue-700 text-white text-base font-bold rounded-lg transition-all duration-200 shadow-lg shadow-primary/20 min-w-[200px]">
+                    Return to Dashboard
+                </button>
+                <a class="flex items-center justify-center h-12 px-6 text-navy-accent dark:text-white font-medium hover:text-primary transition-colors"
+                    href="#">
+                    <span class="mr-2">Visit Help Center</span>
+                    <span class="material-symbols-outlined text-sm">arrow_outward</span>
+                </a>
+            </div>
+        </div>
+    </main>
+    <!-- Simple Footer -->
+    <footer class="w-full py-8 border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-background-dark">
+        <div
+            class="max-w-[1200px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-text-secondary">
+            <p>© 2024 Sampelit. All rights reserved.</p>
+            <div class="flex gap-6">
+                <a class="hover:text-primary transition-colors" href="#">Status</a>
+                <a class="hover:text-primary transition-colors" href="#">Privacy</a>
+                <a class="hover:text-primary transition-colors" href="#">Terms</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

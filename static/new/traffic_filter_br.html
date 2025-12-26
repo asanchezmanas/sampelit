@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Traffic Exclusion Filters</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300..700&amp;display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f172a", "secondary": "#475569",
+                        "accent-blue": "#3b82f6", "background-light": "#ffffff",
+                        "surface": "#f8fafc",
+                        "surface-hover": "#f1f5f9",
+                        "border-subtle": "#e2e8f0",
+                    },
+                    fontFamily: {
+                        "sans": ["Manrope", "sans-serif"],
+                    },
+                    boxShadow: {
+                        'subtle': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02)',
+                        'float': '0 10px 15px -3px rgba(15, 23, 42, 0.05), 0 4px 6px -2px rgba(15, 23, 42, 0.025)',
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #ffffff;
+            color: #0f172a;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        input[type="radio"]:checked {
+            background-color: #0f172a;
+            border-color: #0f172a;
+        }
+
+        input[type="checkbox"]:checked {
+            background-color: #0f172a;
+            border-color: #0f172a;
+        }
+
+        *:focus-visible {
+            outline: 2px solid #0f172a;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+
+<body class="bg-white text-slate-800 antialiased overflow-hidden h-screen flex">
+    <aside class="w-64 bg-surface border-r border-border-subtle flex-shrink-0 flex flex-col h-full z-20">
+        <div class="p-6 pb-2">
+            <div class="flex gap-3 items-center mb-10">
+                <div class="h-9 w-9 rounded bg-primary flex items-center justify-center text-white shadow-subtle"
+                    data-alt="Minimalist logo">
+                    <span class="material-symbols-outlined text-lg">tune</span>
+                </div>
+                <div class="flex flex-col">
+                    <h1 class="text-slate-900 text-sm font-bold tracking-tight">Optimizely AI</h1>
+                    <p class="text-slate-500 text-[10px] font-medium uppercase tracking-wide">Workspace A</p>
+                </div>
+            </div>
+        </div>
+        <nav class="flex-1 px-4 flex flex-col gap-1 overflow-y-auto">
+            <a class="flex items-center gap-3 px-3 py-2 rounded-md text-slate-500 hover:bg-white hover:text-primary hover:shadow-subtle transition-all duration-200 group"
+                href="#">
+                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">dashboard</span>
+                <span class="text-sm font-medium">Dashboard</span>
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2 rounded-md text-slate-500 hover:bg-white hover:text-primary hover:shadow-subtle transition-all duration-200 group"
+                href="#">
+                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">science</span>
+                <span class="text-sm font-medium">Experiments</span>
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2 rounded-md bg-white text-primary shadow-subtle border border-border-subtle/50 transition-all relative overflow-hidden"
+                href="#">
+                <div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+                <span class="material-symbols-outlined fill text-primary">filter_alt_off</span>
+                <span class="text-sm font-bold">Traffic Exclusion</span>
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2 rounded-md text-slate-500 hover:bg-white hover:text-primary hover:shadow-subtle transition-all duration-200 group"
+                href="#">
+                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">groups</span>
+                <span class="text-sm font-medium">Audiences</span>
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2 rounded-md text-slate-500 hover:bg-white hover:text-primary hover:shadow-subtle transition-all duration-200 group"
+                href="#">
+                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">settings</span>
+                <span class="text-sm font-medium">Settings</span>
+            </a>
+        </nav>
+        <div class="p-4 mt-auto border-t border-border-subtle">
+            <div
+                class="flex items-center gap-3 p-2 rounded-md hover:bg-white hover:shadow-subtle transition-all cursor-pointer">
+                <div class="h-8 w-8 rounded bg-slate-200 bg-center bg-cover border border-slate-100"
+                    data-alt="User profile"
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBlPT0yXPHRLmmRvsUAKFqS9TGd1_J2mi5XWT4eAT6N7Tl_HuanR8mQJj4322IZatabGwjzK_pYlVnDk8zXPE6nLmWarqrYLALgMkwQEcZA9VF_XyDSt3SGRsIraaGEt1Sl0Pby-xIXq7dXl-gbR_X0o7vUlKjWL4N9GNIwEDK0iG540cXVHx_kD8QOhuzh0yUBlEHrXthdC0xDG65adZG496jQH7Z0N2z4sLDBkGKQmtP2Of8xF6GqbrZehMi5s41qhJ6U0cTr");'>
+                </div>
+                <div class="flex flex-col min-w-0">
+                    <p class="text-sm font-semibold text-slate-900 truncate">Alex Morgan</p>
+                    <p class="text-[10px] text-slate-500 truncate uppercase tracking-wide">Administrator</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <main class="flex-1 flex flex-col h-full min-w-0 overflow-hidden bg-white relative">
+        <header
+            class="h-16 flex items-center justify-between px-8 bg-white/90 backdrop-blur-md border-b border-border-subtle z-10 sticky top-0">
+            <nav class="flex items-center gap-2 text-sm font-medium">
+                <a class="text-slate-400 hover:text-primary transition-colors" href="#">Configuration</a>
+                <span class="text-slate-300 text-xs">/</span>
+                <span class="text-primary">Exclusion Rules</span>
+            </nav>
+            <div class="flex items-center gap-4">
+                <button
+                    class="h-8 w-8 flex items-center justify-center rounded-md text-slate-400 hover:bg-surface hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined">notifications</span>
+                </button>
+                <div class="h-4 w-px bg-slate-200"></div>
+                <button
+                    class="h-8 w-8 flex items-center justify-center rounded-md text-slate-400 hover:bg-surface hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined">help</span>
+                </button>
+            </div>
+        </header>
+        <div class="flex-1 overflow-y-auto p-8 lg:p-10 scroll-smooth">
+            <div class="max-w-6xl mx-auto flex flex-col gap-10">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div>
+                        <h2 class="text-3xl font-light text-primary tracking-tight mb-2">Traffic Exclusion</h2>
+                        <p class="text-slate-500 text-sm max-w-xl leading-relaxed">
+                            Configure precise rules to prevent specific traffic segments from entering your A/B
+                            experiments. Ensuring data purity by filtering out unwanted sessions.
+                        </p>
+                    </div>
+                    <button
+                        class="flex items-center gap-2 bg-primary hover:bg-slate-800 text-white px-5 py-2.5 rounded-md text-sm font-medium shadow-float transition-all hover:-translate-y-0.5 active:translate-y-0">
+                        <span class="material-symbols-outlined text-[18px]">add</span>
+                        <span>Create Exclusion Rule</span>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div
+                        class="bg-surface p-6 rounded-lg border border-border-subtle shadow-subtle flex flex-col gap-1 group hover:border-slate-300 transition-colors">
+                        <div class="flex justify-between items-start mb-2">
+                            <p class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Active Sessions</p>
+                            <span
+                                class="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">monitoring</span>
+                        </div>
+                        <h3 class="text-3xl font-light text-slate-900">1.2M</h3>
+                        <p class="text-xs text-slate-400 mt-1">Total traffic monitored</p>
+                    </div>
+                    <div
+                        class="bg-surface p-6 rounded-lg border border-border-subtle shadow-subtle flex flex-col gap-1 group hover:border-slate-300 transition-colors">
+                        <div class="flex justify-between items-start mb-2">
+                            <p class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Excluded Traffic
+                            </p>
+                            <span
+                                class="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">block</span>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <h3 class="text-3xl font-light text-slate-900">155k</h3>
+                            <span
+                                class="text-xs font-medium text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">+12%</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">Sessions filtered out</p>
+                    </div>
+                    <div
+                        class="bg-surface p-6 rounded-lg border border-border-subtle shadow-subtle flex flex-col gap-1 group hover:border-slate-300 transition-colors">
+                        <div class="flex justify-between items-start mb-2">
+                            <p class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Quality Score</p>
+                            <span
+                                class="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">verified_user</span>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <h3 class="text-3xl font-light text-slate-900">98.5%</h3>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">Data purity rating</p>
+                    </div>
+                </div>
+                <div class="bg-white border border-border-subtle rounded-lg p-5 shadow-card flex items-start gap-4">
+                    <div
+                        class="h-8 w-8 rounded-full bg-slate-50 flex items-center justify-center flex-shrink-0 text-primary">
+                        <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="text-sm font-bold text-primary">Smart Suggestion</h4>
+                        <p class="text-sm text-slate-600 mt-1 leading-relaxed">
+                            We've identified an anomaly from IP range <strong>84.12.x.x (Frankfurt)</strong> showing
+                            bot-like behavior. Adding an exclusion rule could improve your experiment accuracy by
+                            approximately 2.4%.
+                        </p>
+                    </div>
+                    <button
+                        class="self-center px-4 py-2 text-xs font-bold text-primary border border-slate-200 rounded hover:bg-slate-50 transition-colors whitespace-nowrap">
+                        Review &amp; Exclude
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    <div class="lg:col-span-4 flex flex-col gap-4">
+                        <div class="flex items-center justify-between pb-2 border-b border-border-subtle">
+                            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-widest">Active Rules</h3>
+                            <button class="text-xs text-slate-400 hover:text-primary transition-colors">Sort by
+                                Priority</button>
+                        </div>
+                        <div
+                            class="group bg-white p-4 rounded-md border-l-4 border-primary shadow-subtle cursor-pointer transition-all relative ring-1 ring-slate-100">
+                            <div class="flex items-start gap-3">
+                                <span
+                                    class="material-symbols-outlined text-slate-300 text-sm mt-0.5 cursor-grab">drag_indicator</span>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <h4 class="font-bold text-slate-900 text-sm">Internal IPs</h4>
+                                        <span class="flex h-2 w-2 rounded-full bg-primary"></span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 line-clamp-1">Strict exclusion of office network
+                                        ranges.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="group bg-surface hover:bg-white p-4 rounded-md border border-transparent hover:border-slate-200 hover:shadow-subtle cursor-pointer transition-all">
+                            <div class="flex items-start gap-3">
+                                <span
+                                    class="material-symbols-outlined text-slate-300 text-sm mt-0.5 cursor-grab">drag_indicator</span>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <h4 class="font-medium text-slate-700 text-sm group-hover:text-slate-900">Bot
+                                            Patterns</h4>
+                                        <span class="flex h-2 w-2 rounded-full bg-emerald-500"></span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 line-clamp-1">User-Agent contains "bot", "crawl".
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="group bg-surface hover:bg-white p-4 rounded-md border border-transparent hover:border-slate-200 hover:shadow-subtle cursor-pointer transition-all">
+                            <div class="flex items-start gap-3">
+                                <span
+                                    class="material-symbols-outlined text-slate-300 text-sm mt-0.5 cursor-grab">drag_indicator</span>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <h4 class="font-medium text-slate-700 text-sm group-hover:text-slate-900">
+                                            Staging Env</h4>
+                                        <span class="flex h-2 w-2 rounded-full bg-emerald-500"></span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 line-clamp-1">Exclude traffic from test.domain.com.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-8 flex flex-col gap-6">
+                        <div class="bg-white rounded-lg border border-border-subtle shadow-card overflow-hidden">
+                            <div
+                                class="px-6 py-4 border-b border-border-subtle flex justify-between items-center bg-slate-50/50">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-slate-400 text-[20px]">edit_note</span>
+                                    <h3 class="font-bold text-slate-900 text-sm">Edit Exclusion Rule</h3>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <label class="inline-flex items-center cursor-pointer group">
+                                        <span
+                                            class="me-3 text-xs font-medium text-slate-500 group-hover:text-slate-700 transition-colors">Enabled</span>
+                                        <input checked="" class="sr-only peer" type="checkbox" value="" />
+                                        <div
+                                            class="relative w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary">
+                                        </div>
+                                    </label>
+                                    <div class="h-4 w-px bg-slate-200"></div>
+                                    <button
+                                        class="text-slate-400 hover:text-red-600 transition-colors flex items-center gap-1 text-xs font-medium">
+                                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-8 flex flex-col gap-8">
+                                <div class="grid gap-2">
+                                    <label class="text-xs font-bold text-slate-700 uppercase tracking-wide">Rule
+                                        Name</label>
+                                    <input
+                                        class="w-full bg-white border border-slate-200 text-slate-900 text-sm rounded-md focus:ring-1 focus:ring-primary focus:border-primary block p-2.5 placeholder-slate-400 font-medium transition-all hover:border-slate-300"
+                                        placeholder="e.g. Mobile Users Only" type="text" value="Internal IPs" />
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-end mb-3">
+                                        <label
+                                            class="text-xs font-bold text-slate-700 uppercase tracking-wide">Exclusion
+                                            Logic</label>
+                                        <span class="text-[10px] text-slate-400">Match ANY of the following</span>
+                                    </div>
+                                    <div class="flex flex-col gap-3">
+                                        <div
+                                            class="flex flex-wrap items-center gap-3 p-3 border border-slate-200 rounded-md bg-surface hover:bg-white hover:shadow-subtle transition-all group">
+                                            <div
+                                                class="px-2 py-1 bg-white border border-slate-200 rounded text-[10px] font-bold text-slate-500 uppercase">
+                                                If</div>
+                                            <div class="relative min-w-[140px]">
+                                                <select
+                                                    class="block w-full px-3 py-2 bg-transparent border-0 border-b border-slate-300 text-sm text-slate-700 font-medium focus:ring-0 focus:border-primary cursor-pointer">
+                                                    <option selected="">IP Address</option>
+                                                    <option>User Agent</option>
+                                                    <option>Geography</option>
+                                                </select>
+                                            </div>
+                                            <div class="relative min-w-[120px]">
+                                                <select
+                                                    class="block w-full px-3 py-2 bg-transparent border-0 border-b border-slate-300 text-sm text-slate-700 font-medium focus:ring-0 focus:border-primary cursor-pointer">
+                                                    <option>is exactly</option>
+                                                    <option selected="">starts with</option>
+                                                    <option>contains</option>
+                                                </select>
+                                            </div>
+                                            <input
+                                                class="flex-1 min-w-[180px] px-3 py-2 bg-transparent border-0 border-b border-slate-300 text-sm focus:ring-0 focus:border-primary font-mono text-slate-600"
+                                                placeholder="Value" type="text" value="192.168." />
+                                            <button
+                                                class="text-slate-300 hover:text-slate-500 p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <span class="material-symbols-outlined text-[18px]">close</span>
+                                            </button>
+                                        </div>
+                                        <div
+                                            class="flex flex-wrap items-center gap-3 p-3 border border-slate-200 rounded-md bg-surface hover:bg-white hover:shadow-subtle transition-all group">
+                                            <div
+                                                class="px-2 py-1 bg-white border border-slate-200 rounded text-[10px] font-bold text-slate-500 uppercase">
+                                                If</div>
+                                            <div class="relative min-w-[140px]">
+                                                <select
+                                                    class="block w-full px-3 py-2 bg-transparent border-0 border-b border-slate-300 text-sm text-slate-700 font-medium focus:ring-0 focus:border-primary cursor-pointer">
+                                                    <option selected="">IP Address</option>
+                                                    <option>User Agent</option>
+                                                </select>
+                                            </div>
+                                            <div class="relative min-w-[120px]">
+                                                <select
+                                                    class="block w-full px-3 py-2 bg-transparent border-0 border-b border-slate-300 text-sm text-slate-700 font-medium focus:ring-0 focus:border-primary cursor-pointer">
+                                                    <option>is exactly</option>
+                                                    <option>starts with</option>
+                                                    <option selected="">is in range</option>
+                                                </select>
+                                            </div>
+                                            <input
+                                                class="flex-1 min-w-[180px] px-3 py-2 bg-transparent border-0 border-b border-slate-300 text-sm focus:ring-0 focus:border-primary font-mono text-slate-600"
+                                                placeholder="Value" type="text" value="10.0.0.0/8" />
+                                            <button
+                                                class="text-slate-300 hover:text-slate-500 p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <span class="material-symbols-outlined text-[18px]">close</span>
+                                            </button>
+                                        </div>
+                                        <button
+                                            class="self-start text-xs text-primary font-bold hover:bg-slate-50 px-3 py-2 rounded border border-dashed border-primary/30 hover:border-primary transition-all flex items-center gap-2 mt-2">
+                                            <span class="material-symbols-outlined text-[16px]">add</span>
+                                            Add Condition
+                                        </button>
+                                    </div>
+                                </div>
+                                <div
+                                    class="bg-slate-50 p-5 rounded-md border border-border-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                    <div>
+                                        <span class="text-sm font-bold text-slate-900 block">Rule Action</span>
+                                        <span class="text-xs text-slate-500">What happens when conditions are
+                                            met?</span>
+                                    </div>
+                                    <div
+                                        class="flex items-center gap-2 bg-white p-1 rounded-md border border-slate-200 shadow-sm">
+                                        <label class="flex items-center cursor-pointer">
+                                            <input checked="" class="sr-only peer" id="exclude" name="action"
+                                                type="radio" />
+                                            <div
+                                                class="px-4 py-1.5 rounded text-sm font-medium text-slate-500 peer-checked:bg-slate-900 peer-checked:text-white transition-all flex items-center gap-2">
+                                                <span
+                                                    class="material-symbols-outlined text-[16px] hidden peer-checked:block">block</span>
+                                                Exclude
+                                            </div>
+                                        </label>
+                                        <label class="flex items-center cursor-pointer">
+                                            <input class="sr-only peer" id="include" name="action" type="radio" />
+                                            <div
+                                                class="px-4 py-1.5 rounded text-sm font-medium text-slate-500 peer-checked:bg-slate-900 peer-checked:text-white transition-all flex items-center gap-2">
+                                                <span
+                                                    class="material-symbols-outlined text-[16px] hidden peer-checked:block">check_circle</span>
+                                                Include
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex justify-end gap-3 px-8 py-5 border-t border-border-subtle bg-slate-50/50">
+                                <button
+                                    class="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-white border border-transparent hover:border-slate-200 rounded-md transition-all">Cancel</button>
+                                <button
+                                    class="px-6 py-2 text-sm font-semibold text-white bg-primary hover:bg-slate-800 rounded-md shadow-lg shadow-slate-900/10 transition-all transform hover:-translate-y-0.5">Save
+                                    Configuration</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-4 pb-10">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-light text-slate-900">Traffic Preview</h3>
+                            <p class="text-xs text-slate-500 mt-1">Real-time sampling of traffic matching current rules.
+                            </p>
+                        </div>
+                        <button class="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+                            Download Log <span class="material-symbols-outlined text-[14px]">download</span>
+                        </button>
+                    </div>
+                    <div class="bg-white border border-border-subtle rounded-lg overflow-hidden shadow-card">
+                        <table class="w-full text-sm text-left text-slate-500">
+                            <thead
+                                class="text-xs text-slate-400 uppercase bg-surface border-b border-border-subtle font-medium tracking-wider">
+                                <tr>
+                                    <th class="px-6 py-4 font-semibold w-32" scope="col">Timestamp</th>
+                                    <th class="px-6 py-4 font-semibold" scope="col">IP Address</th>
+                                    <th class="px-6 py-4 font-semibold" scope="col">User Agent</th>
+                                    <th class="px-6 py-4 font-semibold text-right" scope="col">Result</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr class="bg-white hover:bg-slate-50 transition-colors">
+                                    <td class="px-6 py-4 font-mono text-xs text-slate-400">10:42:15 AM</td>
+                                    <td class="px-6 py-4 font-mono text-xs text-slate-700">192.168.1.45</td>
+                                    <td class="px-6 py-4 text-xs text-slate-500 truncate max-w-xs">Mozilla/5.0
+                                        (Macintosh; Intel Mac OS X 10_15_7)...</td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-slate-200 bg-slate-100 text-xs font-semibold text-slate-600">
+                                            <span class="h-1.5 w-1.5 rounded-full bg-slate-500"></span> Excluded
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class="bg-white hover:bg-slate-50 transition-colors">
+                                    <td class="px-6 py-4 font-mono text-xs text-slate-400">10:38:22 AM</td>
+                                    <td class="px-6 py-4 font-mono text-xs text-slate-700">10.0.5.12</td>
+                                    <td class="px-6 py-4 text-xs text-slate-500 truncate max-w-xs">Mozilla/5.0 (Windows
+                                        NT 10.0; Win64; x64)...</td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-slate-200 bg-slate-100 text-xs font-semibold text-slate-600">
+                                            <span class="h-1.5 w-1.5 rounded-full bg-slate-500"></span> Excluded
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class="bg-white hover:bg-slate-50 transition-colors">
+                                    <td class="px-6 py-4 font-mono text-xs text-slate-400">10:35:01 AM</td>
+                                    <td class="px-6 py-4 font-mono text-xs text-slate-700">84.12.199.3</td>
+                                    <td class="px-6 py-4 text-xs text-slate-500 truncate max-w-xs">Mozilla/5.0 (iPhone;
+                                        CPU iPhone OS 16_0 like Mac OS X)...</td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-emerald-100 bg-emerald-50 text-xs font-semibold text-emerald-700">
+                                            <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Allowed
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="px-6 py-3 bg-surface border-t border-border-subtle text-center">
+                            <button
+                                class="text-xs font-bold text-slate-500 hover:text-primary transition-colors uppercase tracking-wide">Load
+                                More Events</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>
