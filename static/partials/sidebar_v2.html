@@ -1,0 +1,193 @@
+<aside
+  :class="sidebarToggle ? 'translate-x-0 lg:w-[90px]' : '-translate-x-full'"
+  class="sidebar fixed left-0 top-0 z-9999 flex h-screen w-[290px] flex-col overflow-y-hidden border-r border-slate-200 bg-white px-5 dark:border-slate-800 dark:bg-gray-900 lg:static lg:translate-x-0 transition-all duration-300"
+  @click.outside="sidebarToggle = false"
+>
+  <!-- SIDEBAR HEADER -->
+  <div
+    :class="sidebarToggle ? 'justify-center' : 'justify-between'"
+    class="flex items-center gap-2 pt-8 sidebar-header pb-7"
+  >
+    <a href="/">
+      <span class="logo flex items-center gap-2" :class="sidebarToggle ? 'hidden' : 'block'">
+        <span class="text-2xl font-display font-bold text-accent dark:text-blue-400">Sampelit<span class="text-primary dark:text-white">.</span></span>
+      </span>
+
+      <img
+        class="logo-icon w-8 h-8"
+        :class="sidebarToggle ? 'lg:block' : 'hidden'"
+        src="./images/logo/logo-icon.svg"
+        alt="Logo"
+      />
+    </a>
+  </div>
+  <!-- SIDEBAR HEADER -->
+
+  <div
+    class="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar"
+  >
+    <!-- Sidebar Menu -->
+    <nav x-data="{selected: $persist('Dashboard'), role: localStorage.getItem('mab_role') || 'client'}">
+      <!-- Menu Group: Platform -->
+      <div>
+        <h3 class="mb-4 text-xs uppercase leading-[20px] text-text-muted/70 tracking-wider font-bold">
+          <span
+            class="menu-group-title"
+            :class="sidebarToggle ? 'lg:hidden' : ''"
+          >
+            PLATFORM
+          </span>
+
+          <svg
+            :class="sidebarToggle ? 'lg:block hidden' : 'hidden'"
+            class="mx-auto fill-current menu-group-icon text-gray-400"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+              fill=""
+            />
+          </svg>
+        </h3>
+
+        <ul class="flex flex-col gap-2 mb-6">
+          <!-- Item: Dashboard -->
+          <li>
+            <a
+              href="/?tab=web"
+              @click="selected = 'Dashboard'"
+              class="group relative flex items-center gap-2.5 rounded-lg px-4 py-2 font-medium duration-300 ease-in-out"
+              :class="selected === 'Dashboard' ? 'bg-primary text-white dark:bg-white/10' : 'text-text-muted hover:bg-slate-100 dark:text-gray-400 dark:hover:bg-white/5'"
+            >
+              <span class="material-symbols-outlined">grid_view</span>
+              <span :class="sidebarToggle ? 'lg:hidden' : ''">Dashboard</span>
+            </a>
+          </li>
+
+          <!-- Item: Experiments -->
+          <li>
+            <a
+              href="/?tab=web"
+              @click="selected = 'Experiments'"
+              class="group relative flex items-center gap-2.5 rounded-lg px-4 py-2 font-medium duration-300 ease-in-out"
+              :class="selected === 'Experiments' ? 'bg-primary text-white dark:bg-white/10' : 'text-text-muted hover:bg-slate-100 dark:text-gray-400 dark:hover:bg-white/5'"
+            >
+              <span class="material-symbols-outlined">science</span>
+              <span :class="sidebarToggle ? 'lg:hidden' : ''">Experiments</span>
+            </a>
+          </li>
+
+           <!-- Item: Funnels -->
+           <li>
+            <a
+              href="/?tab=funnels"
+              @click="selected = 'Funnels'"
+              class="group relative flex items-center gap-2.5 rounded-lg px-4 py-2 font-medium duration-300 ease-in-out"
+              :class="selected === 'Funnels' ? 'bg-primary text-white dark:bg-white/10' : 'text-text-muted hover:bg-slate-100 dark:text-gray-400 dark:hover:bg-white/5'"
+            >
+              <span class="material-symbols-outlined">filter_list</span>
+              <span :class="sidebarToggle ? 'lg:hidden' : ''">Funnels</span>
+              <span 
+                class="absolute right-4 rounded bg-accent px-1.5 py-0.5 text-[10px] font-bold text-white uppercase" 
+                :class="sidebarToggle ? 'lg:hidden' : ''"
+              >
+                  Beta
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Menu Group: Administration -->
+      <div x-show="role === 'admin'" x-cloak>
+        <h3 class="mb-4 text-xs uppercase leading-[20px] text-text-muted/70 tracking-wider font-bold">
+          <span
+            class="menu-group-title"
+            :class="sidebarToggle ? 'lg:hidden' : ''"
+          >
+            ADMINISTRATION
+          </span>
+        </h3>
+
+        <ul class="flex flex-col gap-2 mb-6">
+          <li>
+            <a
+              href="/?tab=email"
+              @click="selected = 'Leads'"
+              class="group relative flex items-center gap-2.5 rounded-lg px-4 py-2 font-medium duration-300 ease-in-out"
+              :class="selected === 'Leads' ? 'bg-primary text-white dark:bg-white/10' : 'text-text-muted hover:bg-slate-100 dark:text-gray-400 dark:hover:bg-white/5'"
+            >
+              <span class="material-symbols-outlined">forward_to_inbox</span>
+              <span :class="sidebarToggle ? 'lg:hidden' : ''">Email Leads</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Menu Group: Settings -->
+      <div>
+        <h3 class="mb-4 text-xs uppercase leading-[20px] text-text-muted/70 tracking-wider font-bold">
+          <span
+            class="menu-group-title"
+            :class="sidebarToggle ? 'lg:hidden' : ''"
+          >
+            SETTINGS
+          </span>
+        </h3>
+
+        <ul class="flex flex-col gap-2 mb-6">
+           <!-- Billing -->
+           <li>
+            <a
+              href="/settings/billing.html"
+              class="group relative flex items-center gap-2.5 rounded-lg px-4 py-2 font-medium text-text-muted duration-300 ease-in-out hover:bg-slate-100 dark:text-gray-400 dark:hover:bg-white/5"
+            >
+              <span class="material-symbols-outlined">credit_card</span>
+              <span :class="sidebarToggle ? 'lg:hidden' : ''">Billing & Plans</span>
+            </a>
+          </li>
+          
+          <!-- Site Setup -->
+          <li>
+            <a
+              href="/onboarding/verify.html"
+              class="group relative flex items-center gap-2.5 rounded-lg px-4 py-2 font-medium text-text-muted duration-300 ease-in-out hover:bg-slate-100 dark:text-gray-400 dark:hover:bg-white/5"
+            >
+              <span class="material-symbols-outlined">domain_verification</span>
+              <span :class="sidebarToggle ? 'lg:hidden' : ''">Site Setup</span>
+            </a>
+          </li>
+
+           <!-- Profile -->
+           <li>
+            <a
+              href="/profile.html"
+              class="group relative flex items-center gap-2.5 rounded-lg px-4 py-2 font-medium text-text-muted duration-300 ease-in-out hover:bg-slate-100 dark:text-gray-400 dark:hover:bg-white/5"
+            >
+              <span class="material-symbols-outlined">person</span>
+              <span :class="sidebarToggle ? 'lg:hidden' : ''">My Profile</span>
+            </a>
+          </li>
+
+          <!-- Logout -->
+          <li>
+            <a
+              href="#"
+              data-action="logout"
+              class="group relative flex items-center gap-2.5 rounded-lg px-4 py-2 font-medium text-text-muted duration-300 ease-in-out hover:bg-red-50 hover:text-red-500 dark:text-gray-400 dark:hover:bg-red-500/10 dark:hover:text-red-400"
+            >
+              <span class="material-symbols-outlined">logout</span>
+              <span :class="sidebarToggle ? 'lg:hidden' : ''">Sign Out</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</aside>
