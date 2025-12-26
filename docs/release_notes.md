@@ -1,4 +1,4 @@
-# 🚀 Samplit v1.0 Release Notes
+# 🚀 Sampelit v1.0 Release Notes
 
 **Status: READY FOR PRODUCTION**
 **Date:** December 25, 2025

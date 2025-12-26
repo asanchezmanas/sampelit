@@ -1,4 +1,4 @@
-# ❓ FAQ Y AYUDA - INSTALACIÓN DE SAMPLIT
+# ❓ FAQ Y AYUDA - INSTALACIÓN DE Sampelit
 
 Textos para la sección de ayuda, FAQ, tooltips y mensajes del sistema.
 
@@ -14,30 +14,30 @@ Textos para la sección de ayuda, FAQ, tooltips y mensajes del sistema.
 
 ---
 
-#### P: ¿Necesito saber programar para instalar Samplit?
+#### P: ¿Necesito saber programar para instalar Sampelit?
 
-**R:** No. La instalación es tan simple como copiar y pegar. Si puedes editar el HTML de tu sitio (o tienes acceso a tu CMS), puedes instalar Samplit.
+**R:** No. La instalación es tan simple como copiar y pegar. Si puedes editar el HTML de tu sitio (o tienes acceso a tu CMS), puedes instalar Sampelit.
 
 Si no te sientes cómodo haciéndolo tú mismo, puedes enviar nuestra guía a tu desarrollador o webmaster.
 
 ---
 
-#### P: ¿Afecta Samplit la velocidad de mi sitio?
+#### P: ¿Afecta Sampelit la velocidad de mi sitio?
 
-**R:** No. Samplit está diseñado para tener **cero impacto** en la velocidad:
+**R:** No. Sampelit está diseñado para tener **cero impacto** en la velocidad:
 
 - Script ligero (~15KB minificado)
 - Carga asíncrona (no bloquea el render)
 - CDN global para máxima velocidad
 - Optimizado para performance
 
-De hecho, muchos clientes reportan que sus sitios se vuelven más rápidos después de usar Samplit gracias a las optimizaciones que descubren.
+De hecho, muchos clientes reportan que sus sitios se vuelven más rápidos después de usar Sampelit gracias a las optimizaciones que descubren.
 
 ---
 
 #### P: ¿Es compatible con mi plataforma?
 
-**R:** Samplit funciona con **todas las plataformas web**:
+**R:** Sampelit funciona con **todas las plataformas web**:
 
 ✅ WordPress  
 ✅ Shopify  
@@ -49,11 +49,11 @@ De hecho, muchos clientes reportan que sus sitios se vuelven más rápidos despu
 ✅ Next.js, Nuxt, Gatsby  
 ✅ Cualquier CMS o framework  
 
-Si tu sitio carga en un navegador, Samplit funciona.
+Si tu sitio carga en un navegador, Sampelit funciona.
 
 ---
 
-#### P: ¿Puedo instalar Samplit yo mismo o necesito un desarrollador?
+#### P: ¿Puedo instalar Sampelit yo mismo o necesito un desarrollador?
 
 **R:** Depende de tu nivel técnico:
 
@@ -99,9 +99,9 @@ En ambos casos, proporcionamos guías detalladas.
 
 ---
 
-#### P: ¿Puedo usar Samplit con Google Analytics / otras herramientas?
+#### P: ¿Puedo usar Sampelit con Google Analytics / otras herramientas?
 
-**R:** ¡Absolutamente! Samplit es **100% compatible** con:
+**R:** ¡Absolutamente! Sampelit es **100% compatible** con:
 
 - Google Analytics (GA4 y Universal)
 - Google Tag Manager
@@ -111,20 +111,20 @@ En ambos casos, proporcionamos guías detalladas.
 - Segment
 - Cualquier otra herramienta de analytics
 
-De hecho, muchos clientes integran Samplit con sus herramientas existentes para obtener análisis más profundos.
+De hecho, muchos clientes integran Sampelit con sus herramientas existentes para obtener análisis más profundos.
 
 ---
 
 #### P: ¿Afecta al SEO de mi sitio?
 
-**R:** No, de ninguna manera. Samplit:
+**R:** No, de ninguna manera. Sampelit:
 
 - No oculta contenido de los motores de búsqueda
 - No usa técnicas de cloaking
 - No duplica contenido
 - Google puede rastrear todas las variantes
 
-Los cambios que hagas con Samplit son transparentes para los buscadores.
+Los cambios que hagas con Sampelit son transparentes para los buscadores.
 
 ---
 
@@ -141,7 +141,7 @@ Los cambios que hagas con Samplit son transparentes para los buscadores.
 
 ---
 
-#### P: ¿Puedo instalar Samplit en múltiples sitios?
+#### P: ¿Puedo instalar Sampelit en múltiples sitios?
 
 **R:** Sí, pero cada sitio necesita su propio código con un token único:
 
@@ -169,16 +169,16 @@ La única excepción es si tú mismo eliminas el código o cambias tu token desd
 1. Abre tu sitio
 2. Presiona F12
 3. Ve a "Console"
-4. Busca: `[Samplit] Tracker initialized`
+4. Busca: `[Sampelit] Tracker initialized`
 
 **Método 2 (automático):**
-1. Dashboard de Samplit
+1. Dashboard de Sampelit
 2. Click en "Verificar instalación"
 3. Espera 10-20 segundos
 
 **Método 3 (manual):**
 1. Ver código fuente de tu página (Ctrl+U)
-2. Buscar: `cdn.samplit.com`
+2. Buscar: `cdn.Sampelit.com`
 
 ---
 
@@ -253,7 +253,7 @@ Si nada funciona, contacta a soporte con:
 
 ---
 
-#### P: Mi sitio va más lento después de instalar Samplit
+#### P: Mi sitio va más lento después de instalar Sampelit
 
 **R:** Esto es **extremadamente raro** porque:
 
@@ -269,14 +269,14 @@ Si nada funciona, contacta a soporte con:
 
 **Diagnóstico:**
 - Usa PageSpeed Insights antes y después
-- Desactiva temporalmente Samplit y compara
+- Desactiva temporalmente Sampelit y compara
 - Contacta a soporte con los resultados
 
 ---
 
 ### Categoría: Seguridad y Privacidad
 
-#### P: ¿Es seguro Samplit?
+#### P: ¿Es seguro Sampelit?
 
 **R:** Sí, completamente:
 
@@ -288,9 +288,9 @@ Si nada funciona, contacta a soporte con:
 
 ---
 
-#### P: ¿Qué datos recopila Samplit?
+#### P: ¿Qué datos recopila Sampelit?
 
-**R:** Samplit recopila **solo lo necesario** para los A/B tests:
+**R:** Sampelit recopila **solo lo necesario** para los A/B tests:
 
 ✅ **Lo que SÍ recopilamos:**
 - URL de la página visitada
@@ -310,14 +310,14 @@ Si nada funciona, contacta a soporte con:
 
 #### P: ¿Es compatible con GDPR/LOPD?
 
-**R:** Sí. Samplit no recopila información personal identificable (PII), por lo que cumple con GDPR.
+**R:** Sí. Sampelit no recopila información personal identificable (PII), por lo que cumple con GDPR.
 
 **Recomendación opcional:**
-Algunos clientes prefieren incluir Samplit en su banner de cookies por transparencia, aunque técnicamente no es obligatorio ya que no procesamos datos personales.
+Algunos clientes prefieren incluir Sampelit en su banner de cookies por transparencia, aunque técnicamente no es obligatorio ya que no procesamos datos personales.
 
 Puedes añadir un texto como:
 ```
-"Usamos Samplit para optimizar tu experiencia en el sitio mediante pruebas A/B. No recopilamos datos personales."
+"Usamos Sampelit para optimizar tu experiencia en el sitio mediante pruebas A/B. No recopilamos datos personales."
 ```
 
 ---
@@ -328,7 +328,7 @@ Puedes añadir un texto como:
 
 1. Abre DevTools (F12)
 2. Ve a la pestaña "Network"
-3. Busca requests a `api.samplit.com`
+3. Busca requests a `api.Sampelit.com`
 4. Click en cualquier request
 5. Ve la pestaña "Payload" para ver qué se envía
 
@@ -371,7 +371,7 @@ Total downtime: 0 minutos.
 
 #### P: Wix - ¿Por qué necesito un plan de pago?
 
-**R:** Las funciones de código personalizado en Wix solo están disponibles en planes Business o superiores. Esto es una limitación de Wix, no de Samplit.
+**R:** Las funciones de código personalizado en Wix solo están disponibles en planes Business o superiores. Esto es una limitación de Wix, no de Sampelit.
 
 **Alternativas si tienes plan gratuito:**
 - Actualiza a plan Business
@@ -401,16 +401,16 @@ Total downtime: 0 minutos.
 
 **R:** Varias formas:
 
-**Email:** soporte@samplit.com  
+**Email:** soporte@Sampelit.com  
 Respuesta en 24-48h
 
 **Chat en vivo:** Desde tu dashboard  
 Horario: Lun-Vie 9am-6pm CET
 
-**Documentación:** docs.samplit.com  
+**Documentación:** docs.Sampelit.com  
 Guías, videos y tutoriales
 
-**Comunidad:** community.samplit.com  
+**Comunidad:** community.Sampelit.com  
 Pregunta a otros usuarios
 
 ---
@@ -440,7 +440,7 @@ Pregunta a otros usuarios
 - Entrenar a tu equipo
 - Optimización personalizada
 
-Contacta a ventas@samplit.com para más información.
+Contacta a ventas@Sampelit.com para más información.
 
 ---
 
@@ -492,7 +492,7 @@ No lo compartas públicamente.
 ### Sección: Instrucciones
 
 ```
-Sigue estos pasos para instalar Samplit en tu sitio.
+Sigue estos pasos para instalar Sampelit en tu sitio.
 Si tienes dudas, consulta nuestra documentación
 o contacta al soporte.
 ```
@@ -539,7 +539,7 @@ Posibles causas:
 ```
 ⚠️ Código no detectado aún
 
-No hemos encontrado el código de Samplit en tu sitio.
+No hemos encontrado el código de Sampelit en tu sitio.
 
 Esto puede ser porque:
 • Los cambios no se han guardado/publicado
@@ -591,7 +591,7 @@ Tiempo estimado: 5 minutos
 ```
 🎉 ¡Instalación exitosa!
 
-Hemos verificado que Samplit está correctamente
+Hemos verificado que Sampelit está correctamente
 instalado en tu sitio.
 
 Ya puedes empezar a crear experimentos y
@@ -617,7 +617,7 @@ Ahora pégalo en el <head> de tu sitio.
 ```
 🔍 Verificando instalación...
 
-Estamos comprobando que el código de Samplit
+Estamos comprobando que el código de Sampelit
 esté correctamente instalado en tu sitio.
 
 Esto puede tardar entre 10 y 30 segundos.
@@ -627,7 +627,7 @@ Por favor, espera...
 ### Info: Primera instalación
 
 ```
-👋 ¡Primera vez instalando Samplit!
+👋 ¡Primera vez instalando Sampelit!
 
 No te preocupes, es muy simple.
 Sigue las instrucciones paso a paso
@@ -666,7 +666,7 @@ Click para ver instrucciones →
 
 ```
 🎉 ¡Sitio instalado correctamente!
-tusitio.com está ahora conectado a Samplit.
+tusitio.com está ahora conectado a Sampelit.
 Crea tu primer experimento →
 ```
 
@@ -684,11 +684,11 @@ lo hemos detectado en tu sitio.
 ## 📧 SUBJECT LINES (Emails)
 
 ```
-✅ Tu código de Samplit está listo
-👋 ¿Ya instalaste Samplit?
+✅ Tu código de Sampelit está listo
+👋 ¿Ya instalaste Sampelit?
 🎉 ¡Instalación verificada!
-⚠️ Problema con la instalación de Samplit
-💡 Tips para instalar Samplit más rápido
+⚠️ Problema con la instalación de Sampelit
+💡 Tips para instalar Sampelit más rápido
 🚀 Siguiente paso: Crea tu primer experimento
 ```
 

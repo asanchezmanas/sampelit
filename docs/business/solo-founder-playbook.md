@@ -1,6 +1,6 @@
 # Solo Founder Playbook
 
-Guía táctica para operar Samplit como fundador solo, sin llamadas, maximizando automatización.
+Guía táctica para operar Sampelit como fundador solo, sin llamadas, maximizando automatización.
 
 ---
 

@@ -1,4 +1,4 @@
-# Testing Guide - Samplit Application
+# Testing Guide - Sampelit Application
 
 Complete testing strategy and implementation guide for all application components.
 
@@ -467,7 +467,7 @@ test.describe('Blog', () => {
 ```python
 from locust import HttpUser, task, between
 
-class SamplitUser(HttpUser):
+class SampelitUser(HttpUser):
     wait_time = between(1, 3)
     
     def on_start(self):

@@ -28,7 +28,7 @@ Email captured via `/api/v1/leads/capture` (simulator, landing page, or direct s
 ```
 Hi,
 
-You're on the Samplit waitlist.
+You're on the Sampelit waitlist.
 
 Here's what happens next:
 - We're in private beta with a limited number of teams
@@ -43,7 +43,7 @@ In the meantime, you might find these useful:
 No newsletters. No "we miss you" emails. Just the invite when it's ready.
 
 —
-Samplit
+Sampelit
 Barcelona
 ```
 
@@ -62,7 +62,7 @@ Barcelona
 ```
 Hi,
 
-You signed up for the Samplit waitlist. Here's a bit more about how the system works.
+You signed up for the Sampelit waitlist. Here's a bit more about how the system works.
 
 Most A/B testing tools split traffic 50/50 and wait. That's inefficient. Visitors who see underperforming variants are wasted opportunities.
 
@@ -80,7 +80,7 @@ Every allocation decision is logged with a cryptographic hash. You can verify th
 More details: [link to methodology page or blog post]
 
 —
-Samplit
+Sampelit
 ```
 
 **Notes:**
@@ -100,7 +100,7 @@ Samplit
 ```
 Hi,
 
-A spot opened up. You can now access Samplit.
+A spot opened up. You can now access Sampelit.
 
 What you get:
 - Full access to the testing platform
@@ -119,7 +119,7 @@ Set up your account: [link]
 If you have questions before starting, reply to this email.
 
 —
-Samplit
+Sampelit
 ```
 
 ### Version B: Still on Waitlist
@@ -143,7 +143,7 @@ The methodology is documented here: [link]
 You're still on the list. We'll reach out when a spot opens.
 
 —
-Samplit
+Sampelit
 ```
 
 ---
@@ -183,7 +183,7 @@ resend.api_key = os.getenv("RESEND_API_KEY")
 
 def send_welcome_email(email: str):
     resend.Emails.send({
-        "from": "Samplit <hello@samplit.com>",
+        "from": "Sampelit <hello@Sampelit.com>",
         "to": email,
         "subject": "You're on the list",
         "html": render_template("emails/welcome.html")
@@ -222,7 +222,7 @@ async def send_scheduled_emails():
 
 ## A/B Tests to Run
 
-1. Subject line: "You're on the list" vs "Samplit: You're in"
+1. Subject line: "You're on the list" vs "Sampelit: You're in"
 2. Email 3 timing: Day 7 vs Day 5
 3. Case study inclusion vs no case study
-4. Sender name: "Samplit" vs "Name from Samplit"
+4. Sender name: "Sampelit" vs "Name from Sampelit"

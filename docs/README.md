@@ -1,10 +1,10 @@
-# 📚 Samplit Documentation
+# 📚 Sampelit Documentation
 
 Welcome to the project documentation.
 
 ## 📖 User Guides
 
-Guides for end-users on how to install and use Samplit:
+Guides for end-users on how to install and use Sampelit:
 
 | Guide | Description |
 |-------|-------------|
@@ -21,6 +21,8 @@ Guides for end-users on how to install and use Samplit:
 | **[Shopify Integration](guides/users/shopify_guide.md)** | OAuth-based Shopify store integration. |
 | **[WordPress Integration](guides/users/wordpress_guide.md)** | Plugin and OAuth integration for WordPress sites. |
 | **[Proxy Middleware](guides/users/proxy_guide.md)** | Automatic tracker injection for any web application. |
+| **[Universal Integration](guides/integration-guide.md)** | Detailed API and framework integration (React, Vue, etc). |
+| **[Self-Hosting Deployment](guides/deployment-guide.md)** | How to deploy Sampelit on your own infra (Docker, Render). |
 
 ---
 
@@ -32,14 +34,16 @@ Guides for end-users on how to install and use Samplit:
 | **[Frontend Architecture](technical/frontend_architecture.md)** | "State of the Art" UI patterns, Alpine.js usage, and Visual Editor proxy. |
 | **[Testing Strategy](technical/testing_strategy.md)** | Full testing stack (Pytest, Playwright), coverage goals, and examples. |
 | **[Database Optimization](technical/database_optimization.md)** | Optimization plans, Indexes, and Realtime setup. |
-| **[Deployment Guide](technical/deployment_guide.md)** | Operations strategy for Render + Supabase (Blue/Green, PITR). |
+| **[Deployment Strategy](technical/deployment_guide.md)** | Cloud-native strategy (Render + Supabase). |
 | **[Database Schema](database_schema.md)** | Entity-Relationship Diagram and Schema Reference. |
 
-## 📅 Releases
+## 📅 Planning & Roadmap
 
 | Document | Description |
 |----------|-------------|
-| **[v1.0 Release Notes](release_notes.md)** | Features, Known Issues, and Future Scope. |
+| **[Future Improvements](future_improvements.md)** | Roadmap for v2.0 (Firecrawl, SEO, etc). |
+| **[SEO Guide](seo_guide.md)** | Page titling and metadata standards. |
+| **[v1.0 Release Notes](release_notes.md)** | Features and initial scope. |
 
 ## 💼 Business & Product
 

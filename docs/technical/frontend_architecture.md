@@ -1,7 +1,7 @@
-# Samplit Frontend Architecture & Interaction Guide
+# Sampelit Frontend Architecture & Interaction Guide
 
 > [!IMPORTANT]
-> This guide defines the "State of the Art" frontend patterns for Samplit. It leverages **Alpine.js** for reactivity and **Tailwind CSS** for styling, orchestrated by a custom Vanilla JS core.
+> This guide defines the "State of the Art" frontend patterns for Sampelit. It leverages **Alpine.js** for reactivity and **Tailwind CSS** for styling, orchestrated by a custom Vanilla JS core.
 
 ## 1. High-Level Architecture
 
@@ -74,7 +74,7 @@ The crown jewel of the platform. It allows users to edit their websites via an i
     1.  User enters URL.
     2.  Backend `/proxy` fetches HTML and injects `editor-client.js`.
     3.  Frontend displays pure HTML in iframe (sandbox).
-    4.  `postMessage` API synchronizes clicks/edits between Parent (Samplit) and Child (Iframe).
+    4.  `postMessage` API synchronizes clicks/edits between Parent (Sampelit) and Child (Iframe).
 
 ### C. Advanced Visualization (Planned)
 For the [Results UI], we will use **Chart.js**.

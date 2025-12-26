@@ -2,7 +2,7 @@
 title: "Copy Testing: The Most Underrated Conversion Lever"
 slug: "copy-testing-guide"
 category: "ab-testing-fundamentals"
-author: "Samplit Team"
+author: "Sampelit Team"
 date: "2024-12-25"
 excerpt: "Most teams obsess over design changes while ignoring the element that drives 80% of conversion decisions: copy. Here's how to test it properly."
 keywords: ["copy testing", "headline testing", "CTA testing", "conversion copywriting", "A/B testing copy"]
@@ -109,7 +109,7 @@ We tested three headlines on our own homepage:
 2. **Statistical Calculator** - Know when to stop
 3. **Heatmaps** - See what users actually read
 
-Samplit provides all three in one platform.
+Sampelit provides all three in one platform.
 
 ## Next Steps
 
@@ -124,4 +124,4 @@ Copy testing isn't glamorous. But it's the fastest path to measurable revenue gr
 
 ---
 
-**Ready to test your copy?** Try Samplit's Visual Editor to change headlines without touching code. [Start testing →](/static/visual-editor.html)
+**Ready to test your copy?** Try Sampelit's Visual Editor to change headlines without touching code. [Start testing →](/static/visual-editor.html)

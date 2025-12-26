@@ -1,6 +1,6 @@
 # Blog Content Strategy
 
-This folder contains all blog content for Samplit, organized by content pillar.
+This folder contains all blog content for Sampelit, organized by content pillar.
 
 ## Content Pillars
 

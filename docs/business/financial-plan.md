@@ -11,7 +11,7 @@ Estructura financiera para sostenibilidad a largo plazo.
 │         HOLDING (SL / BV)           │
 │   (Holanda/España/Estonia)          │
 │                                     │
-│   ├── Samplit SL (operativa)        │
+│   ├── Sampelit SL (operativa)        │
 │   │   └── Revenue del producto      │
 │   │                                 │
 │   └── Inversiones                   │

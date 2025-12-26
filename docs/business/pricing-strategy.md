@@ -25,7 +25,7 @@ Pricing para Europa Rica + Anglo markets.
 | Optimizely | €500-2000/mes | Full-stack, enterprise |
 | VWO | €300-800/mes | Visual editor, heatmaps |
 | Google Optimize | Gratis (discontinuado) | — |
-| **Samplit** | €149-399/mes | Solo copy, más barato, autoservicio |
+| **Sampelit** | €149-399/mes | Solo copy, más barato, autoservicio |
 
 ### Por qué €149 y no €49
 

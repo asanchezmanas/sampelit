@@ -1,6 +1,6 @@
 # Tracker Snippet Installation Guide
 
-> **Samplit A/B Testing Platform**  
+> **Sampelit A/B Testing Platform**  
 > Universal installation guide for any website
 
 ---
@@ -22,24 +22,24 @@
 
 ## Overview
 
-The Samplit tracker snippet is a small piece of JavaScript code that enables A/B testing on your website. This guide covers all the ways you can install it, whether you do it yourself or get help from your hosting provider or a web professional.
+The Sampelit tracker snippet is a small piece of JavaScript code that enables A/B testing on your website. This guide covers all the ways you can install it, whether you do it yourself or get help from your hosting provider or a web professional.
 
 ### What is the Tracker Snippet?
 
 It's a small JavaScript code that you add to your website's HTML. It looks like this:
 
 ```html
-<!-- Samplit A/B Testing Tracker -->
+<!-- Sampelit A/B Testing Tracker -->
 <script>
 (function() {
-    window.SAMPLIT_CONFIG = {
+    window.Sampelit_CONFIG = {
         installationToken: 'YOUR_TOKEN_HERE',
-        apiEndpoint: 'https://api.samplit.com/api/v1/tracker'
+        apiEndpoint: 'https://api.Sampelit.com/api/v1/tracker'
     };
 })();
 </script>
-<script src="https://api.samplit.com/static/tracker/t.js" async></script>
-<!-- End Samplit Tracker -->
+<script src="https://api.Sampelit.com/static/tracker/t.js" async></script>
+<!-- End Sampelit Tracker -->
 ```
 
 ### Installation Time
@@ -56,7 +56,7 @@ It's a small JavaScript code that you add to your website's HTML. It looks like 
 
 Before installation, you need your personalized tracker code:
 
-1. Log into [Samplit Dashboard](https://app.samplit.com)
+1. Log into [Sampelit Dashboard](https://app.Sampelit.com)
 2. Go to **Installations** → **Add New Installation**
 3. Enter your website name and URL
 4. Click **Create Installation**
@@ -117,17 +117,17 @@ The tracker snippet must be placed in the `<head>` section of every page on your
 <head>
     <title>Your Website</title>
     
-    <!-- Samplit A/B Testing Tracker -->
+    <!-- Sampelit A/B Testing Tracker -->
     <script>
     (function() {
-        window.SAMPLIT_CONFIG = {
+        window.Sampelit_CONFIG = {
             installationToken: 'YOUR_TOKEN_HERE',
-            apiEndpoint: 'https://api.samplit.com/api/v1/tracker'
+            apiEndpoint: 'https://api.Sampelit.com/api/v1/tracker'
         };
     })();
     </script>
-    <script src="https://api.samplit.com/static/tracker/t.js" async></script>
-    <!-- End Samplit Tracker -->
+    <script src="https://api.Sampelit.com/static/tracker/t.js" async></script>
+    <!-- End Sampelit Tracker -->
     
 </head>
 <body>
@@ -197,17 +197,17 @@ I would like to request assistance adding a tracking code snippet to my website.
 Please add the following code to the `<head>` section of ALL pages on my website:
 
 ```html
-<!-- Samplit A/B Testing Tracker -->
+<!-- Sampelit A/B Testing Tracker -->
 <script>
 (function() {
-    window.SAMPLIT_CONFIG = {
+    window.Sampelit_CONFIG = {
         installationToken: 'YOUR_TOKEN_HERE',
-        apiEndpoint: 'https://api.samplit.com/api/v1/tracker'
+        apiEndpoint: 'https://api.Sampelit.com/api/v1/tracker'
     };
 })();
 </script>
-<script src="https://api.samplit.com/static/tracker/t.js" async></script>
-<!-- End Samplit Tracker -->
+<script src="https://api.Sampelit.com/static/tracker/t.js" async></script>
+<!-- End Sampelit Tracker -->
 ```
 
 This code should be placed:
@@ -287,17 +287,17 @@ I need help adding a JavaScript tracking snippet to my website. The task involve
 **The code to be added:**
 
 ```html
-<!-- Samplit A/B Testing Tracker -->
+<!-- Sampelit A/B Testing Tracker -->
 <script>
 (function() {
-    window.SAMPLIT_CONFIG = {
+    window.Sampelit_CONFIG = {
         installationToken: 'YOUR_TOKEN_HERE',
-        apiEndpoint: 'https://api.samplit.com/api/v1/tracker'
+        apiEndpoint: 'https://api.Sampelit.com/api/v1/tracker'
     };
 })();
 </script>
-<script src="https://api.samplit.com/static/tracker/t.js" async></script>
-<!-- End Samplit Tracker -->
+<script src="https://api.Sampelit.com/static/tracker/t.js" async></script>
+<!-- End Sampelit Tracker -->
 ```
 
 **Deliverables:**
@@ -311,10 +311,10 @@ I need help adding a JavaScript tracking snippet to my website. The task involve
 
 ### What to Provide the Freelancer
 
-1. ✅ The tracker snippet code (from your Samplit dashboard)
+1. ✅ The tracker snippet code (from your Sampelit dashboard)
 2. ✅ Admin access to your website (create a temporary account if possible)
 3. ✅ Instructions on which pages need the tracker (usually ALL pages)
-4. ❌ DON'T share your Samplit account password
+4. ❌ DON'T share your Sampelit account password
 
 ### Security Tips
 
@@ -345,7 +345,7 @@ After installation (regardless of method), verify it works:
 1. Open your website in Chrome or Firefox
 2. Right-click anywhere and select **View Page Source**
 3. Press `Ctrl+F` (or `Cmd+F` on Mac)
-4. Search for `Samplit`
+4. Search for `Sampelit`
 5. You should find the tracker code in the `<head>` section
 
 ### Method 2: Developer Tools
@@ -354,7 +354,7 @@ After installation (regardless of method), verify it works:
 2. Press `F12` to open Developer Tools
 3. Go to the **Network** tab
 4. Refresh the page
-5. Filter by "samplit" or "t.js"
+5. Filter by "Sampelit" or "t.js"
 6. You should see the tracker script loading (status 200)
 
 ### Method 3: Console Check
@@ -362,13 +362,13 @@ After installation (regardless of method), verify it works:
 1. Open your website
 2. Press `F12` to open Developer Tools
 3. Go to the **Console** tab
-4. Type: `window.SAMPLIT_CONFIG`
+4. Type: `window.Sampelit_CONFIG`
 5. Press Enter
 6. You should see your configuration object
 
-### Method 4: Samplit Dashboard
+### Method 4: Sampelit Dashboard
 
-1. Log into [Samplit Dashboard](https://app.samplit.com)
+1. Log into [Sampelit Dashboard](https://app.Sampelit.com)
 2. Go to **Installations**
 3. Find your website
 4. Check the status indicator:
@@ -406,7 +406,7 @@ After installation (regardless of method), verify it works:
 2. Click **Settings** → **Custom Code**
 3. Click **+ Add Custom Code**
 4. Paste your tracker snippet
-5. Name it "Samplit Tracker"
+5. Name it "Sampelit Tracker"
 6. Set placement to "Head"
 7. Apply to "All Pages"
 8. Click **Apply**
@@ -438,7 +438,7 @@ After installation (regardless of method), verify it works:
 3. Choose **Custom HTML**
 4. Paste your tracker snippet
 5. Set trigger to "All Pages"
-6. Name it "Samplit Tracker"
+6. Name it "Sampelit Tracker"
 7. Submit and publish
 
 ### Custom HTML Site
@@ -534,7 +534,7 @@ Yes, once installed in the `<head>` section, it tracks all pages on your website
 
 ### What if I have multiple websites?
 
-Create a separate installation in Samplit for each website. Each will have its own unique installation token.
+Create a separate installation in Sampelit for each website. Each will have its own unique installation token.
 
 ### Can I install on a staging/test site first?
 
@@ -558,14 +558,14 @@ Yes. Simply delete the tracker code from your website to stop tracking.
 
 If you're stuck at any point:
 
-- 📖 **Knowledge Base**: [help.samplit.com](https://help.samplit.com)
-- 📧 **Email Support**: support@samplit.com
+- 📖 **Knowledge Base**: [help.Sampelit.com](https://help.Sampelit.com)
+- 📧 **Email Support**: support@Sampelit.com
 - 💬 **Live Chat**: Available in dashboard (9am-6pm EST)
-- 🎮 **Discord Community**: [discord.gg/samplit](https://discord.gg/samplit)
+- 🎮 **Discord Community**: [discord.gg/Sampelit](https://discord.gg/Sampelit)
 
 ### Installation Assistance
 
-If none of the options work for you, contact us at **support@samplit.com** with:
+If none of the options work for you, contact us at **support@Sampelit.com** with:
 - Your website URL
 - Your website platform (WordPress, Wix, etc.)
 - What you've tried so far

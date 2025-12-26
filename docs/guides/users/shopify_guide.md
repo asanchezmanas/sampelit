@@ -1,6 +1,6 @@
 # Shopify Integration Guide
 
-> **Samplit A/B Testing Platform**  
+> **Sampelit A/B Testing Platform**  
 > Complete integration guide for Shopify stores
 
 ---
@@ -23,7 +23,7 @@
 
 ## Overview
 
-The Samplit Shopify integration allows you to run A/B tests on your Shopify store with automatic tracking of conversions, orders, and customer behavior. This integration uses Shopify's OAuth 2.0 authentication and Admin API for seamless connectivity.
+The Sampelit Shopify integration allows you to run A/B tests on your Shopify store with automatic tracking of conversions, orders, and customer behavior. This integration uses Shopify's OAuth 2.0 authentication and Admin API for seamless connectivity.
 
 ### What You Can Test
 
@@ -51,7 +51,7 @@ Before starting, ensure you have:
 
 - [ ] A Shopify store (any plan)
 - [ ] Store owner or staff account with app installation permissions
-- [ ] A Samplit account (sign up at [samplit.com](https://samplit.com))
+- [ ] A Sampelit account (sign up at [Sampelit.com](https://Sampelit.com))
 - [ ] Your Shopify store's `.myshopify.com` domain
 
 ---
@@ -69,9 +69,9 @@ Example formats:
 - `https://mystore.myshopify.com` ✓
 - `mystore` (we'll add `.myshopify.com` automatically) ✓
 
-### 2. Connect from Samplit Dashboard
+### 2. Connect from Sampelit Dashboard
 
-1. Log into [Samplit Dashboard](https://app.samplit.com)
+1. Log into [Sampelit Dashboard](https://app.Sampelit.com)
 2. Go to **Integrations** → **Add Integration**
 3. Select **Shopify**
 4. Enter your store domain
@@ -80,7 +80,7 @@ Example formats:
 
 ### 3. Verify Connection
 
-After authorization, you'll be redirected back to Samplit. You should see:
+After authorization, you'll be redirected back to Sampelit. You should see:
 - ✅ Store connected successfully
 - ✅ Webhooks registered
 - ✅ Tracker installed
@@ -102,7 +102,7 @@ Find your store's myshopify.com domain:
 
 ### Step 2: Initiate OAuth Connection
 
-In your Samplit dashboard:
+In your Sampelit dashboard:
 
 1. Navigate to **Integrations**
 2. Click **+ Add New Integration**
@@ -125,7 +125,7 @@ You'll be redirected to Shopify to authorize the connection. Review the permissi
 | `write_products` | Update product data if needed |
 | `read_orders` | Track order conversions |
 | `read_customers` | Segment experiments by customer type |
-| `write_script_tags` | Install the Samplit tracker on your store |
+| `write_script_tags` | Install the Sampelit tracker on your store |
 | `read_themes` | Read theme data for experiments |
 | `write_themes` | Optional: Modify theme for advanced experiments |
 
@@ -133,7 +133,7 @@ Click **Install app** to authorize.
 
 ### Step 4: Confirm Installation
 
-After authorization, you'll be redirected back to Samplit. Verify:
+After authorization, you'll be redirected back to Sampelit. Verify:
 
 1. **Connection Status**: Shows "Connected"
 2. **Store Information**: Displays your store name, currency, and timezone
@@ -147,13 +147,13 @@ Visit your Shopify store and verify the tracker is working:
 1. Open your store's homepage
 2. Open browser Developer Tools (F12)
 3. Go to the **Network** tab
-4. Filter by "samplit" or "t.js"
+4. Filter by "Sampelit" or "t.js"
 5. You should see the tracker script loading
 
 Alternatively, view page source and search for:
 
 ```html
-<!-- Samplit A/B Testing Tracker -->
+<!-- Sampelit A/B Testing Tracker -->
 ```
 
 ---
@@ -165,7 +165,7 @@ Understanding the OAuth flow helps troubleshoot issues:
 ```
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
 │                 │     │                 │     │                 │
-│  Samplit App    │────▶│   Shopify       │────▶│  Your Store     │
+│  Sampelit App    │────▶│   Shopify       │────▶│  Your Store     │
 │                 │     │   OAuth Server  │     │                 │
 └─────────────────┘     └─────────────────┘     └─────────────────┘
          │                       │                       │
@@ -232,7 +232,7 @@ X-Shopify-Hmac-SHA256: [base64-encoded-signature]
 Webhooks are sent to:
 
 ```
-https://api.samplit.com/webhooks/shopify
+https://api.Sampelit.com/webhooks/shopify
 ```
 
 > **Note**: You don't need to configure anything — webhooks are registered automatically during installation.
@@ -241,7 +241,7 @@ https://api.samplit.com/webhooks/shopify
 
 If webhooks stop working:
 
-1. Go to **Samplit Dashboard** → **Integrations** → **Shopify**
+1. Go to **Sampelit Dashboard** → **Integrations** → **Shopify**
 2. Click **Settings** (gear icon)
 3. Click **Re-register Webhooks**
 4. Verify all 4 webhooks show "Active"
@@ -253,7 +253,7 @@ If webhooks stop working:
 ### Creating Your First Experiment
 
 1. **Go to Experiments**
-   - Samplit Dashboard → **Experiments** → **Create New**
+   - Sampelit Dashboard → **Experiments** → **Create New**
 
 2. **Select Your Shopify Store**
    - Choose your connected Shopify store as the target
@@ -291,7 +291,7 @@ If webhooks stop working:
 
 ### Experiment Sync
 
-When you create or update an experiment, Samplit automatically:
+When you create or update an experiment, Sampelit automatically:
 
 1. Creates/updates a **Script Tag** in your Shopify store
 2. Stores experiment metadata in **Shopify Metafields**
@@ -299,7 +299,7 @@ When you create or update an experiment, Samplit automatically:
 
 You can verify in Shopify Admin:
 
-**Settings → Apps and sales channels → Samplit → Script tags**
+**Settings → Apps and sales channels → Sampelit → Script tags**
 
 ---
 
@@ -327,7 +327,7 @@ Orders are attributed to experiments based on:
 
 ### Viewing Conversion Data
 
-In your Samplit dashboard:
+In your Sampelit dashboard:
 
 1. Go to **Experiments** → Select your experiment
 2. Click **Results** tab
@@ -343,7 +343,7 @@ In your Samplit dashboard:
 
 ### Viewing Store Information
 
-**Samplit Dashboard → Integrations → Shopify → Store Info**
+**Sampelit Dashboard → Integrations → Shopify → Store Info**
 
 Displays:
 - Store name
@@ -371,16 +371,16 @@ When you stop or delete an experiment:
 
 ### Uninstalling Completely
 
-To remove Samplit from your store:
+To remove Sampelit from your store:
 
-**Option 1: From Samplit**
+**Option 1: From Sampelit**
 1. Dashboard → Integrations → Shopify
 2. Click **Disconnect**
 3. Confirm removal
 
 **Option 2: From Shopify**
 1. Shopify Admin → Settings → Apps and sales channels
-2. Find Samplit
+2. Find Sampelit
 3. Click **Uninstall**
 
 Both methods will:
@@ -412,8 +412,8 @@ Both methods will:
 
 **Solution**:
 1. Check script tags in Shopify:
-   - Admin → Settings → Apps and sales channels → Samplit
-2. If missing, go to Samplit → Integrations → Shopify → **Re-sync**
+   - Admin → Settings → Apps and sales channels → Sampelit
+2. If missing, go to Sampelit → Integrations → Shopify → **Re-sync**
 3. Verify in browser DevTools that script is loading
 
 #### Issue: Webhooks not receiving events
@@ -421,10 +421,10 @@ Both methods will:
 **Cause**: Webhook registration failed or was deleted.
 
 **Solution**:
-1. Go to Samplit → Integrations → Shopify → Settings
+1. Go to Sampelit → Integrations → Shopify → Settings
 2. Click **Re-register Webhooks**
 3. Check Shopify Admin → Settings → Notifications → Webhooks
-4. Verify the Samplit webhook URL is listed
+4. Verify the Sampelit webhook URL is listed
 
 #### Issue: Orders not tracking as conversions
 
@@ -460,7 +460,7 @@ Both methods will:
 Verify your integration is healthy:
 
 ```
-Samplit Dashboard → Integrations → Shopify → Health Check
+Sampelit Dashboard → Integrations → Shopify → Health Check
 ```
 
 Shows:
@@ -520,7 +520,7 @@ If you disconnect the integration:
 ### Can multiple team members manage experiments?
 
 Yes! Add team members in:
-- Samplit Dashboard → Settings → Team
+- Sampelit Dashboard → Settings → Team
 - Assign roles: Admin, Editor, Viewer
 
 ### Is my store data secure?
@@ -537,12 +537,12 @@ Yes. We follow industry best practices:
 
 Need help? We're here for you:
 
-- 📖 **Knowledge Base**: [help.samplit.com](https://help.samplit.com)
-- 📧 **Email Support**: support@samplit.com
+- 📖 **Knowledge Base**: [help.Sampelit.com](https://help.Sampelit.com)
+- 📧 **Email Support**: support@Sampelit.com
 - 💬 **Live Chat**: Available in dashboard (9am-6pm EST)
-- 🎮 **Discord Community**: [discord.gg/samplit](https://discord.gg/samplit)
+- 🎮 **Discord Community**: [discord.gg/Sampelit](https://discord.gg/Sampelit)
 
-For urgent issues, email priority-support@samplit.com with your store domain.
+For urgent issues, email priority-support@Sampelit.com with your store domain.
 
 ---
 

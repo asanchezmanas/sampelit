@@ -1,15 +1,15 @@
 # Guía de Integración
 
-Este documento detalla cómo integrar Stitch AI (Samplit) en tu sitio web.
+Este documento detalla cómo integrar Sampelit (Sampelit) en tu sitio web.
 
 ## 1. Integración Universal (HTML)
 
-La forma más rápida de instalar Samplit es añadiendo el siguiente snippet en el `<head>` de tu sitio web. Esto cargará el script de rastreo de forma asíncrona y comenzará a ejecutar tus experimentos automáticamente.
+La forma más rápida de instalar Sampelit es añadiendo el siguiente snippet en el `<head>` de tu sitio web. Esto cargará el script de rastreo de forma asíncrona y comenzará a ejecutar tus experimentos automáticamente.
 
 ```html
-<!-- Stitch AI Code -->
-<script src="https://cdn.samplit.com/t.js?token=TU_TOKEN_DE_INSTALACION" async></script>
-<!-- End Stitch AI Code -->
+<!-- Sampelit Code -->
+<script src="https://cdn.Sampelit.com/t.js?token=TU_TOKEN_DE_INSTALACION" async></script>
+<!-- End Sampelit Code -->
 ```
 
 > **Nota:** Reemplaza `TU_TOKEN_DE_INSTALACION` con el token único de tu proyecto, que puedes encontrar en el Dashboard bajo **Settings > Installation**.
@@ -29,9 +29,9 @@ import { useEffect } from 'react';
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
-    // Cargar script de Stitch AI
+    // Cargar script de Sampelit
     const script = document.createElement('script');
-    script.src = "https://cdn.samplit.com/t.js?token=TU_TOKEN";
+    script.src = "https://cdn.Sampelit.com/t.js?token=TU_TOKEN";
     script.async = true;
     document.head.appendChild(script);
 
@@ -53,7 +53,7 @@ En tu `App.vue` o layout principal:
 export default {
   mounted() {
     const script = document.createElement('script');
-    script.src = "https://cdn.samplit.com/t.js?token=TU_TOKEN";
+    script.src = "https://cdn.Sampelit.com/t.js?token=TU_TOKEN";
     script.async = true;
     document.head.appendChild(script);
   }
@@ -94,13 +94,13 @@ Para confirmar que la instalación es correcta:
 
 1. Abre tu sitio web en una nueva pestaña.
 2. Abre las herramientas de desarrollador (F12) y ve a la **Consola**.
-3. Escribe `window.samplit.isReady()`. Debería devolver `true`.
-4. También puedes buscar mensajes con el prefijo `[Samplit]` si el modo debug está activo.
+3. Escribe `window.Sampelit.isReady()`. Debería devolver `true`.
+4. También puedes buscar mensajes con el prefijo `[Sampelit]` si el modo debug está activo.
 
 ## API del Cliente
 
-Una vez cargado, puedes interactuar con Samplit mediante `window.samplit`:
+Una vez cargado, puedes interactuar con Sampelit mediante `window.Sampelit`:
 
-- `window.samplit.getUserId()`: Obtiene el ID anónimo del usuario actual.
-- `window.samplit.convert(experimentId)`: Fuerza una conversión manual.
-- `window.samplit.refresh()`: Re-checkea experimentos (útil para cambios de ruta en SPAs).
+- `window.Sampelit.getUserId()`: Obtiene el ID anónimo del usuario actual.
+- `window.Sampelit.convert(experimentId)`: Fuerza una conversión manual.
+- `window.Sampelit.refresh()`: Re-checkea experimentos (útil para cambios de ruta en SPAs).

@@ -192,7 +192,7 @@ GET /api/v1/audit/experiments/{id}/proof-of-fairness
 
 ## Comparación con Competencia
 
-| Característica | Samplit | Competidor A | Competidor B |
+| Característica | Sampelit | Competidor A | Competidor B |
 |----------------|---------|--------------|--------------|
 | Audit trail completo | ✅ Sí | ❌ No | ⚠️ Parcial |
 | Prueba criptográfica | ✅ Sí | ❌ No | ❌ No |

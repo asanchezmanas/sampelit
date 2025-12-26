@@ -145,7 +145,7 @@ Quality, precision, thoughtfulness.
 | **Typical SaaS** | "10x your productivity with our AI-powered platform!" |
 | **Growth hackers** | "One weird trick to double conversions" |
 | **Enterprise sales** | "Schedule a demo with our team" |
-| **Influencer marketing** | "Use code SAMPLIT20 for exclusive savings!" |
+| **Influencer marketing** | "Use code Sampelit20 for exclusive savings!" |
 
 ---
 

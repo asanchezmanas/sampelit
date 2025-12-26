@@ -1,6 +1,6 @@
 # Deployment & Operations Strategy (Render + Supabase)
 
-To maximize the benefits of Render and Supabase for Samplit, we will implement a robust CI/CD and DevOps strategy focusing on reliability, observability, and data protection.
+To maximize the benefits of Render and Supabase for Sampelit, we will implement a robust CI/CD and DevOps strategy focusing on reliability, observability, and data protection.
 
 ## 🚀 Render: Professional Deployment
 Render provides several "Enterprise-grade" features out of the box that we will leverage:

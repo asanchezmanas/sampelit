@@ -1,13 +1,13 @@
-# Getting Started with Samplit
+# Getting Started with Sampelit
 
-> **Samplit A/B Testing Platform**  
+> **Sampelit A/B Testing Platform**  
 > Your complete guide to running data-driven experiments
 
 ---
 
 ## Table of Contents
 
-1. [What is Samplit?](#what-is-samplit)
+1. [What is Sampelit?](#what-is-Sampelit)
 2. [Key Concepts](#key-concepts)
 3. [Quick Start (5 Minutes)](#quick-start-5-minutes)
 4. [Dashboard Overview](#dashboard-overview)
@@ -17,9 +17,9 @@
 
 ---
 
-## What is Samplit?
+## What is Sampelit?
 
-Samplit is an intelligent A/B testing platform that helps you optimize your website through data-driven experimentation. Unlike traditional A/B testing tools, Samplit uses **Adaptive Optimization** algorithms that automatically allocate more traffic to better-performing variations, maximizing your conversions while the test runs.
+Sampelit is an intelligent A/B testing platform that helps you optimize your website through data-driven experimentation. Unlike traditional A/B testing tools, Sampelit uses **Adaptive Optimization** algorithms that automatically allocate more traffic to better-performing variations, maximizing your conversions while the test runs.
 
 ### Key Benefits
 
@@ -80,7 +80,7 @@ A **conversion** is when a visitor completes your goal:
 
 ### Statistical Significance
 
-**Statistical significance** tells you if the results are reliable (not due to random chance). Samplit shows this as a percentage—look for 95% or higher before making decisions.
+**Statistical significance** tells you if the results are reliable (not due to random chance). Sampelit shows this as a percentage—look for 95% or higher before making decisions.
 
 ---
 
@@ -88,7 +88,7 @@ A **conversion** is when a visitor completes your goal:
 
 ### Step 1: Create Your Account
 
-1. Go to [samplit.com](https://samplit.com)
+1. Go to [Sampelit.com](https://Sampelit.com)
 2. Click **Start for Free**
 3. Enter your email and create a password
 4. Verify your email
@@ -101,17 +101,17 @@ A **conversion** is when a visitor completes your goal:
 4. Add it to your website's `<head>` section
 
 ```html
-<!-- Samplit A/B Testing Tracker -->
+<!-- Sampelit A/B Testing Tracker -->
 <script>
 (function() {
-    window.SAMPLIT_CONFIG = {
+    window.Sampelit_CONFIG = {
         installationToken: 'YOUR_TOKEN',
-        apiEndpoint: 'https://api.samplit.com/api/v1/tracker'
+        apiEndpoint: 'https://api.Sampelit.com/api/v1/tracker'
     };
 })();
 </script>
-<script src="https://api.samplit.com/static/tracker/t.js" async></script>
-<!-- End Samplit Tracker -->
+<script src="https://api.Sampelit.com/static/tracker/t.js" async></script>
+<!-- End Sampelit Tracker -->
 ```
 
 > **Tip**: See [Tracker Installation Guide](tracker_guide.md) for detailed instructions.
@@ -119,7 +119,7 @@ A **conversion** is when a visitor completes your goal:
 ### Step 3: Verify Installation
 
 1. Visit your website
-2. Return to Samplit dashboard
+2. Return to Sampelit dashboard
 3. Check that status shows: ✅ **Connected**
 
 ### Step 4: Create Your First Test
@@ -141,7 +141,7 @@ After logging in, you'll see the main dashboard:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  SAMPLIT                                    [Profile] [Logout]  │
+│  Sampelit                                    [Profile] [Logout]  │
 ├───────────┬─────────────────────────────────────────────────────┤
 │           │                                                     │
 │ Dashboard │   📊 Active Experiments: 3                          │
@@ -319,11 +319,11 @@ When a winner is clear:
 
 ### Get Help
 
-- 📖 **Knowledge Base**: [help.samplit.com](https://help.samplit.com)
-- 📧 **Email Support**: support@samplit.com
+- 📖 **Knowledge Base**: [help.Sampelit.com](https://help.Sampelit.com)
+- 📧 **Email Support**: support@Sampelit.com
 - 💬 **Live Chat**: Available in dashboard
-- 🎮 **Discord Community**: [discord.gg/samplit](https://discord.gg/samplit)
+- 🎮 **Discord Community**: [discord.gg/Sampelit](https://discord.gg/Sampelit)
 
 ---
 
-*Welcome to Samplit! Start optimizing today.*
+*Welcome to Sampelit! Start optimizing today.*

@@ -66,10 +66,10 @@ Este script ahora incluye **verificación completa del sistema de auditoría** a
 systemctl status postgresql
 
 # 2. Base de datos creada
-createdb samplit
+createdb Sampelit
 
 # 3. Migrations aplicadas
-psql -U postgres -d samplit -f migrations/001_initial_schema.sql
+psql -U postgres -d Sampelit -f migrations/001_initial_schema.sql
 ```
 
 ### Ejecutar Script
@@ -253,7 +253,7 @@ Audit Trail (En Memoria):
 💡 Esto permite:
   ✅ Cliente puede auditar TODAS las decisiones
   ✅ Cliente puede verificar que no hay trampa
-  ✅ Samplit protege su propiedad intelectual
+  ✅ Sampelit protege su propiedad intelectual
   ✅ Competencia NO puede copiar el algoritmo
 ```
 
@@ -381,7 +381,7 @@ systemctl start postgresql
 ### Error: relation does not exist
 ```bash
 # Aplicar migrations
-psql -U postgres -d samplit -f migrations/001_initial_schema.sql
+psql -U postgres -d Sampelit -f migrations/001_initial_schema.sql
 ```
 
 ### Audit integrity fails

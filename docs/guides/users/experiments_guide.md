@@ -1,6 +1,6 @@
 # Experiments Guide
 
-> **Samplit A/B Testing Platform**  
+> **Sampelit A/B Testing Platform**  
 > Complete guide to creating and managing experiments
 
 ---
@@ -22,7 +22,7 @@
 
 ## Understanding Experiments
 
-An experiment in Samplit compares different versions of content to determine which performs best. The platform uses **Adaptive Optimization** algorithms to automatically allocate more traffic to better-performing variations while the test runs.
+An experiment in Sampelit compares different versions of content to determine which performs best. The platform uses **Adaptive Optimization** algorithms to automatically allocate more traffic to better-performing variations while the test runs.
 
 ### Experiment Lifecycle
 
@@ -186,7 +186,7 @@ Traffic allocation determines what percentage of your visitors see the experimen
 
 ### Adaptive Traffic Allocation
 
-Samplit uses **Adaptive Optimization** to automatically adjust traffic:
+Sampelit uses **Adaptive Optimization** to automatically adjust traffic:
 
 1. **Initial Phase**: Traffic is split evenly among variations
 2. **Learning Phase**: Algorithm identifies better performers
@@ -464,8 +464,8 @@ With adaptive allocation, the best **combination** gets more traffic.
 
 Need help with experiments?
 
-- 📖 **Knowledge Base**: [help.samplit.com](https://help.samplit.com)
-- 📧 **Email**: support@samplit.com
+- 📖 **Knowledge Base**: [help.Sampelit.com](https://help.Sampelit.com)
+- 📧 **Email**: support@Sampelit.com
 - 💬 **Live Chat**: Available in dashboard
 
 ---

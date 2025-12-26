@@ -1,6 +1,6 @@
 # Estructura Corporativa y Tributación
 
-Guía sobre la optimización legal y fiscal para Samplit.
+Guía sobre la optimización legal y fiscal para Sampelit.
 
 ---
 
@@ -16,7 +16,7 @@ La estructura más recomendada para un negocio de software con visión de invers
       ┗━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┛
                            ┃
             ┏━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━┓
-            ┃      OPERATING COMPANY     ┃  <-- Samplit (Riesgos, clientes)
+            ┃      OPERATING COMPANY     ┃  <-- Sampelit (Riesgos, clientes)
             ┃       (Genera cash)        ┃
             ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ```
@@ -25,7 +25,7 @@ La estructura más recomendada para un negocio de software con visión de invers
 1. **Separación de Riesgos**: Si la operativa tiene un problema legal o técnico grave, el dinero que ya has subido a la holding está legalmente protegido.
 2. **Diferimiento Fiscal**: Puedes mover beneficios de la operativa a la holding para reinvertir en otros activos (ETFs, inmuebles) sin pagar IRPF personal (solo pagas el Impuesto de Sociedades, que suele ser mucho menor).
 3. **Exención por Participación**: En muchos países (como España), los dividendos de la hija a la madre están exentos en un 95% (solo tributas por el 5% restante al tipo de sociedades).
-4. **Optimización del Exit**: Si algún día vendes Samplit, el dinero entra en la holding. Puedes usarlo para montar otro negocio sin que Hacienda se lleve el 20-50% en el camino al bolsillo personal.
+4. **Optimización del Exit**: Si algún día vendes Sampelit, el dinero entra en la holding. Puedes usarlo para montar otro negocio sin que Hacienda se lleve el 20-50% en el camino al bolsillo personal.
 
 ---
 

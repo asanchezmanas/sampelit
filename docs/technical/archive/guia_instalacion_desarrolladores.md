@@ -1,4 +1,4 @@
-# 📘 GUÍA DE INSTALACIÓN DE SAMPLIT
+# 📘 GUÍA DE INSTALACIÓN DE Sampelit
 ## Para Desarrolladores, Freelancers y Equipos Técnicos
 
 **Versión:** 1.0  
@@ -22,9 +22,9 @@
 
 ## 🎯 Resumen Ejecutivo
 
-### ¿Qué es Samplit?
+### ¿Qué es Sampelit?
 
-Samplit es una plataforma de A/B testing que permite optimizar sitios web mediante pruebas automáticas. Esta guía te ayudará a instalar el código de tracking en cualquier sitio web.
+Sampelit es una plataforma de A/B testing que permite optimizar sitios web mediante pruebas automáticas. Esta guía te ayudará a instalar el código de tracking en cualquier sitio web.
 
 ### ¿Qué necesitas hacer?
 
@@ -33,7 +33,7 @@ Añadir **una línea de JavaScript** en el `<head>` de tu sitio web. Nada más.
 ### Código a instalar
 
 ```html
-<script src="https://cdn.samplit.com/t.js?token=TU_TOKEN_AQUI" async></script>
+<script src="https://cdn.Sampelit.com/t.js?token=TU_TOKEN_AQUI" async></script>
 ```
 
 ⚠️ **Importante:** Reemplaza `TU_TOKEN_AQUI` con el token único proporcionado por el cliente.
@@ -99,8 +99,8 @@ Busca la etiqueta `<head>` y añade el script **antes de** `</head>`.
   <title>Mi Sitio</title>
   <link rel="stylesheet" href="styles.css">
   
-  <!-- Samplit A/B Testing -->
-  <script src="https://cdn.samplit.com/t.js?token=inst_abc123xyz456" async></script>
+  <!-- Sampelit A/B Testing -->
+  <script src="https://cdn.Sampelit.com/t.js?token=inst_abc123xyz456" async></script>
 </head>
 ```
 
@@ -148,7 +148,7 @@ Abre el sitio y verifica que el script se carga correctamente (ver sección [Ver
 ┌──────────────────────────────────────────┐
 │ Scripts in Header                        │
 │ ┌──────────────────────────────────────┐ │
-│ │ <script src="https://cdn.samplit... │ │
+│ │ <script src="https://cdn.Sampelit... │ │
 │ │   async></script>                    │ │
 │ └──────────────────────────────────────┘ │
 │                                          │
@@ -174,12 +174,12 @@ Añade este código en el archivo `functions.php` de tu tema:
 
 ```php
 <?php
-function samplit_tracking_code() {
+function Sampelit_tracking_code() {
     ?>
-    <script src="https://cdn.samplit.com/t.js?token=inst_abc123xyz456" async></script>
+    <script src="https://cdn.Sampelit.com/t.js?token=inst_abc123xyz456" async></script>
     <?php
 }
-add_action('wp_head', 'samplit_tracking_code');
+add_action('wp_head', 'Sampelit_tracking_code');
 ?>
 ```
 
@@ -201,8 +201,8 @@ add_action('wp_head', 'samplit_tracking_code');
 5. Pega el código **antes** de `</head>`:
 
 ```liquid
-  <!-- Samplit A/B Testing -->
-  <script src="https://cdn.samplit.com/t.js?token=inst_abc123xyz456" async></script>
+  <!-- Sampelit A/B Testing -->
+  <script src="https://cdn.Sampelit.com/t.js?token=inst_abc123xyz456" async></script>
 </head>
 ```
 
@@ -222,8 +222,8 @@ add_action('wp_head', 'samplit_tracking_code');
 2. Click en **"+ Add Custom Code"**
 
 3. Configuración:
-   - **Name:** "Samplit Tracker"
-   - **Code snippet:** Pega el código de Samplit
+   - **Name:** "Sampelit Tracker"
+   - **Code snippet:** Pega el código de Sampelit
    - **Add Code to:** Selecciona **"Head"**
    - **Load code on:** Selecciona **"All pages"**
 
@@ -239,7 +239,7 @@ add_action('wp_head', 'samplit_tracking_code');
 
 1. Ve a **Settings** → **Advanced** → **Code Injection**
 
-2. En la sección **"Header"**, pega el código de Samplit
+2. En la sección **"Header"**, pega el código de Sampelit
 
 3. **Save**
 
@@ -275,8 +275,8 @@ Edita directamente tus archivos `.html`:
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mi Sitio</title>
   
-  <!-- Samplit A/B Testing -->
-  <script src="https://cdn.samplit.com/t.js?token=inst_abc123xyz456" async></script>
+  <!-- Sampelit A/B Testing -->
+  <script src="https://cdn.Sampelit.com/t.js?token=inst_abc123xyz456" async></script>
 </head>
 <body>
   <!-- Tu contenido -->
@@ -301,8 +301,8 @@ Edita `public/index.html`:
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>React App</title>
     
-    <!-- Samplit A/B Testing -->
-    <script src="https://cdn.samplit.com/t.js?token=inst_abc123xyz456" async></script>
+    <!-- Sampelit A/B Testing -->
+    <script src="https://cdn.Sampelit.com/t.js?token=inst_abc123xyz456" async></script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -324,9 +324,9 @@ export default function Document() {
   return (
     <Html lang="es">
       <Head>
-        {/* Samplit A/B Testing */}
+        {/* Sampelit A/B Testing */}
         <script 
-          src="https://cdn.samplit.com/t.js?token=inst_abc123xyz456" 
+          src="https://cdn.Sampelit.com/t.js?token=inst_abc123xyz456" 
           async 
         />
       </Head>
@@ -356,8 +356,8 @@ Edita `public/index.html`:
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>Vue App</title>
     
-    <!-- Samplit A/B Testing -->
-    <script src="https://cdn.samplit.com/t.js?token=inst_abc123xyz456" async></script>
+    <!-- Sampelit A/B Testing -->
+    <script src="https://cdn.Sampelit.com/t.js?token=inst_abc123xyz456" async></script>
   </head>
   <body>
     <div id="app"></div>
@@ -381,7 +381,7 @@ export default {
     ],
     script: [
       {
-        src: 'https://cdn.samplit.com/t.js?token=inst_abc123xyz456',
+        src: 'https://cdn.Sampelit.com/t.js?token=inst_abc123xyz456',
         async: true
       }
     ]
@@ -404,8 +404,8 @@ Edita `src/index.html`:
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
-  <!-- Samplit A/B Testing -->
-  <script src="https://cdn.samplit.com/t.js?token=inst_abc123xyz456" async></script>
+  <!-- Sampelit A/B Testing -->
+  <script src="https://cdn.Sampelit.com/t.js?token=inst_abc123xyz456" async></script>
 </head>
 <body>
   <app-root></app-root>
@@ -423,7 +423,7 @@ Si el cliente prefiere gestionar todos los scripts desde GTM:
 
 2. Pega el código:
    ```html
-   <script src="https://cdn.samplit.com/t.js?token=inst_abc123xyz456" async></script>
+   <script src="https://cdn.Sampelit.com/t.js?token=inst_abc123xyz456" async></script>
    ```
 
 3. Configuración de activación:
@@ -448,9 +448,9 @@ Si el cliente prefiere gestionar todos los scripts desde GTM:
 4. Busca este mensaje:
 
 ```
-[Samplit] Tracker initialized
-[Samplit] Version: 2.0.0
-[Samplit] Token: inst_abc...
+[Sampelit] Tracker initialized
+[Sampelit] Version: 2.0.0
+[Sampelit] Token: inst_abc...
 ```
 
 5. **Si lo ves** → ✅ TODO CORRECTO
@@ -459,10 +459,10 @@ Si el cliente prefiere gestionar todos los scripts desde GTM:
 ```
 Console
 ──────────────────────────────────────
-▼ [Samplit] Tracker initialized
-  [Samplit] Version: 2.0.0
-  [Samplit] Token: inst_abc123...
-  [Samplit] Found 0 active experiments
+▼ [Sampelit] Tracker initialized
+  [Sampelit] Version: 2.0.0
+  [Sampelit] Token: inst_abc123...
+  [Sampelit] Found 0 active experiments
 ──────────────────────────────────────
 ```
 
@@ -472,7 +472,7 @@ Console
 
 1. Abre el sitio
 2. Click derecho → **"Ver código fuente"** (o Ctrl+U)
-3. Busca (Ctrl+F): `cdn.samplit.com`
+3. Busca (Ctrl+F): `cdn.Sampelit.com`
 4. **Si aparece** → ✅ Código instalado
 
 ---
@@ -497,11 +497,11 @@ t.js          200     script      15.2KB  45ms  ← Busca esto
 
 ---
 
-### Método 4: Verificación automática desde Samplit
+### Método 4: Verificación automática desde Sampelit
 
 El cliente puede verificar desde su dashboard:
 
-1. Dashboard de Samplit → Sitios
+1. Dashboard de Sampelit → Sitios
 2. Click en "Verificar instalación"
 3. Espera 10-30 segundos
 4. **Si detecta el código** → ✅ TODO CORRECTO
@@ -542,7 +542,7 @@ El cliente puede verificar desde su dashboard:
 **Posibles causas:**
 
 1. Problema de conectividad
-2. Firewall bloqueando `cdn.samplit.com`
+2. Firewall bloqueando `cdn.Sampelit.com`
 3. Bloqueador de ads
 
 **Solución:**
@@ -613,7 +613,7 @@ No debería afectar. El script:
 Si notas problemas de velocidad:
 1. Usa herramientas como PageSpeed Insights
 2. Verifica que el `async` esté presente
-3. Contacta al soporte de Samplit
+3. Contacta al soporte de Sampelit
 
 ---
 
@@ -668,7 +668,7 @@ Tendrás que **reinstalar el código** en el nuevo tema. Por eso recomendamos:
 
 ### ¿Qué datos recopila?
 
-Samplit recopila únicamente:
+Sampelit recopila únicamente:
 - URL de la página visitada
 - Variante asignada al usuario
 - Eventos de conversión
@@ -679,7 +679,7 @@ Samplit recopila únicamente:
 
 ### ¿Es compatible con GDPR/LOPD?
 
-**Sí.** No recopila datos personales identificables. De todas formas, el cliente puede incluir Samplit en su banner de cookies si lo desea.
+**Sí.** No recopila datos personales identificables. De todas formas, el cliente puede incluir Sampelit en su banner de cookies si lo desea.
 
 ---
 
@@ -688,11 +688,11 @@ Samplit recopila únicamente:
 Si tienes problemas con la instalación:
 
 ### Email
-**soporte@samplit.com**  
+**soporte@Sampelit.com**  
 Tiempo de respuesta: 24-48 horas
 
 ### Documentación
-**https://docs.samplit.com**  
+**https://docs.Sampelit.com**  
 Guías detalladas y tutoriales en video
 
 ### Chat en vivo
@@ -722,16 +722,16 @@ Usa este checklist para asegurarte de que todo está correcto:
 
 ## 📄 Información de Contacto
 
-**Sitio web:** https://samplit.com  
-**Documentación:** https://docs.samplit.com  
-**Soporte:** soporte@samplit.com  
-**Estado del servicio:** https://status.samplit.com
+**Sitio web:** https://Sampelit.com  
+**Documentación:** https://docs.Sampelit.com  
+**Soporte:** soporte@Sampelit.com  
+**Estado del servicio:** https://status.Sampelit.com
 
 ---
 
-**Documento generado por Samplit**  
+**Documento generado por Sampelit**  
 **Versión 1.0 - Diciembre 2024**
 
 ---
 
-*Esta guía puede ser distribuida libremente a desarrolladores, freelancers y equipos técnicos que necesiten instalar Samplit.*
+*Esta guía puede ser distribuida libremente a desarrolladores, freelancers y equipos técnicos que necesiten instalar Sampelit.*

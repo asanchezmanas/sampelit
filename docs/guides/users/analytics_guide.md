@@ -1,6 +1,6 @@
 # Analytics Guide
 
-> **Samplit A/B Testing Platform**  
+> **Sampelit A/B Testing Platform**  
 > Understanding your experiment results
 
 ---
@@ -10,7 +10,7 @@
 1. [Overview](#overview)
 2. [The Results Dashboard](#the-results-dashboard)
 3. [Key Metrics Explained](#key-metrics-explained)
-4. [Bayesian Statistics in Samplit](#bayesian-statistics-in-samplit)
+4. [Bayesian Statistics in Sampelit](#bayesian-statistics-in-Sampelit)
 5. [Reading the Confidence Score](#reading-the-confidence-score)
 6. [Understanding Lift](#understanding-lift)
 7. [Segment Analysis](#segment-analysis)
@@ -22,7 +22,7 @@
 
 ## Overview
 
-Samplit uses **Bayesian statistics** to analyze your experiment results. This approach provides:
+Sampelit uses **Bayesian statistics** to analyze your experiment results. This approach provides:
 
 - **Faster insights**: Get actionable results sooner
 - **Probability-based decisions**: "There's a 95% chance A is better than B"
@@ -140,11 +140,11 @@ Lift = ((Variant Rate - Control Rate) / Control Rate) × 100
 
 ---
 
-## Bayesian Statistics in Samplit
+## Bayesian Statistics in Sampelit
 
 ### Traditional vs Bayesian
 
-| Traditional (Frequentist) | Samplit (Bayesian) |
+| Traditional (Frequentist) | Sampelit (Bayesian) |
 |---------------------------|---------------------|
 | "Is A different from B?" | "How likely is A better than B?" |
 | P-values and significance | Probability distributions |
@@ -427,7 +427,7 @@ Choose the metric that matches your business goals.
 
 ### AI Recommendations
 
-Samplit provides automated recommendations:
+Sampelit provides automated recommendations:
 
 | Recommendation | Meaning |
 |----------------|---------|
@@ -476,8 +476,8 @@ Depends on your baseline:
 
 Need help understanding your results?
 
-- 📖 **Knowledge Base**: [help.samplit.com](https://help.samplit.com)
-- 📧 **Email**: support@samplit.com
+- 📖 **Knowledge Base**: [help.Sampelit.com](https://help.Sampelit.com)
+- 📧 **Email**: support@Sampelit.com
 - 💬 **Live Chat**: Available in dashboard
 
 ---

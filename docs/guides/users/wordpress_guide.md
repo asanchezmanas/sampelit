@@ -1,6 +1,6 @@
 # WordPress Integration Guide
 
-> **Samplit A/B Testing Platform**  
+> **Sampelit A/B Testing Platform**  
 > Complete integration guide for WordPress websites
 
 ---
@@ -23,7 +23,7 @@
 
 ## Overview
 
-The Samplit WordPress integration allows you to run A/B tests on your WordPress website with automatic tracking and real-time webhooks. This integration supports both WordPress.com hosted sites and self-hosted WordPress installations.
+The Sampelit WordPress integration allows you to run A/B tests on your WordPress website with automatic tracking and real-time webhooks. This integration supports both WordPress.com hosted sites and self-hosted WordPress installations.
 
 ### What You Can Test
 
@@ -54,7 +54,7 @@ Before starting, ensure you have:
 
 - [ ] WordPress.com account (Free, Personal, Premium, or Business)
 - [ ] Admin access to your WordPress.com site
-- [ ] A Samplit account
+- [ ] A Sampelit account
 
 ### For Self-Hosted WordPress:
 
@@ -63,7 +63,7 @@ Before starting, ensure you have:
 - [ ] Admin access to WordPress dashboard
 - [ ] Ability to install plugins
 - [ ] SSL certificate (HTTPS) - recommended
-- [ ] A Samplit account
+- [ ] A Sampelit account
 
 ---
 
@@ -83,7 +83,7 @@ Choose the integration method that matches your WordPress setup:
 
 ### Step 1: Initiate Connection
 
-1. Log into [Samplit Dashboard](https://app.samplit.com)
+1. Log into [Sampelit Dashboard](https://app.Sampelit.com)
 2. Go to **Integrations** → **Add Integration**
 3. Select **WordPress**
 4. Choose **WordPress.com**
@@ -109,7 +109,7 @@ If you have multiple sites, select which one to connect:
 
 ### Step 4: Verify Installation
 
-After connection, verify in Samplit:
+After connection, verify in Sampelit:
 
 - ✅ Site connected: [yoursite.wordpress.com]
 - ✅ Tracker installed
@@ -125,10 +125,10 @@ For self-hosted WordPress installations, you have two options:
 
 #### Step 1: Download the Plugin
 
-1. Log into Samplit Dashboard
+1. Log into Sampelit Dashboard
 2. Go to **Integrations** → **WordPress**
 3. Click **Download Plugin**
-4. Save `samplit-ab-testing.zip` to your computer
+4. Save `Sampelit-ab-testing.zip` to your computer
 
 #### Step 2: Install the Plugin
 
@@ -136,22 +136,22 @@ For self-hosted WordPress installations, you have two options:
 
 1. Log into your WordPress admin
 2. Go to **Plugins** → **Add New** → **Upload Plugin**
-3. Choose the `samplit-ab-testing.zip` file
+3. Choose the `Sampelit-ab-testing.zip` file
 4. Click **Install Now**
 5. Click **Activate Plugin**
 
 **Method 2: FTP Upload**
 
 1. Extract the zip file
-2. Upload the `samplit-ab-testing` folder to `/wp-content/plugins/`
+2. Upload the `Sampelit-ab-testing` folder to `/wp-content/plugins/`
 3. Go to **Plugins** in WordPress admin
-4. Find "Samplit A/B Testing" and click **Activate**
+4. Find "Sampelit A/B Testing" and click **Activate**
 
 #### Step 3: Configure the Plugin
 
-1. Go to **Settings** → **Samplit A/B Testing**
-2. Enter your **Installation Token** (from Samplit dashboard)
-3. Enter your **API Endpoint**: `https://api.samplit.com`
+1. Go to **Settings** → **Sampelit A/B Testing**
+2. Enter your **Installation Token** (from Sampelit dashboard)
+3. Enter your **API Endpoint**: `https://api.Sampelit.com`
 4. Click **Save Settings**
 
 #### Step 4: Verify Installation
@@ -161,17 +161,17 @@ For self-hosted WordPress installations, you have two options:
 3. Visit your site and check page source for:
 
 ```html
-<!-- Samplit A/B Testing Tracker -->
+<!-- Sampelit A/B Testing Tracker -->
 <script>
 (function() {
-    window.SAMPLIT_CONFIG = {
+    window.Sampelit_CONFIG = {
         installationToken: 'your_token',
-        apiEndpoint: 'https://api.samplit.com/api/v1/tracker'
+        apiEndpoint: 'https://api.Sampelit.com/api/v1/tracker'
     };
 })();
 </script>
-<script src="https://api.samplit.com/static/tracker/t.js?token=your_token" async></script>
-<!-- End Samplit Tracker -->
+<script src="https://api.Sampelit.com/static/tracker/t.js?token=your_token" async></script>
+<!-- End Sampelit Tracker -->
 ```
 
 ### Option B: Manual Script Installation
@@ -180,7 +180,7 @@ For minimal footprint or custom setups:
 
 #### Step 1: Get Your Tracker Code
 
-1. Log into Samplit Dashboard
+1. Log into Sampelit Dashboard
 2. Go to **Integrations** → **WordPress** → **Manual Install**
 3. Copy the tracker code snippet
 
@@ -211,22 +211,22 @@ For theme update safety:
 2. Add to your child theme's `functions.php`:
 
 ```php
-function samplit_add_tracker() {
+function Sampelit_add_tracker() {
     ?>
-    <!-- Samplit A/B Testing Tracker -->
+    <!-- Sampelit A/B Testing Tracker -->
     <script>
     (function() {
-        window.SAMPLIT_CONFIG = {
+        window.Sampelit_CONFIG = {
             installationToken: 'YOUR_TOKEN_HERE',
-            apiEndpoint: 'https://api.samplit.com/api/v1/tracker'
+            apiEndpoint: 'https://api.Sampelit.com/api/v1/tracker'
         };
     })();
     </script>
-    <script src="https://api.samplit.com/static/tracker/t.js?token=YOUR_TOKEN_HERE" async></script>
-    <!-- End Samplit Tracker -->
+    <script src="https://api.Sampelit.com/static/tracker/t.js?token=YOUR_TOKEN_HERE" async></script>
+    <!-- End Sampelit Tracker -->
     <?php
 }
-add_action('wp_head', 'samplit_add_tracker');
+add_action('wp_head', 'Sampelit_add_tracker');
 ```
 
 ---
@@ -238,7 +238,7 @@ add_action('wp_head', 'samplit_add_tracker');
 ```
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
 │                 │     │                 │     │                 │
-│  Samplit App    │────▶│  WordPress.com  │────▶│   Your Site     │
+│  Sampelit App    │────▶│  WordPress.com  │────▶│   Your Site     │
 │                 │     │   OAuth Server  │     │                 │
 └─────────────────┘     └─────────────────┘     └─────────────────┘
          │                       │                       │
@@ -275,7 +275,7 @@ The integration uses state tokens for CSRF protection:
 
 ### Revoking Access
 
-**From Samplit:**
+**From Sampelit:**
 
 1. Dashboard → Integrations → WordPress
 2. Click **Disconnect**
@@ -283,7 +283,7 @@ The integration uses state tokens for CSRF protection:
 **From WordPress.com:**
 
 1. Go to [WordPress.com Settings](https://wordpress.com/me/security/connected-applications)
-2. Find "Samplit A/B Testing"
+2. Find "Sampelit A/B Testing"
 3. Click **Revoke Access**
 
 ---
@@ -311,27 +311,27 @@ Add to your theme's `functions.php` or plugin:
 
 ```php
 add_action('rest_api_init', function() {
-    register_rest_route('samplit/v1', '/webhook', array(
+    register_rest_route('Sampelit/v1', '/webhook', array(
         'methods' => 'POST',
-        'callback' => 'samplit_handle_webhook',
+        'callback' => 'Sampelit_handle_webhook',
         'permission_callback' => '__return_true'
     ));
 });
 
-function samplit_handle_webhook($request) {
+function Sampelit_handle_webhook($request) {
     $payload = $request->get_body();
     $signature = $request->get_header('X-Signature');
     
     // Verify signature
-    if (!samplit_verify_signature($payload, $signature)) {
+    if (!Sampelit_verify_signature($payload, $signature)) {
         return new WP_REST_Response('Invalid signature', 401);
     }
     
     // Process webhook
     $data = json_decode($payload, true);
     
-    // Forward to Samplit
-    wp_remote_post('https://api.samplit.com/webhooks/wordpress', array(
+    // Forward to Sampelit
+    wp_remote_post('https://api.Sampelit.com/webhooks/wordpress', array(
         'body' => $payload,
         'headers' => array('Content-Type' => 'application/json')
     ));
@@ -346,7 +346,7 @@ function samplit_handle_webhook($request) {
 // Post published webhook
 add_action('publish_post', function($post_id) {
     $post = get_post($post_id);
-    samplit_send_webhook('post_published', array(
+    Sampelit_send_webhook('post_published', array(
         'post_id' => $post_id,
         'title' => $post->post_title,
         'url' => get_permalink($post_id)
@@ -355,7 +355,7 @@ add_action('publish_post', function($post_id) {
 
 // Page updated webhook
 add_action('save_post_page', function($post_id) {
-    samplit_send_webhook('page_updated', array(
+    Sampelit_send_webhook('page_updated', array(
         'page_id' => $post_id,
         'url' => get_permalink($post_id)
     ));
@@ -367,8 +367,8 @@ add_action('save_post_page', function($post_id) {
 All webhooks are signed using HMAC-SHA256. Always verify before processing:
 
 ```php
-function samplit_verify_signature($payload, $signature) {
-    $secret = get_option('samplit_client_secret');
+function Sampelit_verify_signature($payload, $signature) {
+    $secret = get_option('Sampelit_client_secret');
     
     if (empty($secret) || empty($signature)) {
         return false;
@@ -393,7 +393,7 @@ function samplit_verify_signature($payload, $signature) {
 
 ### Creating an Experiment
 
-1. **Log into Samplit Dashboard**
+1. **Log into Sampelit Dashboard**
    
 2. **Go to Experiments → Create New**
 
@@ -436,7 +436,7 @@ function samplit_verify_signature($payload, $signature) {
 
 #### Testing Blog Post Titles
 
-1. Create your variations in Samplit
+1. Create your variations in Sampelit
 2. Use the visual editor to modify `<h1>` or `.entry-title`
 3. Set goal: Time on page, scroll depth, or share clicks
 
@@ -460,7 +460,7 @@ If you're running WooCommerce, additional tracking is available.
 
 ### Enable WooCommerce Tracking
 
-1. **Samplit Dashboard** → **Integrations** → **WordPress**
+1. **Sampelit Dashboard** → **Integrations** → **WordPress**
 2. Click **Settings**
 3. Enable **WooCommerce Tracking**
 4. Save
@@ -508,13 +508,13 @@ View revenue data in:
 
 #### Issue: Tracker not loading
 
-**Symptoms**: No Samplit script in page source
+**Symptoms**: No Sampelit script in page source
 
 **Solutions**:
 
 1. **Plugin method**: 
    - Verify plugin is activated
-   - Check Settings → Samplit for correct token
+   - Check Settings → Sampelit for correct token
    - Clear all caches (WordPress, hosting, CDN)
 
 2. **Manual method**:
@@ -525,7 +525,7 @@ View revenue data in:
 3. **Check for conflicts**:
    ```javascript
    // In browser console
-   console.log(window.SAMPLIT_CONFIG);
+   console.log(window.Sampelit_CONFIG);
    // Should show your configuration
    ```
 
@@ -541,7 +541,7 @@ View revenue data in:
 
 #### Issue: Webhooks not receiving events
 
-**Symptoms**: Changes not reflected in Samplit
+**Symptoms**: Changes not reflected in Sampelit
 
 **Solutions**:
 
@@ -568,7 +568,7 @@ View revenue data in:
 
 1. Add to `.htaccess`:
    ```apache
-   Header set X-Frame-Options "ALLOW-FROM https://app.samplit.com"
+   Header set X-Frame-Options "ALLOW-FROM https://app.Sampelit.com"
    ```
 
 2. Or in WordPress:
@@ -596,13 +596,13 @@ This will:
 - Show experiment assignments
 - Display API requests/responses
 
-To view: Open browser DevTools → Console → Filter by "Samplit"
+To view: Open browser DevTools → Console → Filter by "Sampelit"
 
 ### Checking Installation Health
 
 Verify your integration:
 
-**Samplit Dashboard → Integrations → WordPress → Health**
+**Sampelit Dashboard → Integrations → WordPress → Health**
 
 | Check | Status | Action if Failed |
 |-------|--------|------------------|
@@ -641,7 +641,7 @@ No. The tracker script:
 Yes, with configuration:
 
 **WP Super Cache / W3 Total Cache / WP Rocket:**
-- Exclude the Samplit cookie from cache
+- Exclude the Sampelit cookie from cache
 - Or disable page caching for experiment pages
 
 ### Does it work with WordPress multisite?
@@ -650,7 +650,7 @@ Yes! Install the plugin network-wide or per-site. Each site needs its own instal
 
 ### How do I test on staging before production?
 
-1. Create a separate Samplit project for staging
+1. Create a separate Sampelit project for staging
 2. Use that project's token on staging site
 3. Test experiments completely
 4. Use production token on live site
@@ -661,10 +661,10 @@ Yes! Go to Experiments → Select experiment → Export (CSV/JSON)
 
 ### What about GDPR compliance?
 
-- Samplit uses first-party cookies only
+- Sampelit uses first-party cookies only
 - No personal data is collected without consent
 - Integrate with your consent management platform
-- Cookie: `samplit_visitor_id` - can be listed in cookie policy
+- Cookie: `Sampelit_visitor_id` - can be listed in cookie policy
 
 ### How do I handle page variants with caching?
 
@@ -681,11 +681,11 @@ For best results with cached pages:
 
 Need help? We're here for you:
 
-- 📖 **Knowledge Base**: [help.samplit.com](https://help.samplit.com)
-- 📧 **Email Support**: support@samplit.com
+- 📖 **Knowledge Base**: [help.Sampelit.com](https://help.Sampelit.com)
+- 📧 **Email Support**: support@Sampelit.com
 - 💬 **Live Chat**: Available in dashboard (9am-6pm EST)
-- 🎮 **Discord Community**: [discord.gg/samplit](https://discord.gg/samplit)
-- 📹 **Video Tutorials**: [youtube.com/samplit](https://youtube.com/samplit)
+- 🎮 **Discord Community**: [discord.gg/Sampelit](https://discord.gg/Sampelit)
+- 📹 **Video Tutorials**: [youtube.com/Sampelit](https://youtube.com/Sampelit)
 
 For WordPress-specific issues, include:
 - WordPress version

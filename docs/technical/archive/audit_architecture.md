@@ -477,7 +477,7 @@ import pandas as pd
 
 # 1. Obtener audit trail
 response = requests.get(
-    'https://api.samplit.com/v1/audit/experiments/abc-123/export',
+    'https://api.Sampelit.com/v1/audit/experiments/abc-123/export',
     headers={'Authorization': 'Bearer YOUR_TOKEN'}
 )
 
@@ -573,10 +573,10 @@ function AuditDashboard({ experimentId }) {
 ### Ejemplo 3: Integración con Código Cliente
 
 ```typescript
-// SDK de Samplit con auditoría integrada
-import Samplit from 'samplit-sdk';
+// SDK de Sampelit con auditoría integrada
+import Sampelit from 'Sampelit-sdk';
 
-const samplit = new Samplit({
+const Sampelit = new Sampelit({
   apiKey: 'YOUR_API_KEY',
   audit: {
     enabled: true,  // Activa auditoría automática
@@ -588,7 +588,7 @@ const samplit = new Samplit({
 });
 
 // Uso normal
-const assignment = await samplit.allocate({
+const assignment = await Sampelit.allocate({
   experimentId: 'exp_123',
   visitorId: 'user_456'
 });
@@ -601,7 +601,7 @@ const assignment = await samplit.allocate({
 console.log(`Usuario asignado a: ${assignment.variantId}`);
 
 // Más tarde...
-await samplit.recordConversion({
+await Sampelit.recordConversion({
   assignmentId: assignment.id,
   value: 49.99
 });
@@ -627,7 +627,7 @@ await samplit.recordConversion({
 │  ✅ Exportación de datos                                      │
 │  ✅ API en tiempo real                                        │
 │                                                               │
-│  SAMPLIT protege:                                             │
+│  Sampelit protege:                                             │
 │  ✅ Algoritmo (propiedad intelectual)                         │
 │  ✅ Parámetros internos (alpha, beta)                         │
 │  ✅ Lógica de decisión                                        │

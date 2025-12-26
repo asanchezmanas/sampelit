@@ -26,7 +26,7 @@ Canales y tácticas específicas para crecer sin llamadas.
    - "7 errores comunes en A/B testing"
 
 2. **Case Studies** (social proof)
-   - Experimentos propios de Samplit
+   - Experimentos propios de Sampelit
    - Resultados de clientes (anonimizados)
 
 3. **Copywriting Science** (diferenciador)
@@ -56,7 +56,7 @@ Cliente refiere → Nuevo cliente paga → Ambos reciben 1 mes gratis
 
 1. Email automático post-signup (día 30):
    ```
-   Subject: Know someone who could use Samplit?
+   Subject: Know someone who could use Sampelit?
    
    "If you refer a friend and they sign up, 
    you both get 1 month free. Just share this link: [referral_link]"
@@ -161,8 +161,8 @@ What we learned: Sometimes the "boring" option is just as good.
 ### Mejoras pendientes
 
 - [ ] Compartir resultados del simulador en Twitter/LinkedIn
-- [ ] Dashboard público con métricas de Samplit
-- [ ] "Built with Samplit" badge para clientes
+- [ ] Dashboard público con métricas de Sampelit
+- [ ] "Built with Sampelit" badge para clientes
 
 ---
 

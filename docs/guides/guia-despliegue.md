@@ -1,10 +1,10 @@
 # Guía de Despliegue (Self-Hosting)
 
-Esta guía detalla cómo desplegar la plataforma Stitch AI en tu propia infraestructura. Ideal para empresas que requieren control total sobre sus datos.
+Esta guía detalla cómo desplegar la plataforma Sampelit en tu propia infraestructura. Ideal para empresas que requieren control total sobre sus datos.
 
 ## Arquitectura
 
-Stitch AI consta de dos componentes principales:
+Sampelit consta de dos componentes principales:
 1. **Backend**: Aplicación Python (FastAPI).
 2. **Base de Datos**: PostgreSQL 13+.
 
@@ -23,13 +23,13 @@ Esta es la forma más sencilla de levantar la plataforma completa.
 1. **Clonar el repositorio**:
    ```bash
    git clone <repo-url>
-   cd samplit
+   cd Sampelit
    ```
 
 2. **Crear archivo `.env`**:
    Crea un archivo `.env` en la raíz con lo siguiente:
    ```env
-   DATABASE_URL=postgres://postgres:password@db:5432/samplit
+   DATABASE_URL=postgres://postgres:password@db:5432/Sampelit
    SECRET_KEY=cambia_esto_por_algo_seguro_y_largo
    ENVIRONMENT=production
    LOG_LEVEL=INFO
@@ -46,7 +46,7 @@ Esta es la forma más sencilla de levantar la plataforma completa.
        ports:
          - "8000:8000"
        environment:
-         - DATABASE_URL=postgres://postgres:password@db:5432/samplit
+         - DATABASE_URL=postgres://postgres:password@db:5432/Sampelit
          - SECRET_KEY=${SECRET_KEY}
        depends_on:
          - db
@@ -56,7 +56,7 @@ Esta es la forma más sencilla de levantar la plataforma completa.
        environment:
          - POSTGRES_USER=postgres
          - POSTGRES_PASSWORD=password
-         - POSTGRES_DB=samplit
+         - POSTGRES_DB=Sampelit
        volumes:
          - postgres_data:/var/lib/postgresql/data
 
@@ -84,7 +84,7 @@ El repositorio incluye un archivo `render.yaml` listo para usar en Render.com.
 
 ## Configuración del Tracker para Self-Hosting
 
-El archivo `t.js` (el tracker) está configurado por defecto para apuntar a la nube de Stitch AI (`api.samplit.com`). 
+El archivo `t.js` (el tracker) está configurado por defecto para apuntar a la nube de Sampelit (`api.Sampelit.com`). 
 
 **IMPORTANTE:** Si alojas tu propia instancia, debes indicar al tracker dónde enviar los datos. Tienes dos opciones:
 
@@ -94,7 +94,7 @@ En tu sitio web, configura el endpoint antes de cargar el script:
 
 ```html
 <script>
-  window.SAMPLIT_CONFIG = {
+  window.Sampelit_CONFIG = {
     // Reemplaza con la URL de tu instancia
     apiEndpoint: "https://tu-dominio.com/api/v1/tracker"
   };
@@ -108,7 +108,7 @@ Edita el archivo `/static/tracker/t.js` y cambia la constante `API_ENDPOINT` por
 
 ```javascript
 /* static/tracker/t.js */
-const API_ENDPOINT = (window.SAMPLIT_CONFIG && window.SAMPLIT_CONFIG.apiEndpoint) ||
+const API_ENDPOINT = (window.Sampelit_CONFIG && window.Sampelit_CONFIG.apiEndpoint) ||
     'https://tu-nuevo-dominio.com/api/v1/tracker';
 ```
 

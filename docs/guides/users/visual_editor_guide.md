@@ -1,6 +1,6 @@
 # Visual Editor Guide
 
-> **Samplit A/B Testing Platform**  
+> **Sampelit A/B Testing Platform**  
 > Create experiments without writing code
 
 ---
@@ -432,8 +432,8 @@ Create a separate experiment for each page, or use URL pattern matching in advan
 
 Need help with the Visual Editor?
 
-- 📖 **Knowledge Base**: [help.samplit.com](https://help.samplit.com)
-- 📧 **Email**: support@samplit.com
+- 📖 **Knowledge Base**: [help.Sampelit.com](https://help.Sampelit.com)
+- 📧 **Email**: support@Sampelit.com
 - 💬 **Live Chat**: Available in dashboard
 
 ---

@@ -7,7 +7,7 @@
 
 ## 🏗 System Overview
 
-Samplit is a high-performance **Adaptive Experimentation Platform** built on **FastAPI** (Python) and **Supabase** (PostgreSQL). It moves beyond traditional A/B testing by using **Multi-Armed Bandit algorithms** (Thompson Sampling) to automatically route traffic to winning variants in real-time.
+Sampelit is a high-performance **Adaptive Experimentation Platform** built on **FastAPI** (Python) and **Supabase** (PostgreSQL). It moves beyond traditional A/B testing by using **Multi-Armed Bandit algorithms** (Thompson Sampling) to automatically route traffic to winning variants in real-time.
 
 ### Technology Stack
 - **API Framework**: FastAPI (Async Python 3.12+)

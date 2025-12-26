@@ -1,6 +1,6 @@
 # Proxy Middleware Integration Guide
 
-> **Samplit A/B Testing Platform**  
+> **Sampelit A/B Testing Platform**  
 > Automatic tracker injection for any web application
 
 ---
@@ -22,7 +22,7 @@
 
 ## Overview
 
-The Proxy Middleware allows you to automatically inject the Samplit A/B testing tracker into your HTML pages without modifying your application code. This is the ideal solution when you want to add A/B testing capabilities to an existing website or application with minimal changes.
+The Proxy Middleware allows you to automatically inject the Sampelit A/B testing tracker into your HTML pages without modifying your application code. This is the ideal solution when you want to add A/B testing capabilities to an existing website or application with minimal changes.
 
 ### Key Benefits
 
@@ -57,7 +57,7 @@ The Proxy Middleware allows you to automatically inject the Samplit A/B testing 
 1. Browser requests a page through the proxy
 2. Proxy forwards the request to your origin server
 3. Origin server returns the HTML response
-4. Proxy injects the Samplit tracker script into the HTML
+4. Proxy injects the Sampelit tracker script into the HTML
 5. Modified HTML is returned to the browser
 
 ---
@@ -67,7 +67,7 @@ The Proxy Middleware allows you to automatically inject the Samplit A/B testing 
 Before you begin, ensure you have:
 
 - [ ] Python 3.8 or higher installed
-- [ ] A Samplit account with an active installation token
+- [ ] A Sampelit account with an active installation token
 - [ ] Access to modify your server configuration or DNS settings
 - [ ] The following Python packages:
   - `starlette`
@@ -97,7 +97,7 @@ app = FastAPI()
 
 # Initialize the proxy middleware
 proxy = ProxyMiddleware(
-    api_url="https://api.samplit.com",
+    api_url="https://api.Sampelit.com",
     timeout=30,
     max_connections=100
 )
@@ -107,7 +107,7 @@ async def proxy_request(request: Request, path: str):
     """
     Proxy all requests and inject the tracker
     """
-    # Your installation token from Samplit dashboard
+    # Your installation token from Sampelit dashboard
     installation_token = "YOUR_INSTALLATION_TOKEN"
     
     # Original URL to proxy
@@ -144,7 +144,7 @@ Your proxy is now running on `http://localhost:8000`.
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `api_url` | string | Required | The Samplit API endpoint |
+| `api_url` | string | Required | The Sampelit API endpoint |
 | `timeout` | integer | 30 | Request timeout in seconds |
 | `max_connections` | integer | 100 | Maximum concurrent connections to origin |
 
@@ -153,8 +153,8 @@ Your proxy is now running on `http://localhost:8000`.
 We recommend using environment variables for sensitive configuration:
 
 ```bash
-export SAMPLIT_API_URL="https://api.samplit.com"
-export SAMPLIT_INSTALLATION_TOKEN="your_token_here"
+export Sampelit_API_URL="https://api.Sampelit.com"
+export Sampelit_INSTALLATION_TOKEN="your_token_here"
 export ORIGIN_SERVER_URL="https://your-origin-server.com"
 ```
 
@@ -164,12 +164,12 @@ Then in your code:
 import os
 
 proxy = ProxyMiddleware(
-    api_url=os.getenv("SAMPLIT_API_URL"),
+    api_url=os.getenv("Sampelit_API_URL"),
     timeout=30,
     max_connections=100
 )
 
-installation_token = os.getenv("SAMPLIT_INSTALLATION_TOKEN")
+installation_token = os.getenv("Sampelit_INSTALLATION_TOKEN")
 origin_url = os.getenv("ORIGIN_SERVER_URL")
 ```
 
@@ -202,10 +202,10 @@ app = FastAPI()
 # Add as middleware
 @app.middleware("http")
 async def inject_tracker(request, call_next):
-    proxy = ProxyMiddleware(api_url="https://api.samplit.com")
+    proxy = ProxyMiddleware(api_url="https://api.Sampelit.com")
     
     # Check for installation token header
-    if request.headers.get("X-Samplit-Installation-Token"):
+    if request.headers.get("X-Sampelit-Installation-Token"):
         return await proxy.dispatch(request, call_next)
     
     return await call_next(request)
@@ -251,23 +251,23 @@ You should receive a response from your origin server.
 ### Step 2: Check Tracker Injection
 
 ```bash
-curl http://localhost:8000/ | grep "Samplit"
+curl http://localhost:8000/ | grep "Sampelit"
 ```
 
-You should see the Samplit tracker script in the HTML:
+You should see the Sampelit tracker script in the HTML:
 
 ```html
-<!-- Samplit A/B Testing Tracker -->
+<!-- Sampelit A/B Testing Tracker -->
 <script>
 (function() {
-    window.SAMPLIT_CONFIG = {
+    window.Sampelit_CONFIG = {
         installationToken: 'your_token',
-        apiEndpoint: 'https://api.samplit.com/api/v1/tracker'
+        apiEndpoint: 'https://api.Sampelit.com/api/v1/tracker'
     };
 })();
 </script>
-<script src="https://api.samplit.com/static/tracker/t.js?token=your_token" async></script>
-<!-- End Samplit Tracker -->
+<script src="https://api.Sampelit.com/static/tracker/t.js?token=your_token" async></script>
+<!-- End Sampelit Tracker -->
 ```
 
 ### Step 3: Verify in Browser
@@ -278,9 +278,9 @@ You should see the Samplit tracker script in the HTML:
 4. Look for `t.js` being loaded
 5. Check the Console for any errors
 
-### Step 4: Test in Samplit Dashboard
+### Step 4: Test in Sampelit Dashboard
 
-1. Log into your Samplit dashboard
+1. Log into your Sampelit dashboard
 2. Go to "Installations" → Your installation
 3. Check "Live Status" — should show "Connected"
 4. Create a test experiment to verify everything works
@@ -320,7 +320,7 @@ curl -I https://your-origin-server.com/
 
 # Increase timeout if needed
 proxy = ProxyMiddleware(
-    api_url="https://api.samplit.com",
+    api_url="https://api.Sampelit.com",
     timeout=60,  # Increase from 30 to 60
     max_connections=100
 )
@@ -337,7 +337,7 @@ proxy = ProxyMiddleware(
 ```python
 # Increase connection pool
 proxy = ProxyMiddleware(
-    api_url="https://api.samplit.com",
+    api_url="https://api.Sampelit.com",
     timeout=30,
     max_connections=200  # Increase from 100
 )
@@ -421,7 +421,7 @@ async def proxy_request(request: Request, path: str):
 Simply update the environment variable and restart the proxy:
 
 ```bash
-export SAMPLIT_INSTALLATION_TOKEN="new_token_here"
+export Sampelit_INSTALLATION_TOKEN="new_token_here"
 # Restart your proxy server
 ```
 
@@ -431,9 +431,9 @@ export SAMPLIT_INSTALLATION_TOKEN="new_token_here"
 
 If you encounter issues not covered in this guide:
 
-1. Check our [Knowledge Base](https://help.samplit.com)
-2. Contact support at support@samplit.com
-3. Join our [Discord Community](https://discord.gg/samplit)
+1. Check our [Knowledge Base](https://help.Sampelit.com)
+2. Contact support at support@Sampelit.com
+3. Join our [Discord Community](https://discord.gg/Sampelit)
 
 ---
 

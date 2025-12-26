@@ -1,6 +1,6 @@
 # Marketing Content
 
-Todos los copies, estrategias y contenido de marketing para Samplit.
+Todos los copies, estrategias y contenido de marketing para Sampelit.
 
 ## Contenido
 

@@ -100,6 +100,20 @@
 
 ---
 
+## 7. SEO & Performance
+
+### Page Titling Optimization
+- Implement dynamic titling based on active experiments (canonical handles)
+- Automatic meta-description generation for variations
+- SSR (Server Side Rendering) friendly tracker for minimal CLS (Cumulative Layout Shift)
+
+### Core Web Vitals Monitoring
+- Track impact of experiments on page load speed
+- Automatic warning if a variation degrades performance significantly
+- LCP (Largest Contentful Paint) optimization for injected images
+
+---
+
 ## Priority Matrix
 
 | Feature | Impact | Effort | Priority |
