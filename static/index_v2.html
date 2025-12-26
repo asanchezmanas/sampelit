@@ -60,8 +60,10 @@
     <script src="js/include.js"></script> <!-- Custom include script -->
 </head>
 
-<body x-data="{ page: 'ecommerce', 'sidebarToggle': false, 'darkMode': false }" :class="{ 'dark': darkMode === true }"
-    class="bg-[#f8f9fc] text-text-main font-sans antialiased selection:bg-primary/10 selection:text-primary">
+<body x-data="{ page: 'dashboard', sidebarToggle: false, darkMode: false }"
+    x-init="darkMode = JSON.parse(localStorage.getItem('darkMode')) || false; $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{ 'dark': darkMode === true }"
+    class="bg-[#f8f9fc] dark:bg-gray-900 text-text-main dark:text-gray-300 font-sans antialiased selection:bg-primary/10 selection:text-primary">
     <!-- ===== Page Wrapper Start ===== -->
     <div class="flex h-screen overflow-hidden">
         <!-- ===== Sidebar Start ===== -->

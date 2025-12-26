@@ -44,8 +44,10 @@
     <script src="js/include.js"></script>
 </head>
 
-<body x-data="{ page: 'experiments', 'sidebarToggle': false, 'darkMode': false }" :class="{ 'dark': darkMode === true }"
-    class="font-body text-text-main dark:text-gray-400 dark:bg-gray-900">
+<body x-data="{ page: 'experiments', sidebarToggle: false, darkMode: false }"
+    x-init="darkMode = JSON.parse(localStorage.getItem('darkMode')) || false; $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{ 'dark': darkMode === true }"
+    class="bg-[#f8f9fc] dark:bg-gray-900 text-text-main dark:text-gray-300 font-sans antialiased">
     <div class="flex h-screen overflow-hidden">
         <include src="./partials/sidebar_v2.html"></include>
 
