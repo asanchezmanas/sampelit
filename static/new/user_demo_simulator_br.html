@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Algorithm Simulator</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1414b8",
+                        "background-light": "#f8f8fc",
+                        "background-dark": "#111121",
+                        "surface": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.375rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+                    boxShadow: {
+                        'subtle': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02)',
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Custom range slider styling for that refined look */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #1414b8;
+            cursor: pointer;
+            margin-top: -6px;
+            box-shadow: 0 0 0 2px #ffffff;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+
+        input[type=range]:focus::-webkit-slider-runnable-track {
+            background: #cbd5e1;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Smooth details animation */
+        details>summary {
+            list-style: none;
+        }
+
+        details>summary::-webkit-details-marker {
+            display: none;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 font-display min-h-screen flex flex-col">
+    <!-- Top Navigation -->
+    <header class="bg-surface sticky top-0 z-50 border-b border-slate-200/60 dark:border-slate-800">
+        <div class="px-6 md:px-10 h-16 flex items-center justify-between max-w-[1440px] mx-auto w-full">
+            <div class="flex items-center gap-3">
+                <div class="size-8 text-primary flex items-center justify-center bg-primary/10 rounded-lg">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">analytics</span>
+                </div>
+                <h2 class="text-slate-900 dark:text-white text-lg font-bold tracking-tight">AlgoSim</h2>
+            </div>
+            <nav class="hidden md:flex items-center gap-8">
+                <a class="text-slate-500 hover:text-primary text-sm font-medium transition-colors"
+                    href="#">Dashboard</a>
+                <a class="text-slate-500 hover:text-primary text-sm font-medium transition-colors"
+                    href="#">Campaigns</a>
+                <a class="text-primary text-sm font-bold" href="#">Simulator</a>
+                <a class="text-slate-500 hover:text-primary text-sm font-medium transition-colors" href="#">Reports</a>
+            </nav>
+            <div class="flex items-center gap-3">
+                <button
+                    class="flex items-center justify-center size-9 rounded-full text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">search</span>
+                </button>
+                <button
+                    class="flex items-center justify-center size-9 rounded-full text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">notifications</span>
+                </button>
+                <div class="ml-2 size-8 rounded-full bg-slate-200 overflow-hidden ring-2 ring-white cursor-pointer relative"
+                    data-alt="User profile avatar showing a generic gradient or silhouette">
+                    <img alt="User Profile" class="w-full h-full object-cover"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPTK_dxYLvfRnLItvr4dM9FQ8G1ejt0dWUt3Sls1-w8DgMzA0LWB49dhZzjM8VegEfzzY8ZOLpeZu6ftx398SQWAwcgqyYrsrqcGQi-nHFcwIjxlbkkZFN8hCEIdpRGiofcEc6xo1kVyWoCesjHYM3ODmwJuWZFjwjPeycuNAy8CQWo3qRUCzlO0E8_br7oSFjVG2CBTD16KI_SQDKKi4gdLK1wRgGQUdoR5nVvQ2vbipZ0JYsinEtwVIE36N_vsNbgLqo-O4x" />
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Main Content -->
+    <main class="flex-1 w-full max-w-[1440px] mx-auto p-6 md:p-10 flex flex-col gap-8">
+        <!-- Breadcrumbs & Heading -->
+        <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div class="flex flex-col gap-2">
+                <div class="flex items-center gap-2 text-sm text-slate-400">
+                    <a class="hover:text-primary transition-colors" href="#">Home</a>
+                    <span class="material-symbols-outlined text-[10px]">chevron_right</span>
+                    <a class="hover:text-primary transition-colors" href="#">Tools</a>
+                    <span class="material-symbols-outlined text-[10px]">chevron_right</span>
+                    <span class="text-slate-800 font-medium">Simulator</span>
+                </div>
+                <h1 class="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Algorithm Simulator</h1>
+                <p class="text-slate-500 max-w-xl text-base font-light">
+                    Configure statistical parameters to forecast A/B test convergence and stability.
+                </p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button
+                    class="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center gap-2 shadow-sm">
+                    <span class="material-symbols-outlined text-[18px]">upload</span>
+                    Load Preset
+                </button>
+                <button
+                    class="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center gap-2 shadow-sm">
+                    <span class="material-symbols-outlined text-[18px]">download</span>
+                    Export Report
+                </button>
+            </div>
+        </div>
+        <!-- Simulator Workspace -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <!-- Left Column: Configuration (Input) -->
+            <div class="lg:col-span-4 flex flex-col gap-6">
+                <div class="bg-surface rounded-xl border border-slate-200 shadow-card overflow-hidden">
+                    <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                        <h3 class="font-semibold text-slate-900 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary text-[20px]">tune</span>
+                            Configuration
+                        </h3>
+                        <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">v2.4</span>
+                    </div>
+                    <div class="flex flex-col divide-y divide-slate-100">
+                        <!-- Accordion 1 -->
+                        <details class="group p-5" open="">
+                            <summary
+                                class="flex cursor-pointer items-center justify-between mb-4 list-none outline-none">
+                                <span class="text-sm font-bold text-slate-800">Traffic Allocation</span>
+                                <span
+                                    class="material-symbols-outlined text-slate-400 group-open:rotate-180 transition-transform text-[20px]">expand_more</span>
+                            </summary>
+                            <div class="space-y-6 animate-fadeIn">
+                                <div>
+                                    <div class="flex justify-between text-xs mb-2">
+                                        <span class="text-slate-500">Control Group</span>
+                                        <span class="font-bold text-slate-900">50%</span>
+                                    </div>
+                                    <input class="w-full" max="100" min="0" type="range" value="50" />
+                                    <div class="flex justify-between text-xs mt-1 text-slate-400">
+                                        <span>0%</span>
+                                        <span>100%</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-slate-600">Dynamic Re-allocation</span>
+                                    <button
+                                        class="w-11 h-6 bg-slate-200 rounded-full relative transition-colors duration-200 focus:outline-none hover:bg-slate-300">
+                                        <span
+                                            class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </details>
+                        <!-- Accordion 2 -->
+                        <details class="group p-5" open="">
+                            <summary
+                                class="flex cursor-pointer items-center justify-between mb-4 list-none outline-none">
+                                <span class="text-sm font-bold text-slate-800">Statistical Parameters</span>
+                                <span
+                                    class="material-symbols-outlined text-slate-400 group-open:rotate-180 transition-transform text-[20px]">expand_more</span>
+                            </summary>
+                            <div class="space-y-4">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="space-y-1.5">
+                                        <label class="text-xs font-medium text-slate-500">Confidence Level</label>
+                                        <div class="relative">
+                                            <select
+                                                class="w-full text-sm border-slate-200 rounded-lg focus:border-primary focus:ring-primary/20 bg-slate-50 py-2 pl-3 pr-8 font-medium text-slate-700 appearance-none">
+                                                <option>90%</option>
+                                                <option selected="">95%</option>
+                                                <option>99%</option>
+                                            </select>
+                                            <span
+                                                class="material-symbols-outlined absolute right-2 top-2.5 text-slate-400 pointer-events-none text-[18px]">expand_more</span>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-1.5">
+                                        <label class="text-xs font-medium text-slate-500">Statistical Power</label>
+                                        <div class="relative">
+                                            <select
+                                                class="w-full text-sm border-slate-200 rounded-lg focus:border-primary focus:ring-primary/20 bg-slate-50 py-2 pl-3 pr-8 font-medium text-slate-700 appearance-none">
+                                                <option selected="">80%</option>
+                                                <option>90%</option>
+                                            </select>
+                                            <span
+                                                class="material-symbols-outlined absolute right-2 top-2.5 text-slate-400 pointer-events-none text-[18px]">expand_more</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space-y-1.5 pt-2">
+                                    <label class="text-xs font-medium text-slate-500">Minimum Detectable Effect
+                                        (MDE)</label>
+                                    <div class="flex items-center gap-3">
+                                        <input class="flex-1" max="20" min="1" type="range" value="5" />
+                                        <div
+                                            class="w-16 px-2 py-1 bg-white border border-slate-200 rounded text-center text-sm font-bold text-primary">
+                                            5%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </details>
+                        <!-- Accordion 3 -->
+                        <details class="group p-5">
+                            <summary
+                                class="flex cursor-pointer items-center justify-between mb-2 list-none outline-none">
+                                <span class="text-sm font-bold text-slate-800">Conversion Baselines</span>
+                                <span
+                                    class="material-symbols-outlined text-slate-400 group-open:rotate-180 transition-transform text-[20px]">expand_more</span>
+                            </summary>
+                            <p class="text-sm text-slate-400">Set current average performance values.</p>
+                        </details>
+                    </div>
+                    <div class="p-5 bg-slate-50/50 border-t border-slate-100">
+                        <button
+                            class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 px-4 rounded-lg shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-[20px]">play_arrow</span>
+                            Run Simulation
+                        </button>
+                        <p class="text-xs text-center text-slate-400 mt-3 flex items-center justify-center gap-1">
+                            <span class="material-symbols-outlined text-[14px]">info</span>
+                            Est. computation time: ~1.2s
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- Right Column: Results (Output) -->
+            <div class="lg:col-span-8 flex flex-col gap-6">
+                <!-- KPI Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div
+                        class="bg-surface p-5 rounded-xl border border-slate-200 shadow-subtle hover:shadow-md transition-shadow">
+                        <div class="flex items-start justify-between mb-2">
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Est. Sample Size</p>
+                            <span class="material-symbols-outlined text-slate-300 text-[20px]">groups</span>
+                        </div>
+                        <p class="text-3xl font-bold text-slate-900 tracking-tight">24,500</p>
+                        <p class="text-xs text-slate-500 mt-1">Visitors per variation</p>
+                    </div>
+                    <div
+                        class="bg-surface p-5 rounded-xl border border-slate-200 shadow-subtle hover:shadow-md transition-shadow">
+                        <div class="flex items-start justify-between mb-2">
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Projected Duration</p>
+                            <span class="material-symbols-outlined text-slate-300 text-[20px]">timer</span>
+                        </div>
+                        <p class="text-3xl font-bold text-slate-900 tracking-tight">14 <span
+                                class="text-lg font-normal text-slate-400">days</span></p>
+                        <p class="text-xs text-emerald-600 font-medium mt-1 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[14px]">trending_down</span>
+                            -2 days vs avg
+                        </p>
+                    </div>
+                    <div
+                        class="bg-surface p-5 rounded-xl border border-slate-200 shadow-subtle hover:shadow-md transition-shadow">
+                        <div class="flex items-start justify-between mb-2">
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Req. Uplift</p>
+                            <span class="material-symbols-outlined text-slate-300 text-[20px]">trending_up</span>
+                        </div>
+                        <p class="text-3xl font-bold text-primary tracking-tight">+5.2%</p>
+                        <p class="text-xs text-slate-500 mt-1">To reach 95% significance</p>
+                    </div>
+                </div>
+                <!-- Main Chart Section -->
+                <div class="bg-surface rounded-xl border border-slate-200 shadow-card p-6 md:p-8">
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-900">Convergence Projection</h3>
+                            <p class="text-sm text-slate-500">Projected p-value evolution over traffic volume.</p>
+                        </div>
+                        <div class="flex items-center gap-4 text-xs font-medium">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-primary"></span>
+                                <span class="text-slate-600">P-Value</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span
+                                    class="w-3 h-3 rounded-full bg-slate-300 border border-slate-400 border-dashed"></span>
+                                <span class="text-slate-600">Significance Threshold (0.05)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- SVG Chart -->
+                    <div class="relative w-full aspect-[2/1] min-h-[300px]">
+                        <svg class="w-full h-full overflow-visible" viewbox="0 0 800 400">
+                            <!-- Grid Lines -->
+                            <g class="stroke-slate-100" stroke-width="1">
+                                <line x1="0" x2="800" y1="0" y2="0"></line>
+                                <line x1="0" x2="800" y1="100" y2="100"></line>
+                                <line x1="0" x2="800" y1="200" y2="200"></line>
+                                <line x1="0" x2="800" y1="300" y2="300"></line>
+                                <line x1="0" x2="800" y1="400" y2="400"></line>
+                            </g>
+                            <!-- Threshold Line (Dashed) -->
+                            <line stroke="#94a3b8" stroke-dasharray="4,4" stroke-width="1" x1="0" x2="800" y1="350"
+                                y2="350"></line>
+                            <text class="text-xs fill-slate-400 font-mono text-[10px]" x="810" y="355">0.05</text>
+                            <!-- Data Line (Bezier Curve) -->
+                            <!-- Starts high, fluctuates, then drops below threshold -->
+                            <path d="M0,50 C100,60 150,20 250,150 C350,280 400,200 500,320 C600,440 700,360 800,380"
+                                fill="none" stroke="#1414b8" stroke-width="3"></path>
+                            <!-- Area under curve (gradient) -->
+                            <defs>
+                                <lineargradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+                                    <stop offset="0%" stop-color="#1414b8" stop-opacity="0.1"></stop>
+                                    <stop offset="100%" stop-color="#1414b8" stop-opacity="0"></stop>
+                                </lineargradient>
+                            </defs>
+                            <path
+                                d="M0,50 C100,60 150,20 250,150 C350,280 400,200 500,320 C600,440 700,360 800,380 V400 H0 Z"
+                                fill="url(#chartGradient)"></path>
+                            <!-- Tooltip Indicator (Simulated) -->
+                            <circle cx="500" cy="320" fill="#1414b8" r="6" stroke="white" stroke-width="2"></circle>
+                            <g transform="translate(480, 260)">
+                                <rect fill="#1e293b" height="40" rx="4" width="90"></rect>
+                                <text fill="white" font-size="10" font-weight="bold" text-anchor="middle" x="45"
+                                    y="18">Day 10</text>
+                                <text fill="#cbd5e1" font-size="10" text-anchor="middle" x="45" y="32">p = 0.08</text>
+                                <path d="M45 40 L50 46 L55 40 Z" fill="#1e293b"></path>
+                            </g>
+                            <!-- X Axis Labels -->
+                            <g class="fill-slate-400 text-[10px] font-medium" text-anchor="middle">
+                                <text x="0" y="420">Day 1</text>
+                                <text x="200" y="420">Day 4</text>
+                                <text x="400" y="420">Day 8</text>
+                                <text x="600" y="420">Day 12</text>
+                                <text x="800" y="420">Day 14</text>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+                <!-- Secondary Analysis Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Distribution Chart -->
+                    <div class="bg-surface rounded-xl border border-slate-200 shadow-card p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="font-bold text-base text-slate-900">Win Probability</h3>
+                            <button class="text-slate-400 hover:text-primary">
+                                <span class="material-symbols-outlined text-[20px]">more_horiz</span>
+                            </button>
+                        </div>
+                        <div class="relative w-full aspect-[16/9]"
+                            data-alt="Two overlapping bell curves representing statistical distribution">
+                            <svg class="w-full h-full" viewbox="0 0 400 200">
+                                <!-- Control Curve -->
+                                <path d="M20,180 Q100,180 140,50 Q180,180 260,180" fill="none" stroke="#94a3b8"
+                                    stroke-dasharray="4,2" stroke-width="2"></path>
+                                <path d="M20,180 Q100,180 140,50 Q180,180 260,180 Z" fill="#94a3b8" fill-opacity="0.1">
+                                </path>
+                                <!-- Variant Curve (Shifted right) -->
+                                <path d="M140,180 Q220,180 260,30 Q300,180 380,180" fill="none" stroke="#1414b8"
+                                    stroke-width="2"></path>
+                                <path d="M140,180 Q220,180 260,30 Q300,180 380,180 Z" fill="#1414b8" fill-opacity="0.1">
+                                </path>
+                                <!-- Baseline -->
+                                <line stroke="#e2e8f0" stroke-width="1" x1="0" x2="400" y1="180" y2="180"></line>
+                            </svg>
+                            <div
+                                class="absolute bottom-2 left-0 w-full flex justify-center text-xs text-slate-500 font-medium">
+                                <span class="mr-12 text-slate-400">Control</span>
+                                <span class="text-primary">Variant B</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-4 leading-relaxed">
+                            <strong class="text-slate-900">Variant B</strong> has a <strong class="text-primary">92%
+                                probability</strong> of outperforming Control based on current variance settings.
+                        </p>
+                    </div>
+                    <!-- Summary / Insight Panel -->
+                    <div
+                        class="bg-surface rounded-xl border border-slate-200 shadow-card p-6 flex flex-col justify-between">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-2 bg-primary/10 rounded-lg text-primary">
+                                <span class="material-symbols-outlined text-[20px]">lightbulb</span>
+                            </div>
+                            <h3 class="font-bold text-base text-slate-900">Simulator Insight</h3>
+                        </div>
+                        <div class="space-y-4">
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                To achieve statistically significant results within 14 days, you may need to increase
+                                the
+                                <span class="text-slate-900 font-medium border-b border-primary/30">Minimal Detectable
+                                    Effect</span>
+                                from 2% to 5%.
+                            </p>
+                            <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
+                                <div class="flex justify-between items-center text-xs mb-2">
+                                    <span class="text-slate-500 font-medium">Risk of False Positive (Type I)</span>
+                                    <span class="text-slate-900 font-bold">Low (5%)</span>
+                                </div>
+                                <div class="w-full bg-slate-200 rounded-full h-1.5">
+                                    <div class="bg-emerald-500 h-1.5 rounded-full" style="width: 5%"></div>
+                                </div>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
+                                <div class="flex justify-between items-center text-xs mb-2">
+                                    <span class="text-slate-500 font-medium">Risk of False Negative (Type II)</span>
+                                    <span class="text-slate-900 font-bold">Moderate (20%)</span>
+                                </div>
+                                <div class="w-full bg-slate-200 rounded-full h-1.5">
+                                    <div class="bg-amber-400 h-1.5 rounded-full" style="width: 20%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <button
+                            class="mt-6 text-sm font-bold text-primary hover:text-primary/80 text-left flex items-center gap-2">
+                            View detailed recommendation report
+                            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 bg-white mt-12 py-8">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-10 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-xs text-slate-400">© 2024 AlgoSim Analytics. All rights reserved.</p>
+            <div class="flex gap-6 text-xs font-medium text-slate-500">
+                <a class="hover:text-primary" href="#">Documentation</a>
+                <a class="hover:text-primary" href="#">API Status: <span class="text-emerald-500">Online</span></a>
+                <a class="hover:text-primary" href="#">Support</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

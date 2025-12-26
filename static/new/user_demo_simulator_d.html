@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Algorithm Simulator</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1414b8",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111121",
+                        "surface-dark": "#1a1a32",
+                        "border-dark": "#343465",
+                        "text-muted": "#9393c8"
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Custom range slider styling for Webkit */
+        input[type=range] {
+            -webkit-appearance: none;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            margin-top: -8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #343465;
+            border-radius: 2px;
+        }
+
+        /* Animation for the chart line */
+        @keyframes dash {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        .chart-line {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: dash 3s ease-out forwards;
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .delay-100 {
+            animation-delay: 100ms;
+        }
+
+        .delay-200 {
+            animation-delay: 200ms;
+        }
+
+        .delay-300 {
+            animation-delay: 300ms;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display antialiased selection:bg-primary selection:text-white overflow-x-hidden">
+    <!-- Top Navigation -->
+    <nav class="border-b border-border-dark bg-background-dark/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="px-6 md:px-10 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-4 text-white">
+                <div class="size-8 flex items-center justify-center bg-primary/20 rounded-lg text-primary">
+                    <span class="material-symbols-outlined text-[20px]">hub</span>
+                </div>
+                <h2 class="text-white text-lg font-bold tracking-tight">OptiAlgo</h2>
+            </div>
+            <div class="hidden md:flex flex-1 justify-center gap-8">
+                <a class="text-text-muted hover:text-white transition-colors text-sm font-medium" href="#">Dashboard</a>
+                <a class="text-text-muted hover:text-white transition-colors text-sm font-medium"
+                    href="#">Experiments</a>
+                <a class="text-white text-sm font-medium" href="#">Simulators</a>
+                <a class="text-text-muted hover:text-white transition-colors text-sm font-medium" href="#">Settings</a>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-3">
+                    <button
+                        class="size-9 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-text-muted">
+                        <span class="material-symbols-outlined text-[20px]">notifications</span>
+                    </button>
+                    <button
+                        class="size-9 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-text-muted">
+                        <span class="material-symbols-outlined text-[20px]">help</span>
+                    </button>
+                </div>
+                <div class="h-8 w-[1px] bg-border-dark"></div>
+                <button class="flex items-center gap-3 pl-1 pr-2 py-1 rounded-full hover:bg-white/5 transition-colors">
+                    <div class="bg-center bg-no-repeat bg-cover rounded-full size-8 ring-2 ring-primary/20"
+                        data-alt="User profile avatar showing a smiling person"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB1Rr12tW81DV5PmqbRscJvEX571ePcj_3laCHTkoTnWz1Hrq2lVro8fgBg2aD9_eXT5VhzF9Ph5j4VrmuUGTTWCcLIAId4JqxPwDodpVigyySzqGyhqzPnenT9x8TFN3ICDaPJIF_uDAab1zPHb4XdIh7fVVBayJqiSeyyFu_D2OuPyGU5YeAjdtbuujdbVLFsz5aSjPV9dZ9IRPTJOra1jCdB-TbWE360ncap4AMB1ar0hoGQHVuDLFK7So6wUu8P_klcvkwn");'>
+                    </div>
+                    <span class="text-sm font-medium hidden lg:block">Alex M.</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+    <main
+        class="layout-container min-h-[calc(100vh-65px)] flex flex-col p-6 md:px-10 md:py-8 max-w-[1600px] mx-auto w-full">
+        <!-- Breadcrumbs -->
+        <div class="flex items-center gap-2 text-sm text-text-muted mb-6 fade-in-up">
+            <a class="hover:text-white transition-colors" href="#">Home</a>
+            <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+            <a class="hover:text-white transition-colors" href="#">Simulators</a>
+            <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+            <span class="text-white font-medium">Algorithm V.2</span>
+        </div>
+        <!-- Header -->
+        <div
+            class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-10 fade-in-up delay-100">
+            <div class="flex flex-col gap-2 max-w-2xl">
+                <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-white leading-tight">Optimization
+                    Simulator</h1>
+                <p class="text-text-muted text-base font-light">
+                    Test your reinforcement learning models against historical datasets before deploying to production
+                    traffic.
+                </p>
+            </div>
+            <div class="flex gap-3">
+                <button
+                    class="h-10 px-4 rounded-lg border border-border-dark hover:bg-white/5 text-text-muted hover:text-white text-sm font-semibold transition-colors flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[18px]">history</span>
+                    Past Runs
+                </button>
+                <button
+                    class="h-10 px-4 rounded-lg border border-border-dark hover:bg-white/5 text-text-muted hover:text-white text-sm font-semibold transition-colors flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[18px]">download</span>
+                    Export Report
+                </button>
+            </div>
+        </div>
+        <!-- Main Content Split -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 flex-1">
+            <!-- Left Panel: Configuration -->
+            <div class="lg:col-span-4 xl:col-span-3 flex flex-col gap-6 fade-in-up delay-200">
+                <div
+                    class="bg-surface-dark border border-border-dark rounded-xl overflow-hidden shadow-xl flex flex-col h-full">
+                    <!-- Tabs -->
+                    <div class="flex border-b border-border-dark">
+                        <button
+                            class="flex-1 py-4 text-center text-sm font-semibold text-text-muted hover:text-white hover:bg-white/5 transition-colors border-b-2 border-transparent">
+                            Upload CSV
+                        </button>
+                        <button
+                            class="flex-1 py-4 text-center text-sm font-semibold text-white bg-primary/5 border-b-2 border-primary">
+                            Manual Entry
+                        </button>
+                    </div>
+                    <div class="p-6 md:p-8 flex flex-col gap-8 flex-1">
+                        <!-- Section: Metrics -->
+                        <div class="flex flex-col gap-5">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="material-symbols-outlined text-primary text-[20px]">tune</span>
+                                <h3 class="text-white font-semibold text-base">Baseline Metrics</h3>
+                            </div>
+                            <div class="grid grid-cols-1 gap-5">
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-text-muted text-xs font-semibold uppercase tracking-wider">Base
+                                        Conversion Rate (%)</label>
+                                    <div class="relative">
+                                        <input
+                                            class="w-full bg-background-dark border border-border-dark rounded-lg h-11 px-4 text-white font-mono focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder-gray-600"
+                                            placeholder="0.00" type="number" value="12.5" />
+                                        <div
+                                            class="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none text-sm">
+                                            %</div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-text-muted text-xs font-semibold uppercase tracking-wider">Min.
+                                        Detectable Lift</label>
+                                    <div class="relative">
+                                        <input
+                                            class="w-full bg-background-dark border border-border-dark rounded-lg h-11 px-4 text-white font-mono focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder-gray-600"
+                                            placeholder="0.00" type="number" value="5.0" />
+                                        <div
+                                            class="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none text-sm">
+                                            %</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="border-border-dark/50" />
+                        <!-- Section: Traffic Volume -->
+                        <div class="flex flex-col gap-5">
+                            <div class="flex justify-between items-end">
+                                <label class="text-text-muted text-xs font-semibold uppercase tracking-wider">Simulation
+                                    Traffic</label>
+                                <span class="text-white font-mono text-sm bg-white/5 px-2 py-0.5 rounded">50,000
+                                    Visitors</span>
+                            </div>
+                            <input class="w-full accent-primary" max="100000" min="1000" step="1000" type="range"
+                                value="50000" />
+                            <div class="flex justify-between text-xs text-text-muted font-mono mt-[-10px]">
+                                <span>1k</span>
+                                <span>100k</span>
+                            </div>
+                        </div>
+                        <!-- Section: Algo Tuning -->
+                        <div class="flex flex-col gap-5">
+                            <div class="flex justify-between items-end">
+                                <label
+                                    class="text-text-muted text-xs font-semibold uppercase tracking-wider">Exploration
+                                    (ε)</label>
+                                <span class="text-white font-mono text-sm bg-white/5 px-2 py-0.5 rounded">0.2</span>
+                            </div>
+                            <input class="w-full accent-primary" max="1" min="0" step="0.05" type="range" value="0.2" />
+                            <div class="flex justify-between text-xs text-text-muted mt-[-10px]">
+                                <span>Conservative</span>
+                                <span>Aggressive</span>
+                            </div>
+                        </div>
+                        <div class="mt-auto pt-6">
+                            <button
+                                class="w-full h-12 bg-primary hover:bg-blue-700 active:transform active:scale-[0.98] transition-all rounded-lg text-white font-bold tracking-wide flex items-center justify-center gap-2 shadow-lg shadow-primary/25">
+                                <span class="material-symbols-outlined">play_arrow</span>
+                                Run Simulation
+                            </button>
+                            <p class="text-center text-text-muted text-xs mt-3">Estimated runtime: ~4.2s</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Right Panel: Visualization -->
+            <div class="lg:col-span-8 xl:col-span-9 flex flex-col gap-6 fade-in-up delay-300">
+                <!-- Chart Card -->
+                <div
+                    class="bg-surface-dark border border-border-dark rounded-xl p-6 md:p-8 shadow-xl flex flex-col gap-6 min-h-[400px]">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-white font-bold text-lg">Traffic Allocation Velocity</h3>
+                            <p class="text-text-muted text-sm font-light mt-1">Multi-armed bandit traffic routing over
+                                simulation period</p>
+                        </div>
+                        <div class="flex gap-4 text-xs font-medium">
+                            <div class="flex items-center gap-2">
+                                <span class="size-3 rounded-full bg-primary"></span>
+                                <span class="text-white">AI Model</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="size-3 rounded-full bg-slate-600"></span>
+                                <span class="text-text-muted">A/B Split</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Chart Area -->
+                    <div
+                        class="flex-1 w-full relative h-64 md:h-80 bg-background-dark/30 rounded-lg border border-border-dark/30 p-4">
+                        <!-- Y-Axis Labels -->
+                        <div
+                            class="absolute left-4 top-4 bottom-8 flex flex-col justify-between text-xs text-text-muted font-mono">
+                            <span>100%</span>
+                            <span>75%</span>
+                            <span>50%</span>
+                            <span>25%</span>
+                            <span>0%</span>
+                        </div>
+                        <!-- Chart Content SVG -->
+                        <svg class="w-full h-full pl-10 pb-6 overflow-visible" preserveaspectratio="none"
+                            viewbox="0 0 800 300">
+                            <!-- Grid Lines -->
+                            <line opacity="0.3" stroke="#343465" stroke-dasharray="4 4" stroke-width="1" x1="0" x2="800"
+                                y1="0" y2="0"></line>
+                            <line opacity="0.3" stroke="#343465" stroke-dasharray="4 4" stroke-width="1" x1="0" x2="800"
+                                y1="75" y2="75"></line>
+                            <line opacity="0.3" stroke="#343465" stroke-dasharray="4 4" stroke-width="1" x1="0" x2="800"
+                                y1="150" y2="150"></line>
+                            <line opacity="0.3" stroke="#343465" stroke-dasharray="4 4" stroke-width="1" x1="0" x2="800"
+                                y1="225" y2="225"></line>
+                            <line opacity="0.3" stroke="#343465" stroke-dasharray="4 4" stroke-width="1" x1="0" x2="800"
+                                y1="300" y2="300"></line>
+                            <!-- Static A/B Split Line (Flat 50%) -->
+                            <path d="M0,150 L800,150" fill="none" opacity="0.5" stroke="#64748b" stroke-dasharray="5 5"
+                                stroke-width="2"></path>
+                            <!-- Dynamic Algorithm Line (Curve) -->
+                            <!-- Starts at 50% (150y), dips slightly for exploration, then climbs to ~85% (45y) -->
+                            <defs>
+                                <lineargradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+                                    <stop offset="0%" stop-color="#1414b8" stop-opacity="0.3"></stop>
+                                    <stop offset="100%" stop-color="#1414b8" stop-opacity="0"></stop>
+                                </lineargradient>
+                            </defs>
+                            <path class="chart-line" d="M0,150 C50,160 100,140 200,100 C400,20 600,60 800,45"
+                                fill="none" stroke="#1414b8" stroke-width="3"></path>
+                            <path class="opacity-0 animate-[fadeInUp_1s_ease-out_0.5s_forwards]"
+                                d="M0,150 C50,160 100,140 200,100 C400,20 600,60 800,45 L800,300 L0,300 Z"
+                                fill="url(#chartGradient)"></path>
+                            <!-- Highlight Dot -->
+                            <circle class="opacity-0 animate-[fadeInUp_0.3s_ease-out_2s_forwards]" cx="800" cy="45"
+                                fill="#ffffff" r="4"></circle>
+                        </svg>
+                        <!-- X-Axis Labels -->
+                        <div
+                            class="absolute left-14 right-4 bottom-2 flex justify-between text-xs text-text-muted font-mono">
+                            <span>Day 0</span>
+                            <span>Day 7</span>
+                            <span>Day 14</span>
+                            <span>Day 21</span>
+                            <span>Day 30</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Metrics Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Metric 1 -->
+                    <div
+                        class="bg-surface-dark border border-border-dark rounded-xl p-6 shadow-xl relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <span class="material-symbols-outlined text-[64px] text-primary">trending_up</span>
+                        </div>
+                        <div class="relative z-10 flex flex-col gap-2">
+                            <p class="text-text-muted text-xs font-semibold uppercase tracking-wider">Proj. ROI Increase
+                            </p>
+                            <div class="flex items-baseline gap-2">
+                                <span class="text-3xl font-bold text-white">+14.5%</span>
+                                <span
+                                    class="text-xs text-emerald-400 font-medium bg-emerald-400/10 px-1.5 py-0.5 rounded">↑
+                                    2.3%</span>
+                            </div>
+                            <p class="text-xs text-text-muted mt-2">vs. Traditional A/B testing baseline</p>
+                        </div>
+                    </div>
+                    <!-- Metric 2 -->
+                    <div
+                        class="bg-surface-dark border border-border-dark rounded-xl p-6 shadow-xl relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <span class="material-symbols-outlined text-[64px] text-primary">timer</span>
+                        </div>
+                        <div class="relative z-10 flex flex-col gap-2">
+                            <p class="text-text-muted text-xs font-semibold uppercase tracking-wider">Time to
+                                Convergence</p>
+                            <div class="flex items-baseline gap-2">
+                                <span class="text-3xl font-bold text-white">12<span
+                                        class="text-lg text-text-muted font-normal ml-1">Days</span></span>
+                            </div>
+                            <p class="text-xs text-text-muted mt-2">Significance reached 18 days faster</p>
+                        </div>
+                    </div>
+                    <!-- Metric 3 -->
+                    <div
+                        class="bg-surface-dark border border-border-dark rounded-xl p-6 shadow-xl relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <span class="material-symbols-outlined text-[64px] text-primary">group_remove</span>
+                        </div>
+                        <div class="relative z-10 flex flex-col gap-2">
+                            <p class="text-text-muted text-xs font-semibold uppercase tracking-wider">Traffic Saved</p>
+                            <div class="flex items-baseline gap-2">
+                                <span class="text-3xl font-bold text-white">1,240</span>
+                            </div>
+                            <p class="text-xs text-text-muted mt-2">Visitors diverted from losing variants</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Bottom Section: Comparison -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+                    <div class="bg-surface-dark border border-border-dark rounded-xl p-6 shadow-xl flex flex-col">
+                        <h3 class="text-white font-bold text-base mb-6">Cumulative Conversions</h3>
+                        <div class="flex-1 flex flex-col justify-center gap-6">
+                            <!-- Bar 1 -->
+                            <div class="flex flex-col gap-2">
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-white font-medium">OptiAlgo (AI)</span>
+                                    <span class="text-white font-mono">1,842</span>
+                                </div>
+                                <div class="h-3 w-full bg-background-dark rounded-full overflow-hidden">
+                                    <div class="h-full bg-primary w-[85%] rounded-full relative">
+                                        <div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Bar 2 -->
+                            <div class="flex flex-col gap-2">
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-text-muted">Standard A/B</span>
+                                    <span class="text-text-muted font-mono">1,405</span>
+                                </div>
+                                <div class="h-3 w-full bg-background-dark rounded-full overflow-hidden">
+                                    <div class="h-full bg-slate-600 w-[65%] rounded-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Map/Geo Context (Optional flavor) -->
+                    <div
+                        class="bg-surface-dark border border-border-dark rounded-xl p-6 shadow-xl flex flex-col relative overflow-hidden">
+                        <div class="absolute inset-0 opacity-20 bg-cover bg-center"
+                            data-alt="Abstract blue digital map of Europe connection nodes" data-location="Europe"
+                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB4vc_A623jt1V-iVCT1mNdqlt3JqmzMh9tlfV1Y6GhTJNzPahkaGaM3AAtf2h0ALUtTwU8SRzKDWgbvvX-XlE9ZC-HeeWNRn3goLdvWX8pc9QqGHO34KynaQ1LvA6TXys9iDNuQXswE8Gt1uQJil91-1yK8cDXNfeFCW_aC1K5N_X2ibFak3toST8j18yumPdu3Ip691culQUTLpIVoj9qPW-pd9B7QGF1w8S_6ghVldHCZs4n3A0qZVMpdfCPnss8EbjMzCBw");'>
+                        </div>
+                        <div class="relative z-10">
+                            <h3 class="text-white font-bold text-base mb-2">Regional Impact</h3>
+                            <p class="text-text-muted text-sm max-w-[80%]">Traffic optimization active across 4 data
+                                centers.</p>
+                        </div>
+                        <div class="relative z-10 mt-auto flex gap-2">
+                            <span
+                                class="px-2 py-1 bg-background-dark/80 backdrop-blur rounded text-xs text-white border border-white/10">EU-West</span>
+                            <span
+                                class="px-2 py-1 bg-background-dark/80 backdrop-blur rounded text-xs text-white border border-white/10">US-East</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

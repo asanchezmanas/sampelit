@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>CRM Contactos</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1414b8",
+                        "primary-light": "#eef2ff",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111121",
+                        "surface": "#ffffff",
+                        "text-main": "#111827",
+                        "text-secondary": "#6b7280",
+                        "border-color": "#e5e7eb"
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "body": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #e5e7eb;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d1d5db;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light text-text-main font-body antialiased selection:bg-primary/10 selection:text-primary h-screen flex overflow-hidden">
+    <!-- Sidebar -->
+    <aside
+        class="w-64 bg-surface border-r border-border-color flex-shrink-0 flex flex-col h-full hidden md:flex transition-all duration-300">
+        <!-- Logo Area -->
+        <div class="h-16 flex items-center px-6 border-b border-border-color/50">
+            <div class="flex items-center gap-2 text-primary">
+                <span class="material-symbols-outlined text-[28px] font-bold">bubble_chart</span>
+                <span class="text-xl font-bold tracking-tight text-text-main">Nexus<span
+                        class="text-primary">CRM</span></span>
+            </div>
+        </div>
+        <!-- User Profile Snippet -->
+        <div class="p-4 border-b border-border-color/50">
+            <div class="flex items-center gap-3 p-2 rounded-lg bg-background-light/50 border border-border-color/50">
+                <div class="w-10 h-10 rounded-full bg-cover bg-center border border-white shadow-sm"
+                    data-alt="Portrait of a professional man in a suit"
+                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDHDQzxhdKM7018eCu3yICzJCDch65ag3E8gl-Wd3BAZXSYAAPV3-eVMrNIJzqd0WB1JfREHnkyhHd19Fjl43lO3_AI1kUQikhimkg5I8UfZzINrr5LiRBuYecYPNnFljG-8ydRSsmT2SZxqyRrtWrtxs8KeIfFfZvd49bu89mGdOdUsRho9KiZYlcJb2cVCvZE7sYBNA4EbFNwB6muolK9qxXopOJvYaCp8BWgGmAOxHxhYgW6mTL80X28vH9h25TV4-NTcC81');">
+                </div>
+                <div class="flex flex-col overflow-hidden">
+                    <span class="text-sm font-semibold truncate text-text-main">Carlos Méndez</span>
+                    <span class="text-xs text-text-secondary truncate">Admin • Sales</span>
+                </div>
+            </div>
+        </div>
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto py-4 px-3 flex flex-col gap-1">
+            <p class="px-3 text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2 mt-2">Principal</p>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-text-secondary rounded-lg hover:bg-background-light hover:text-primary transition-colors group"
+                href="#">
+                <span
+                    class="material-symbols-outlined text-[22px] group-hover:scale-110 transition-transform">dashboard</span>
+                <span class="text-sm font-medium">Dashboard</span>
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 bg-primary/10 text-primary rounded-lg transition-colors font-semibold relative"
+                href="#">
+                <div class="absolute left-0 w-1 h-6 bg-primary rounded-r-full"></div>
+                <span class="material-symbols-outlined text-[22px] fill-1">group</span>
+                <span class="text-sm">Contactos</span>
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-text-secondary rounded-lg hover:bg-background-light hover:text-primary transition-colors group"
+                href="#">
+                <span
+                    class="material-symbols-outlined text-[22px] group-hover:scale-110 transition-transform">work</span>
+                <span class="text-sm font-medium">Oportunidades</span>
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-text-secondary rounded-lg hover:bg-background-light hover:text-primary transition-colors group"
+                href="#">
+                <span
+                    class="material-symbols-outlined text-[22px] group-hover:scale-110 transition-transform">task_alt</span>
+                <span class="text-sm font-medium">Tareas</span>
+                <span class="ml-auto bg-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">4</span>
+            </a>
+            <p class="px-3 text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2 mt-6">Gestión</p>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-text-secondary rounded-lg hover:bg-background-light hover:text-primary transition-colors group"
+                href="#">
+                <span
+                    class="material-symbols-outlined text-[22px] group-hover:scale-110 transition-transform">analytics</span>
+                <span class="text-sm font-medium">Reportes</span>
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-text-secondary rounded-lg hover:bg-background-light hover:text-primary transition-colors group"
+                href="#">
+                <span
+                    class="material-symbols-outlined text-[22px] group-hover:scale-110 transition-transform">settings</span>
+                <span class="text-sm font-medium">Configuración</span>
+            </a>
+        </nav>
+        <!-- Bottom Support Link -->
+        <div class="p-4 border-t border-border-color/50">
+            <a class="flex items-center gap-3 px-3 py-2 text-text-secondary rounded-lg hover:bg-background-light transition-colors"
+                href="#">
+                <span class="material-symbols-outlined text-[20px]">help</span>
+                <span class="text-sm font-medium">Centro de Ayuda</span>
+            </a>
+        </div>
+    </aside>
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-full min-w-0 bg-background-light relative">
+        <!-- Top Navbar -->
+        <header
+            class="h-16 bg-surface border-b border-border-color flex items-center justify-between px-6 lg:px-8 z-20 flex-shrink-0">
+            <!-- Mobile Menu Toggle -->
+            <button class="md:hidden p-2 -ml-2 text-text-secondary">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+            <!-- Global Search -->
+            <div class="hidden md:flex flex-1 max-w-md ml-4">
+                <div class="relative w-full group">
+                    <span
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary group-focus-within:text-primary transition-colors text-[20px]">search</span>
+                    <input
+                        class="w-full bg-background-light border-transparent focus:bg-white focus:border-primary/30 focus:ring-4 focus:ring-primary/10 rounded-lg py-2 pl-10 pr-4 text-sm transition-all outline-none text-text-main placeholder-text-secondary/70"
+                        placeholder="Buscar en todo el CRM..." type="text" />
+                </div>
+            </div>
+            <!-- Right Actions -->
+            <div class="flex items-center gap-4 ml-auto">
+                <button
+                    class="relative p-2 text-text-secondary hover:text-primary hover:bg-background-light rounded-full transition-colors">
+                    <span class="material-symbols-outlined text-[22px]">notifications</span>
+                    <span class="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+                </button>
+                <button
+                    class="p-2 text-text-secondary hover:text-primary hover:bg-background-light rounded-full transition-colors">
+                    <span class="material-symbols-outlined text-[22px]">settings</span>
+                </button>
+                <div class="h-6 w-px bg-border-color mx-1"></div>
+                <button class="flex items-center gap-2 text-sm font-medium text-text-secondary hover:text-text-main">
+                    <span>Exportar</span>
+                    <span class="material-symbols-outlined text-[18px]">download</span>
+                </button>
+            </div>
+        </header>
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-6 lg:p-8 scroll-smooth">
+            <div class="max-w-7xl mx-auto flex flex-col gap-6">
+                <!-- Breadcrumbs & Heading -->
+                <div class="flex flex-col gap-1">
+                    <nav class="flex items-center gap-2 text-sm text-text-secondary">
+                        <a class="hover:text-primary transition-colors" href="#">CRM</a>
+                        <span class="text-xs material-symbols-outlined">chevron_right</span>
+                        <span class="text-text-main font-medium">Contactos</span>
+                    </nav>
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-2">
+                        <div>
+                            <h1 class="text-3xl font-bold text-text-main tracking-tight font-display">Contactos</h1>
+                            <p class="text-text-secondary mt-1 text-sm">Gestiona tus relaciones con clientes y
+                                prospectos.</p>
+                        </div>
+                        <button
+                            class="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg text-sm font-semibold shadow-sm shadow-primary/30 flex items-center gap-2 transition-all active:scale-95">
+                            <span class="material-symbols-outlined text-[20px]">add</span>
+                            Nuevo Contacto
+                        </button>
+                    </div>
+                </div>
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div
+                        class="bg-surface p-5 rounded-xl border border-border-color shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] hover:shadow-md transition-shadow">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-text-secondary text-sm font-medium">Total Contactos</p>
+                                <h3 class="text-2xl font-bold text-text-main mt-1">1,240</h3>
+                            </div>
+                            <span
+                                class="bg-green-50 text-green-700 text-xs font-semibold px-2 py-1 rounded-full flex items-center">
+                                <span class="material-symbols-outlined text-[14px] mr-0.5">trending_up</span> +2.5%
+                            </span>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-surface p-5 rounded-xl border border-border-color shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] hover:shadow-md transition-shadow">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-text-secondary text-sm font-medium">Nuevos (Semana)</p>
+                                <h3 class="text-2xl font-bold text-text-main mt-1">12</h3>
+                            </div>
+                            <span
+                                class="bg-green-50 text-green-700 text-xs font-semibold px-2 py-1 rounded-full flex items-center">
+                                <span class="material-symbols-outlined text-[14px] mr-0.5">trending_up</span> +0.8%
+                            </span>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-surface p-5 rounded-xl border border-border-color shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] hover:shadow-md transition-shadow">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-text-secondary text-sm font-medium">Activos</p>
+                                <h3 class="text-2xl font-bold text-text-main mt-1">856</h3>
+                            </div>
+                            <div class="p-1.5 rounded-full bg-blue-50 text-primary">
+                                <span class="material-symbols-outlined text-[20px]">person_check</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-surface p-5 rounded-xl border border-border-color shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] hover:shadow-md transition-shadow">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-text-secondary text-sm font-medium">Sin Actividad</p>
+                                <h3 class="text-2xl font-bold text-text-main mt-1">45</h3>
+                            </div>
+                            <span
+                                class="bg-red-50 text-red-600 text-xs font-semibold px-2 py-1 rounded-full flex items-center">
+                                <span class="material-symbols-outlined text-[14px] mr-0.5">warning</span> Acción req.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Filters & Toolbar -->
+                <div
+                    class="flex flex-col sm:flex-row gap-4 justify-between items-center bg-surface p-4 rounded-xl border border-border-color">
+                    <div class="flex items-center gap-2 w-full sm:w-auto overflow-x-auto pb-2 sm:pb-0">
+                        <div class="relative group">
+                            <span
+                                class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary text-[18px]">filter_list</span>
+                            <button
+                                class="pl-9 pr-4 py-2 bg-background-light hover:bg-gray-100 text-text-main text-sm font-medium rounded-lg border border-transparent hover:border-border-color transition-all whitespace-nowrap">
+                                Todos los filtros
+                            </button>
+                        </div>
+                        <div class="h-6 w-px bg-border-color mx-2"></div>
+                        <!-- Dropdowns -->
+                        <div class="relative">
+                            <select
+                                class="appearance-none bg-background-light hover:bg-gray-100 pl-3 pr-8 py-2 rounded-lg text-sm font-medium text-text-main border-none focus:ring-2 focus:ring-primary/20 cursor-pointer">
+                                <option>Propietario</option>
+                                <option>Yo</option>
+                                <option>Equipo Ventas</option>
+                            </select>
+                            <span
+                                class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none text-[18px]">expand_more</span>
+                        </div>
+                        <div class="relative">
+                            <select
+                                class="appearance-none bg-background-light hover:bg-gray-100 pl-3 pr-8 py-2 rounded-lg text-sm font-medium text-text-main border-none focus:ring-2 focus:ring-primary/20 cursor-pointer">
+                                <option>Estado</option>
+                                <option>Activo</option>
+                                <option>Inactivo</option>
+                                <option>Lead</option>
+                            </select>
+                            <span
+                                class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none text-[18px]">expand_more</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <div class="relative flex-1 sm:w-64">
+                            <span
+                                class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary text-[18px]">search</span>
+                            <input
+                                class="w-full pl-9 pr-4 py-2 text-sm border border-border-color rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                                placeholder="Buscar contacto..." type="text" />
+                        </div>
+                        <div class="flex bg-background-light p-1 rounded-lg border border-border-color">
+                            <button class="p-1.5 rounded bg-white shadow-sm text-primary">
+                                <span class="material-symbols-outlined text-[20px]">table_rows</span>
+                            </button>
+                            <button class="p-1.5 rounded text-text-secondary hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">grid_view</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Main Data Table -->
+                <div class="bg-surface border border-border-color rounded-xl overflow-hidden shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50/50 border-b border-border-color">
+                                    <th class="p-4 w-12">
+                                        <input
+                                            class="rounded border-gray-300 text-primary focus:ring-primary/20 h-4 w-4 cursor-pointer"
+                                            type="checkbox" />
+                                    </th>
+                                    <th class="p-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">
+                                        Nombre</th>
+                                    <th class="p-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">
+                                        Empresa</th>
+                                    <th class="p-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">
+                                        Estado</th>
+                                    <th class="p-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">
+                                        Última Actividad</th>
+                                    <th
+                                        class="p-4 text-xs font-semibold text-text-secondary uppercase tracking-wider text-right">
+                                        Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-border-color">
+                                <!-- Row 1 -->
+                                <tr class="group hover:bg-blue-50/30 transition-colors">
+                                    <td class="p-4">
+                                        <input
+                                            class="rounded border-gray-300 text-primary focus:ring-primary/20 h-4 w-4 cursor-pointer"
+                                            type="checkbox" />
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-9 h-9 rounded-full bg-cover bg-center border border-gray-200"
+                                                data-alt="Portrait of a smiling woman"
+                                                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCuq-R3wdZrCpdzJfNoODd2rl8Hxj-e6l86empM10W1V34g69299QXmdntGyRLuOzesC7tPvLGokfNk0ZpJwuhIFH0PSHzB9nddA_nBP_rgA6bQAB7L1e-ohSRzGqYew8SnI5Bphf4wPqLWiLFTfi6HTLhJ1pdpyI8vTfZpqdmSAiBJhVtW5_073okc7ChGzUZrgAxYaLWo3aCl2YNnIRFSjOwCdXobS_bpXVCS85mVTDex56X3yZt7dfYNN2iD7AAqMyrKtdYC');">
+                                            </div>
+                                            <div>
+                                                <p
+                                                    class="text-sm font-bold text-text-main group-hover:text-primary transition-colors">
+                                                    Ana García</p>
+                                                <p class="text-xs text-text-secondary">ana.garcia@techflow.com</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm text-text-main font-medium">TechFlow Inc.</span>
+                                            <span class="text-xs text-text-secondary">Software</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                            Cliente
+                                        </span>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="text-sm text-text-main">Hoy, 09:42 AM</div>
+                                        <div class="text-xs text-text-secondary">Email enviado</div>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <button
+                                            class="text-text-secondary hover:text-primary hover:bg-primary/10 p-1.5 rounded transition-colors">
+                                            <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- Row 2 -->
+                                <tr class="group hover:bg-blue-50/30 transition-colors">
+                                    <td class="p-4">
+                                        <input
+                                            class="rounded border-gray-300 text-primary focus:ring-primary/20 h-4 w-4 cursor-pointer"
+                                            type="checkbox" />
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-9 h-9 rounded-full bg-blue-100 text-primary flex items-center justify-center text-sm font-bold border border-blue-200">
+                                                MR</div>
+                                            <div>
+                                                <p
+                                                    class="text-sm font-bold text-text-main group-hover:text-primary transition-colors">
+                                                    Miguel Rodriguez</p>
+                                                <p class="text-xs text-text-secondary">miguel.r@innovate.co</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm text-text-main font-medium">Innovate Co</span>
+                                            <span class="text-xs text-text-secondary">Consultoría</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                                            Negociación
+                                        </span>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="text-sm text-text-main">Ayer, 16:20 PM</div>
+                                        <div class="text-xs text-text-secondary">Llamada completada</div>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <button
+                                            class="text-text-secondary hover:text-primary hover:bg-primary/10 p-1.5 rounded transition-colors">
+                                            <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- Row 3 -->
+                                <tr class="group hover:bg-blue-50/30 transition-colors">
+                                    <td class="p-4">
+                                        <input
+                                            class="rounded border-gray-300 text-primary focus:ring-primary/20 h-4 w-4 cursor-pointer"
+                                            type="checkbox" />
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-9 h-9 rounded-full bg-cover bg-center border border-gray-200"
+                                                data-alt="Portrait of a young man with beard"
+                                                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB6RWDE-RUusyYl65ryZkcMWWUnydYzEb3mREOAKhXTKg0gPqizwXm35q4Z-31ahtjfiiS_isOGHtXGaAcqqszRhrC73oxabxjOb-cDkuQ15mCjaJ-5qdklfjm4e1lfsXrsPFQca2lskmDEBkSa_TBFCbDkI7zQKSOjQY2ukamIjaW3wF13jjQCb8dDnEaJqwCpYy1HwFGeMa5fYgguGj5DADoIfAVzmQ2NAiLhX0vy5t2nnfbJp6mbOyNmd6WwSiVC9e1JOxV_');">
+                                            </div>
+                                            <div>
+                                                <p
+                                                    class="text-sm font-bold text-text-main group-hover:text-primary transition-colors">
+                                                    Javier Torres</p>
+                                                <p class="text-xs text-text-secondary">javier@startuplab.io</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm text-text-main font-medium">StartupLab</span>
+                                            <span class="text-xs text-text-secondary">Tecnología</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                                            Lead
+                                        </span>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="text-sm text-text-main">20 Oct, 2023</div>
+                                        <div class="text-xs text-text-secondary">Reunión agendada</div>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <button
+                                            class="text-text-secondary hover:text-primary hover:bg-primary/10 p-1.5 rounded transition-colors">
+                                            <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- Row 4 -->
+                                <tr class="group hover:bg-blue-50/30 transition-colors">
+                                    <td class="p-4">
+                                        <input
+                                            class="rounded border-gray-300 text-primary focus:ring-primary/20 h-4 w-4 cursor-pointer"
+                                            type="checkbox" />
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-9 h-9 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center text-sm font-bold border border-purple-200">
+                                                EP</div>
+                                            <div>
+                                                <p
+                                                    class="text-sm font-bold text-text-main group-hover:text-primary transition-colors">
+                                                    Elena Perez</p>
+                                                <p class="text-xs text-text-secondary">elena.p@globaltrade.net</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm text-text-main font-medium">Global Trade</span>
+                                            <span class="text-xs text-text-secondary">Logística</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
+                                            Prospecto
+                                        </span>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="text-sm text-text-main">18 Oct, 2023</div>
+                                        <div class="text-xs text-text-secondary">Formulario web</div>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <button
+                                            class="text-text-secondary hover:text-primary hover:bg-primary/10 p-1.5 rounded transition-colors">
+                                            <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- Row 5 -->
+                                <tr class="group hover:bg-blue-50/30 transition-colors">
+                                    <td class="p-4">
+                                        <input
+                                            class="rounded border-gray-300 text-primary focus:ring-primary/20 h-4 w-4 cursor-pointer"
+                                            type="checkbox" />
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-9 h-9 rounded-full bg-cover bg-center border border-gray-200"
+                                                data-alt="Portrait of a woman looking sideways"
+                                                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD-MaTqoGadZZyovzpc4z6DJC5BzL6tNxdpWxpkyOyTxuOso2zL0oUNVbJRCTqo1r24aFzD1rjAk76wuJ8--qwnnDLqPizV88wjuoi262uwtoBr2nrz4W7ntK6xTsD2kC3ZlcGHhlLcFA_dvWZ3WFOtADUKP71Z1b2U4joMnyvfD-PQ8XT9HUHIXo4cTmSjSlmdpCowRattka-U6ktuEnwAGrGn9iwVsCZaGK041pY-iCVkOBKXTEBCHpc7N6kn4GUo8O1kcbuw');">
+                                            </div>
+                                            <div>
+                                                <p
+                                                    class="text-sm font-bold text-text-main group-hover:text-primary transition-colors">
+                                                    Sofia Martinez</p>
+                                                <p class="text-xs text-text-secondary">sofia@designstudio.com</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm text-text-main font-medium">Design Studio</span>
+                                            <span class="text-xs text-text-secondary">Diseño</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                            Cliente
+                                        </span>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="text-sm text-text-main">15 Oct, 2023</div>
+                                        <div class="text-xs text-text-secondary">Proyecto finalizado</div>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <button
+                                            class="text-text-secondary hover:text-primary hover:bg-primary/10 p-1.5 rounded transition-colors">
+                                            <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Pagination -->
+                    <div class="bg-surface px-4 py-3 flex items-center justify-between border-t border-border-color">
+                        <div class="text-sm text-text-secondary">
+                            Mostrando <span class="font-medium text-text-main">1</span> a <span
+                                class="font-medium text-text-main">5</span> de <span
+                                class="font-medium text-text-main">1,240</span> resultados
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button
+                                class="px-3 py-1 text-sm border border-border-color rounded hover:bg-gray-50 text-text-secondary disabled:opacity-50">Anterior</button>
+                            <button
+                                class="px-3 py-1 text-sm bg-primary text-white border border-primary rounded hover:bg-primary/90">1</button>
+                            <button
+                                class="px-3 py-1 text-sm border border-border-color rounded hover:bg-gray-50 text-text-secondary">2</button>
+                            <button
+                                class="px-3 py-1 text-sm border border-border-color rounded hover:bg-gray-50 text-text-secondary">3</button>
+                            <span class="text-text-secondary">...</span>
+                            <button
+                                class="px-3 py-1 text-sm border border-border-color rounded hover:bg-gray-50 text-text-secondary">Siguiente</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer Spacer -->
+            <div class="h-12"></div>
+        </div>
+    </main>
+</body>
+
+</html>

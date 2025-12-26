@@ -1,0 +1,30 @@
+<!-- Alert Warning Component - Sampelit Design System -->
+<div class="rounded-xl border border-amber-200/50 bg-amber-50/50 p-4 dark:border-amber-500/20 dark:bg-amber-500/10">
+    <div class="flex items-start gap-3">
+        <!-- Warning Icon -->
+        <div class="-mt-0.5 text-amber-600 dark:text-amber-400">
+            <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M10.2932 3.86357C11.0497 2.57477 12.9503 2.57477 13.7068 3.86357L21.6817 17.4509C22.4382 18.7397 21.4879 20.3591 19.9749 20.3591H4.02508C2.51208 20.3591 1.56179 18.7397 2.31832 17.4509L10.2932 3.86357ZM12 8.15909C12.4142 8.15909 12.75 8.49488 12.75 8.90909V13.0909C12.75 13.5051 12.4142 13.8409 12 13.8409C11.5858 13.8409 11.25 13.5051 11.25 13.0909V8.90909C11.25 8.49488 11.5858 8.15909 12 8.15909ZM12 17.2727C12.5523 17.2727 13 16.825 13 16.2727C13 15.7205 12.5523 15.2727 12 15.2727C11.4477 15.2727 11 15.7205 11 16.2727C11 16.825 11.4477 17.2727 12 17.2727Z"
+                    fill="" />
+            </svg>
+        </div>
+
+        <div class="flex-1">
+            <h4 class="mb-1 text-sm font-semibold text-text-main dark:text-white">
+                Warning
+            </h4>
+            <p class="text-sm text-text-muted dark:text-gray-400">
+                Please review this information before proceeding.
+            </p>
+        </div>
+
+        <button class="text-text-dim hover:text-text-muted dark:text-gray-500 dark:hover:text-gray-400"
+            onclick="this.closest('.rounded-xl').remove()">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+    </div>
+</div>

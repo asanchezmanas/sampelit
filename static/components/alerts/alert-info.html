@@ -1,0 +1,30 @@
+<!-- Alert Info Component - Sampelit Design System -->
+<div class="rounded-xl border border-accent/20 bg-blue-50/50 p-4 dark:border-blue-500/20 dark:bg-blue-500/10">
+    <div class="flex items-start gap-3">
+        <!-- Info Icon -->
+        <div class="-mt-0.5 text-accent dark:text-blue-400">
+            <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8C11 7.44772 11.4477 7 12 7ZM12 10.5C12.4142 10.5 12.75 10.8358 12.75 11.25V16.25C12.75 16.6642 12.4142 17 12 17C11.5858 17 11.25 16.6642 11.25 16.25V11.25C11.25 10.8358 11.5858 10.5 12 10.5Z"
+                    fill="" />
+            </svg>
+        </div>
+
+        <div class="flex-1">
+            <h4 class="mb-1 text-sm font-semibold text-text-main dark:text-white">
+                Information
+            </h4>
+            <p class="text-sm text-text-muted dark:text-gray-400">
+                Here's some helpful information you should know.
+            </p>
+        </div>
+
+        <button class="text-text-dim hover:text-text-muted dark:text-gray-500 dark:hover:text-gray-400"
+            onclick="this.closest('.rounded-xl').remove()">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+    </div>
+</div>

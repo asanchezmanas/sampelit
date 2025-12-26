@@ -1,0 +1,81 @@
+<!-- OTP / 2FA Input Component - Sampelit Design System -->
+<!-- 6-digit code verification input -->
+
+<div class="w-full max-w-md mx-auto">
+    <div class="mb-6">
+        <h2 class="text-xl font-display font-bold text-text-main dark:text-white mb-2">
+            Two-Step Verification
+        </h2>
+        <p class="text-sm text-text-muted dark:text-gray-400">
+            Enter the 6-digit code sent to your email.
+        </p>
+    </div>
+
+    <form id="otp-form">
+        <label class="mb-2 block text-sm font-medium text-text-main dark:text-gray-300">
+            Verification Code
+        </label>
+
+        <div class="flex gap-2 sm:gap-3 mb-6" id="otp-container">
+            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-input h-12 w-12 sm:h-14 sm:w-14 rounded-xl border border-slate-200 bg-white text-center text-xl font-display font-bold text-text-main 
+               focus:border-accent focus:ring-2 focus:ring-accent/10 focus:outline-none
+               dark:border-gray-700 dark:bg-gray-900 dark:text-white shadow-soft" />
+            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-input h-12 w-12 sm:h-14 sm:w-14 rounded-xl border border-slate-200 bg-white text-center text-xl font-display font-bold text-text-main 
+               focus:border-accent focus:ring-2 focus:ring-accent/10 focus:outline-none
+               dark:border-gray-700 dark:bg-gray-900 dark:text-white shadow-soft" />
+            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-input h-12 w-12 sm:h-14 sm:w-14 rounded-xl border border-slate-200 bg-white text-center text-xl font-display font-bold text-text-main 
+               focus:border-accent focus:ring-2 focus:ring-accent/10 focus:outline-none
+               dark:border-gray-700 dark:bg-gray-900 dark:text-white shadow-soft" />
+            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-input h-12 w-12 sm:h-14 sm:w-14 rounded-xl border border-slate-200 bg-white text-center text-xl font-display font-bold text-text-main 
+               focus:border-accent focus:ring-2 focus:ring-accent/10 focus:outline-none
+               dark:border-gray-700 dark:bg-gray-900 dark:text-white shadow-soft" />
+            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-input h-12 w-12 sm:h-14 sm:w-14 rounded-xl border border-slate-200 bg-white text-center text-xl font-display font-bold text-text-main 
+               focus:border-accent focus:ring-2 focus:ring-accent/10 focus:outline-none
+               dark:border-gray-700 dark:bg-gray-900 dark:text-white shadow-soft" />
+            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-input h-12 w-12 sm:h-14 sm:w-14 rounded-xl border border-slate-200 bg-white text-center text-xl font-display font-bold text-text-main 
+               focus:border-accent focus:ring-2 focus:ring-accent/10 focus:outline-none
+               dark:border-gray-700 dark:bg-gray-900 dark:text-white shadow-soft" />
+        </div>
+
+        <button type="submit"
+            class="w-full px-6 py-3.5 text-sm font-semibold text-white rounded-xl bg-primary hover:bg-accent transition-all shadow-lg shadow-slate-200 dark:shadow-gray-900">
+            Verify Code
+        </button>
+    </form>
+
+    <p class="mt-4 text-center text-sm text-text-muted dark:text-gray-400">
+        Didn't receive the code?
+        <a href="#" class="text-accent hover:underline font-medium dark:text-blue-400">Resend</a>
+    </p>
+</div>
+
+<script>
+    // OTP Auto-focus and navigation
+    document.addEventListener('DOMContentLoaded', () => {
+        const inputs = document.querySelectorAll('.otp-input');
+
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                const value = e.target.value;
+                if (value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && input.value === '' && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const pastedData = e.clipboardData.getData('text').slice(0, 6);
+                pastedData.split('').forEach((char, i) => {
+                    if (inputs[i]) inputs[i].value = char;
+                });
+                if (pastedData.length === 6) inputs[5].focus();
+            });
+        });
+    });
+</script>

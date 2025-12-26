@@ -1,0 +1,61 @@
+<!-- Success Modal Component - Sampelit Design System -->
+<!-- Requires Alpine.js for x-show/x-data -->
+<div x-data="{ isOpen: false }">
+    <!-- Trigger Button Example -->
+    <button
+        class="px-6 py-3 text-sm font-semibold text-white rounded-xl bg-primary hover:bg-accent transition-all shadow-soft"
+        @click="isOpen = true">
+        Show Success
+    </button>
+
+    <!-- Modal Overlay -->
+    <div x-show="isOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+        class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto z-50">
+
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-slate-400/50 backdrop-blur-md dark:bg-gray-900/80" @click="isOpen = false"></div>
+
+        <!-- Modal Content -->
+        <div @click.outside="isOpen = false"
+            class="relative w-full max-w-md rounded-2xl bg-white p-8 shadow-card border border-slate-100 dark:bg-gray-900 dark:border-gray-800">
+
+            <!-- Close Button -->
+            <button @click="isOpen = false"
+                class="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-surface text-text-muted hover:bg-slate-100 hover:text-text-main dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-400">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+
+            <!-- Success Content -->
+            <div class="text-center">
+                <!-- Success Icon -->
+                <div class="flex items-center justify-center mb-6">
+                    <div
+                        class="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100/50 border border-emerald-100 dark:bg-emerald-500/20 dark:border-emerald-500/30">
+                        <svg class="w-8 h-8 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                            </path>
+                        </svg>
+                    </div>
+                </div>
+
+                <h4 class="mb-2 text-xl font-display font-bold text-text-main dark:text-white">
+                    Success!
+                </h4>
+                <p class="text-sm text-text-muted dark:text-gray-400 mb-6">
+                    Your experiment has been launched successfully and is now collecting data.
+                </p>
+
+                <button @click="isOpen = false"
+                    class="w-full px-6 py-3 text-sm font-semibold text-white rounded-xl bg-primary hover:bg-accent transition-all shadow-soft">
+                    Got it, thanks!
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
