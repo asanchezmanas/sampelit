@@ -65,24 +65,3 @@
         </div>
     </div>
 </nav>
-<script>
-    (function () {
-        // Initialize theme on page load
-        const savedTheme = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-            document.documentElement.classList.add('dark');
-        }
-
-        // Set up toggle handler
-        const toggle = document.getElementById('theme-toggle');
-        if (toggle) {
-            toggle.addEventListener('click', function () {
-                document.documentElement.classList.toggle('dark');
-                localStorage.setItem('theme',
-                    document.documentElement.classList.contains('dark') ? 'dark' : 'light'
-                );
-            });
-        }
-    })();
-</script>

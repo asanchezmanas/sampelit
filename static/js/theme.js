@@ -31,11 +31,17 @@
     // Initialize on page load
     applyTheme(getInitialTheme());
 
-    // Setup toggle buttons after DOM is ready
+    // Setup toggle buttons
     function setupToggles() {
         const toggles = document.querySelectorAll('#theme-toggle, [data-theme-toggle]');
         toggles.forEach(toggle => {
-            toggle.addEventListener('click', toggleTheme);
+            if (toggle.dataset.themeBound === "true") return;
+
+            toggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleTheme();
+            });
+            toggle.dataset.themeBound = "true";
         });
     }
 
@@ -46,11 +52,16 @@
         setupToggles();
     }
 
-    // Also setup after includes are processed (for pages using include.js)
-    const observer = new MutationObserver(() => {
-        setupToggles();
+    // Also setup after includes are processed
+    document.addEventListener('include-loaded', setupToggles);
+
+    // MutationObserver as a fallback for any other dynamic elements
+    const observer = new MutationObserver((mutations) => {
+        if (mutations.some(m => m.addedNodes.length > 0)) {
+            setupToggles();
+        }
     });
-    observer.observe(document.body, { childList: true, subtree: true });
+    observer.observe(document.documentElement, { childList: true, subtree: true });
 
     // Expose for external use
     window.SampelitTheme = {
