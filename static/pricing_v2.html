@@ -14,7 +14,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
-    <link rel="stylesheet" href="css/sampelit.css">
+    <!-- sampelit.css removed for v2 - using Tailwind only -->
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -51,33 +51,37 @@
             <main>
                 <div class="mx-auto max-w-screen-xl p-4 md:p-6 2xl:p-10">
                     <!-- Header -->
-                    <div class="mb-10 text-center">
-                        <h1 class="text-3xl font-bold font-display text-gray-900 dark:text-white md:text-4xl">
+                    <div class="mb-14 text-center">
+                        <span
+                            class="inline-block mb-4 text-[10px] font-bold uppercase tracking-widest text-brand-500">Investment
+                            Tiers</span>
+                        <h1
+                            class="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white font-display md:text-5xl">
                             Simple, Transparent Pricing
                         </h1>
-                        <p class="mt-3 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                        <p class="mt-4 text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
                             Choose the plan that fits your optimization needs. All plans include our core A/B testing
                             features.
                         </p>
                     </div>
 
                     <!-- Billing Toggle -->
-                    <div x-data="{ monthly: true }" class="mb-12">
-                        <div class="flex justify-center mb-8">
-                            <div class="relative inline-flex rounded-full bg-gray-100 p-1 dark:bg-gray-800">
+                    <div x-data="{ monthly: true }" class="mb-14">
+                        <div class="flex justify-center mb-10">
+                            <div class="relative inline-flex rounded-2xl bg-gray-100 p-1.5 dark:bg-white/5">
                                 <span :class="monthly ? 'translate-x-0' : 'translate-x-full'"
-                                    class="absolute top-1/2 -z-1 flex h-10 w-[110px] -translate-y-1/2 rounded-full bg-white shadow-md transition-transform duration-300 dark:bg-gray-700"></span>
+                                    class="absolute top-1/2 flex h-11 w-[120px] -translate-y-1/2 rounded-xl bg-white shadow-lg transition-transform duration-300 dark:bg-gray-800"></span>
                                 <button @click="monthly = true"
                                     :class="monthly ? 'text-gray-900 dark:text-white' : 'text-gray-500'"
-                                    class="relative z-10 flex h-10 w-[110px] items-center justify-center text-sm font-medium transition-colors">
+                                    class="relative z-10 flex h-11 w-[120px] items-center justify-center text-sm font-bold transition-colors">
                                     Monthly
                                 </button>
                                 <button @click="monthly = false"
                                     :class="!monthly ? 'text-gray-900 dark:text-white' : 'text-gray-500'"
-                                    class="relative z-10 flex h-10 w-[110px] items-center justify-center text-sm font-medium transition-colors">
+                                    class="relative z-10 flex h-11 w-[120px] items-center justify-center gap-2 text-sm font-bold transition-colors">
                                     Annually
                                     <span
-                                        class="ml-1.5 rounded-full bg-success-500 px-1.5 py-0.5 text-[10px] font-bold text-white">-20%</span>
+                                        class="rounded-full bg-emerald-500 px-2 py-0.5 text-[10px] font-bold text-white uppercase tracking-widest">-20%</span>
                                 </button>
                             </div>
                         </div>
@@ -86,115 +90,120 @@
                         <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                             <!-- Starter Plan -->
                             <div
-                                class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-                                <div class="mb-5">
-                                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">Starter</h3>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">For small websites getting
+                                class="overflow-hidden rounded-[32px] border border-gray-200 bg-white p-8 dark:border-white/5 dark:bg-white/[0.03]">
+                                <div class="mb-8">
+                                    <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Starter
+                                    </h3>
+                                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">For small websites getting
                                         started</p>
                                 </div>
-                                <div class="mb-5">
-                                    <span class="text-4xl font-bold text-gray-900 dark:text-white"
+                                <div class="mb-8">
+                                    <span
+                                        class="text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white font-display"
                                         x-text="monthly ? '$29' : '$23'"></span>
                                     <span class="text-gray-500 dark:text-gray-400">/month</span>
                                 </div>
-                                <ul class="mb-6 space-y-3 text-sm text-gray-600 dark:text-gray-300">
-                                    <li class="flex items-center gap-2"><span
-                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                <ul class="mb-10 space-y-4 text-sm text-gray-600 dark:text-gray-300">
+                                    <li class="flex items-center gap-3"><span
+                                            class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
                                         Up to 10,000 visitors/mo</li>
-                                    <li class="flex items-center gap-2"><span
-                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                    <li class="flex items-center gap-3"><span
+                                            class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
                                         3 active experiments</li>
-                                    <li class="flex items-center gap-2"><span
-                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                    <li class="flex items-center gap-3"><span
+                                            class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
                                         Basic analytics</li>
-                                    <li class="flex items-center gap-2"><span
-                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                    <li class="flex items-center gap-3"><span
+                                            class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
                                         Email support</li>
-                                    <li class="flex items-center gap-2 text-gray-400"><span
+                                    <li class="flex items-center gap-3 text-gray-400"><span
                                             class="material-symbols-outlined text-lg">cancel</span> Visual editor</li>
-                                    <li class="flex items-center gap-2 text-gray-400"><span
+                                    <li class="flex items-center gap-3 text-gray-400"><span
                                             class="material-symbols-outlined text-lg">cancel</span> Multi-Armed Bandit
                                     </li>
                                 </ul>
                                 <button
-                                    class="w-full rounded-lg border border-gray-300 bg-white py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-transparent dark:text-gray-300 dark:hover:bg-gray-700">
+                                    class="w-full rounded-2xl border border-gray-200 bg-white py-4 text-sm font-bold text-gray-900 hover:bg-gray-50 transition-all dark:border-white/5 dark:bg-transparent dark:text-white dark:hover:bg-white/5">
                                     Get Started
                                 </button>
                             </div>
 
                             <!-- Pro Plan (Featured) -->
                             <div
-                                class="relative rounded-2xl border-2 border-brand-500 bg-white p-6 shadow-lg dark:bg-gray-800">
+                                class="relative overflow-hidden rounded-[32px] border-2 border-brand-500 bg-white p-8 shadow-xl dark:bg-white/[0.03]">
                                 <span
-                                    class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand-500 px-3 py-1 text-xs font-bold text-white">MOST
-                                    POPULAR</span>
-                                <div class="mb-5">
-                                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">Pro</h3>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">For growing businesses</p>
+                                    class="absolute -top-px left-1/2 -translate-x-1/2 rounded-b-xl bg-brand-500 px-6 py-2 text-[10px] font-bold uppercase tracking-widest text-white">Most
+                                    Popular</span>
+                                <div class="mb-8 pt-4">
+                                    <h3 class="text-[10px] font-bold uppercase tracking-widest text-brand-500">Pro</h3>
+                                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">For growing businesses</p>
                                 </div>
-                                <div class="mb-5">
-                                    <span class="text-4xl font-bold text-gray-900 dark:text-white"
+                                <div class="mb-8">
+                                    <span
+                                        class="text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white font-display"
                                         x-text="monthly ? '$79' : '$63'"></span>
                                     <span class="text-gray-500 dark:text-gray-400">/month</span>
                                 </div>
-                                <ul class="mb-6 space-y-3 text-sm text-gray-600 dark:text-gray-300">
-                                    <li class="flex items-center gap-2"><span
-                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                <ul class="mb-10 space-y-4 text-sm text-gray-600 dark:text-gray-300">
+                                    <li class="flex items-center gap-3"><span
+                                            class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
                                         Up to 100,000 visitors/mo</li>
-                                    <li class="flex items-center gap-2"><span
-                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                    <li class="flex items-center gap-3"><span
+                                            class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
                                         Unlimited experiments</li>
-                                    <li class="flex items-center gap-2"><span
-                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                    <li class="flex items-center gap-3"><span
+                                            class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
                                         Advanced analytics</li>
-                                    <li class="flex items-center gap-2"><span
-                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                    <li class="flex items-center gap-3"><span
+                                            class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
                                         Priority support</li>
-                                    <li class="flex items-center gap-2"><span
-                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                    <li class="flex items-center gap-3"><span
+                                            class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
                                         Visual editor</li>
-                                    <li class="flex items-center gap-2"><span
-                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                    <li class="flex items-center gap-3"><span
+                                            class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
                                         Multi-Armed Bandit</li>
                                 </ul>
                                 <button
-                                    class="w-full rounded-lg bg-brand-500 py-3 text-sm font-medium text-white hover:bg-brand-600">
+                                    class="w-full rounded-2xl bg-brand-500 py-4 text-sm font-bold text-white hover:bg-brand-600 shadow-lg hover:shadow-xl transition-all">
                                     Get Started
                                 </button>
                             </div>
 
                             <!-- Enterprise Plan -->
                             <div
-                                class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-                                <div class="mb-5">
-                                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">Enterprise</h3>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">For large organizations</p>
+                                class="overflow-hidden rounded-[32px] border border-gray-200 bg-white p-8 dark:border-white/5 dark:bg-white/[0.03]">
+                                <div class="mb-8">
+                                    <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Enterprise
+                                    </h3>
+                                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">For large organizations</p>
                                 </div>
-                                <div class="mb-5">
-                                    <span class="text-4xl font-bold text-gray-900 dark:text-white">Custom</span>
+                                <div class="mb-8">
+                                    <span
+                                        class="text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white font-display">Custom</span>
                                 </div>
-                                <ul class="mb-6 space-y-3 text-sm text-gray-600 dark:text-gray-300">
-                                    <li class="flex items-center gap-2"><span
-                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                <ul class="mb-10 space-y-4 text-sm text-gray-600 dark:text-gray-300">
+                                    <li class="flex items-center gap-3"><span
+                                            class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
                                         Unlimited visitors</li>
-                                    <li class="flex items-center gap-2"><span
-                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                    <li class="flex items-center gap-3"><span
+                                            class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
                                         Unlimited experiments</li>
-                                    <li class="flex items-center gap-2"><span
-                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                    <li class="flex items-center gap-3"><span
+                                            class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
                                         Custom integrations</li>
-                                    <li class="flex items-center gap-2"><span
-                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                    <li class="flex items-center gap-3"><span
+                                            class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
                                         Dedicated support</li>
-                                    <li class="flex items-center gap-2"><span
-                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                    <li class="flex items-center gap-3"><span
+                                            class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
                                         SLA guarantee</li>
-                                    <li class="flex items-center gap-2"><span
-                                            class="material-symbols-outlined text-success-500 text-lg">check_circle</span>
+                                    <li class="flex items-center gap-3"><span
+                                            class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
                                         On-premise option</li>
                                 </ul>
                                 <button
-                                    class="w-full rounded-lg border border-gray-300 bg-white py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-transparent dark:text-gray-300 dark:hover:bg-gray-700">
+                                    class="w-full rounded-2xl border border-gray-200 bg-white py-4 text-sm font-bold text-gray-900 hover:bg-gray-50 transition-all dark:border-white/5 dark:bg-transparent dark:text-white dark:hover:bg-white/5">
                                     Contact Sales
                                 </button>
                             </div>
@@ -202,12 +211,15 @@
                     </div>
 
                     <!-- FAQ Section -->
-                    <div class="mt-16 text-center">
-                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Frequently Asked Questions
-                        </h2>
-                        <p class="text-gray-600 dark:text-gray-400 mb-8">Have questions? We've got answers.</p>
+                    <div class="mt-20 text-center">
+                        <span
+                            class="inline-block mb-4 text-[10px] font-bold uppercase tracking-widest text-gray-400">Support</span>
+                        <h2
+                            class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white font-display mb-4">
+                            Frequently Asked Questions</h2>
+                        <p class="text-gray-500 dark:text-gray-400 mb-10">Have questions? We've got answers.</p>
                         <a href="faq_v2.html"
-                            class="inline-flex items-center gap-2 text-brand-500 hover:text-brand-600 font-medium">
+                            class="inline-flex items-center gap-2 text-brand-500 hover:text-brand-600 font-bold transition-colors">
                             View all FAQs <span class="material-symbols-outlined">arrow_forward</span>
                         </a>
                     </div>

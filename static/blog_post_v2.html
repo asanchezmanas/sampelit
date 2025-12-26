@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog Post | Sampelit V2</title>
+    <!-- Tailwind with Typography Plugin -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography,forms,container-queries"></script>
+    <link href="./css/sampelit-v2.css" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                fontFamily: {
+                    body: ["Inter", "sans-serif"],
+                    display: ["Manrope", "sans-serif"],
+                },
+                extend: {
+                    colors: {
+                        brand: {
+                            50: "#eff6ff",
+                            100: "#dbeafe",
+                            200: "#bfdbfe",
+                            300: "#93c5fd",
+                            400: "#60a5fa",
+                            500: "#3b82f6",
+                            600: "#2563eb",
+                            700: "#1d4ed8",
+                            800: "#1e40af",
+                            900: "#1e3a8a",
+                            950: "#172554",
+                        },
+                        gray: {
+                            800: "#1f2937",
+                            900: "#111827",
+                        },
+                    },
+                    boxShadow: {
+                        premium: "0 20px 40px -15px rgba(0, 0, 0, 0.05)",
+                    },
+                    typography: (theme) => ({
+                        DEFAULT: {
+                            css: {
+                                color: theme('colors.gray.700'),
+                                h1: { fontFamily: theme('fontFamily.display') },
+                                h2: { fontFamily: theme('fontFamily.display') },
+                                h3: { fontFamily: theme('fontFamily.display') },
+                            }
+                        },
+                        invert: {
+                            css: {
+                                color: theme('colors.gray.300'),
+                            }
+                        }
+                    })
+                },
+            },
+        };
+    </script>
+</head>
+
+<body x-data="{ sidebarOpen: false, darkMode: false, loading: false, content: '', metadata: {} }" x-init="
+        const params = new URLSearchParams(window.location.search);
+        const slug = params.get('slug');
+        if(!slug) {
+            // Mock content if no slug provided for demo purposes
+            metadata = {
+                title: 'The Future of A/B Testing in 2025',
+                category: 'Strategy',
+                author: 'Sarah Jenkins',
+                date: '2024-12-25',
+                reading_time: 5,
+                image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop'
+            };
+            content = `
+                <p class='lead'>As we move into 2025, the landscape of experimentation is shifting from simple conversion rate optimization to holistic experience optimization. Here is what you need to know.</p>
+                <h2>The Rise of AI-Driven Hypotheses</h2>
+                <p>Machine learning models are no longer just analyzing results; they are suggesting what to test. By analyzing user behavior at scale, AI can identify friction points that human analysts might miss.</p>
+                <blockquote>The best experiments are the ones you didn't think to run.</blockquote>
+                <h3>Key Trends</h3>
+                <ul>
+                    <li><strong>Automated Traffic Allocation:</strong> Multi-armed bandits are becoming the default.</li>
+                    <li><strong>Personalization at Scale:</strong> 1:1 experiences based on real-time intent.</li>
+                    <li><strong>Server-Side Testing:</strong> Performance matters more than ever.</li>
+                </ul>
+                <h2>Conclusion</h2>
+                <p>The tools are getting better, but the scientific method remains the same. Hypothesize, test, learn, repeat.</p>
+            `;
+        }
+    " :class="{ 'dark': darkMode }"
+    class="font-body text-gray-800 antialiased bg-white dark:bg-gray-950 transition-colors duration-300">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div id="sidebar-container" class="flex-shrink-0 transition-all duration-300 z-50 h-full"></div>
+
+        <!-- Content Area -->
+        <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+            <!-- Header -->
+            <div id="header-container" class="sticky top-0 z-40"></div>
+
+            <!-- Main Content -->
+            <main class="w-full">
+                <!-- Hero Section -->
+                <div class="relative h-[400px] w-full overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent z-10">
+                    </div>
+                    <img :src="metadata.image" class="w-full h-full object-cover" alt="Cover Image">
+
+                    <div class="absolute bottom-0 left-0 w-full p-8 md:p-12 z-20 max-w-5xl mx-auto">
+                        <a href="blog_v2.html"
+                            class="inline-flex items-center text-sm font-bold text-gray-300 hover:text-white mb-6 transition-colors">
+                            <span class="material-symbols-outlined text-lg mr-1">arrow_back</span>
+                            Back to Articles
+                        </a>
+                        <div class="flex items-center gap-3 mb-4">
+                            <span
+                                class="px-3 py-1 rounded-full bg-brand-500 text-white text-[10px] font-bold uppercase tracking-widest"
+                                x-text="metadata.category"></span>
+                            <span class="text-gray-300 text-sm font-medium"
+                                x-text="metadata.reading_time + ' min read'"></span>
+                        </div>
+                        <h1 class="text-4xl md:text-5xl font-display font-extrabold text-white leading-tight mb-4"
+                            x-text="metadata.title"></h1>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-gray-700 border border-gray-600"></div>
+                            <div>
+                                <p class="text-sm font-bold text-white" x-text="metadata.author"></p>
+                                <p class="text-xs text-gray-400" x-text="metadata.date"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-12 gap-12">
+                    <!-- Article Content -->
+                    <article
+                        class="lg:col-span-8 prose prose-lg dark:prose-invert prose-headings:font-display prose-a:text-brand-600 hover:prose-a:text-brand-500 max-w-none">
+                        <div x-html="content"></div>
+                    </article>
+
+                    <!-- Sidebar -->
+                    <aside class="lg:col-span-4 space-y-8">
+                        <!-- Share -->
+                        <div
+                            class="bg-gray-50 dark:bg-gray-900 rounded-3xl p-8 border border-gray-100 dark:border-gray-800">
+                            <h3 class="text-lg font-display font-bold text-gray-900 dark:text-white mb-4">Share this
+                                article</h3>
+                            <div class="flex gap-2">
+                                <button
+                                    class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm font-bold hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                    Twitter
+                                </button>
+                                <button
+                                    class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm font-bold hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                    LinkedIn
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Newsletter / CTA -->
+                        <div class="relative overflow-hidden bg-brand-900 rounded-3xl p-8 text-white">
+                            <div
+                                class="absolute top-0 right-0 w-32 h-32 bg-brand-500 rounded-full blur-[60px] opacity-50 -mr-10 -mt-10">
+                            </div>
+                            <div class="relative z-10">
+                                <span
+                                    class="material-symbols-outlined text-4xl mb-4 text-brand-300">rocket_launch</span>
+                                <h3 class="text-xl font-display font-bold mb-2">Optimize your growth</h3>
+                                <p class="text-brand-100 text-sm mb-6 text-pretty">Join 2,500+ product teams running
+                                    better experiments with Sampelit.</p>
+                                <button
+                                    class="w-full py-3 bg-white text-brand-900 rounded-xl font-bold hover:bg-brand-50 transition-colors">
+                                    Start Free Trial
+                                </button>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Include Layout Partials -->
+    <script>
+        fetch("./partials/sidebar_v2.html")
+            .then((response) => response.text())
+            .then((data) => {
+                document.getElementById("sidebar-container").innerHTML = data;
+            });
+
+        fetch("./partials/header_v2.html")
+            .then((response) => response.text())
+            .then((data) => {
+                document.getElementById("header-container").innerHTML = data;
+            });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+        document.addEventListener('alpine:init', () => {
+            // Syntax highlighting initialization could go here
+        });
+    </script>
+</body>
+
+</html>

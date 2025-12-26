@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In | Sampelit V2</title>
+    <link href="./css/sampelit-v2.css" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                fontFamily: {
+                    body: ["Inter", "sans-serif"],
+                    display: ["Manrope", "sans-serif"],
+                },
+                extend: {
+                    colors: {
+                        brand: {
+                            50: "#eff6ff",
+                            100: "#dbeafe",
+                            200: "#bfdbfe",
+                            300: "#93c5fd",
+                            400: "#60a5fa",
+                            500: "#3b82f6",
+                            600: "#2563eb",
+                            700: "#1d4ed8",
+                            800: "#1e40af",
+                            900: "#1e3a8a",
+                            950: "#172554",
+                        },
+                        gray: {
+                            800: "#1f2937",
+                            900: "#111827",
+                        },
+                    },
+                    boxShadow: {
+                        premium: "0 20px 40px -15px rgba(0, 0, 0, 0.05)",
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+
+<body x-data="{ darkMode: false }" :class="{ 'dark': darkMode }"
+    class="font-body text-gray-800 antialiased bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
+    <div class="flex min-h-screen w-full">
+        <!-- Left Section: Premium Brand Panel -->
+        <div class="hidden lg:flex lg:w-1/2 relative flex-col justify-between bg-gray-900 p-16 overflow-hidden">
+            <!-- Dynamic Background -->
+            <div class="absolute inset-0 z-0">
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-brand-900/40 via-gray-900 to-gray-900 opacity-90 z-10">
+                </div>
+                <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop"
+                    alt="Background" class="w-full h-full object-cover opacity-30 grayscale mix-blend-overlay" />
+                <div
+                    class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] [mask-image:linear-gradient(to_bottom,white,transparent)]">
+                </div>
+            </div>
+
+            <!-- Brand Identity -->
+            <div class="relative z-20">
+                <div class="flex items-center gap-4 text-white mb-10">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center backdrop-blur-sm shadow-2xl">
+                        <span class="material-symbols-outlined text-3xl text-brand-400">auto_fix_high</span>
+                    </div>
+                    <h1 class="text-3xl font-display font-extrabold tracking-tight">
+                        Sampelit.
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Quote / Testimonial -->
+            <div class="relative z-20 max-w-xl">
+                <blockquote class="mb-8">
+                    <p class="text-4xl font-display font-bold leading-tight text-white tracking-tight">
+                        "The experimentation platform for <span class="text-brand-400">modern product teams</span>."
+                    </p>
+                </blockquote>
+                <div
+                    class="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm w-fit">
+                    <div class="flex -space-x-3">
+                        <div class="h-10 w-10 rounded-full ring-2 ring-gray-900 bg-gray-700"></div>
+                        <div class="h-10 w-10 rounded-full ring-2 ring-gray-900 bg-gray-600"></div>
+                        <div class="h-10 w-10 rounded-full ring-2 ring-gray-900 bg-gray-500"></div>
+                    </div>
+                    <div class="text-sm">
+                        <p class="font-bold text-white">Trusted by 2,000+ companies</p>
+                        <p class="text-gray-400 text-xs">Join the best teams today</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Meta -->
+            <div
+                class="relative z-20 flex justify-between items-center text-xs font-bold uppercase tracking-widest text-gray-500">
+                <span>&copy; 2025 Sampelit Inc.</span>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-white transition-colors">Privacy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Section: Login Form -->
+        <div
+            class="w-full lg:w-1/2 flex flex-col justify-center items-center bg-white dark:bg-gray-900 p-8 sm:p-16 relative">
+            <!-- Mobile Toggle -->
+            <div class="absolute top-6 right-6 lg:top-10 lg:right-10">
+                <button @click="darkMode = !darkMode"
+                    class="p-2 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-100 transition-colors">
+                    <span x-show="!darkMode" class="material-symbols-outlined">dark_mode</span>
+                    <span x-show="darkMode" class="material-symbols-outlined">light_mode</span>
+                </button>
+            </div>
+
+            <div class="w-full max-w-[420px] mx-auto">
+                <!-- Header -->
+                <div class="mb-10 text-center lg:text-left">
+                    <div class="lg:hidden flex justify-center mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-brand-50 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-3xl text-brand-600">auto_fix_high</span>
+                        </div>
+                    </div>
+                    <h2 class="text-3xl font-display font-extrabold tracking-tight text-gray-900 dark:text-white mb-3">
+                        Welcome back
+                    </h2>
+                    <p class="text-gray-500 dark:text-gray-400 text-base leading-relaxed">
+                        Enter your credentials to access the command center.
+                    </p>
+                </div>
+
+                <!-- Social Auth -->
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <button
+                        class="flex items-center justify-center gap-2.5 h-12 rounded-2xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all text-sm font-bold text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
+                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
+                        <span>Google</span>
+                    </button>
+                    <button
+                        class="flex items-center justify-center gap-2.5 h-12 rounded-2xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all text-sm font-bold text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
+                        <img src="https://www.svgrepo.com/show/448234/github.svg" class="w-5 h-5 dark:invert"
+                            alt="GitHub">
+                        <span>GitHub</span>
+                    </button>
+                </div>
+
+                <div class="relative flex py-2 mb-8 items-center">
+                    <div class="flex-grow border-t border-gray-100 dark:border-gray-800"></div>
+                    <span class="flex-shrink-0 mx-4 text-gray-400 text-[10px] font-bold tracking-widest uppercase">Or
+                        sign in with email</span>
+                    <div class="flex-grow border-t border-gray-100 dark:border-gray-800"></div>
+                </div>
+
+                <!-- Form -->
+                <form action="/index_v2.html" class="space-y-6">
+                    <!-- Email -->
+                    <div class="space-y-2">
+                        <label
+                            class="block text-[11px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Email
+                            Address</label>
+                        <div class="relative group">
+                            <span
+                                class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-500 transition-colors">
+                                <span class="material-symbols-outlined text-xl">mail</span>
+                            </span>
+                            <input type="email" placeholder="name@company.com"
+                                class="w-full h-12 rounded-2xl border border-gray-200 bg-gray-50 dark:bg-white/5 dark:border-gray-800 pl-12 pr-4 text-sm font-medium transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:text-white dark:placeholder-gray-500 dark:focus:bg-gray-900" />
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <label
+                                class="block text-[11px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Password</label>
+                            <a href="reset_password_v2.html"
+                                class="text-[11px] font-bold text-brand-600 hover:text-brand-700">Forgot Password?</a>
+                        </div>
+                        <div class="relative group">
+                            <span
+                                class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-500 transition-colors">
+                                <span class="material-symbols-outlined text-xl">lock</span>
+                            </span>
+                            <input type="password" placeholder="••••••••"
+                                class="w-full h-12 rounded-2xl border border-gray-200 bg-gray-50 dark:bg-white/5 dark:border-gray-800 pl-12 pr-4 text-sm font-medium transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:text-white dark:placeholder-gray-500 dark:focus:bg-gray-900" />
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit"
+                        class="w-full h-12 rounded-2xl bg-gray-900 text-white font-bold text-sm shadow-xl hover:bg-black hover:scale-[1.02] active:scale-[0.98] transition-all dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100">
+                        Sign In to Command Center
+                    </button>
+                </form>
+
+                <!-- Footer -->
+                <p class="mt-8 text-center text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Don't have an account?
+                    <a href="signup_v2.html"
+                        class="text-brand-600 hover:text-brand-700 font-bold ml-1 dark:text-brand-400">Create
+                        account</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

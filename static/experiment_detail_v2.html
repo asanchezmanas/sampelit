@@ -16,27 +16,42 @@
         rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <link rel="stylesheet" href="css/sampelit.css">
+    <!-- sampelit.css removed for v2 - using Tailwind only -->
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        background: "#FFFFFF", surface: "#FAFAFA", primary: "#0f172a", accent: "#1e3a8a", "primary-light": "#3b82f6",
-                        text: { main: "#1E293B", muted: "#64748B", dim: "#94A3B8" },
-                        border: { light: "#E2E8F0", subtle: "#F1F5F9" },
-                        gray: { 50: '#F9FAFB', 100: '#F3F4F6', 200: '#E5E7EB', 300: '#D1D5DB', 400: '#9CA3AF', 500: '#6B7280', 600: '#4B5563', 700: '#374151', 800: '#1F2937', 900: '#111827' },
-                        brand: { DEFAULT: '#3b82f6', 50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd', 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 800: '#1e40af', 900: '#1e3a8a' },
+                        // Sampelit v2 Brand Colors (Aligned with V1)
+                        "primary": "#1E3A8A", // Dark Navy
+                        "primary-dark": "#0f172a",
+                        "background-light": "#f8f9fc",
+                        "surface": "#ffffff",
+                        "text-main": "#0f172a", // Slate 900
+                        "text-secondary": "#64748b", // Slate 500
+                        "accent-green": "#10b981",
+                        "border-subtle": "#e2e8f0",
+                        gray: {
+                            50: '#F9FAFB', 100: '#F3F4F6', 200: '#E5E7EB', 300: '#D1D5DB',
+                            400: '#9CA3AF', 500: '#6B7280', 600: '#4B5563', 700: '#374151',
+                            800: '#1F2937', 900: '#111827'
+                        },
+                        brand: { DEFAULT: '#1E3A8A', 500: '#1E3A8A', 600: '#0f172a' },
                         success: { 50: '#ecfdf5', 500: '#10b981', 600: '#059669' },
                         error: { 50: '#fef2f2', 500: '#ef4444', 600: '#dc2626' }
                     },
-                    fontFamily: { display: ['"Manrope"', 'sans-serif'], body: ['"Inter"', 'sans-serif'] },
+                    fontFamily: {
+                        display: ['Manrope', 'sans-serif'],
+                        sans: ['Manrope', 'sans-serif'],
+                        body: ['Inter', 'sans-serif']
+                    },
                 },
             },
         };
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="js/core/api.js"></script> <!-- Core API Client -->
     <script src="js/include.js"></script>
 </head>
 
@@ -53,28 +68,35 @@
             <main>
                 <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
                     <!-- Breadcrumb & Actions -->
-                    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <div>
-                            <div class="flex items-center gap-2 mb-1">
-                                <a href="experiments_v2.html"
-                                    class="text-sm text-text-muted hover:text-accent">Experiments</a>
-                                <span class="text-text-dim">/</span>
-                                <span class="text-sm text-text-main dark:text-white">Homepage Hero Test</span>
-                            </div>
-                            <h2 class="text-2xl font-bold font-display text-text-main dark:text-white">Homepage Hero
-                                Test</h2>
+                            <nav
+                                class="mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">
+                                <a href="index_v2.html" class="hover:text-brand-500 transition-colors">Command
+                                    Center</a>
+                                <span class="material-symbols-outlined text-[10px]">chevron_right</span>
+                                <a href="experiments_v2.html" class="hover:text-brand-500 transition-colors">Discovery
+                                    Lab</a>
+                                <span class="material-symbols-outlined text-[10px]">chevron_right</span>
+                                <span class="text-gray-900 dark:text-white">Homepage Hero Test</span>
+                            </nav>
+                            <h2
+                                class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white font-display">
+                                Homepage Hero Test</h2>
+                            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Active experiment with 3 variants
+                            </p>
                         </div>
                         <div class="flex items-center gap-3">
                             <span
-                                class="inline-flex items-center gap-1.5 rounded-full bg-success-50 px-3 py-1 text-sm font-medium text-success-600 dark:bg-success-500/15">
-                                <span class="h-2 w-2 rounded-full bg-success-500 animate-pulse"></span> Running
+                                class="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-emerald-600 dark:bg-emerald-500/15">
+                                <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span> Running
                             </span>
                             <button
-                                class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                                class="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-5 py-3 text-sm font-bold text-gray-700 hover:bg-gray-50 transition-all dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
                                 <span class="material-symbols-outlined text-lg">pause</span> Pause
                             </button>
                             <button
-                                class="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600">
+                                class="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-3 text-sm font-bold text-white hover:bg-black transition-all dark:bg-white dark:text-gray-900">
                                 <span class="material-symbols-outlined text-lg">check</span> Finalize
                             </button>
                         </div>
@@ -84,26 +106,26 @@
                     <div x-data="{ activeTab: 'overview' }">
                         <!-- Tab Navigation -->
                         <div
-                            class="mb-6 rounded-xl border border-gray-200 bg-white p-1.5 dark:border-gray-800 dark:bg-gray-800">
+                            class="mb-8 rounded-[32px] border border-gray-100 bg-white p-2 shadow-sm dark:border-gray-800 dark:bg-gray-800">
                             <nav class="flex gap-1 overflow-x-auto">
                                 <button @click="activeTab = 'overview'"
-                                    :class="activeTab === 'overview' ? 'bg-brand-500 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'"
-                                    class="flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors">
+                                    :class="activeTab === 'overview' ? 'bg-gray-900 text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-700'"
+                                    class="flex items-center gap-2 rounded-2xl px-5 py-3 text-[11px] font-bold uppercase tracking-widest transition-all">
                                     <span class="material-symbols-outlined text-lg">dashboard</span> Overview
                                 </button>
                                 <button @click="activeTab = 'variants'"
-                                    :class="activeTab === 'variants' ? 'bg-brand-500 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'"
-                                    class="flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors">
+                                    :class="activeTab === 'variants' ? 'bg-gray-900 text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-700'"
+                                    class="flex items-center gap-2 rounded-2xl px-5 py-3 text-[11px] font-bold uppercase tracking-widest transition-all">
                                     <span class="material-symbols-outlined text-lg">compare</span> Variants
                                 </button>
                                 <button @click="activeTab = 'results'"
-                                    :class="activeTab === 'results' ? 'bg-brand-500 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'"
-                                    class="flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors">
+                                    :class="activeTab === 'results' ? 'bg-gray-900 text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-700'"
+                                    class="flex items-center gap-2 rounded-2xl px-5 py-3 text-[11px] font-bold uppercase tracking-widest transition-all">
                                     <span class="material-symbols-outlined text-lg">analytics</span> Results
                                 </button>
                                 <button @click="activeTab = 'settings'"
-                                    :class="activeTab === 'settings' ? 'bg-brand-500 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'"
-                                    class="flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors">
+                                    :class="activeTab === 'settings' ? 'bg-gray-900 text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-700'"
+                                    class="flex items-center gap-2 rounded-2xl px-5 py-3 text-[11px] font-bold uppercase tracking-widest transition-all">
                                     <span class="material-symbols-outlined text-lg">settings</span> Settings
                                 </button>
                             </nav>
@@ -114,147 +136,344 @@
                             <!-- Stats Grid -->
                             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                                 <div
-                                    class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-800">
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Visitors</p>
-                                    <p class="mt-1 text-2xl font-bold text-gray-900 dark:text-white">12,450</p>
-                                    <p class="mt-1 text-xs text-success-600">+8.2% from last week</p>
+                                    class="rounded-[32px] border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-800">
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Total
+                                        Visitors</p>
+                                    <p
+                                        class="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white font-display">
+                                        12,450</p>
+                                    <p class="mt-1 text-xs font-bold text-emerald-600">+8.2% from last week</p>
                                 </div>
                                 <div
-                                    class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-800">
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Conversions</p>
-                                    <p class="mt-1 text-2xl font-bold text-gray-900 dark:text-white">1,543</p>
-                                    <p class="mt-1 text-xs text-success-600">+12.4% improvement</p>
+                                    class="rounded-[32px] border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-800">
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Conversions
+                                    </p>
+                                    <p
+                                        class="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white font-display">
+                                        1,543</p>
+                                    <p class="mt-1 text-xs font-bold text-emerald-600">+12.4% improvement</p>
                                 </div>
                                 <div
-                                    class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-800">
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Conversion Rate</p>
-                                    <p class="mt-1 text-2xl font-bold text-gray-900 dark:text-white">12.4%</p>
-                                    <p class="mt-1 text-xs text-gray-500">vs 11.0% baseline</p>
+                                    class="rounded-[32px] border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-800">
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Conversion
+                                        Rate</p>
+                                    <p
+                                        class="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white font-display">
+                                        12.4%</p>
+                                    <p class="mt-1 text-xs font-medium text-gray-500">vs 11.0% baseline</p>
                                 </div>
                                 <div
-                                    class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-800">
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Statistical Significance</p>
-                                    <p class="mt-1 text-2xl font-bold text-success-600">95.2%</p>
-                                    <div class="mt-2 h-2 w-full rounded-full bg-gray-200 dark:bg-gray-700">
-                                        <div class="h-2 rounded-full bg-success-500" style="width: 95.2%"></div>
+                                    class="rounded-[32px] border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-800">
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Statistical
+                                        Significance</p>
+                                    <p
+                                        class="mt-2 text-3xl font-extrabold tracking-tight text-emerald-600 font-display">
+                                        95.2%</p>
+                                    <div class="mt-3 h-2 w-full rounded-full bg-gray-100 dark:bg-gray-700">
+                                        <div class="h-2 rounded-full bg-emerald-500" style="width: 95.2%"></div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Chart -->
-                            <div
-                                class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-800">
-                                <h3 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Conversion Over
-                                    Time</h3>
-                                <div id="conversionChart" class="h-[300px]"></div>
-                            </div>
-                        </div>
-
-                        <!-- Tab: Variants -->
-                        <div x-show="activeTab === 'variants'" class="space-y-4">
-                            <div
-                                class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-800">
-                                <div class="flex items-center justify-between mb-4">
-                                    <div class="flex items-center gap-3">
-                                        <span
-                                            class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-sm font-bold text-gray-600 dark:bg-gray-700">A</span>
-                                        <div>
-                                            <p class="font-semibold text-gray-900 dark:text-white">Control</p>
-                                            <p class="text-sm text-gray-500">Original version</p>
-                                        </div>
-                                    </div>
-                                    <span
-                                        class="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-600 dark:bg-gray-700">50%
-                                        traffic</span>
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div
+                                    class="rounded-[32px] border border-gray-100 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-800">
+                                    <h3 class="mb-6 text-sm font-bold uppercase tracking-widest text-gray-400">
+                                        Conversion Rate</h3>
+                                    <div id="conversionChart" class="h-[300px]"></div>
                                 </div>
-                                <div class="grid grid-cols-3 gap-4 text-center">
-                                    <div>
-                                        <p class="text-2xl font-bold text-gray-900 dark:text-white">6,225</p>
-                                        <p class="text-xs text-gray-500">Visitors</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-2xl font-bold text-gray-900 dark:text-white">685</p>
-                                        <p class="text-xs text-gray-500">Conversions</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-2xl font-bold text-gray-900 dark:text-white">11.0%</p>
-                                        <p class="text-xs text-gray-500">Rate</p>
+                                <h3 class="mb-6 text-sm font-bold uppercase tracking-widest text-gray-400">Bayesian Win
+                                    Probability</h3>
+                                <div class="relative flex items-center justify-center h-[300px]">
+                                    <div id="bayesianChart" class="w-full"></div>
+                                    <!-- Gauge Center Text -->
+                                    <div
+                                        class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                        <p class="text-4xl font-extrabold text-gray-900 dark:text-white font-display">
+                                            95.2%</p>
+                                        <p class="text-[10px] font-bold uppercase tracking-widest text-emerald-600">
+                                            Confidence</p>
                                     </div>
                                 </div>
-                            </div>
-                            <div
-                                class="rounded-xl border-2 border-success-500 bg-success-50/30 p-6 dark:bg-success-500/10">
-                                <div class="flex items-center justify-between mb-4">
-                                    <div class="flex items-center gap-3">
-                                        <span
-                                            class="flex h-8 w-8 items-center justify-center rounded-full bg-success-500 text-sm font-bold text-white">B</span>
+                                <!-- Risk Assessment Card -->
+                                <div
+                                    class="mt-4 rounded-xl bg-emerald-50 p-4 border border-emerald-100 dark:bg-emerald-900/10 dark:border-emerald-800">
+                                    <div class="flex items-start gap-3">
+                                        <span class="material-symbols-outlined text-emerald-600">verified_user</span>
                                         <div>
-                                            <p class="font-semibold text-gray-900 dark:text-white">Variant B <span
-                                                    class="ml-2 text-success-600 text-sm font-medium">★ Winner</span>
+                                            <p class="text-sm font-bold text-gray-900 dark:text-gray-100">Low Risk
+                                                Decisions</p>
+                                            <p class="text-xs text-gray-600 dark:text-gray-400">
+                                                Deploying Variant B has a predicted <strong>expected loss</strong> of
+                                                only
+                                                <span class="font-mono text-emerald-600">0.02%</span> if it's the wrong
+                                                choice.
                                             </p>
-                                            <p class="text-sm text-gray-500">New hero with video</p>
                                         </div>
-                                    </div>
-                                    <span
-                                        class="rounded-full bg-success-100 px-3 py-1 text-sm font-medium text-success-600 dark:bg-success-500/20">50%
-                                        traffic</span>
-                                </div>
-                                <div class="grid grid-cols-3 gap-4 text-center">
-                                    <div>
-                                        <p class="text-2xl font-bold text-gray-900 dark:text-white">6,225</p>
-                                        <p class="text-xs text-gray-500">Visitors</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-2xl font-bold text-success-600">858</p>
-                                        <p class="text-xs text-gray-500">Conversions</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-2xl font-bold text-success-600">13.8%</p>
-                                        <p class="text-xs text-gray-500">Rate (+25.5%)</p>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- Tab: Results -->
-                        <div x-show="activeTab === 'results'"
-                            class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-800">
-                            <h3 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Statistical Analysis
-                            </h3>
-                            <p class="text-gray-600 dark:text-gray-300">Detailed Bayesian analysis and funnel breakdown
-                                will be displayed here.</p>
-                        </div>
-
-                        <!-- Tab: Settings -->
-                        <div x-show="activeTab === 'settings'"
-                            class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-800">
-                            <h3 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Experiment Settings
-                            </h3>
-                            <p class="text-gray-600 dark:text-gray-300">Configure targeting rules, traffic allocation,
-                                and goals.</p>
                         </div>
                     </div>
+
+                    <!-- Tab: Variants -->
+                    <div x-show="activeTab === 'variants'" class="space-y-4">
+                        <div
+                            class="rounded-[32px] border border-gray-100 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-800">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center gap-4">
+                                    <span
+                                        class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gray-100 text-sm font-bold text-gray-600 dark:bg-gray-700">A</span>
+                                    <div>
+                                        <p class="font-bold text-gray-900 dark:text-white">Control</p>
+                                        <p class="text-[11px] font-medium text-gray-400 uppercase tracking-wider">
+                                            Original version</p>
+                                    </div>
+                                </div>
+                                <span
+                                    class="rounded-full bg-gray-100 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-gray-600 dark:bg-gray-700">50%
+                                    traffic</span>
+                            </div>
+                            <div class="grid grid-cols-3 gap-6 text-center">
+                                <div>
+                                    <p
+                                        class="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white font-display">
+                                        6,225</p>
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                                        Visitors</p>
+                                </div>
+                                <div>
+                                    <p
+                                        class="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white font-display">
+                                        685</p>
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                                        Conversions</p>
+                                </div>
+                                <div>
+                                    <p
+                                        class="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white font-display">
+                                        11.0%</p>
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Rate
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="rounded-[32px] border-2 border-emerald-400 bg-emerald-50/30 p-8 shadow-lg dark:bg-emerald-500/10">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center gap-4">
+                                    <span
+                                        class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500 text-sm font-bold text-white shadow-lg">B</span>
+                                    <div>
+                                        <p class="font-bold text-gray-900 dark:text-white">Variant B <span
+                                                class="ml-2 text-emerald-600 text-[11px] font-bold uppercase tracking-wider">★
+                                                Winner</span>
+                                        </p>
+                                        <p class="text-[11px] font-medium text-gray-400 uppercase tracking-wider">
+                                            New hero with video</p>
+                                    </div>
+                                </div>
+                                <span
+                                    class="rounded-full bg-emerald-100 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-emerald-600 dark:bg-emerald-500/20">50%
+                                    traffic</span>
+                            </div>
+                            <div class="grid grid-cols-3 gap-6 text-center">
+                                <div>
+                                    <p
+                                        class="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white font-display">
+                                        6,225</p>
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                                        Visitors</p>
+                                </div>
+                                <div>
+                                    <p class="text-2xl font-extrabold tracking-tight text-emerald-600 font-display">
+                                        858</p>
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                                        Conversions</p>
+                                </div>
+                                <div>
+                                    <p class="text-2xl font-extrabold tracking-tight text-emerald-600 font-display">
+                                        13.8%</p>
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Rate
+                                        (+25.5%)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab: Results -->
+                    <div x-show="activeTab === 'results'"
+                        class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-800">
+                        <h3 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Statistical Analysis
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-300">Detailed Bayesian analysis and funnel breakdown
+                            will be displayed here.</p>
+                    </div>
+
+                    <!-- Tab: Settings -->
+                    <div x-show="activeTab === 'settings'"
+                        class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-800">
+                        <h3 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Experiment Settings
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-300">Configure targeting rules, traffic allocation,
+                            and goals.</p>
+                    </div>
                 </div>
-            </main>
         </div>
+        </main>
+    </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const options = {
-                series: [
-                    { name: 'Control (A)', data: [10.2, 10.5, 10.8, 11.0, 11.2, 10.9, 11.0] },
-                    { name: 'Variant B', data: [10.2, 11.5, 12.2, 12.8, 13.2, 13.5, 13.8] }
-                ],
-                chart: { type: 'line', height: 300, toolbar: { show: false } },
-                colors: ['#6B7280', '#3b82f6'],
-                stroke: { curve: 'smooth', width: 3 },
-                xaxis: { categories: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'] },
-                yaxis: { title: { text: 'Conversion Rate (%)' }, min: 8, max: 16 },
-                legend: { position: 'top' },
-                tooltip: { theme: 'dark' }
+        document.addEventListener('DOMContentLoaded', async function () {
+            // Initialize API Client
+            const api = new APIClient();
+
+            // Mock Data for Experiment (To be replaced by API)
+            let experimentData = {
+                conversion: {
+                    control: [10.2, 10.5, 10.8, 11.0, 11.2, 10.9, 11.0, 11.2, 11.4],
+                    variant: [10.2, 11.5, 12.2, 12.8, 13.2, 13.5, 13.8, 14.2, 14.5],
+                    days: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7', 'Day 8', 'Day 9']
+                },
+                bayesian: {
+                    probability: 95.2
+                }
             };
-            new ApexCharts(document.querySelector("#conversionChart"), options).render();
+
+            try {
+                // Future endpoint: /api/v1/experiments/{id}/analytics
+                // const response = await api.get('/experiments/123/analytics');
+                // if (response.data) experimentData = response.data;
+                console.log('Using mock experiment data until backend endpoint is ready.');
+            } catch (err) {
+                console.warn('Failed to fetch experiment analytics', err);
+            }
+
+            // Chart 1: Conversion Rate Over Time (Gradient Area Chart - Premium Style)
+            const conversionOptions = {
+                series: [
+                    { name: 'Control (A)', data: experimentData.conversion.control },
+                    { name: 'Variant B', data: experimentData.conversion.variant }
+                ],
+                chart: {
+                    type: 'area',
+                    height: 320,
+                    fontFamily: 'Manrope, sans-serif',
+                    toolbar: { show: false },
+                    animations: { enabled: true, easing: 'easeinout', speed: 800 }
+                },
+                colors: ['#94a3b8', '#10b981'], // Gray for Control, Emerald for Winner (Semantic)
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.4,
+                        opacityTo: 0.05,
+                        stops: [0, 90, 100]
+                    }
+                },
+                dataLabels: { enabled: false },
+                stroke: { curve: 'smooth', width: 2 },
+                xaxis: {
+                    categories: experimentData.conversion.days,
+                    axisBorder: { show: false },
+                    axisTicks: { show: false },
+                    labels: { style: { colors: '#94a3b8', fontSize: '11px' } }
+                },
+                yaxis: {
+                    min: 8,
+                    max: 16,
+                    labels: { style: { colors: '#94a3b8', fontSize: '11px' }, formatter: (val) => val.toFixed(1) + '%' }
+                },
+                grid: {
+                    borderColor: '#f1f5f9',
+                    strokeDashArray: 4,
+                    yaxis: { lines: { show: true } },
+                    xaxis: { lines: { show: false } },
+                    padding: { top: 0, right: 0, bottom: 0, left: 10 }
+                },
+                legend: {
+                    position: 'top',
+                    horizontalAlign: 'right',
+                    markers: { radius: 12 },
+                    itemMargin: { horizontal: 10 }
+                },
+                tooltip: {
+                    theme: 'light',
+                    y: { formatter: (val) => val + '%' },
+                    style: { fontSize: '12px', fontFamily: 'Inter, sans-serif' }
+                }
+            };
+
+            // Check for dark mode to adjust chart colors if needed
+            if (document.documentElement.classList.contains('dark')) {
+                conversionOptions.grid.borderColor = '#374151';
+                conversionOptions.tooltip.theme = 'dark';
+            }
+
+            if (document.querySelector("#conversionChart")) {
+                new ApexCharts(document.querySelector("#conversionChart"), conversionOptions).render();
+            }
+
+            // Chart 2: Bayesian Probability Gauge (Radial Bar)
+            // Visualizes probability_best from analytics_service.py
+            const bayesianOptions = {
+                series: [experimentData.bayesian.probability],
+                chart: {
+                    type: 'radialBar',
+                    height: 320,
+                    fontFamily: 'Manrope, sans-serif',
+                },
+                plotOptions: {
+                    radialBar: {
+                        startAngle: -135,
+                        endAngle: 135,
+                        hollow: {
+                            margin: 15,
+                            size: '65%',
+                            background: 'transparent',
+                            image: undefined,
+                        },
+                        track: {
+                            background: '#f1f5f9', // Light gray track
+                            strokeWidth: '100%',
+                            margin: 0, // margin is in pixels
+                        },
+                        dataLabels: {
+                            show: false // We use custom center text HTML above
+                        }
+                    }
+                },
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shade: 'dark',
+                        type: 'horizontal',
+                        shadeIntensity: 0.5,
+                        gradientToColors: ['#10b981'], // Emerald-500
+                        inverseColors: true,
+                        opacityFrom: 1,
+                        opacityTo: 1,
+                        stops: [0, 100]
+                    }
+                },
+                stroke: {
+                    lineCap: 'round'
+                },
+                colors: ['#1E3A8A'], // Dark Navy Start (Updated from Bright Blue)
+                labels: ['Confidence'],
+            };
+
+            // Dark mode adjustment for track color
+            if (document.documentElement.classList.contains('dark')) {
+                bayesianOptions.plotOptions.radialBar.track.background = '#374151'; // Gray-700
+            }
+
+            if (document.querySelector("#bayesianChart")) {
+                new ApexCharts(document.querySelector("#bayesianChart"), bayesianOptions).render();
+            }
         });
     </script>
 </body>

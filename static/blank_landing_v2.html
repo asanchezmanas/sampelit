@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sampelit | Page Title</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1754cf',
+                        accent: '#0f3a9a',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Manrope', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<!-- 
+  BLANK TEMPLATE - Landing Layout
+  Use this as base for public pages WITHOUT sidebar
+  Only has the landing header with navigation
+  
+  Variables available from body x-data:
+  - darkMode: boolean (persisted to localStorage)
+  - page: string (current page identifier)
+-->
+
+<body x-data="{ 
+        page: 'landing', 
+        darkMode: false
+    }" x-init="
+        darkMode = JSON.parse(localStorage.getItem('darkMode')) || false;
+        $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))
+    " :class="{ 'dark': darkMode }"
+    class="font-sans antialiased bg-white text-gray-700 dark:bg-gray-900 dark:text-gray-300">
+    <!-- ===== Header Start ===== -->
+    <include src="./partials/header_landing_v2.html"></include>
+    <!-- ===== Header End ===== -->
+
+    <!-- ===== Main Content Start ===== -->
+    <main class="pt-20">
+        <!-- Hero Section Example -->
+        <section class="px-4 py-16 mx-auto max-w-7xl md:py-24 lg:py-32">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold text-gray-900 dark:text-white md:text-5xl lg:text-6xl font-display">
+                    Page Title Here
+                </h1>
+                <p class="mt-6 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                    Add your hero subtitle or description here. This template is for landing pages without sidebar.
+                </p>
+                <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="signup.html"
+                        class="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-primary rounded-lg hover:bg-primary/90 shadow-lg shadow-primary/20 transition-colors">
+                        Get Started Free
+                    </a>
+                    <a href="#learn-more"
+                        class="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-gray-700 dark:text-white bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Section Example -->
+        <section id="learn-more" class="px-4 py-16 mx-auto max-w-7xl bg-gray-50 dark:bg-gray-800/50">
+            <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                <!-- Feature Card 1 -->
+                <div class="p-6 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800">
+                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 mb-4">
+                        <span class="material-symbols-outlined text-primary text-2xl">science</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Feature One</h3>
+                    <p class="text-gray-500 dark:text-gray-400">Description of this feature goes here.</p>
+                </div>
+
+                <!-- Feature Card 2 -->
+                <div class="p-6 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800">
+                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 mb-4">
+                        <span class="material-symbols-outlined text-primary text-2xl">bar_chart</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Feature Two</h3>
+                    <p class="text-gray-500 dark:text-gray-400">Description of this feature goes here.</p>
+                </div>
+
+                <!-- Feature Card 3 -->
+                <div class="p-6 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800">
+                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 mb-4">
+                        <span class="material-symbols-outlined text-primary text-2xl">rocket_launch</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Feature Three</h3>
+                    <p class="text-gray-500 dark:text-gray-400">Description of this feature goes here.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- ===== Main Content End ===== -->
+
+    <!-- ===== Footer Start ===== -->
+    <footer class="px-4 py-8 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+        <div class="mx-auto max-w-7xl text-center">
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+                © 2024 Sampelit. All rights reserved.
+            </p>
+        </div>
+    </footer>
+    <!-- ===== Footer End ===== -->
+
+    <script src="./js/include.js"></script>
+</body>
+
+</html>

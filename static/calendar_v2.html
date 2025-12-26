@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Experiment Schedule | Sampelit V2</title>
+    <link href="./css/sampelit-v2.css" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                fontFamily: {
+                    body: ["Inter", "sans-serif"],
+                    display: ["Manrope", "sans-serif"],
+                },
+                extend: {
+                    colors: {
+                        brand: {
+                            50: "#eff6ff",
+                            100: "#dbeafe",
+                            200: "#bfdbfe",
+                            300: "#93c5fd",
+                            400: "#60a5fa",
+                            500: "#3b82f6",
+                            600: "#2563eb",
+                            700: "#1d4ed8",
+                            800: "#1e40af",
+                            900: "#1e3a8a",
+                            950: "#172554",
+                        },
+                        gray: {
+                            800: "#1f2937",
+                            900: "#111827",
+                        },
+                    },
+                    boxShadow: {
+                        premium: "0 20px 40px -15px rgba(0, 0, 0, 0.05)",
+                        elevation: "0 10px 30px -5px rgba(0, 0, 0, 0.05)",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        /* Custom Scrollbar for Calendar Events */
+        .calendar-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .calendar-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .calendar-scroll::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+
+<body x-data="{ sidebarOpen: false, darkMode: false }" :class="{ 'dark': darkMode }"
+    class="font-body text-gray-800 antialiased bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div id="sidebar-container" class="flex-shrink-0 transition-all duration-300 z-50 h-full"></div>
+
+        <!-- Content Area -->
+        <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+            <!-- Header -->
+            <div id="header-container" class="sticky top-0 z-40"></div>
+
+            <!-- Main Content -->
+            <main class="w-full h-full p-6 lg:p-8">
+                <!-- Header & Actions -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                    <div>
+                        <div
+                            class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">
+                            <span>Command Center</span>
+                            <span class="material-symbols-outlined text-xs">chevron_right</span>
+                            <span class="text-brand-600">Schedule</span>
+                        </div>
+                        <h1 class="text-3xl font-display font-extrabold tracking-tight text-gray-900 dark:text-white">
+                            Experiment Calendar
+                        </h1>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="flex bg-white dark:bg-gray-900 rounded-xl p-1 shadow-sm border border-gray-100 dark:border-gray-800">
+                            <button
+                                class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm">Month</button>
+                            <button
+                                class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors">Week</button>
+                        </div>
+                        <button
+                            class="flex items-center gap-2 bg-gray-900 hover:bg-black text-white px-5 py-3 rounded-xl font-bold shadow-lg shadow-gray-200 dark:shadow-none transition-all hover:scale-[1.02] active:scale-[0.98]">
+                            <span class="material-symbols-outlined text-xl">add</span>
+                            <span>Schedule Experiment</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 h-[calc(100vh-200px)]">
+                    <!-- Calendar Grid -->
+                    <div
+                        class="lg:col-span-3 bg-white dark:bg-gray-900 rounded-[32px] border border-gray-100 dark:border-gray-800 shadow-premium p-6 flex flex-col h-full">
+                        <!-- Days Header -->
+                        <div class="grid grid-cols-7 mb-4">
+                            <template x-for="day in ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']">
+                                <div class="text-center text-xs font-bold uppercase tracking-wider text-gray-400 py-2"
+                                    x-text="day"></div>
+                            </template>
+                        </div>
+
+                        <!-- Calendar Cells -->
+                        <div
+                            class="grid grid-cols-7 grid-rows-5 flex-1 gap-px bg-gray-100 dark:bg-gray-800 border border-gray-100 dark:border-gray-800 rounded-2xl overflow-hidden">
+                            <!-- Previous Month Days -->
+                            <template x-for="i in 4">
+                                <div class="bg-gray-50 dark:bg-gray-900/50 p-2 text-gray-400 text-sm font-medium">
+                                    <span x-text="27 + i"></span>
+                                </div>
+                            </template>
+
+                            <!-- Current Month Days -->
+                            <template x-for="i in 31">
+                                <div
+                                    class="bg-white dark:bg-gray-900 p-2 relative group hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors cursor-pointer min-h-[100px]">
+                                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                                        x-text="i"></span>
+
+                                    <!-- Example Events -->
+                                    <template x-if="i === 5">
+                                        <div
+                                            class="mt-2 p-1.5 rounded-lg bg-brand-50 border border-brand-100 dark:bg-brand-500/20 dark:border-brand-500/30 text-[10px] font-bold text-brand-700 dark:text-brand-300 truncate">
+                                            Homepage Hero Test
+                                        </div>
+                                    </template>
+                                    <template x-if="i === 12">
+                                        <div
+                                            class="mt-2 p-1.5 rounded-lg bg-emerald-50 border border-emerald-100 dark:bg-emerald-500/20 dark:border-emerald-500/30 text-[10px] font-bold text-emerald-700 dark:text-emerald-300 truncate">
+                                            Checkout Flow V2
+                                        </div>
+                                    </template>
+                                    <template x-if="i === 12">
+                                        <div
+                                            class="mt-1 p-1.5 rounded-lg bg-purple-50 border border-purple-100 dark:bg-purple-500/20 dark:border-purple-500/30 text-[10px] font-bold text-purple-700 dark:text-purple-300 truncate">
+                                            Pricing Page Layout
+                                        </div>
+                                    </template>
+                                    <template x-if="i === 24">
+                                        <div
+                                            class="mt-2 p-1.5 rounded-lg bg-amber-50 border border-amber-100 dark:bg-amber-500/20 dark:border-amber-500/30 text-[10px] font-bold text-amber-700 dark:text-amber-300 truncate">
+                                            Search Algorithm B
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar: Upcoming Schedule -->
+                    <div
+                        class="bg-white dark:bg-gray-900 rounded-[32px] border border-gray-100 dark:border-gray-800 shadow-premium p-6 flex flex-col h-full">
+                        <h3 class="text-lg font-display font-bold text-gray-900 dark:text-white mb-6">Upcoming</h3>
+
+                        <div class="flex-1 overflow-y-auto calendar-scroll space-y-6">
+                            <!-- Item 1 -->
+                            <div class="flex gap-4 group">
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="w-10 h-10 rounded-2xl bg-brand-50 dark:bg-brand-500/10 flex items-center justify-center text-brand-600 dark:text-brand-400 font-bold text-sm border border-brand-100 dark:border-brand-500/20">
+                                        05
+                                    </div>
+                                    <div class="w-0.5 h-full bg-gray-100 dark:bg-gray-800 my-2 group-last:hidden"></div>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">Tomorrow,
+                                        10:00 AM</p>
+                                    <h4 class="font-bold text-gray-900 dark:text-white mb-1">Homepage Hero Test</h4>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Launch new hero copy variants.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Item 2 -->
+                            <div class="flex gap-4 group">
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="w-10 h-10 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold text-sm border border-emerald-100 dark:border-emerald-500/20">
+                                        12
+                                    </div>
+                                    <div class="w-0.5 h-full bg-gray-100 dark:bg-gray-800 my-2 group-last:hidden"></div>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">Next Week
+                                    </p>
+                                    <h4 class="font-bold text-gray-900 dark:text-white mb-1">Checkout Flow V2</h4>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Testing simplified checkout
+                                        process.</p>
+                                </div>
+                            </div>
+
+                            <!-- Item 3 -->
+                            <div class="flex gap-4 group">
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="w-10 h-10 rounded-2xl bg-purple-50 dark:bg-purple-500/10 flex items-center justify-center text-purple-600 dark:text-purple-400 font-bold text-sm border border-purple-100 dark:border-purple-500/20">
+                                        12
+                                    </div>
+                                    <div class="w-0.5 h-full bg-gray-100 dark:bg-gray-800 my-2 group-last:hidden"></div>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">Next Week
+                                    </p>
+                                    <h4 class="font-bold text-gray-900 dark:text-white mb-1">Pricing Page Layout</h4>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Monthly vs Annual toggle
+                                        prominence.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-800">
+                            <button
+                                class="w-full py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-bold text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                                View All Scheduled
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Include Layout Partials -->
+    <script>
+        fetch("./partials/sidebar_v2.html")
+            .then((response) => response.text())
+            .then((data) => {
+                document.getElementById("sidebar-container").innerHTML = data;
+            });
+
+        fetch("./partials/header_v2.html")
+            .then((response) => response.text())
+            .then((data) => {
+                document.getElementById("header-container").innerHTML = data;
+            });
+    </script>
+</body>
+
+</html>

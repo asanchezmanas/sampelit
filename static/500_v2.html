@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>500 - Server Error | Sampelit V2</title>
+    <link href="./css/sampelit-v2.css" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                fontFamily: {
+                    body: ["Inter", "sans-serif"],
+                    display: ["Manrope", "sans-serif"],
+                },
+                extend: {
+                    colors: {
+                        brand: {
+                            50: "#eff6ff",
+                            100: "#dbeafe",
+                            200: "#bfdbfe",
+                            300: "#93c5fd",
+                            400: "#60a5fa",
+                            500: "#3b82f6",
+                            600: "#2563eb",
+                            700: "#1d4ed8",
+                            800: "#1e40af",
+                            900: "#1e3a8a",
+                            950: "#172554",
+                        },
+                        gray: {
+                            800: "#1f2937",
+                            900: "#111827",
+                        },
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+
+<body x-data="{ darkMode: false }" :class="{ 'dark': darkMode }"
+    class="font-body text-gray-800 antialiased bg-gray-50 dark:bg-gray-950 transition-colors duration-300 min-h-screen flex flex-col relative overflow-hidden">
+    <!-- Background Texture -->
+    <div class="absolute inset-0 z-0">
+        <div class="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-red-500/5 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-orange-500/5 rounded-full blur-[100px]">
+        </div>
+        <div
+            class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMCwwLDAsMC4wNSkiLz48L3N2Zz4=')] [mask-image:linear-gradient(to_bottom,white,transparent)] z-0 pointer-events-none opacity-50 dark:invert">
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="relative z-10 flex items-center justify-between px-6 py-6 md:px-12 lg:px-20">
+        <a href="index_v2.html" class="flex items-center gap-3 group">
+            <div
+                class="flex items-center justify-center w-10 h-10 rounded-xl bg-white dark:bg-white/10 shadow-sm border border-gray-100 dark:border-white/10 group-hover:scale-105 transition-transform">
+                <span class="material-symbols-outlined text-2xl text-brand-600 dark:text-brand-400">auto_fix_high</span>
+            </div>
+            <h2 class="text-gray-900 dark:text-white text-xl font-display font-bold tracking-tight">Sampelit<span
+                    class="text-brand-500">.</span></h2>
+        </a>
+
+        <!-- Dark Mode Toggle -->
+        <button @click="darkMode = !darkMode"
+            class="p-2 rounded-xl bg-white dark:bg-white/5 border border-gray-100 dark:border-white/10 text-gray-500 dark:text-gray-400 hover:bg-gray-50 transition-colors">
+            <span x-show="!darkMode" class="material-symbols-outlined">dark_mode</span>
+            <span x-show="darkMode" class="material-symbols-outlined">light_mode</span>
+        </button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="relative z-10 flex-1 flex flex-col items-center justify-center px-6 text-center">
+        <div class="max-w-2xl mx-auto">
+            <h1
+                class="text-[120px] md:text-[180px] font-display font-bold text-transparent bg-clip-text bg-gradient-to-br from-gray-200 to-gray-50 dark:from-gray-800 dark:to-gray-900 leading-none select-none tracking-tighter">
+                500
+            </h1>
+
+            <div class="-mt-12 md:-mt-20 relative">
+                <div
+                    class="inline-flex items-center justify-center p-2 rounded-2xl bg-white dark:bg-gray-800 shadow-xl mb-6">
+                    <span class="material-symbols-outlined text-4xl text-red-500">error</span>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-display font-bold text-gray-900 dark:text-white mb-4">
+                    Internal Server Error
+                </h2>
+                <p class="text-lg text-gray-500 dark:text-gray-400 max-w-md mx-auto leading-relaxed">
+                    Something went wrong on our end. Our engineers have been notified and are working to fix it.
+                </p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mt-10">
+                <a href="index_v2.html"
+                    class="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold transition-all shadow-lg shadow-brand-500/20 hover:scale-[1.02] active:scale-[0.98]">
+                    <span class="material-symbols-outlined">refresh</span>
+                    Try Again
+                </a>
+                <a href="contact_v2.html"
+                    class="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-xl bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-white font-bold hover:bg-gray-50 dark:hover:bg-white/10 transition-all">
+                    <span class="material-symbols-outlined">support</span>
+                    Contact Support
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative z-10 py-8 text-center">
+        <p class="text-xs font-bold uppercase tracking-widest text-gray-400">© 2025 Sampelit Inc.</p>
+    </footer>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</body>
+
+</html>

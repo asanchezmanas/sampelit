@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sampelit | Page Title</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/sampelit-v2.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1754cf',
+                        accent: '#0f3a9a',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Manrope', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<!-- 
+  BLANK TEMPLATE - Dashboard Layout
+  Use this as base for pages with sidebar + header
+  
+  Variables available from body x-data:
+  - darkMode: boolean (persisted to localStorage)
+  - sidebarToggle: boolean (controls sidebar collapse)
+  - page: string (current page identifier)
+-->
+
+<body x-data="{ 
+        page: 'blank', 
+        darkMode: false, 
+        sidebarToggle: false 
+    }" x-init="
+        darkMode = JSON.parse(localStorage.getItem('darkMode')) || false;
+        $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))
+    " :class="{ 'dark': darkMode }"
+    class="font-sans antialiased bg-[#f8f9fc] text-gray-700 dark:bg-gray-900 dark:text-gray-300">
+    <!-- ===== Page Wrapper Start ===== -->
+    <div class="flex h-screen overflow-hidden">
+
+        <!-- ===== Sidebar Start ===== -->
+        <include src="./partials/sidebar_v2.html"></include>
+        <!-- ===== Sidebar End ===== -->
+
+        <!-- ===== Content Area Start ===== -->
+        <div class="relative flex flex-1 flex-col overflow-x-hidden overflow-y-auto bg-[#f8f9fc] dark:bg-gray-900">
+
+            <!-- ===== Header Start ===== -->
+            <include src="./partials/header_v2.html"></include>
+            <!-- ===== Header End ===== -->
+
+            <!-- ===== Main Content Start ===== -->
+            <main>
+                <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+
+                    <!-- Breadcrumb Start -->
+                    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Page Title</h2>
+                        <nav>
+                            <ol class="flex items-center gap-2">
+                                <li><a class="text-primary hover:underline" href="index_v2.html">Dashboard</a></li>
+                                <li class="text-gray-400">/</li>
+                                <li class="text-gray-500 dark:text-gray-400">Page Title</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <!-- Breadcrumb End -->
+
+                    <!-- Content Card Start -->
+                    <div
+                        class="rounded-2xl border border-gray-200 bg-white px-5 py-7 dark:border-gray-800 dark:bg-gray-800 xl:px-10 xl:py-12">
+                        <div class="mx-auto w-full max-w-[630px] text-center">
+                            <h3 class="mb-4 text-xl font-semibold text-gray-800 dark:text-white/90 sm:text-2xl">
+                                Card Title Here
+                            </h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 sm:text-base">
+                                Start putting content here. You can use grids, panels, or any TailAdmin components.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Content Card End -->
+
+                </div>
+            </main>
+            <!-- ===== Main Content End ===== -->
+        </div>
+        <!-- ===== Content Area End ===== -->
+    </div>
+    <!-- ===== Page Wrapper End ===== -->
+
+    <script src="./js/include.js"></script>
+</body>
+
+</html>

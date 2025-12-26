@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up | Sampelit V2</title>
+    <link href="./css/sampelit-v2.css" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                fontFamily: {
+                    body: ["Inter", "sans-serif"],
+                    display: ["Manrope", "sans-serif"],
+                },
+                extend: {
+                    colors: {
+                        brand: {
+                            50: "#eff6ff",
+                            100: "#dbeafe",
+                            200: "#bfdbfe",
+                            300: "#93c5fd",
+                            400: "#60a5fa",
+                            500: "#3b82f6",
+                            600: "#2563eb",
+                            700: "#1d4ed8",
+                            800: "#1e40af",
+                            900: "#1e3a8a",
+                            950: "#172554",
+                        },
+                        gray: {
+                            800: "#1f2937",
+                            900: "#111827",
+                        },
+                    },
+                    boxShadow: {
+                        premium: "0 20px 40px -15px rgba(0, 0, 0, 0.05)",
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+
+<body x-data="{ darkMode: false }" :class="{ 'dark': darkMode }"
+    class="font-body text-gray-800 antialiased bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
+    <div class="flex min-h-screen w-full">
+        <!-- Left Section: Premium Brand Panel -->
+        <div class="hidden lg:flex lg:w-1/2 relative flex-col justify-between bg-brand-900 p-16 overflow-hidden">
+            <!-- Dynamic Background -->
+            <div class="absolute inset-0 z-0">
+                <div class="absolute inset-0 bg-gradient-to-br from-brand-900 via-gray-900 to-black opacity-90 z-10">
+                </div>
+                <div
+                    class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIvPjwvc3ZnPg==')] [mask-image:linear-gradient(to_bottom,white,transparent)] z-10 opacity-30">
+                </div>
+                <!-- Abstract Shapes -->
+                <div
+                    class="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-500/30 rounded-full blur-[100px] animate-pulse">
+                </div>
+                <div class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-500/20 rounded-full blur-[80px]"></div>
+            </div>
+
+            <!-- Brand Identity -->
+            <div class="relative z-20">
+                <div class="flex items-center gap-4 text-white mb-10">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center backdrop-blur-sm shadow-2xl">
+                        <span class="material-symbols-outlined text-3xl text-brand-300">auto_fix_high</span>
+                    </div>
+                    <h1 class="text-3xl font-display font-extrabold tracking-tight">
+                        Sampelit.
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Feature Highlight -->
+            <div class="relative z-20 max-w-xl space-y-8">
+                <div>
+                    <h2 class="text-4xl font-display font-bold leading-tight text-white tracking-tight mb-4">
+                        Join <span class="text-brand-400">2,500+ teams</span> delivering better products.
+                    </h2>
+                    <p class="text-lg text-gray-300 leading-relaxed max-w-lg">
+                        Start your 14-day free trial. No credit card required. Cancel anytime.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 gap-4">
+                    <div
+                        class="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm transition-transform hover:scale-[1.02]">
+                        <div
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-500/20 text-brand-300">
+                            <span class="material-symbols-outlined">rocket_launch</span>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-white text-sm">Deploy Faster</h3>
+                            <p class="text-xs text-gray-400 text-pretty">Launch experiments in minutes, not days.</p>
+                        </div>
+                    </div>
+                    <div
+                        class="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm transition-transform hover:scale-[1.02]">
+                        <div
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-500/20 text-purple-300">
+                            <span class="material-symbols-outlined">analytics</span>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-white text-sm">Advanced Analytics</h3>
+                            <p class="text-xs text-gray-400 text-pretty">Bayesian significance engine included.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Meta -->
+            <div
+                class="relative z-20 flex justify-between items-center text-xs font-bold uppercase tracking-widest text-gray-500">
+                <span>&copy; 2025 Sampelit Inc.</span>
+            </div>
+        </div>
+
+        <!-- Right Section: Sign Up Form -->
+        <div
+            class="w-full lg:w-1/2 flex flex-col justify-center items-center bg-white dark:bg-gray-900 p-8 sm:p-16 relative overflow-y-auto">
+            <!-- Mobile Toggle -->
+            <div class="absolute top-6 right-6 lg:top-10 lg:right-10">
+                <button @click="darkMode = !darkMode"
+                    class="p-2 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-100 transition-colors">
+                    <span x-show="!darkMode" class="material-symbols-outlined">dark_mode</span>
+                    <span x-show="darkMode" class="material-symbols-outlined">light_mode</span>
+                </button>
+            </div>
+
+            <div class="w-full max-w-[480px] mx-auto py-10">
+                <!-- Header -->
+                <div class="mb-10 text-center lg:text-left">
+                    <div class="lg:hidden flex justify-center mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-brand-50 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-3xl text-brand-600">auto_fix_high</span>
+                        </div>
+                    </div>
+                    <h2 class="text-3xl font-display font-extrabold tracking-tight text-gray-900 dark:text-white mb-3">
+                        Create your account
+                    </h2>
+                    <p class="text-gray-500 dark:text-gray-400 text-base leading-relaxed">
+                        Start your 14-day free trial. No credit card required.
+                    </p>
+                </div>
+
+                <!-- Social Auth -->
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <button
+                        class="flex items-center justify-center gap-2.5 h-12 rounded-2xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all text-sm font-bold text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
+                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
+                        <span>Google</span>
+                    </button>
+                    <button
+                        class="flex items-center justify-center gap-2.5 h-12 rounded-2xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all text-sm font-bold text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
+                        <img src="https://www.svgrepo.com/show/448234/github.svg" class="w-5 h-5 dark:invert"
+                            alt="GitHub">
+                        <span>GitHub</span>
+                    </button>
+                </div>
+
+                <div class="relative flex py-2 mb-8 items-center">
+                    <div class="flex-grow border-t border-gray-100 dark:border-gray-800"></div>
+                    <span class="flex-shrink-0 mx-4 text-gray-400 text-[10px] font-bold tracking-widest uppercase">Or
+                        register with email</span>
+                    <div class="flex-grow border-t border-gray-100 dark:border-gray-800"></div>
+                </div>
+
+                <!-- Form -->
+                <form action="/index_v2.html" class="space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- First Name -->
+                        <div class="space-y-2">
+                            <label
+                                class="block text-[11px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">First
+                                Name</label>
+                            <input type="text" placeholder="John"
+                                class="w-full h-12 rounded-2xl border border-gray-200 bg-gray-50 dark:bg-white/5 dark:border-gray-800 px-4 text-sm font-medium transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:text-white dark:placeholder-gray-500 dark:focus:bg-gray-900" />
+                        </div>
+                        <!-- Last Name -->
+                        <div class="space-y-2">
+                            <label
+                                class="block text-[11px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Last
+                                Name</label>
+                            <input type="text" placeholder="Doe"
+                                class="w-full h-12 rounded-2xl border border-gray-200 bg-gray-50 dark:bg-white/5 dark:border-gray-800 px-4 text-sm font-medium transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:text-white dark:placeholder-gray-500 dark:focus:bg-gray-900" />
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="space-y-2">
+                        <label
+                            class="block text-[11px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Work
+                            Email</label>
+                        <div class="relative group">
+                            <span
+                                class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-500 transition-colors">
+                                <span class="material-symbols-outlined text-xl">mail</span>
+                            </span>
+                            <input type="email" placeholder="name@company.com"
+                                class="w-full h-12 rounded-2xl border border-gray-200 bg-gray-50 dark:bg-white/5 dark:border-gray-800 pl-12 pr-4 text-sm font-medium transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:text-white dark:placeholder-gray-500 dark:focus:bg-gray-900" />
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="space-y-2">
+                        <label
+                            class="block text-[11px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Password</label>
+                        <div class="relative group">
+                            <span
+                                class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-500 transition-colors">
+                                <span class="material-symbols-outlined text-xl">lock</span>
+                            </span>
+                            <input type="password" placeholder="8+ characters"
+                                class="w-full h-12 rounded-2xl border border-gray-200 bg-gray-50 dark:bg-white/5 dark:border-gray-800 pl-12 pr-4 text-sm font-medium transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:text-white dark:placeholder-gray-500 dark:focus:bg-gray-900" />
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3">
+                        <div class="flex items-center h-5">
+                            <input id="terms" type="checkbox" value=""
+                                class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-brand-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-brand-600 dark:ring-offset-gray-800"
+                                required>
+                        </div>
+                        <label for="terms" class="text-sm font-medium text-gray-500 dark:text-gray-400">I agree to the
+                            <a href="#" class="text-brand-600 hover:underline dark:text-brand-500">Terms and
+                                Conditions</a> and <a href="#"
+                                class="text-brand-600 hover:underline dark:text-brand-500">Privacy Policy</a>.</label>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit"
+                        class="w-full h-12 rounded-2xl bg-gray-900 text-white font-bold text-sm shadow-xl hover:bg-black hover:scale-[1.02] active:scale-[0.98] transition-all dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100">
+                        Start Free Trial
+                    </button>
+                </form>
+
+                <!-- Footer -->
+                <p class="mt-8 text-center text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Already have an account?
+                    <a href="signin_v2.html"
+                        class="text-brand-600 hover:text-brand-700 font-bold ml-1 dark:text-brand-400">Sign in</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

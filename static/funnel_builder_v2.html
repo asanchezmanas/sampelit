@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Funnel Builder | Sampelit V2</title>
+    <link href="./css/sampelit-v2.css" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Funnel Logic -->
+    <script src="./js/funnel-builder.js"></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                fontFamily: {
+                    body: ["Inter", "sans-serif"],
+                    display: ["Manrope", "sans-serif"],
+                },
+                extend: {
+                    colors: {
+                        brand: {
+                            50: "#eff6ff",
+                            100: "#dbeafe",
+                            200: "#bfdbfe",
+                            300: "#93c5fd",
+                            400: "#60a5fa",
+                            500: "#3b82f6",
+                            600: "#2563eb",
+                            700: "#1d4ed8",
+                            800: "#1e40af",
+                            900: "#1e3a8a",
+                            950: "#172554",
+                        },
+                        gray: {
+                            800: "#1f2937",
+                            900: "#111827",
+                        },
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        .grid-pattern {
+            background-size: 20px 20px;
+            background-image:
+                linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+        }
+
+        .dark .grid-pattern {
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        }
+    </style>
+</head>
+
+<body x-data="{ sidebarOpen: false, darkMode: false, ...funnelBuilder() }" :class="{ 'dark': darkMode }"
+    class="font-body text-gray-800 antialiased bg-gray-50 dark:bg-gray-950 transition-colors duration-300 h-screen overflow-hidden flex">
+    <!-- Sidebar (Collapsed by default for builder space?) -->
+    <div id="sidebar-container" class="flex-shrink-0 transition-all duration-300 z-50 h-full"></div>
+
+    <!-- Content Area -->
+    <div class="relative flex flex-1 flex-col h-full overflow-hidden">
+        <!-- Header -->
+        <div id="header-container" class="shrink-0 z-40"></div>
+
+        <!-- Main Builder Canvas -->
+        <main class="flex-1 relative overflow-hidden bg-gray-50 dark:bg-gray-900 grid-pattern">
+            <!-- Toolbox (Floating) -->
+            <div
+                class="absolute left-6 top-6 z-10 bg-white dark:bg-gray-800 rounded-2xl shadow-premium border border-gray-100 dark:border-gray-700 p-2 flex flex-col gap-2">
+                <template x-for="tool in tools">
+                    <button @click="addNode(tool.type)"
+                        class="w-12 h-12 flex items-center justify-center rounded-xl text-gray-500 hover:bg-brand-50 hover:text-brand-600 transition-colors dark:text-gray-400 dark:hover:bg-brand-500/20 dark:hover:text-brand-400"
+                        :title="tool.label">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            x-html="`<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='${tool.icon}'></path>`"></svg>
+                    </button>
+                </template>
+            </div>
+
+            <!-- Properties Panel (Floating Right) -->
+            <div class="absolute right-6 top-6 z-10 w-80 bg-white dark:bg-gray-800 rounded-[24px] shadow-premium border border-gray-100 dark:border-gray-700 p-6 transition-transform duration-300"
+                x-show="selectedNode" x-transition:enter="translate-x-full opacity-0"
+                x-transition:enter-end="translate-x-0 opacity-100">
+
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-display font-bold text-gray-900 dark:text-white">Properties</h3>
+                    <button @click="selectedNode = null"
+                        class="w-8 h-8 rounded-full bg-gray-50 dark:bg-gray-700 flex items-center justify-center text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-sm">close</span>
+                    </button>
+                </div>
+
+                <template x-if="selectedNode">
+                    <div class="space-y-6">
+                        <div>
+                            <label
+                                class="block text-[10px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">Step
+                                Name</label>
+                            <input type="text" x-model="selectedNode.label"
+                                class="w-full h-10 px-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 dark:text-white transition-all">
+                        </div>
+
+                        <div>
+                            <label
+                                class="block text-[10px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">Linked
+                                Experiment</label>
+                            <select
+                                class="w-full h-10 px-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 dark:text-white transition-all">
+                                <option>Select Experiment...</option>
+                                <option>Homepage Hero Test</option>
+                                <option>Checkout V2</option>
+                            </select>
+                        </div>
+
+                        <div class="pt-6 border-t border-gray-100 dark:border-gray-700">
+                            <button @click="deleteNode(selectedNode.id)"
+                                class="w-full py-3 bg-red-50 text-red-600 rounded-xl text-sm font-bold hover:bg-red-100 dark:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-500/20 transition-colors flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-lg">delete</span>
+                                Delete Step
+                            </button>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- SVG Paint Surface -->
+            <div class="w-full h-full relative overflow-hidden cursor-grab active:cursor-grabbing" x-ref="canvas">
+
+                <svg class="absolute inset-0 w-full h-full pointer-events-none z-0">
+                    <!-- Connections -->
+                    <template x-for="conn in connections" :key="conn.id">
+                        <path :d="getConnectorPath(conn)" stroke="#cbd5e1" stroke-width="2" fill="none"
+                            class="transition-all duration-300 dark:stroke-gray-600" />
+                    </template>
+
+                    <!-- Temporary Connection Line -->
+                    <path :d="getTempConnectionPath()" stroke="#3b82f6" stroke-width="2" stroke-dasharray="5,5"
+                        fill="none" x-show="connectingNode" />
+                </svg>
+
+                <!-- NODES -->
+                <template x-for="node in nodes" :key="node.id">
+                    <div class="absolute w-44 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 flex flex-col group hover:shadow-xl transition-all select-none"
+                        :class="{'ring-2 ring-brand-500 border-transparent': selectedNode?.id === node.id}"
+                        :style="`transform: translate(${node.x}px, ${node.y}px)`"
+                        @mousedown.stop="startDrag($event, node)">
+
+                        <!-- Header -->
+                        <div
+                            class="px-4 py-3 bg-gray-50 dark:bg-gray-700/50 border-b border-gray-100 dark:border-gray-700 rounded-t-xl flex items-center justify-between">
+                            <span
+                                class="text-[10px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400"
+                                x-text="node.type"></span>
+                            <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="p-4">
+                            <p class="text-sm font-bold text-gray-800 dark:text-white truncate" x-text="node.label"></p>
+                        </div>
+
+                        <!-- Connectors -->
+                        <div class="absolute -right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-white dark:bg-gray-700 border border-brand-200 dark:border-brand-500 rounded-full flex items-center justify-center cursor-crosshair hover:bg-brand-50 dark:hover:bg-brand-900 z-10 shadow-sm"
+                            @mousedown.stop="startConnection($event, node)" title="Drag">
+                            <div class="w-2 h-2 bg-brand-500 rounded-full"></div>
+                        </div>
+
+                        <div class="absolute -left-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-transparent rounded-full z-0"
+                            @mouseup="completeConnection($event, node)">
+                        </div>
+                    </div>
+                </template>
+        </main>
+    </div>
+
+    <!-- Include Layout Partials -->
+    <script>
+        fetch("./partials/sidebar_v2.html")
+            .then((response) => response.text())
+            .then((data) => {
+                document.getElementById("sidebar-container").innerHTML = data;
+            });
+
+        fetch("./partials/header_v2.html")
+            .then((response) => response.text())
+            .then((data) => {
+                document.getElementById("header-container").innerHTML = data;
+            });
+    </script>
+</body>
+
+</html>

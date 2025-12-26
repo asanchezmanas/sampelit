@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sampelit | Integrity Audit</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+    <link rel="stylesheet" href="css/sampelit-v2.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1754cf",
+                        "primary-dark": "#0f3a9a",
+                        "background-light": "#f8f9fc",
+                        "surface": "#ffffff",
+                        "text-main": "#0e121b",
+                        "text-secondary": "#5a6b89",
+                        "accent-green": "#07883b",
+                        "border-subtle": "#e7ebf3",
+                        gray: {
+                            50: '#F9FAFB', 100: '#F3F4F6', 800: '#1F2937', 900: '#111827'
+                        },
+                        brand: { DEFAULT: '#1754cf', 500: '#1754cf', 600: '#0f3a9a' },
+                    },
+                    fontFamily: {
+                        display: ['Manrope', 'sans-serif'],
+                        sans: ['Manrope', 'sans-serif'],
+                    },
+                },
+            },
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="js/include.js"></script>
+</head>
+
+<body x-data="{ page: 'audits', sidebarToggle: false, darkMode: false }"
+    x-init="darkMode = JSON.parse(localStorage.getItem('darkMode')) || false; $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{ 'dark': darkMode === true }"
+    class="bg-[#f8f9fc] dark:bg-gray-900 text-text-main dark:text-gray-300 font-sans antialiased">
+    <div class="flex h-screen overflow-hidden">
+        <include src="./partials/sidebar_v2.html"></include>
+
+        <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden bg-surface dark:bg-gray-900">
+            <include src="./partials/header_v2.html"></include>
+
+            <main>
+                <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+                    <!-- Breakdown -->
+                    <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                            <nav
+                                class="mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                                <a href="index_v2.html" class="hover:text-brand-500">Command Center</a>
+                                <span class="material-symbols-outlined text-[10px]">chevron_right</span>
+                                <span class="text-gray-900 dark:text-white">Truth Matrix</span>
+                            </nav>
+                            <h2
+                                class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white font-display">
+                                Integrity Audit
+                            </h2>
+                            <p class="mt-2 text-sm text-gray-500">Cryptographic verification of experiment fairness
+                                (`audit_service.py`).</p>
+                        </div>
+                    </div>
+
+                    <!-- Hash Chain Visual -->
+                    <div
+                        class="mb-8 rounded-[32px] border border-gray-100 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-800">
+                        <h3 class="mb-6 text-sm font-bold uppercase tracking-widest text-gray-400">Immutable Event Chain
+                        </h3>
+                        <div class="flex items-center gap-4 overflow-x-auto pb-4">
+                            <!-- Block 1 -->
+                            <div
+                                class="flex-shrink-0 w-64 rounded-2xl bg-gray-50 p-4 border border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="material-symbols-outlined text-emerald-500">lock</span>
+                                    <span class="text-xs font-mono text-gray-500">Block #12,401</span>
+                                </div>
+                                <div
+                                    class="font-mono text-[10px] text-gray-600 break-all bg-white p-2 rounded border border-gray-100 dark:bg-black dark:text-gray-400 dark:border-gray-800">
+                                    0x7d5a...4f91
+                                </div>
+                                <div class="mt-2 flex justify-between text-[10px] text-gray-400 font-bold uppercase">
+                                    <span>Payload: User_Assign</span>
+                                    <span class="text-emerald-600">Verified</span>
+                                </div>
+                            </div>
+
+                            <!-- Connector -->
+                            <span class="material-symbols-outlined text-gray-300">link</span>
+
+                            <!-- Block 2 -->
+                            <div
+                                class="flex-shrink-0 w-64 rounded-2xl bg-gray-50 p-4 border border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="material-symbols-outlined text-emerald-500">lock</span>
+                                    <span class="text-xs font-mono text-gray-500">Block #12,402</span>
+                                </div>
+                                <div
+                                    class="font-mono text-[10px] text-gray-600 break-all bg-white p-2 rounded border border-gray-100 dark:bg-black dark:text-gray-400 dark:border-gray-800">
+                                    0x9a2b...c1d2
+                                </div>
+                                <div class="mt-2 flex justify-between text-[10px] text-gray-400 font-bold uppercase">
+                                    <span>Payload: Conv_Event</span>
+                                    <span class="text-emerald-600">Verified</span>
+                                </div>
+                            </div>
+
+                            <!-- Connector -->
+                            <span class="material-symbols-outlined text-gray-300">link</span>
+
+                            <!-- Block 3 -->
+                            <div
+                                class="flex-shrink-0 w-64 rounded-2xl bg-emerald-50 p-4 border border-emerald-200 dark:bg-emerald-900/10 dark:border-emerald-800">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span
+                                        class="material-symbols-outlined text-emerald-600 animate-pulse">lock_open</span>
+                                    <span class="text-xs font-mono text-emerald-700">Block #12,403 (Mining)</span>
+                                </div>
+                                <div
+                                    class="font-mono text-[10px] text-emerald-800 break-all bg-white/50 p-2 rounded border border-emerald-100 dark:bg-black dark:text-emerald-400 dark:border-emerald-900">
+                                    Pending...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Truth Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div
+                            class="rounded-[32px] border border-gray-100 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-800">
+                            <h3 class="mb-6 text-sm font-bold uppercase tracking-widest text-gray-400">Entropy
+                                Distribution</h3>
+                            <div class="grid grid-cols-10 gap-1 h-64">
+                                <!-- Mock Heatmap -->
+                                <template x-for="i in 100">
+                                    <div class="rounded-sm transition-all hover:scale-110"
+                                        :class="['bg-emerald-100', 'bg-emerald-200', 'bg-emerald-300', 'bg-emerald-400', 'bg-emerald-500'][Math.floor(Math.random() * 5)]">
+                                    </div>
+                                </template>
+                            </div>
+                            <p class="mt-4 text-xs text-gray-400">Visual representation of random number generator
+                                entropy derived from `audit_service.py`.</p>
+                        </div>
+
+                        <div
+                            class="rounded-[32px] border border-gray-100 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-800">
+                            <h3 class="mb-6 text-sm font-bold uppercase tracking-widest text-gray-400">Verification Logs
+                            </h3>
+                            <div class="space-y-4">
+                                <div
+                                    class="flex items-center justify-between border-b border-gray-50 pb-4 dark:border-gray-700">
+                                    <div class="flex items-center gap-3">
+                                        <div class="h-2 w-2 rounded-full bg-emerald-500"></div>
+                                        <div>
+                                            <p class="text-xs font-bold text-gray-900 dark:text-white">Cron_Audit_Daily
+                                            </p>
+                                            <p class="text-[10px] text-gray-400">2 mins ago</p>
+                                        </div>
+                                    </div>
+                                    <span class="font-mono text-xs text-emerald-600">PASS</span>
+                                </div>
+                                <div
+                                    class="flex items-center justify-between border-b border-gray-50 pb-4 dark:border-gray-700">
+                                    <div class="flex items-center gap-3">
+                                        <div class="h-2 w-2 rounded-full bg-emerald-500"></div>
+                                        <div>
+                                            <p class="text-xs font-bold text-gray-900 dark:text-white">
+                                                Manual_Check_User_Artur</p>
+                                            <p class="text-[10px] text-gray-400">1 hour ago</p>
+                                        </div>
+                                    </div>
+                                    <span class="font-mono text-xs text-emerald-600">PASS</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <div class="h-2 w-2 rounded-full bg-emerald-500"></div>
+                                        <div>
+                                            <p class="text-xs font-bold text-gray-900 dark:text-white">System_Init_Hash
+                                            </p>
+                                            <p class="text-[10px] text-gray-400">5 hours ago</p>
+                                        </div>
+                                    </div>
+                                    <span class="font-mono text-xs text-emerald-600">PASS</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -4,7 +4,10 @@
     "description": "Frontend for Samplit - Intelligent A/B Testing & Funnels",
     "scripts": {
         "start": "npx serve static -p 5500",
-        "dev": "npx serve static -p 5500",
+        "dev": "concurrently \"npx serve static -p 5500\" \"npm run watch:css\"",
+        "dev:server": "npx serve static -p 5500",
+        "build:css": "npx @tailwindcss/cli -i ./static/css/input.css -o ./static/css/output.css --minify",
+        "watch:css": "npx @tailwindcss/cli -i ./static/css/input.css -o ./static/css/output.css --watch",
         "test": "echo \"No frontend tests specified\" && exit 0"
     },
     "keywords": [
@@ -15,8 +18,11 @@
     ],
     "author": "Artur",
     "license": "PRIVATE",
-    "dependencies": {},
     "devDependencies": {
-        "serve": "^14.2.0"
+        "@tailwindcss/cli": "^4.0.0",
+        "@tailwindcss/forms": "^0.5.11",
+        "autoprefixer": "^10.4.23",
+        "serve": "^14.2.0",
+        "tailwindcss": "^4.0.0"
     }
 }

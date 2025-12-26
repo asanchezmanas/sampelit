@@ -14,7 +14,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
-    <link rel="stylesheet" href="css/sampelit.css">
+    <!-- sampelit.css removed for v2 - using Tailwind only -->
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -48,27 +48,35 @@
             <main>
                 <div class="mx-auto max-w-screen-lg p-4 md:p-6 2xl:p-10">
                     <!-- Header -->
-                    <div class="mb-10 text-center">
-                        <h1 class="text-3xl font-bold font-display text-gray-900 dark:text-white md:text-4xl">Frequently
+                    <div class="mb-12 text-center">
+                        <span
+                            class="text-[10px] font-bold uppercase tracking-widest text-brand-500 mb-4 block">Knowledge
+                            Base</span>
+                        <h1
+                            class="text-4xl font-extrabold tracking-tight font-display text-gray-900 dark:text-white md:text-5xl">
+                            Frequently
                             Asked Questions</h1>
-                        <p class="mt-3 text-lg text-gray-600 dark:text-gray-400">Everything you need to know about
-                            Sampelit</p>
+                        <p class="mt-4 text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">Everything you need
+                            to know about
+                            Sampelit's intelligent experimentation platform.</p>
                     </div>
 
                     <!-- FAQ Accordion -->
-                    <div x-data="{ openItem: null }" class="space-y-4">
+                    <div x-data="{ openItem: null }" class="space-y-4 max-w-3xl mx-auto">
                         <!-- Getting Started -->
-                        <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                        <div
+                            class="rounded-[32px] border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow dark:border-gray-700 dark:bg-gray-800">
                             <button @click="openItem = openItem === 1 ? null : 1"
-                                class="flex w-full items-center justify-between p-5 text-left">
-                                <span class="text-lg font-semibold text-gray-900 dark:text-white">What is
+                                class="flex w-full items-center justify-between p-6 text-left">
+                                <span class="text-lg font-bold text-gray-900 dark:text-white">What is
                                     Sampelit?</span>
-                                <span class="material-symbols-outlined text-gray-500 transition-transform"
+                                <span class="material-symbols-outlined text-gray-400 transition-transform duration-300"
                                     :class="openItem === 1 ? 'rotate-180' : ''">expand_more</span>
                             </button>
                             <div x-show="openItem === 1" x-collapse
-                                class="border-t border-gray-100 px-5 pb-5 dark:border-gray-700">
-                                <p class="text-gray-600 dark:text-gray-300">Sampelit is an intelligent A/B testing
+                                class="border-t border-gray-100 px-6 pb-6 dark:border-gray-700">
+                                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">Sampelit is an intelligent
+                                    A/B testing
                                     platform that uses Multi-Armed Bandit algorithms to automatically optimize your
                                     experiments. Unlike traditional A/B testing, our adaptive algorithms shift traffic
                                     to winning variants in real-time, maximizing conversions while gathering
@@ -76,7 +84,9 @@
                             </div>
                         </div>
 
-                        <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                        <div
+                            class="rounded-[32px] border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow dark:border-gray-700 dark:bg-gray-800">
+
                             <button @click="openItem = openItem === 2 ? null : 2"
                                 class="flex w-full items-center justify-between p-5 text-left">
                                 <span class="text-lg font-semibold text-gray-900 dark:text-white">How do I install the
@@ -94,7 +104,8 @@
                             </div>
                         </div>
 
-                        <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                        <div
+                            class="rounded-[32px] border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow dark:border-gray-700 dark:bg-gray-800">
                             <button @click="openItem = openItem === 3 ? null : 3"
                                 class="flex w-full items-center justify-between p-5 text-left">
                                 <span class="text-lg font-semibold text-gray-900 dark:text-white">What is a Multi-Armed
@@ -111,7 +122,8 @@
                             </div>
                         </div>
 
-                        <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                        <div
+                            class="rounded-[32px] border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow dark:border-gray-700 dark:bg-gray-800">
                             <button @click="openItem = openItem === 4 ? null : 4"
                                 class="flex w-full items-center justify-between p-5 text-left">
                                 <span class="text-lg font-semibold text-gray-900 dark:text-white">How long should I run
@@ -127,7 +139,8 @@
                             </div>
                         </div>
 
-                        <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                        <div
+                            class="rounded-[32px] border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow dark:border-gray-700 dark:bg-gray-800">
                             <button @click="openItem = openItem === 5 ? null : 5"
                                 class="flex w-full items-center justify-between p-5 text-left">
                                 <span class="text-lg font-semibold text-gray-900 dark:text-white">Is Sampelit GDPR
@@ -145,11 +158,15 @@
                     </div>
 
                     <!-- Contact Section -->
-                    <div class="mt-12 rounded-2xl bg-brand-50 p-8 text-center dark:bg-brand-900/20">
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Still have questions?</h3>
-                        <p class="text-gray-600 dark:text-gray-300 mb-4">Reach out to our friendly support team.</p>
+                    <div
+                        class="mt-16 rounded-[32px] bg-gradient-to-br from-gray-900 to-gray-800 p-10 text-center max-w-3xl mx-auto shadow-xl">
+                        <span
+                            class="text-[10px] font-bold uppercase tracking-widest text-brand-400 mb-3 block">Support</span>
+                        <h3 class="text-2xl font-extrabold tracking-tight font-display text-white mb-3">Still have
+                            questions?</h3>
+                        <p class="text-gray-400 mb-6">Our team is ready to help you get started.</p>
                         <button
-                            class="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600">
+                            class="inline-flex items-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-sm font-bold text-gray-900 hover:bg-gray-100 transition-all shadow-lg">
                             <span class="material-symbols-outlined text-lg">mail</span> Contact Support
                         </button>
                     </div>

@@ -435,6 +435,163 @@ async def simulator_landing_ui():
     return FileResponse(os.path.join(static_dir, "simulator-landing.html"))
 
 # ════════════════════════════════════════════════════════════════════════════
+# V2 / PREVIEW ROUTES (Safe Parallel Integration)
+# ════════════════════════════════════════════════════════════════════════════
+
+@app.get("/v2/dashboard", include_in_schema=False)
+async def dashboard_v2_ui():
+    """Serve the V2 Premium Dashboard"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "index_v2.html"))
+
+@app.get("/v2/experiments", include_in_schema=False)
+async def experiments_v2_ui():
+    """Serve the V2 Experiments List"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "experiments_v2.html"))
+
+@app.get("/v2/analytics", include_in_schema=False)
+async def analytics_v2_ui():
+    """Serve the V2 Analytics Suite"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "analytics_v2.html"))
+
+@app.get("/v2/login", include_in_schema=False)
+async def login_v2_ui():
+    """Serve the V2 Login Page"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "signin_v2.html"))
+
+@app.get("/v2/register", include_in_schema=False)
+async def register_v2_ui():
+    """Serve the V2 Register Page"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "signup_v2.html"))
+
+@app.get("/v2/editor", include_in_schema=False)
+async def visual_editor_v2_ui():
+    """Serve the V2 Visual Editor"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "visual_editor_v2.html"))
+
+@app.get("/v2/funnels", include_in_schema=False)
+async def funnel_builder_v2_ui():
+    """Serve the V2 Funnel Builder"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "funnel_builder_v2.html"))
+
+@app.get("/v2/profile", include_in_schema=False)
+async def profile_v2_ui():
+    """Serve the V2 Profile Settings"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "profile_v2.html"))
+
+@app.get("/v2/integrations", include_in_schema=False)
+async def integrations_v2_ui():
+    """Serve the V2 Integrations Hub"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "integrations_v2.html"))
+
+@app.get("/v2/pricing", include_in_schema=False)
+async def pricing_v2_ui():
+    """Serve the V2 Pricing Page"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "pricing_v2.html"))
+
+@app.get("/v2/experiments/{experiment_id}", include_in_schema=False)
+async def experiment_detail_v2_ui(experiment_id: str):
+    """Serve the V2 Experiment Details (SPA-like, ID handled by frontend JS)"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "experiment_detail_v2.html"))
+
+# ════════════════════════════════════════════════════════════════════════════
+# V2 / PREVIEW ROUTES (Safe Parallel Integration)
+# ════════════════════════════════════════════════════════════════════════════
+
+@app.get("/v2/dashboard", include_in_schema=False)
+async def dashboard_v2_ui():
+    """Serve the V2 Premium Dashboard"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "index_v2.html"))
+
+@app.get("/v2/experiments", include_in_schema=False)
+async def experiments_v2_ui():
+    """Serve the V2 Experiments List"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "experiments_v2.html"))
+
+@app.get("/v2/analytics", include_in_schema=False)
+async def analytics_v2_ui():
+    """Serve the V2 Analytics Suite"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "analytics_v2.html"))
+
+@app.get("/v2/login", include_in_schema=False)
+async def login_v2_ui():
+    """Serve the V2 Login Page"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "signin_v2.html"))
+
+@app.get("/v2/register", include_in_schema=False)
+async def register_v2_ui():
+    """Serve the V2 Register Page"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "signup_v2.html"))
+
+@app.get("/v2/editor", include_in_schema=False)
+async def visual_editor_v2_ui():
+    """Serve the V2 Visual Editor"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "visual_editor_v2.html"))
+
+@app.get("/v2/funnels", include_in_schema=False)
+async def funnel_builder_v2_ui():
+    """Serve the V2 Funnel Builder"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "funnel_builder_v2.html"))
+
+@app.get("/v2/profile", include_in_schema=False)
+async def profile_v2_ui():
+    """Serve the V2 Profile Settings"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "profile_v2.html"))
+
+@app.get("/v2/integrations", include_in_schema=False)
+async def integrations_v2_ui():
+    """Serve the V2 Integrations Hub"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "integrations_v2.html"))
+
+@app.get("/v2/pricing", include_in_schema=False)
+async def pricing_v2_ui():
+    """Serve the V2 Pricing Page"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "pricing_v2.html"))
+
+@app.get("/v2/audits", include_in_schema=False)
+async def audits_v2_ui():
+    """Serve the V2 Audits Page"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "audits_v2.html"))
+
+@app.get("/v2/simulator", include_in_schema=False)
+async def simulator_v2_ui():
+    """Serve the V2 Simulator Page"""
+    from fastapi.responses import FileResponse
+    return FileResponse(os.path.join(static_dir, "simulator_v2.html"))
+
+# ════════════════════════════════════════════════════════════════════════════
+# V2 DYNAMIC ROUTES (Detail Pages)
+# ════════════════════════════════════════════════════════════════════════════
+
+@app.get("/v2/experiments/{experiment_id}", include_in_schema=False)
+async def experiment_detail_v2_ui(experiment_id: str):
+    """Serve the V2 Experiment Details (SPA-like, ID handled by frontend JS)"""
+    from fastapi.responses import FileResponse
+    # The frontend parses the URL ID from window.location
+    return FileResponse(os.path.join(static_dir, "experiment_detail_v2.html"))
+
+# ════════════════════════════════════════════════════════════════════════════
 # PUBLIC MARKETING PAGES
 # ════════════════════════════════════════════════════════════════════════════
 

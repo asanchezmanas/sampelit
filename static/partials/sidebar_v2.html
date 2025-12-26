@@ -1,143 +1,180 @@
-<aside :class="sidebarToggle ? 'translate-x-0 lg:w-[90px]' : '-translate-x-full'"
-  class="sidebar fixed left-0 top-0 z-9999 flex h-screen w-[290px] flex-col overflow-y-hidden border-r border-slate-200 bg-white px-5 dark:border-slate-800 dark:bg-gray-900 lg:static lg:translate-x-0 transition-all duration-300"
+<!-- Sidebar: Advanced Navigation from TailAdmin + Sampelit branding -->
+<aside :class="sidebarToggle ? 'translate-x-0 xl:w-[90px]' : '-translate-x-full'"
+  class="sidebar fixed top-0 left-0 z-9999 flex h-screen w-[290px] flex-col overflow-y-auto border-r border-gray-100 bg-white px-5 transition-all duration-400 xl:static xl:translate-x-0 dark:border-gray-800 dark:bg-gray-900"
   @click.outside="sidebarToggle = false">
+
   <!-- SIDEBAR HEADER -->
   <div :class="sidebarToggle ? 'justify-center' : 'justify-between'"
-    class="flex items-center gap-2 pt-8 sidebar-header pb-7">
-    <a href="/">
-      <span class="logo flex items-center gap-2" :class="sidebarToggle ? 'hidden' : 'block'">
-        <span class="text-2xl font-display font-bold text-accent dark:text-blue-400">Sampelit<span
-            class="text-primary dark:text-white">.</span></span>
+    class="sidebar-header flex items-center gap-2 pt-8 pb-7">
+    <a href="index_v2.html" class="flex items-center gap-3">
+      <span class="logo flex items-center" :class="sidebarToggle ? 'hidden' : ''">
+        <span class="text-2xl font-bold tracking-premium-tight text-sampelit">Sampelit<span
+            class="text-gray-300">.</span></span>
       </span>
-
-      <img class="logo-icon w-8 h-8" :class="sidebarToggle ? 'lg:block' : 'hidden'" src="./images/logo/logo-icon.svg"
-        alt="Logo" />
+      <span
+        class="logo-icon flex h-10 w-10 items-center justify-center rounded-xl bg-sampelit text-white font-bold shadow-premium"
+        :class="sidebarToggle ? 'xl:flex' : 'hidden'">S</span>
     </a>
   </div>
-  <!-- SIDEBAR HEADER -->
 
-  <div class="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
+  <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
     <!-- Sidebar Menu -->
-    <nav x-data="{selected: $persist('Dashboard'), role: localStorage.getItem('mab_role') || 'client'}">
-      <!-- Menu Group: Platform -->
-      <div>
-        <h3 class="mb-4 text-xs uppercase leading-[20px] text-text-muted/70 tracking-wider font-bold">
-          <span class="menu-group-title" :class="sidebarToggle ? 'lg:hidden' : ''">
-            PLATFORM
-          </span>
+    <nav
+      x-data="{selected: localStorage.getItem('sidebar_selected') || 'Dashboard', role: localStorage.getItem('mab_role') || 'client'}"
+      x-init="$watch('selected', v => localStorage.setItem('sidebar_selected', v))">
 
-          <svg :class="sidebarToggle ? 'lg:block hidden' : 'hidden'"
-            class="mx-auto fill-current menu-group-icon text-gray-400" width="24" height="24" viewBox="0 0 24 24"
-            fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" clip-rule="evenodd"
-              d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-              fill="" />
-          </svg>
+      <!-- Menu Group: CORE -->
+      <div class="mb-6">
+        <h3 class="mb-4 px-4 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">
+          <span class="menu-group-title" :class="sidebarToggle ? 'xl:hidden' : ''">Core Navigation</span>
+          <span :class="sidebarToggle ? 'xl:block hidden' : 'hidden'" class="text-center opacity-30">•••</span>
         </h3>
 
-        <ul class="flex flex-col gap-2 mb-6">
-          <!-- Item: Dashboard -->
+        <ul class="flex flex-col gap-1.5">
+          <!-- Dashboard -->
           <li>
             <a href="index_v2.html" @click="selected = 'Dashboard'"
-              class="group relative flex items-center gap-2.5 rounded-lg px-4 py-2 font-medium duration-300 ease-in-out"
-              :class="selected === 'Dashboard' ? 'bg-primary text-white dark:bg-white/10' : 'text-text-muted hover:bg-slate-100 dark:text-gray-400 dark:hover:bg-white/5'">
-              <span class="material-symbols-outlined">grid_view</span>
-              <span :class="sidebarToggle ? 'lg:hidden' : ''">Dashboard</span>
+              class="group relative flex items-center gap-3.5 rounded-xl px-4 py-3 font-medium transition-all duration-200 tracking-premium"
+              :class="selected === 'Dashboard' 
+                ? 'bg-gray-50 text-sampelit shadow-inner' 
+                : 'text-gray-600 hover:bg-gray-50/50 dark:text-gray-400 dark:hover:bg-white/5'">
+              <span class="material-symbols-outlined text-[22px]"
+                :class="selected === 'Dashboard' ? 'text-sampelit' : 'text-gray-400 group-hover:text-gray-600'">grid_view</span>
+              <span :class="sidebarToggle ? 'xl:hidden' : ''">Dashboard Overview</span>
+              <span x-show="selected === 'Dashboard'"
+                class="absolute right-0 h-5 w-1 rounded-l-full bg-sampelit"></span>
             </a>
           </li>
 
-          <!-- Item: Experiments -->
+          <!-- Experiments (with Dropdown logic if needed later) -->
           <li>
             <a href="experiments_v2.html" @click="selected = 'Experiments'"
-              class="group relative flex items-center gap-2.5 rounded-lg px-4 py-2 font-medium duration-300 ease-in-out"
-              :class="selected === 'Experiments' ? 'bg-primary text-white dark:bg-white/10' : 'text-text-muted hover:bg-slate-100 dark:text-gray-400 dark:hover:bg-white/5'">
-              <span class="material-symbols-outlined">science</span>
-              <span :class="sidebarToggle ? 'lg:hidden' : ''">Experiments</span>
+              class="group relative flex items-center gap-3.5 rounded-xl px-4 py-3 font-medium transition-all duration-200 tracking-premium"
+              :class="selected === 'Experiments' 
+                ? 'bg-gray-50 text-sampelit shadow-inner' 
+                : 'text-gray-600 hover:bg-gray-50/50 dark:text-gray-400 dark:hover:bg-white/5'">
+              <span class="material-symbols-outlined text-[22px]"
+                :class="selected === 'Experiments' ? 'text-sampelit' : 'text-gray-400 group-hover:text-gray-600'">science</span>
+              <span :class="sidebarToggle ? 'xl:hidden' : ''">All Experiments</span>
             </a>
           </li>
 
-          <!-- Item: Funnels -->
+          <!-- Analytics -->
           <li>
-            <a href="/?tab=funnels" @click="selected = 'Funnels'"
-              class="group relative flex items-center gap-2.5 rounded-lg px-4 py-2 font-medium duration-300 ease-in-out"
-              :class="selected === 'Funnels' ? 'bg-primary text-white dark:bg-white/10' : 'text-text-muted hover:bg-slate-100 dark:text-gray-400 dark:hover:bg-white/5'">
-              <span class="material-symbols-outlined">filter_list</span>
-              <span :class="sidebarToggle ? 'lg:hidden' : ''">Funnels</span>
-              <span class="absolute right-4 rounded bg-accent px-1.5 py-0.5 text-[10px] font-bold text-white uppercase"
-                :class="sidebarToggle ? 'lg:hidden' : ''">
-                Beta
-              </span>
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Menu Group: Administration -->
-      <div x-show="role === 'admin'" x-cloak>
-        <h3 class="mb-4 text-xs uppercase leading-[20px] text-text-muted/70 tracking-wider font-bold">
-          <span class="menu-group-title" :class="sidebarToggle ? 'lg:hidden' : ''">
-            ADMINISTRATION
-          </span>
-        </h3>
-
-        <ul class="flex flex-col gap-2 mb-6">
-          <li>
-            <a href="/?tab=email" @click="selected = 'Leads'"
-              class="group relative flex items-center gap-2.5 rounded-lg px-4 py-2 font-medium duration-300 ease-in-out"
-              :class="selected === 'Leads' ? 'bg-primary text-white dark:bg-white/10' : 'text-text-muted hover:bg-slate-100 dark:text-gray-400 dark:hover:bg-white/5'">
-              <span class="material-symbols-outlined">forward_to_inbox</span>
-              <span :class="sidebarToggle ? 'lg:hidden' : ''">Email Leads</span>
+            <a href="analytics_v2.html" @click="selected = 'Analytics'"
+              class="group relative flex items-center gap-3.5 rounded-xl px-4 py-3 font-medium transition-all duration-200 tracking-premium"
+              :class="selected === 'Analytics' 
+                ? 'bg-gray-50 text-sampelit shadow-inner' 
+                : 'text-gray-600 hover:bg-gray-50/50 dark:text-gray-400 dark:hover:bg-white/5'">
+              <span class="material-symbols-outlined text-[22px]"
+                :class="selected === 'Analytics' ? 'text-sampelit' : 'text-gray-400 group-hover:text-gray-600'">insights</span>
+              <span :class="sidebarToggle ? 'xl:hidden' : ''">Performance Hub</span>
             </a>
           </li>
         </ul>
       </div>
 
-      <!-- Menu Group: Settings -->
-      <div>
-        <h3 class="mb-4 text-xs uppercase leading-[20px] text-text-muted/70 tracking-wider font-bold">
-          <span class="menu-group-title" :class="sidebarToggle ? 'lg:hidden' : ''">
-            SETTINGS
-          </span>
+      <!-- Menu Group: PLATFORM -->
+      <div class="mb-6">
+        <h3 class="mb-4 px-4 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">
+          <span class="menu-group-title" :class="sidebarToggle ? 'xl:hidden' : ''">Platform</span>
+          <span :class="sidebarToggle ? 'xl:block hidden' : 'hidden'" class="text-center opacity-30">•••</span>
         </h3>
 
-        <ul class="flex flex-col gap-2 mb-6">
-          <!-- Billing -->
+        <ul class="flex flex-col gap-1.5">
           <li>
-            <a href="/settings/billing.html"
-              class="group relative flex items-center gap-2.5 rounded-lg px-4 py-2 font-medium text-text-muted duration-300 ease-in-out hover:bg-slate-100 dark:text-gray-400 dark:hover:bg-white/5">
-              <span class="material-symbols-outlined">credit_card</span>
-              <span :class="sidebarToggle ? 'lg:hidden' : ''">Billing & Plans</span>
+            <a href="pricing_v2.html" @click="selected = 'Pricing'"
+              class="group relative flex items-center gap-3.5 rounded-xl px-4 py-3 font-medium transition-all duration-200 tracking-premium"
+              :class="selected === 'Pricing' 
+                ? 'bg-gray-50 text-sampelit shadow-inner' 
+                : 'text-gray-600 hover:bg-gray-50/50 dark:text-gray-400 dark:hover:bg-white/5'">
+              <span class="material-symbols-outlined text-[22px]"
+                :class="selected === 'Pricing' ? 'text-sampelit' : 'text-gray-400 group-hover:text-gray-600'">account_balance_wallet</span>
+              <span :class="sidebarToggle ? 'xl:hidden' : ''">Plans & Billing</span>
             </a>
           </li>
 
-          <!-- Site Setup -->
           <li>
-            <a href="/onboarding/verify.html"
-              class="group relative flex items-center gap-2.5 rounded-lg px-4 py-2 font-medium text-text-muted duration-300 ease-in-out hover:bg-slate-100 dark:text-gray-400 dark:hover:bg-white/5">
-              <span class="material-symbols-outlined">domain_verification</span>
-              <span :class="sidebarToggle ? 'lg:hidden' : ''">Site Setup</span>
+            <a href="integrations_v2.html" @click="selected = 'Integrations'"
+              class="group relative flex items-center gap-3.5 rounded-xl px-4 py-3 font-medium transition-all duration-200 tracking-premium"
+              :class="selected === 'Integrations' 
+                ? 'bg-gray-50 text-sampelit shadow-inner' 
+                : 'text-gray-600 hover:bg-gray-50/50 dark:text-gray-400 dark:hover:bg-white/5'">
+              <span class="material-symbols-outlined text-[22px]"
+                :class="selected === 'Integrations' ? 'text-sampelit' : 'text-gray-400 group-hover:text-gray-600'">hub</span>
+              <span :class="sidebarToggle ? 'xl:hidden' : ''">Connect Apps</span>
+              <span
+                class="ml-auto rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-blue-600 dark:bg-blue-900/20"
+                :class="sidebarToggle ? 'hidden' : ''">API</span>
             </a>
           </li>
 
-          <!-- Profile -->
+          <!-- Audits -->
           <li>
-            <a href="/profile.html"
-              class="group relative flex items-center gap-2.5 rounded-lg px-4 py-2 font-medium text-text-muted duration-300 ease-in-out hover:bg-slate-100 dark:text-gray-400 dark:hover:bg-white/5">
-              <span class="material-symbols-outlined">person</span>
-              <span :class="sidebarToggle ? 'lg:hidden' : ''">My Profile</span>
+            <a href="audits_v2.html" @click="selected = 'Audits'"
+              class="group relative flex items-center gap-3.5 rounded-xl px-4 py-3 font-medium transition-all duration-200 tracking-premium"
+              :class="selected === 'Audits' 
+                ? 'bg-gray-50 text-sampelit shadow-inner' 
+                : 'text-gray-600 hover:bg-gray-50/50 dark:text-gray-400 dark:hover:bg-white/5'">
+              <span class="material-symbols-outlined text-[22px]"
+                :class="selected === 'Audits' ? 'text-sampelit' : 'text-gray-400 group-hover:text-gray-600'">policy</span>
+              <span :class="sidebarToggle ? 'xl:hidden' : ''">Integrity Audit</span>
             </a>
           </li>
 
-          <!-- Logout -->
+          <!-- Simulator (New) -->
           <li>
-            <a href="#" data-action="logout"
-              class="group relative flex items-center gap-2.5 rounded-lg px-4 py-2 font-medium text-text-muted duration-300 ease-in-out hover:bg-red-50 hover:text-red-500 dark:text-gray-400 dark:hover:bg-red-500/10 dark:hover:text-red-400">
-              <span class="material-symbols-outlined">logout</span>
-              <span :class="sidebarToggle ? 'lg:hidden' : ''">Sign Out</span>
+            <a href="simulator_v2.html" @click="selected = 'Simulator'"
+              class="group relative flex items-center gap-3.5 rounded-xl px-4 py-3 font-medium transition-all duration-200 tracking-premium"
+              :class="selected === 'Simulator' 
+                ? 'bg-gray-50 text-sampelit shadow-inner' 
+                : 'text-gray-600 hover:bg-gray-50/50 dark:text-gray-400 dark:hover:bg-white/5'">
+              <span class="material-symbols-outlined text-[22px]"
+                :class="selected === 'Simulator' ? 'text-sampelit' : 'text-gray-400 group-hover:text-gray-600'">model_training</span>
+              <span :class="sidebarToggle ? 'xl:hidden' : ''">Algo Simulator</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Menu Group: ADMIN (conditional) -->
+      <div x-show="role === 'admin'" x-cloak class="mb-6">
+        <h3 class="mb-4 px-4 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">
+          <span class="menu-group-title" :class="sidebarToggle ? 'xl:hidden' : ''">Management</span>
+          <span :class="sidebarToggle ? 'xl:block hidden' : 'hidden'" class="text-center opacity-30">•••</span>
+        </h3>
+
+        <ul class="flex flex-col gap-1.5">
+          <li>
+            <a href="/?tab=users" @click="selected = 'Users'"
+              class="group relative flex items-center gap-3.5 rounded-xl px-4 py-3 font-medium transition-all duration-200 tracking-premium"
+              :class="selected === 'Users' 
+                ? 'bg-gray-50 text-sampelit shadow-inner' 
+                : 'text-gray-600 hover:bg-gray-50/50 dark:text-gray-400 dark:hover:bg-white/5'">
+              <span class="material-symbols-outlined text-[22px]"
+                :class="selected === 'Users' ? 'text-sampelit' : 'text-gray-400 group-hover:text-gray-600'">badge</span>
+              <span :class="sidebarToggle ? 'xl:hidden' : ''">Team & Access</span>
             </a>
           </li>
         </ul>
       </div>
     </nav>
+
+    <!-- Premium Upgrade Card (Refined) -->
+    <div class="mt-auto mb-8 mx-2 overflow-hidden rounded-2xl bg-gray-50 p-5 dark:bg-white/[0.02]"
+      :class="sidebarToggle ? 'xl:hidden' : ''">
+      <div class="relative z-10">
+        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-soft dark:bg-gray-800">
+          <span class="material-symbols-outlined text-sampelit">auto_awesome</span>
+        </div>
+        <h4 class="mb-1 text-sm font-bold text-gray-800 tracking-premium dark:text-white/90">Unlock Insights</h4>
+        <p class="mb-4 text-xs leading-relaxed text-gray-500 dark:text-gray-400">Get statistical significance 2x faster
+          with Pro analytics.</p>
+        <a href="pricing_v2.html"
+          class="flex w-full items-center justify-center rounded-lg bg-sampelit py-2.5 text-xs font-bold text-white transition-all hover:bg-sampelit-dark shadow-premium active:scale-[0.98]">
+          Go Professional
+        </a>
+      </div>
+    </div>
   </div>
 </aside>

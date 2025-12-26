@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Visual Editor | Sampelit V2</title>
+    <link href="./css/sampelit-v2.css" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                fontFamily: {
+                    body: ["Inter", "sans-serif"],
+                    display: ["Manrope", "sans-serif"],
+                },
+                extend: {
+                    colors: {
+                        brand: {
+                            50: "#eff6ff",
+                            100: "#dbeafe",
+                            200: "#bfdbfe",
+                            300: "#93c5fd",
+                            400: "#60a5fa",
+                            500: "#3b82f6",
+                            600: "#2563eb",
+                            700: "#1d4ed8",
+                            800: "#1e40af",
+                            900: "#1e3a8a",
+                            950: "#172554",
+                        },
+                        gray: {
+                            800: "#1f2937",
+                            900: "#111827",
+                        },
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+
+<body x-data="{ sidebarOpen: false, darkMode: false, ...visualEditor() }" :class="{ 'dark': darkMode }"
+    class="font-body text-gray-800 antialiased bg-gray-50 dark:bg-gray-950 transition-colors duration-300 h-screen overflow-hidden flex">
+    <!-- Sidebar Hidden or Minimized? Maybe regular sidebar -->
+    <div id="sidebar-container"
+        class="flex-shrink-0 transition-all duration-300 z-50 h-full border-r border-gray-100 dark:border-gray-800">
+    </div>
+
+    <!-- Content Area -->
+    <div class="relative flex flex-1 flex-col h-full overflow-hidden">
+        <!-- Header -->
+        <!-- Custom header for visual editor to allow URL input -->
+        <header
+            class="h-20 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between px-6 z-40">
+            <div class="flex items-center gap-4 w-full max-w-4xl">
+                <div class="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 rounded-xl p-1 flex-1">
+                    <span class="material-symbols-outlined text-gray-400 ml-2">language</span>
+                    <input type="text" x-model="url" @keydown.enter="loadUrl()"
+                        placeholder="Enter URL to edit (e.g. samplit.com)"
+                        class="bg-transparent border-none focus:ring-0 text-sm w-full text-gray-800 dark:text-white placeholder-gray-400">
+                    <button @click="loadUrl()"
+                        class="bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-xs font-bold shadow-sm hover:shadow-md transition-all">
+                        Load
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <button @click="saveExperiment()" :disabled="elements.length === 0"
+                    class="px-6 py-2.5 bg-brand-600 text-white rounded-xl text-sm font-bold hover:bg-brand-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-lg shadow-brand-500/20">
+                    <span class="material-symbols-outlined text-lg">save</span>
+                    Save Changes
+                </button>
+            </div>
+        </header>
+
+        <!-- Editor Workspace -->
+        <main class="flex-1 flex overflow-hidden">
+            <!-- Iframe Container -->
+            <div class="flex-1 bg-gray-100 dark:bg-gray-950 relative flex flex-col justify-center items-center">
+                <div x-show="!iframeLoaded"
+                    class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                    <div
+                        class="w-24 h-24 bg-gray-200 dark:bg-gray-800 rounded-full flex items-center justify-center mb-6 animate-pulse">
+                        <span class="material-symbols-outlined text-4xl text-gray-400 dark:text-gray-600">web</span>
+                    </div>
+                    <p class="text-lg font-medium text-gray-500">Enter a website URL above to start the visual editor.
+                    </p>
+                </div>
+                <iframe x-ref="siteFrame" id="siteFrame" class="w-full h-full border-none bg-white shadow-2xl"
+                    sandbox="allow-same-origin allow-scripts allow-forms allow-popups" :src="proxyUrl">
+                </iframe>
+            </div>
+
+            <!-- Editor Sidebar (Right) -->
+            <aside
+                class="w-96 bg-white dark:bg-gray-900 border-l border-gray-100 dark:border-gray-800 overflow-y-auto z-30 flex flex-col shadow-xl">
+                <div class="p-6 border-b border-gray-100 dark:border-gray-800">
+                    <h2 class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Experiment Name</h2>
+                    <input type="text" x-model="experimentName"
+                        class="w-full text-lg font-display font-bold text-gray-900 dark:text-white bg-transparent border-none focus:ring-0 p-0 placeholder-gray-300"
+                        placeholder="My New Experiment">
+                </div>
+
+                <div class="flex-1 overflow-y-auto p-6 space-y-8">
+                    <!-- Selection Editor -->
+                    <div x-show="currentSelection" x-transition.opacity>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="flex items-center gap-2 text-sm font-bold text-brand-600 dark:text-brand-400">
+                                <span class="material-symbols-outlined text-lg">ads_click</span>
+                                Edit Element
+                            </h3>
+                            <button @click="currentSelection = null"
+                                class="text-xs text-gray-400 hover:text-gray-600">Cancel</button>
+                        </div>
+
+                        <div
+                            class="bg-gray-50 dark:bg-gray-800 rounded-xl p-3 mb-6 font-mono text-xs text-gray-500 break-all border border-gray-100 dark:border-gray-700">
+                            <span x-text="currentSelection?.tagName" class="text-brand-500 font-bold mr-2"></span>
+                            <span x-text="currentSelection?.selector"></span>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">Original
+                                    Content</label>
+                                <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 text-sm text-gray-500 italic"
+                                    x-text="truncate(currentSelection?.innerText, 100)"></div>
+                            </div>
+
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">Variant
+                                    B Content</label>
+                                <textarea x-model="variantText" rows="6"
+                                    class="w-full p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 dark:text-white transition-all resize-none"></textarea>
+                            </div>
+
+                            <button @click="addElementToExperiment()"
+                                class="w-full py-3 bg-brand-600 text-white rounded-xl font-bold hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/20">
+                                Apply Changes
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- List of Changes -->
+                    <div x-show="!currentSelection && elements.length > 0">
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-4">Active Changes</h3>
+                        <div class="space-y-3">
+                            <template x-for="(el, index) in elements" :key="index">
+                                <div
+                                    class="group bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all hover:border-brand-200 dark:hover:border-brand-800">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <span class="font-bold text-sm text-gray-900 dark:text-white"
+                                            x-text="el.name || 'Element ' + (index+1)"></span>
+                                        <button @click="removeElement(index)"
+                                            class="text-gray-400 hover:text-red-500 transition-colors">
+                                            <span class="material-symbols-outlined text-lg">delete</span>
+                                        </button>
+                                    </div>
+                                    <div class="text-xs text-gray-400 font-mono truncate mb-3"
+                                        x-text="el.selector.selector"></div>
+                                    <div
+                                        class="bg-brand-50 dark:bg-brand-900/30 rounded-lg p-2 text-xs font-medium text-brand-700 dark:text-brand-300">
+                                        <span class="opacity-70">New:</span> <span
+                                            x-text="truncate(el.variants[0].html, 30)"></span>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div x-show="!currentSelection && elements.length === 0" class="text-center py-12 opacity-50">
+                        <span class="material-symbols-outlined text-4xl text-gray-300 mb-2">touch_app</span>
+                        <p class="text-sm font-medium text-gray-500">Select an element on the webpage to create a
+                            variation.</p>
+                    </div>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <!-- Include Layout Partials -->
+    <script>
+        fetch("./partials/sidebar_v2.html")
+            .then((response) => response.text())
+            .then((data) => {
+                document.getElementById("sidebar-container").innerHTML = data;
+            });
+        // Header is custom in this file, so we don't include the standard header
+    </script>
+    <script>
+        // Logic from visual-editor.html
+        function visualEditor() {
+            return {
+                url: '',
+                proxyUrl: '',
+                iframeLoaded: false,
+                currentSelection: null,
+                variantText: '',
+                elements: [],
+                experimentName: 'New Experiment',
+
+                init() {
+                    window.addEventListener('message', (event) => {
+                        if (event.data.type === 'SAMPLIT_ELEMENT_SELECTED') {
+                            this.currentSelection = event.data.payload;
+                            this.variantText = event.data.payload.innerHTML; // Default to HTML editing
+                        }
+                    });
+                },
+
+                loadUrl() {
+                    if (!this.url) return;
+                    // Ensure protocol
+                    let target = this.url;
+                    if (!target.startsWith('http')) target = 'https://' + target;
+
+                    // Mock proxy for UI demo if no backend
+                    // this.proxyUrl = `/api/v1/visual-editor/proxy?url=${encodeURIComponent(target)}`;
+                    this.proxyUrl = target; // In a real app this would be blocked by XFrame header, but for demo UI we assume proxy works. 
+
+                    // For demo purposes, we simulate loading standard site in iframe if blocked
+                    // Or we just show the iframeLoaded state
+                    this.iframeLoaded = true;
+                    this.currentSelection = null;
+                },
+
+                addElementToExperiment() {
+                    if (!this.currentSelection) return;
+
+                    this.elements.push({
+                        name: `Element ${this.elements.length + 1}`,
+                        selector: {
+                            selector: this.currentSelection.selector,
+                            type: 'css'
+                        },
+                        element_type: 'other', // Simplified
+                        original_content: { html: this.currentSelection.innerHTML },
+                        variants: [
+                            { html: this.variantText }
+                        ]
+                    });
+
+                    this.currentSelection = null; // Clear selection to show list
+                    this.variantText = '';
+                },
+
+                removeElement(index) {
+                    this.elements.splice(index, 1);
+                },
+
+                async saveExperiment() {
+                    // Logic to save
+                    alert('Experiment logic would be saved here.');
+                    window.location.href = 'index_v2.html';
+                },
+
+                truncate(str, n) {
+                    return (str && str.length > n) ? str.substr(0, n - 1) + '...' : str;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
