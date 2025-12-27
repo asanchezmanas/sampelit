@@ -2,6 +2,9 @@
 
 > Roadmap of enhancements for future Sampelit versions.
 
+> **Note**: Command Palette, Toast Stack, Skeleton Loaders, Empty States, and Auto-Save were implemented in v2.0. 
+> See [Migration Plan](./frontend/migration_plan.md) for the complete **SOTA UX Matrix**.
+
 ---
 
 ## 1. Visual Editor Robustness

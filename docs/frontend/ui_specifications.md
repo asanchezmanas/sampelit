@@ -645,6 +645,25 @@ Cuando el backend devuelve esto, mostramos aquello:
 
 ---
 
+## 💎 SOTA UX Features (Implementados)
+
+El frontend ahora incluye características de nivel **Senior Top-Tier**:
+
+| Feature | Propósito | Ubicación |
+|---------|-----------|-----------|
+| **Skeleton Loaders** | Zero Layout Shift - percepción de velocidad | Dashboard, Lists, Analytics, Billing |
+| **Empty States** | Guía al usuario cuando no hay datos | Experiment List, Billing, Analytics |
+| **Shake on Error** | Feedback visceral en errores de autenticación | `auth_v2.js`, `signin_v2.html` |
+| **Step Transitions** | Fluidez en wizards multi-paso | `experiments_create_v2.html` |
+| **Toast Stack** | Notificaciones premium con progress bar | `partials/toast_stack.html` |
+| **Command Palette** | Cmd+K para navegación rápida | `partials/command_palette.html` |
+| **Auto-Save Drafts** | Resiliencia ante pérdida de datos | Wizard con `localStorage` |
+| **Optimistic UI** | Feedback instantáneo en deletes | Tables con revert on error |
+
+> Ver [Migration Plan](./migration_plan.md) para la **Matriz de Excelencia UX** completa.
+
+---
+
 ## 🚀 Próximos Pasos para Frontend
 
 1. **Leer este documento completo** — No es opcional

@@ -20,14 +20,24 @@ static/
 │   ├── header_v2.html          
 │   ├── sidebar_v2.html         
 │   ├── modals_v2.html          
-│   └── toast_v2.html           
+│   ├── toast_stack.html        # SOTA: Notificaciones premium
+│   └── command_palette.html    # SOTA: Cmd+K navigation
 ├── js/
 │   ├── include.js              # Procesa <include> tags
-│   └── core/
-│       ├── api.js              # Cliente API
-│       └── state.js            # Estado global
+│   ├── alpine-store.js         # Estado global reactivo
+│   ├── core/
+│   │   └── api.js              # Cliente HTTP
+│   ├── services/               # Capa de negocio (API calls)
+│   │   ├── auth-service.js
+│   │   ├── experiment-service.js
+│   │   ├── billing-service.js
+│   │   └── ...
+│   └── pages/                  # Controladores por página
+│       ├── dashboard_v2.js
+│       ├── auth_v2.js
+│       └── ...
 ├── *_v2.html                   # Páginas producción
-└── *.html                      # Legacy v1
+└── *.html                      # Legacy v1 (deprecated)
 ```
 
 ---
@@ -104,14 +114,21 @@ static/
 
 ## ✅ Checklist Antes de Commit
 
+### Estructura Base
 - [ ] `sidebar_v2.html` incluido
 - [ ] `header_v2.html` incluido
-- [ ] `toast_v2.html` al final
-- [ ] `modals_v2.html` al final
+- [ ] `toast_stack.html` al final (antes de `</body>`)
+- [ ] `command_palette.html` al final (antes de `</body>`)
 - [ ] `include.js` en `<head>`
 - [ ] `x-data` en body con `sidebarToggle` y `darkMode`
 - [ ] Dark mode funciona
 - [ ] Responsive funciona
+
+### SOTA UX (Obligatorio para GOLD STANDARD)
+- [ ] Skeleton Loader mientras carga datos (`x-show="loading"`)
+- [ ] Empty State si no hay datos (`x-if="data.length === 0"`)
+- [ ] Transiciones suaves (`x-transition:enter`)
+- [ ] Micro-interacciones en botones (`active:scale-95`)
 
 ---
 
@@ -122,7 +139,7 @@ static/
 | Lista/tabla | `experiments_v2.html` |
 | Detalle | `experiment_detail_v2.html` |
 | Formulario | `experiments_create_v2.html` |
-| Dashboard | `index_v2.html` |
+| Dashboard | `index_v2.html` ← **GOLD STANDARD** |
 
 ---
 
