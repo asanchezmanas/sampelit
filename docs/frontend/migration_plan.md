@@ -137,12 +137,12 @@ V2 es la arquitectura que realmente te permitirá "no tocar el frontend demasiad
 |---------|---------|--------|--------|
 | `sidebar.html` | v1 | 181 | ❌ Deprecated |
 | `sidebar_v2.html` | v2 | 180 | ✅ Producción |
-| `header.html` | v1 | 205 | ❌ Deprecated |
+| `header.html` | v1 | 205 | ❌ Archivado en `_legacy` |
 | `header_v2.html` | v2 | 201 | ✅ Producción |
-| `header_landing.html` | v1 | 88 | ⚠️ Funcional pero sin Alpine |
+| `header_landing.html` | v1 | 88 | ❌ Archivado en `_legacy` |
 | `header_landing_v2.html` | v2 | 81 | ✅ Producción |
-| `footer_landing.html` | - | 75 | ✅ Usa esto |
-| `footer_landing_v2.html` | - | 75 | ⚠️ Duplicado exacto |
+| `footer_landing.html` | - | 75 | ❌ Archivado en `_legacy` |
+| `footer_landing_v2.html` | - | 75 | ✅ Producción |
 | `modals_v2.html` | v2 | 228 | ✅ Solo v2 |
 | `toast_v2.html` | v2 | 98 | ✅ Solo v2 |
 | `overlay.html` | - | 3 | Minimal |
@@ -219,10 +219,10 @@ Irónicamente, **V2 es técnicamente "más vanilla"** en su lógica de persisten
 
 ### Acciones de Partials (Ordenadas por prioridad)
 
-- [ ] **[Bajo Riesgo]** Añadir link a Help Center en `header_landing_v2.html`.
-- [ ] **[Bajo Riesgo]** Corregir link a `pricing.html` → `pricing_v2.html` en headers.
-- [ ] **[Limpieza]** Eliminar `header.html` y `sidebar.html` una vez verificado que todas las páginas usan `*_v2.html`.
-- [ ] **[Limpieza]** Unificar `footer_landing.html` y `footer_landing_v2.html`.
+- [x] **[Bajo Riesgo]** Añadir link a Help Center en `header_landing_v2.html`.
+- [x] **[Bajo Riesgo]** Corregir link a `pricing.html` → `pricing_v2.html` en headers.
+- [x] **[Limpieza]** Eliminar `header.html` y `sidebar.html` una vez verificado que todas las páginas usan `*_v2.html` (Movidos a `_legacy_v1_backup`).
+- [x] **[Limpieza]** Unificar `footer_landing.html` y `footer_landing_v2.html` (Movido a `_legacy_v1_backup`).
 
 
 ---
@@ -235,11 +235,8 @@ Irónicamente, **V2 es técnicamente "más vanilla"** en su lógica de persisten
 |---------|--------|-----------|-----------|
 | `input.css` | 260 | **Tailwind v4** entry point + TailAdmin theme | V2 build |
 | `sampelit.css` | 323 | Design tokens CSS variables v1 | V1 pages |
-| `sampelit-v2.css` | 317 | Design tokens + utilities v2 | V2 pages |
-| `main.css` | ~360 | Output compilado de Tailwind | Producción |
-| `style.css` | ~590 | CSS legacy monolítico | ❌ Deprecated |
-| `styles.css` | ~610 | Otro CSS legacy | ❌ Deprecated |
-| `components.css` | ~95 | Componentes adicionales | Algunos |
+| `sampelit-v2.css` | 317 | Design tokens + utilities v2 | ✅ V2 pages (Producción) |
+| `main.css`, `input.css`, `style.css` | - | Legacy | ❌ Archivados en `_legacy` |
 | `prism.css` | ~60 | Syntax highlighting | Code blocks |
 
 ### Comparativa: Enfoque CSS
@@ -1183,6 +1180,58 @@ Para elevar la funcionalidad de Sampelit V2 a un estándar corporativo, se ha de
 
 ---
 
+## 🧠 Estrategia de Arquitectura JS (Unificación)
+
+Se ha detectado una dualidad en la arquitectura actual:
+1.  **Legacy "MABApp"** (`js/core/`, `js/managers/`): Arquitectura Vanilla JS orientada a SPA con `UIManager`, `ExperimentManager` y orquestación central `app.js`.
+2.  **V2 "Alpine"** (`js/pages/`, `*_v2.html`): Arquitectura reactiva descentralizada basada en Alpine.js.
+
+### Diagnóstico
+La arquitectura V2 (Alpine) es superior en UX y mantenibilidad para la interfaz, pero carece de la capa de conexión de datos sólida que tiene MABApp (`APIClient`).
+
+### Plan de Convergencia ("Hybrid V2")
+El objetivo es fusionar la robustez de `APIClient` con la reactividad de Alpine.js.
+
+#### 1. Componentes a Conservar (Backend Layer)
+-   `js/core/api.js`: **CRÍTICO**. Cliente HTTP robusto con interceptores (Auth). Se mantendrá.
+-   `js/managers/experiment-manager.js`: **ADAPTAR**. Contiene lógica de negocio valiosa, pero mezcla UI (`this.ui.showToast`). Se debe refactorizar a `ExperimentService` (puro datos) para ser consumido por Alpine.
+-   `js/managers/metrics-manager.js`: **ADAPTAR**. Igual que above.
+
+#### 2. Componentes a Retirar (UI Layer Legacy)
+-   `js/managers/ui-manager.js`: ❌ **Deprecar**. Funcionalidades (Sidebar, Modals, Toasts) ya existen nativamente en Alpine V2.
+-   `js/core/app.js`: ❌ **Deprecar**. El orquestador de eventos globales (`data-action`) choca con la lógica declarativa (`@click`) de Alpine.
+-   `js/init.js`: ❌ **Deprecar**. La inicialización se hará vía `document.addEventListener('alpine:init')`.
+
+#### 3. Hoja de Ruta de Implementación JS
+
+1.  **Refactorizar API Client**: Asegurar que `api.js` se puede importar/usar globalmente sin `MABApp`.
+2.  **Crear Servicios de Datos (Services)**:
+    *   Transformar `experiment-manager.js` → `services/experiment-service.js` (Return Promises, No UI logic).
+    *   Crear `services/auth-service.js`.
+3.  **Alpine Store**:
+    *   Crear `js/alpine-store.js` para inicializar Stores globales (`Alpine.store('auth')`, `Alpine.store('experiments')`) usando los servicios.
+4.  **Conectar Controladores**:
+    *   Actualizar `experiments_v2.js`, `dashboard_v2.js` para usar `Alpine.store` o llamar a servicios directamente, eliminando mocks.
+
+### 📂 Análisis Detallado de Archivos JS
+
+| Archivo | Rol Actual | Acción Migración | Justificación |
+|---------|------------|------------------|---------------|
+| `core/app.js` | Orquestador Monolítico | ❌ Deprecar | Incompatible con la descentralización de Alpine. |
+| `core/api.js` | Cliente HTTP | ✅ Conservar | Pieza fundamental, reutilizable. |
+| `core/state.js` | Vanilla Store | ⚠️ Adaptar/Deprecar | Alpine Store (`Alpine.store`) lo reemplaza nativamente. |
+| `core/event-bus.js` | Pub/Sub | ⚠️ Adaptar | Alpine tiene `$dispatch` / `@event.window`. |
+| `core/utils.js` | Helpers variados | ✅ Conservar/Mover | Útil, mover a `utils/` o usar como módulo. |
+| `managers/ui-manager.js` | Lógica DOM Manual | ❌ ELIMINAR | Alpine maneja el DOM declarativamente (Modals, Dropdowns). |
+| `managers/experiment-manager.js` | CRUD + UI Toast | ♻️ Refactorizar | Extraer lógica CRUD a `services/ExperimentService.js`. |
+| `managers/metrics-manager.js` | Polling DOM | ♻️ Refactorizar | Extraer lógica polling a `services/MetricsService.js`. |
+| `init.js` | Bootloader MABApp | ❌ Deprecar | Reemplazar por `alpine-store.js`. |
+| `include.js` | Cargador de Partials | ✅ Conservar (Temp) | Esencial para layouts V2 (Header/Sidebar) hasta migrar a Jinja2/React. |
+| `services/experiment-service.js` | Capa de Datos | ✨ NUEVO | Implementado. Gestiona API de experimentos. |
+| `alpine-store.js` | Store Reactivo | ✨ NUEVO | Implementado. Puente entre Servicios y Alpine. |
+
+---
+
 ## 🔧 Estandarización de Interacciones (Alpine.js)
 
 Se adoptará el patrón de `src/partials/data-table/data-table-01.html` como base para todas las tablas de la aplicación.
@@ -1195,7 +1244,11 @@ Se adoptará el patrón de `src/partials/data-table/data-table-01.html` como bas
 
 | Ubicación | Archivos | Acción |
 |-----------|----------|--------|
-| `static/*.html` v1 | ~20 | Eliminar tras validar v2 |
+| Ubicación | Archivos | Acción |
+|-----------|----------|--------|
+| `static/*.html` v1 | ~20 | Archivado o eliminado |
 | `static/*_v2.html` | ~25 | ✅ Producción |
-| `static/help-center/` | 10 | ✅ Completo |
-| `static/new/*.html` | 51 | ~40 eliminar, ~6 decidir, ~5 crear |
+| `static/help-center/` | 10 | ✅ Migrado a `help_center_v2.html` |
+| `static/js/core/` | 6 | ⚠️ Refactorizar API, deprecar App |
+| `static/js/managers/` | 3 | ⚠️ Convertir a Services puros |
+| `static/_legacy_v1_backup/` | - | ✅ Archivo de seguridad |
