@@ -152,22 +152,23 @@ Mejoras que afectan a toda la aplicación.
 ## 🅱️ Análisis por Módulo
 
 ### 1. Autenticación (`auth_v2.js`)
-*   **Shake-on-Error**: Si el login falla, el modal vibra (feedback visceral).
-*   **Password Strength**: Medidor de fuerza de contraseña en tiempo real.
-*   **Social Login**: Botones de Google/GitHub nativos (sin popup si es posible).
-*   **Session recovery**: Si el token expira mientras escribo un email, guardar el borrador, pedir re-login en modal, y restaurar el borrador.
+*   **Shake-on-Error**: ✅ Implementado.
+*   **Password Strength**: ✅ Implementado (medidor visual 4 barras).
+*   **Social Login**: ⏸️ UI lista (Google/GitHub buttons), backend pending.
+*   **Session recovery**: ⏸️ Future.
 
 ### 2. Dashboard (`dashboard_v2.js`)
-*   **Greeting Dinámico**: "Buenos días, Artur" basado en hora local.
-*   **Skeleton Loading**: Cero spinners. Mostrar estructura de cajas grises pulsantes (shimmer) mientras carga.
-*   **Drag & Drop**: Permitir reorganizar widgets (KPIs arriba, Gráficas abajo). Persistir preferencia.
-*   **Real-time**: Si un experimento tiene una conversión AHORA, actualizar el contador vía WebSockets (o polling inteligente).
+*   **Greeting Dinámico**: ✅ Implementado ("Good morning/afternoon, [Name]").
+*   **Skeleton Loading**: ✅ Implementado.
+*   **Drag \u0026 Drop**: ⏸️ Future.
+*   **Real-time**: ⏸️ WebSockets future.
 
 ### 3. Gestión de Experimentos (`experiments_v2.js`)
-*   **Virtual Scrolling**: Si hay 10,000 experimentos, el DOM solo renderiza 20. Scroll infinito fluido.
-*   **Saved Views**: Permitir guardar filtros complejos (ej: "Mis tests activos en Mobile") como pestañas rápidas.
-*   **Bulk Actions**: Seleccionar 50 experimentos -> "Archivar". Barra flotante de acciones.
-*   **Deep Linking**: La URL debe contener el estado de la UI. `sampelit.com/experiments?status=active&sort=date_desc&q=landing`.
+*   **Virtual Scrolling**: ⏸️ Future (para 10k+ items).
+*   **Saved Views**: ⏸️ Future.
+*   **Bulk Actions**: ✅ Implementado (Archive/Delete floating bar).
+*   **Deep Linking**: ✅ Implementado (URL sync con filtros/paginación).
+*   **Status Filter Tabs**: ✅ Implementado (All/Active/Draft/Completed).
 
 ### 4. Creation Wizard (`experiments_create_v2.js`)
 *   **Persistencia Total**: Si cierro el navegador en el Paso 3, al volver mañana sigo en el Paso 3.

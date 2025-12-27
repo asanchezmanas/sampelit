@@ -31,6 +31,20 @@ document.addEventListener('alpine:init', () => {
             }, 600);
         },
 
+        // SOTA: Dynamic Greeting based on time of day
+        get greeting() {
+            const hour = new Date().getHours();
+            if (hour < 12) return 'Good morning';
+            if (hour < 18) return 'Good afternoon';
+            return 'Good evening';
+        },
+
+        // SOTA: Get user name (from store or localStorage)
+        get userName() {
+            const user = localStorage.getItem('user_name') || 'there';
+            return user;
+        },
+
         // Computed: Activities derived from store data
         get activities() {
             const experiments = Alpine.store('experiments').list;

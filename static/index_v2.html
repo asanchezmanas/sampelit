@@ -83,8 +83,10 @@
                     <!-- Dashboard Title & Breadcrumb -->
                     <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <div>
+                            <!-- SOTA: Dynamic Greeting -->
                             <h2 class="text-3xl font-extrabold tracking-premium-tight text-gray-900 dark:text-white">
-                                Command Center
+                                <span x-text="greeting"></span>, <span x-text="userName"
+                                    class="text-brand-600 dark:text-brand-400"></span> 👋
                             </h2>
                             <p class="mt-1 text-sm text-gray-500 font-medium tracking-premium">Monitoring experiment
                                 performance and core vitals.</p>

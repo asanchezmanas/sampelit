@@ -152,6 +152,62 @@ document.addEventListener('alpine:init', () => {
 
         formatPercent(num) {
             return (num || 0).toFixed(1) + '%';
+        },
+
+        // SOTA: Export to CSV (client-side)
+        exportCSV() {
+            const data = [
+                ['Metric', 'Value'],
+                ['Total Visitors', this.stats.total_visitors],
+                ['Trend', this.stats.trend + '%'],
+                ['Desktop', this.stats.devices?.desktop || 0],
+                ['Mobile', this.stats.devices?.mobile || 0],
+                ['Tablet', this.stats.devices?.tablet || 0]
+            ];
+
+            // Add traffic sources
+            this.stats.traffic_sources.forEach(source => {
+                data.push([source.name, source.visitors]);
+            });
+
+            const csv = data.map(row => row.join(',')).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `sampelit-analytics-${this.period}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            // Toast notification
+            window.dispatchEvent(new CustomEvent('toast:show', {
+                detail: { message: 'CSV exported successfully!', type: 'success' }
+            }));
+        },
+
+        // SOTA: Export Chart to PNG
+        exportPNG() {
+            if (this.charts.yield) {
+                this.charts.yield.dataURI().then(({ imgURI }) => {
+                    const link = document.createElement('a');
+                    link.href = imgURI;
+                    link.download = `sampelit-analytics-${this.period}.png`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                    window.dispatchEvent(new CustomEvent('toast:show', {
+                        detail: { message: 'Chart exported as PNG!', type: 'success' }
+                    }));
+                });
+            } else {
+                window.dispatchEvent(new CustomEvent('toast:show', {
+                    detail: { message: 'No chart to export', type: 'error' }
+                }));
+            }
         }
     }));
 });

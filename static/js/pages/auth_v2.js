@@ -62,6 +62,21 @@ document.addEventListener('alpine:init', () => {
         },
         loading: false,
         error: null,
+        passwordStrength: 0, // SOTA: 0-4 scale
+
+        // SOTA: Password Strength Checker
+        checkPasswordStrength() {
+            const pwd = this.form.password;
+            let strength = 0;
+
+            if (pwd.length >= 8) strength++;
+            if (pwd.length >= 12) strength++;
+            if (/[A-Z]/.test(pwd) && /[a-z]/.test(pwd)) strength++;
+            if (/[0-9]/.test(pwd)) strength++;
+            if (/[^A-Za-z0-9]/.test(pwd)) strength++;
+
+            this.passwordStrength = Math.min(strength, 4);
+        },
 
         async submit() {
             this.loading = true;

@@ -237,9 +237,35 @@
                                     class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-500 transition-colors">
                                     <span class="material-symbols-outlined text-xl">lock</span>
                                 </span>
-                                <input type="password" x-model="form.password" placeholder="8+ characters" required
-                                    minlength="8"
+                                <input type="password" x-model="form.password" @input="checkPasswordStrength()"
+                                    placeholder="8+ characters" required minlength="8"
                                     class="w-full h-12 rounded-2xl border border-gray-200 bg-gray-50 dark:bg-white/5 dark:border-gray-800 pl-12 pr-4 text-sm font-medium transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:text-white dark:placeholder-gray-500 dark:focus:bg-gray-900" />
+                            </div>
+
+                            <!-- SOTA: Password Strength Meter -->
+                            <div x-show="form.password.length > 0" x-transition class="space-y-2 pt-2">
+                                <div class="flex gap-1">
+                                    <div class="h-1.5 flex-1 rounded-full transition-all duration-300"
+                                        :class="passwordStrength >= 1 ? (passwordStrength >= 3 ? 'bg-emerald-500' : passwordStrength >= 2 ? 'bg-yellow-500' : 'bg-red-500') : 'bg-gray-200 dark:bg-gray-700'">
+                                    </div>
+                                    <div class="h-1.5 flex-1 rounded-full transition-all duration-300"
+                                        :class="passwordStrength >= 2 ? (passwordStrength >= 3 ? 'bg-emerald-500' : 'bg-yellow-500') : 'bg-gray-200 dark:bg-gray-700'">
+                                    </div>
+                                    <div class="h-1.5 flex-1 rounded-full transition-all duration-300"
+                                        :class="passwordStrength >= 3 ? 'bg-emerald-500' : 'bg-gray-200 dark:bg-gray-700'">
+                                    </div>
+                                    <div class="h-1.5 flex-1 rounded-full transition-all duration-300"
+                                        :class="passwordStrength >= 4 ? 'bg-emerald-500' : 'bg-gray-200 dark:bg-gray-700'">
+                                    </div>
+                                </div>
+                                <p class="text-[10px] font-bold uppercase tracking-widest" :class="{
+                                        'text-red-500': passwordStrength === 1,
+                                        'text-yellow-500': passwordStrength === 2,
+                                        'text-emerald-500': passwordStrength >= 3,
+                                        'text-gray-400': passwordStrength === 0
+                                    }"
+                                    x-text="passwordStrength === 0 ? '' : passwordStrength === 1 ? 'Weak' : passwordStrength === 2 ? 'Fair' : passwordStrength === 3 ? 'Strong' : 'Very Strong'">
+                                </p>
                             </div>
                         </div>
 
