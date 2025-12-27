@@ -31,35 +31,31 @@ document.addEventListener('alpine:init', () => {
             }, 600);
         },
 
-        // Computeds
-        get activeExperiments() {
-            // Obtener experimentos activos del store
-            return Alpine.store('experiments').list
-                .filter(exp => exp.status === 'Running' || exp.status === 'active')
-                .slice(0, 5); // Top 5
-        },
-
-        get recentActivity() {
-            // Generar actividad basada en los experimentos reales
-            // En un futuro esto vendría de un endpoint /activity-log
+        // Computed: Activities derived from store data
+        get activities() {
             const experiments = Alpine.store('experiments').list;
-            const activities = [];
-
-            experiments.forEach(exp => {
-                activities.push({
-                    type: exp.status === 'Running' ? 'started' : 'created',
-                    experiment: exp.name,
-                    time: this.formatRelativeTime(exp.created_at),
-                    user: 'You' // Mock user
-                });
-            });
-
-            return activities.slice(0, 10);
+            // Create artificial "activities" based on experiment state
+            // In a real app, this would come from an Audit Log API
+            return experiments.slice(0, 5).map(exp => ({
+                id: exp.id,
+                type: exp.status === 'active' ? 'experiment_launch' : 'draft_created',
+                title: exp.status === 'active' ? `Launched "${exp.name}"` : `Drafted "${exp.name}"`,
+                description: exp.description || 'No description provided',
+                time: this.formatRelativeTime(exp.created_at || new Date().toISOString())
+            })).concat([
+                // Mock system events for "alive" feel
+                { id: 'sys-1', type: 'system_alert', title: 'Auto-Scaling Active', description: 'Traffic spike detected. Redis tier scaling.', time: '1 hour ago' },
+                { id: 'sys-2', type: 'conversion_spike', title: 'Conversion Spike', description: '+15% uplift detected in pricing test.', time: '2 hours ago' }
+            ]);
         },
 
         // Chart Logic (ApexCharts)
         initChart() {
-            // Lógica intacta de TailAdmin Chart (chart-03-ish)
+            // Check if element exists before rendering
+            const chartEl = document.querySelector("#chartOne");
+            if (!chartEl) return;
+
+            // ... (rest of chart options same as before, abbreviated for brevity if needed, but keeping full configuration is safer)
             const options = {
                 series: [
                     { name: 'Total Revenue', data: [440, 505, 414, 671, 227, 413, 201, 352, 752, 320, 257, 160] },
@@ -72,7 +68,7 @@ document.addEventListener('alpine:init', () => {
                     toolbar: { show: false },
                     zoom: { enabled: false }
                 },
-                colors: ['#0f172a', '#3b82f6'], // Navy + Blue
+                colors: ['#0f172a', '#3b82f6'],
                 fill: {
                     type: 'gradient',
                     gradient: {
@@ -118,17 +114,29 @@ document.addEventListener('alpine:init', () => {
                 }
             };
 
-            const chartSelector = "#chartOne";
-            if (document.querySelector(chartSelector)) {
-                new ApexCharts(document.querySelector(chartSelector), options).render();
-            }
+            // Clear previous if any (though Alpine handles init)
+            chartEl.innerHTML = '';
+            new ApexCharts(chartEl, options).render();
         },
 
         // Helpers
+        getActivityIcon(type) {
+            const icons = {
+                'experiment_launch': 'rocket_launch',
+                'draft_created': 'edit_note',
+                'conversion_spike': 'trending_up',
+                'system_alert': 'dns',
+                'report_ready': 'analytics'
+            };
+            return icons[type] || 'circle'; // Default icon
+        },
+
         formatRelativeTime(dateString) {
             const date = new Date(dateString);
             const now = new Date();
             const diffInSeconds = Math.floor((now - date) / 1000);
+
+            if (isNaN(diffInSeconds)) return 'Just now'; // Handle invalid dates
 
             if (diffInSeconds < 60) return 'Just now';
             if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;

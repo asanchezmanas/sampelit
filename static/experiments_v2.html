@@ -197,8 +197,35 @@
                                 </thead>
 
                                 <tbody class="divide-y divide-gray-50 dark:divide-white/5">
+                                    <!-- SOTA: Empty State -->
+                                    <template x-if="paginatedData.length === 0 && !loading">
+                                        <tr>
+                                            <td colspan="5" class="py-20 text-center">
+                                                <div class="flex flex-col items-center">
+                                                    <div
+                                                        class="w-24 h-24 mb-6 rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center">
+                                                        <span
+                                                            class="material-symbols-outlined text-5xl text-gray-300 dark:text-gray-700">science</span>
+                                                    </div>
+                                                    <h4 class="text-lg font-black text-gray-900 dark:text-white mb-2">No
+                                                        Experiments Yet</h4>
+                                                    <p class="text-sm text-gray-400 max-w-sm mx-auto mb-6">Launch your
+                                                        first experiment to start optimizing. It only takes 60 seconds.
+                                                    </p>
+                                                    <a href="experiments_create_v2.html"
+                                                        class="inline-flex items-center gap-2 h-12 px-6 rounded-2xl bg-sampelit text-white font-bold text-sm shadow-lg hover:scale-[1.02] active:scale-95 transition-all">
+                                                        <span class="material-symbols-outlined text-lg">add</span>
+                                                        Launch First Experiment
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+
                                     <template x-for="exp in paginatedData" :key="exp.id">
-                                        <tr
+                                        <tr x-transition:leave="transition ease-in duration-200"
+                                            x-transition:leave-start="opacity-100"
+                                            x-transition:leave-end="opacity-0 translate-x-4"
                                             class="group hover:bg-gray-50/50 dark:hover:bg-white/[0.01] transition-all duration-300">
                                             <td class="px-8 py-6">
                                                 <div class="flex items-center gap-5">

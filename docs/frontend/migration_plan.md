@@ -181,10 +181,52 @@ Mejoras que afectan a toda la aplicación.
 
 ---
 
+### 💎 The "Senior Touch" (Secret Sauce)
+*Estos detalles separan un producto funcional de uno Premium.*
+
+1.  **Transiciones "Mantequilla"**: [x] Dashboard (Pauta establecida).
+2.  **Empty States Ilustrados**: [ ] Pendiente Diseño SVG.
+3.  **Micro-Interacciones Táctiles**: [x] Dashboard Buttons.
+4.  **Toast Notifications Stacking**: [ ] Pendiente Refactor Global.
+5.  **Focus Rings Premium**: [ ] Pendiente CSS Global.
+6.  **Skeleton Shimmer**: [x] Dashboard.
+
+## 🌟 Matriz de Excelencia UX (The "Senior Standard")
+
+*Esta matriz define los requisitos obligatorios para considerar una vista como "Premium/Final". No se mergea nada que no cumpla esto.*
+
+| Vista / Módulo | Loading State (Skeletons) | Empty States (Ilustrados) | Transiciones (x-transition) | Micro-Interacciones (Feedback) | Estado Actual |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Dashboard** | ✅ Implementado | N/A (Siempre hay datos o onboarding) | ✅ Fade-in charts | ✅ Botones táctiles | **GOLD STANDARD** 🏆 |
+| **Auth (Login/Reg)** | ⬜ Spinner en botón | N/A | ⬜ Slide entre Login/Reg | ⬜ Shake on Error, Input focus ring | *Básico* |
+| **Experiment List** | ⬜ Table Skeleton | ⬜ "No Experiments" SVG + CTA | ⬜ Row fade-out (Optimistic) | ⬜ Hover row, Sort animado | *Funcional* |
+| **Wizard (Create)** | ⬜ Step Skeleton | N/A | ⬜ Slide-left/right entre pasos | ⬜ Auto-save indicator, Step clic | *Funcional + Perst.* |
+| **Analytics Detail** | ⬜ Chart Skeletons | ⬜ "No Data Yet" (Waiting) | ⬜ Chart load anim, Tab switch | ⬜ Data point hover, Zoom | *Básico* |
+| **Billing & Plan** | ⬜ Invoice Skeleton | ⬜ "No Invoices" SVG | ⬜ Progress bar animada | ⬜ Upgrade confetti 🎉 | *Básico* |
+| **Shared/Global** | ⬜ Sidebar Skeleton | N/A | ⬜ Toast Stacking, Modal fade | ⬜ Cmd+K, Keyboard Shortcuts | *Parcial* |
+
+### Detalle de Implementación por Vista
+
+#### 1. Authentication (`auth_v2.html`)
+*   **Requisito Senior**: El formulario no debe "saltar" al cambiar entre Login y Register. Debe usar `x-transition` para deslizarse suavemente o hacer un flip.
+*   **Error Handling**: Si falla el login, el card debe vibrar (animación CSS `shake`).
+
+#### 2. Experiment List (`experiments_v2.html`)
+*   **Optimistic UI**: Ya implementamos lógica de borrado. Falta visual: La fila debe colapsar su `height` y opacidad suavemente (`x-transition:leave`) antes de desaparecer del DOM.
+*   **Empty State**: Si el array está vacío, mostrar bloque centrado con Ilustración SVG 3D/Flat y botón primario "Launch First Experiment".
+
+#### 3. Wizard (`experiments_create_v2.js`)
+*   **Step Transition**: Al dar "Next", el contenido actual debe salir por la izquierda (`-translate-x`) y el nuevo entrar por la derecha.
+*   **Feedback**: Mostrar un pequeño indicador "Saved" en la esquina cada vez que el Auto-Save (`localStorage`) se dispara.
+
+#### 4. Analytics (`analytics_v2.html`)
+*   **Chart Loading**: Replicar el patrón del Dashboard (Skeletons exactos del tamaño del gráfico).
+*   **Waiting State**: Si el experimento es nuevo, mostrar un estado "Listening for events..." con una animación de radar/ping, no un gráfico vacío a cero.
+
 ## 📝 Lista de Verificación de Implementación (Prioridad)
 
 1.  [x] **Auto-Save Wizard**: Implementar persistencia en `experiments_create_v2.js` (Baja esfuerzo / Alto impacto).
 2.  [x] **Optimistic UI en Tablas**: Eliminar filas visualmente antes de la llamada API `delete`.
-3.  [ ] **Skeletons Globales**: Reemplazar todos los `loading = true` con componentes Skeleton.
+3.  [x] **Skeletons Globales**: Dashboard 100% migrado a Skeleton Loading (resta: Analytics/Tablas).
 4.  [ ] **Command Palette**: Inyectar componente global de búsqueda.
 

@@ -11,10 +11,12 @@ document.addEventListener('alpine:init', () => {
         loading: false,
         error: null,
         showPassword: false,
+        shakeError: false, // SOTA: Shake animation trigger
 
         async submit() {
             this.loading = true;
             this.error = null;
+            this.shakeError = false;
             try {
                 // Initialize standalone service logic for these pages
                 const api = new APIClient();
@@ -27,6 +29,11 @@ document.addEventListener('alpine:init', () => {
             } catch (err) {
                 console.error('Login failed', err);
                 this.error = 'Invalid credentials. Please try again.';
+
+                // SOTA: Trigger shake and then reset
+                this.shakeError = true;
+                setTimeout(() => { this.shakeError = false; }, 500);
+
                 // Mock redirect for demo purposes if backend assumes stateless
                 if (err.status === 404 || err.status === 401) {
                     // For pure frontend demo without backend, uncomment next line:
