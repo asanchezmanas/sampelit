@@ -2,48 +2,31 @@
 
 Welcome to the project documentation.
 
-## 📖 User Guides
-
-Guides for end-users on how to install and use Sampelit:
-
-| Guide | Description |
-|-------|-------------|
-| **[Getting Started](guides/users/getting_started.md)** | Quick start guide for new users. Key concepts, first experiment. |
-| **[Experiments Guide](guides/users/experiments_guide.md)** | Complete guide to creating and managing A/B tests. |
-| **[Visual Editor Guide](guides/users/visual_editor_guide.md)** | Point-and-click experiment builder. No code required. |
-| **[Analytics Guide](guides/users/analytics_guide.md)** | Understanding results, Bayesian statistics, making decisions. |
-
-### Integration Guides
-
-| Guide | Description |
-|-------|-------------|
-| **[Tracker Snippet](guides/users/tracker_guide.md)** | Universal installation for any website (DIY or with help). |
-| **[Shopify Integration](guides/users/shopify_guide.md)** | OAuth-based Shopify store integration. |
-| **[WordPress Integration](guides/users/wordpress_guide.md)** | Plugin and OAuth integration for WordPress sites. |
-| **[Proxy Middleware](guides/users/proxy_guide.md)** | Automatic tracker injection for any web application. |
-| **[Universal Integration](guides/integration-guide.md)** | Detailed API and framework integration (React, Vue, etc). |
-| **[Self-Hosting Deployment](guides/deployment-guide.md)** | How to deploy Sampelit on your own infra (Docker, Render). |
-
 ---
 
-## 🖥️ Backend Documentation (Complete)
-
-Documentación técnica detallada del backend, archivo por archivo:
+## 🚀 Start Here
 
 | Document | Description |
 |----------|-------------|
-| **[Backend Overview](backend/README.md)** | Índice completo de la documentación del backend. |
-| **[🚀 Valor del Backend](backend/valor_del_backend.md)** | **LEER PRIMERO** - Potencial del backend para el frontend. |
-| **[Arquitectura](backend/architecture.md)** | Diagramas de capas, patrones de diseño, flujo de requests. |
-| **[Configuración](backend/configuration.md)** | Variables de entorno, settings, conexión a DB. |
-| **[Base de Datos](backend/database.md)** | Esquema SQL completo, tablas, índices, migraciones. |
-| **[Repositorios](backend/repositories.md)** | Capa de acceso a datos explicada archivo por archivo. |
-| **[Servicios](backend/services.md)** | Lógica de negocio, Thompson Sampling, análisis Bayesiano. |
+| **[🚀 Valor del Backend](backend/valor_del_backend.md)** | **LEER PRIMERO** - Qué hace especial a Samplit. |
+| **[Backend Overview](backend/README.md)** | Documentación técnica completa del backend. |
+| **[Frontend Guide](frontend/README.md)** | Arquitectura y reglas para desarrolladores frontend. |
+
+---
+
+## 🖥️ Backend Documentation
+
+| Document | Description |
+|----------|-------------|
 | **[API Reference](backend/api_reference.md)** | Todos los endpoints REST con ejemplos. |
-| **[Motor de Optimización](backend/engine.md)** | Thompson Sampling, Multi-Armed Bandits explicados. |
-| **[Integraciones](backend/integrations.md)** | Shopify, WordPress, Email, Proxy. |
-| **[Scripts](backend/scripts.md)** | Scripts de mantenimiento y utilidades. |
-| **[Testing](backend/testing.md)** | Estrategia de pruebas y ejemplos. |
+| **[Architecture](backend/architecture.md)** | Capas, patrones de diseño, flujo de requests. |
+| **[Configuration](backend/configuration.md)** | Variables de entorno y settings. |
+| **[Database](backend/database.md)** | Esquema SQL, tablas, índices. |
+| **[Repositories](backend/repositories.md)** | Capa de acceso a datos. |
+| **[Services](backend/services.md)** | Lógica de negocio, Thompson Sampling. |
+| **[Engine](backend/engine.md)** | Motor de optimización explicado. |
+| **[Integrations](backend/integrations.md)** | Shopify, WordPress, Email. |
+| **[Testing](backend/testing.md)** | Estrategia de pruebas. |
 
 ---
 
@@ -51,37 +34,93 @@ Documentación técnica detallada del backend, archivo por archivo:
 
 | Document | Description |
 |----------|-------------|
-| **[Frontend Overview](frontend/README.md)** | Índice de documentación frontend. |
 | **[Architecture](frontend/architecture.md)** | Estructura obligatoria para páginas v2. |
 
-> 💡 **Importante**: Leer primero [Valor del Backend](backend/valor_del_backend.md) para entender qué debe mostrar el frontend.
+> 💡 Leer primero [Valor del Backend](backend/valor_del_backend.md) para entender qué mostrar.
 
 ---
 
-## 🛠 Technical Documentation
+## 📖 User Guides
+
+| Guide | Description |
+|-------|-------------|
+| **[Getting Started](guides/users/getting_started.md)** | Quick start para nuevos usuarios. |
+| **[Experiments Guide](guides/users/experiments_guide.md)** | Crear y gestionar tests A/B. |
+| **[Visual Editor](guides/users/visual_editor_guide.md)** | Editor visual sin código. |
+| **[Analytics Guide](guides/users/analytics_guide.md)** | Entender resultados y estadísticas. |
+
+### Integration Guides
+
+| Guide | Description |
+|-------|-------------|
+| **[Tracker Snippet](guides/users/tracker_guide.md)** | Instalación universal. |
+| **[Shopify](guides/users/shopify_guide.md)** | Integración OAuth con Shopify. |
+| **[WordPress](guides/users/wordpress_guide.md)** | Integración con WordPress. |
+| **[Deployment](guides/deployment-guide.md)** | Despliegue self-hosted. |
+
+---
+
+## 🛠️ Technical Documentation
 
 | Document | Description |
 |----------|-------------|
-| **[Backend Architecture](technical/backend_architecture.md)** | System overview, Data Models, API structure, and Bandit algorithms. |
-| **[Frontend Architecture](technical/frontend_architecture.md)** | "State of the Art" UI patterns, Alpine.js usage, and Visual Editor proxy. |
-| **[Testing Strategy](technical/testing_strategy.md)** | Full testing stack (Pytest, Playwright), coverage goals, and examples. |
-| **[Database Optimization](technical/database_optimization.md)** | Optimization plans, Indexes, and Realtime setup. |
-| **[Deployment Strategy](technical/deployment_guide.md)** | Cloud-native strategy (Render + Supabase). |
-| **[Database Schema](database_schema.md)** | Entity-Relationship Diagram and Schema Reference. |
+| **[Backend Architecture](technical/backend_architecture.md)** | Visión general del sistema. |
+| **[Frontend Architecture](technical/frontend_architecture.md)** | Patrones UI y Alpine.js. |
+| **[Testing Strategy](technical/testing_strategy.md)** | Stack completo de testing. |
+| **[Database Optimization](technical/database_optimization.md)** | Índices y optimizaciones. |
+| **[Firecrawl Implementation](technical/firecrawl-visual-editor-implementation.md)** | Visual Editor con Firecrawl. |
+
+---
+
+## 💼 Business Documentation
+
+| Document | Description |
+|----------|-------------|
+| **[Financial Plan](business/financial-plan.md)** | Plan financiero. |
+| **[Pricing Strategy](business/pricing-strategy.md)** | Estrategia de precios. |
+| **[Growth Tactics](business/growth-tactics.md)** | Tácticas de crecimiento. |
+| **[Solo Founder Playbook](business/solo-founder-playbook.md)** | Guía para founder solitario. |
+| **[Corporate Structure](business/corporate-structure.md)** | Estructura legal. |
+
+---
+
+## 📣 Marketing Documentation
+
+| Document | Description |
+|----------|-------------|
+| **[Marketing Roadmap](marketing/marketing_roadmap.md)** | Plan de marketing. |
+| **[Ad Copy Variations](marketing/ad-copy-variations.md)** | Variaciones de copy. |
+| **[Case Study Template](marketing/case-study-template.md)** | Plantilla de casos de éxito. |
+| **[Lifecycle Emails](marketing/lifecycle_emails.md)** | Emails de ciclo de vida. |
+| **[UTM Convention](marketing/utm-convention.md)** | Convenciones de tracking. |
+
+---
 
 ## 📅 Planning & Roadmap
 
 | Document | Description |
 |----------|-------------|
-| **[Future Improvements](future_improvements.md)** | Roadmap for v2.0 (Firecrawl, SEO, etc). |
-| **[SEO Guide](seo_guide.md)** | Page titling and metadata standards. |
-| **[v1.0 Release Notes](release_notes.md)** | Features and initial scope. |
-
-## 💼 Business & Product
-
-*See [business/](business/) folder for Strategy, Monetization, and Legal documents.*
+| **[Future Improvements](future_improvements.md)** | Roadmap v2.0. |
+| **[Release Notes](release_notes.md)** | Notas de versión. |
+| **[SEO Guide](seo_guide.md)** | Estándares SEO. |
 
 ---
 
-**Version**: 1.0
-**Status**: Stable (Release)
+## 📁 Structure
+
+```
+docs/
+├── backend/      # 12 docs - Documentación técnica del backend
+├── frontend/     # 2 docs - Arquitectura frontend
+├── business/     # 8 docs - Planes de negocio y estrategia
+├── marketing/    # 11 docs - Marketing y contenido
+├── technical/    # 12 docs - Documentación técnica legacy
+├── guides/       # 13 docs - Guías de usuario
+└── _archive/     # Archivos obsoletos (no usar)
+```
+
+---
+
+**Version**: 2.0  
+**Last Updated**: December 2024
+

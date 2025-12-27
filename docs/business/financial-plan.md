@@ -2,6 +2,9 @@
 
 Estructura financiera para sostenibilidad a largo plazo.
 
+**Última actualización:** Diciembre 2024
+**Precios vigentes:** €149 / €399 / €999 / €2,499
+
 ---
 
 ## 🏦 Estructura Legal Recomendada
@@ -11,7 +14,7 @@ Estructura financiera para sostenibilidad a largo plazo.
 │         HOLDING (SL / BV)           │
 │   (Holanda/España/Estonia)          │
 │                                     │
-│   ├── Sampelit SL (operativa)        │
+│   ├── Sampelit SL (operativa)       │
 │   │   └── Revenue del producto      │
 │   │                                 │
 │   └── Inversiones                   │
@@ -36,13 +39,13 @@ Estructura financiera para sostenibilidad a largo plazo.
 
 | Concepto | Mensual | 12 meses | 18 meses |
 |----------|---------|----------|----------|
-| Hosting/Infra | €100 | €1,200 | €1,800 |
-| Herramientas | €150 | €1,800 | €2,700 |
+| Hosting/Infra | €150 | €1,800 | €2,700 |
+| Herramientas | €200 | €2,400 | €3,600 |
 | Dominio/Legal | €50 | €600 | €900 |
-| Marketing mínimo | €200 | €2,400 | €3,600 |
-| **Total Operativo** | €500 | €6,000 | €9,000 |
-| Sueldo mínimo personal | €1,500 | €18,000 | €27,000 |
-| **Total Necesario** | €2,000 | **€24,000** | **€36,000** |
+| Marketing mínimo | €300 | €3,600 | €5,400 |
+| **Total Operativo** | €700 | €8,400 | €12,600 |
+| Sueldo mínimo personal | €2,000 | €24,000 | €36,000 |
+| **Total Necesario** | €2,700 | **€32,400** | **€48,600** |
 
 ### Dónde guardarlo
 
@@ -50,7 +53,7 @@ Estructura financiera para sostenibilidad a largo plazo.
 |-------------|-------------|---------|
 | Cuenta corriente | 20% | Liquidez inmediata |
 | Depósito a 6 meses | 40% | Algo de yield, accesible |
-| Money Market / T-Bills | 40% | ~4-5% anual, muy líquido |
+| Money Market / T-Bills | 40% | ~3-4% anual, muy líquido |
 
 ---
 
@@ -67,19 +70,19 @@ Estructura financiera para sostenibilidad a largo plazo.
 
 ### Evolución por Fase
 
-**€0-5k MRR**: Modo supervivencia
+**€0-5k MRR** (0-15 clientes Starter): Modo supervivencia
 - 60% → Reserva
 - 30% → Reinversión
 - 10% → Personal
 - 0% → Inversiones
 
-**€5k-15k MRR**: Estabilización
+**€5k-15k MRR** (15-40 clientes mix): Estabilización
 - 40% → Reserva (hasta 18 meses)
 - 30% → Reinversión
 - 20% → Personal
 - 10% → Inversiones
 
-**€15k+ MRR**: Crecimiento
+**€15k+ MRR** (40+ clientes): Crecimiento
 - 20% → Reserva
 - 40% → Reinversión/Contratación
 - 25% → Personal
@@ -87,13 +90,41 @@ Estructura financiera para sostenibilidad a largo plazo.
 
 ---
 
+## 💵 Proyecciones por Tier Mix
+
+### Escenario Conservador (Year 1)
+
+| Tier | Precio | Clientes | MRR |
+|------|--------|----------|-----|
+| Starter | €149 | 25 | €3,725 |
+| Professional | €399 | 10 | €3,990 |
+| Scale | €999 | 2 | €1,998 |
+| Enterprise | €2,499 | 0 | €0 |
+| **Total** | | **37** | **€9,713** |
+
+**ARPU esperado:** €263/mes
+
+### Escenario Optimista (Year 1)
+
+| Tier | Precio | Clientes | MRR |
+|------|--------|----------|-----|
+| Starter | €149 | 35 | €5,215 |
+| Professional | €399 | 18 | €7,182 |
+| Scale | €999 | 5 | €4,995 |
+| Enterprise | €2,499 | 1 | €2,499 |
+| **Total** | | **59** | **€19,891** |
+
+**ARPU esperado:** €337/mes
+
+---
+
 ## 📈 Inversiones Pasivas (desde Holding)
 
 ### Objetivo: Generar dividendos para cubrir sueldo base
 
-Para cubrir €2,000/mes de sueldo base con dividendos:
-- Necesitas ~€600,000 a 4% yield annual
-- O ~€400,000 a 6% yield
+Para cubrir €2,500/mes de sueldo base con dividendos:
+- Necesitas ~€750,000 a 4% yield anual
+- O ~€500,000 a 6% yield
 
 ### Portfolio Conservador
 
@@ -102,19 +133,19 @@ Para cubrir €2,000/mes de sueldo base con dividendos:
 | ETF Bonds EUR (iShares) | 30% | 3-4% | Bajo |
 | ETF Dividendos (VHYL) | 30% | 4-5% | Medio |
 | REITs Europa | 20% | 5-7% | Medio |
-| Treasury Bills | 20% | 4% | Muy bajo |
+| Treasury Bills | 20% | 3-4% | Muy bajo |
 
-### Timeline Realista
+### Timeline Realista (con precios actualizados)
 
-| Año | MRR | Ahorro anual | Portfolio acumulado | Dividendos/año |
-|-----|-----|--------------|---------------------|----------------|
-| 1 | €5k | €6,000 | €6,000 | €240 |
-| 2 | €10k | €12,000 | €18,000 | €720 |
-| 3 | €20k | €24,000 | €42,000 | €1,680 |
-| 4 | €35k | €42,000 | €84,000 | €3,360 |
-| 5 | €50k | €60,000 | €144,000 | €5,760 |
+| Año | MRR | Ahorro anual (10%) | Portfolio acumulado | Dividendos/año |
+|-----|-----|---------------------|---------------------|----------------|
+| 1 | €10k | €12,000 | €12,000 | €480 |
+| 2 | €20k | €24,000 | €36,000 | €1,440 |
+| 3 | €35k | €42,000 | €78,000 | €3,120 |
+| 4 | €50k | €60,000 | €138,000 | €5,520 |
+| 5 | €70k | €84,000 | €222,000 | €8,880 |
 
-*A este ritmo: €2,000/mes de dividendos en ~8-10 años*
+*A este ritmo: €2,500/mes de dividendos en ~7-8 años*
 
 ---
 
@@ -124,17 +155,17 @@ Para cubrir €2,000/mes de sueldo base con dividendos:
 
 | Condición | Acción |
 |-----------|--------|
-| MRR > €10k durante 6 meses | Subir sueldo a 25% del revenue |
+| MRR > €15k durante 6 meses | Subir sueldo a 25% del revenue |
 | Runway > 18 meses | Redirigir reserva a inversiones |
-| Portfolio > €100k | Considerar retiros de dividendos |
+| Portfolio > €150k | Considerar retiros de dividendos |
 
 ### Cuándo contratar
 
 | Condición | Acción |
 |-----------|--------|
-| MRR > €15k estable | Primer contractor (support/content) |
-| MRR > €25k estable | Considerar empleado part-time |
-| Net profit > €10k/mes | Contratar dev o marketer |
+| MRR > €20k estable | Primer contractor (support/content) |
+| MRR > €35k estable | Considerar empleado part-time |
+| Net profit > €15k/mes | Contratar dev o marketer |
 
 ### Red Flags (parar gasto)
 
@@ -142,7 +173,7 @@ Para cubrir €2,000/mes de sueldo base con dividendos:
 |-------|--------|
 | MRR cae 20% en 2 meses | Congelar gasto marketing |
 | Runway < 12 meses | Modo austeridad |
-| Churn > 10%/mes | Parar adquisición, focus en retención |
+| Churn > 8%/mes | Parar adquisición, focus en retención |
 
 ---
 
@@ -152,8 +183,9 @@ Para cubrir €2,000/mes de sueldo base con dividendos:
 
 ```
 MRR: €____
+ARPU: €____ (target: €275+)
 Runway (meses): €____ en banco / €____ gastos mensuales
-Net Margin: (MRR - Costes) / MRR = ____%
+Net Margin: (MRR - Costes) / MRR = ____% (target: >70%)
 Portfolio Value: €____
 Dividend Income (anual): €____
 ```
@@ -163,13 +195,15 @@ Dividend Income (anual): €____
 - **Runway mínimo**: 12 meses (objetivo: 18)
 - **Net margin objetivo**: > 70%
 - **% revenue a inversiones**: 10-15% cuando stable
-- **Target portfolio para "libertad"**: 25x gastos anuales
+- **Target portfolio para "libertad"**: 25x gastos anuales (~€800k)
+- **ARPU objetivo**: €275+ (mix Starter/Pro)
 
 ---
 
 ## 📋 Checklist Financiero Mensual (15 min)
 
 - [ ] Revisar MRR y comparar con mes anterior
+- [ ] Calcular ARPU actual
 - [ ] Calcular runway actual
 - [ ] Verificar distribución 40/30/20/10
 - [ ] Transferir ahorros a instrumento correspondiente
@@ -178,6 +212,8 @@ Dividend Income (anual): €____
 ## Checklist Trimestral (1 hora)
 
 - [ ] Revisar P&L trimestral
+- [ ] Analizar mix de tiers (% Starter vs Pro vs Scale)
 - [ ] Rebalancear portfolio si necesario
 - [ ] Evaluar si subir/bajar sueldo personal
 - [ ] Actualizar proyecciones anuales
+- [ ] Revisar unit economics (CAC, LTV, payback)
