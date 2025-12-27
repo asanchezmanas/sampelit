@@ -5,64 +5,50 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Contact Us | Sampelit</title>
-    <link href="https://fonts.googleapis.com" rel="preconnect" />
-    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-        rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-    <!-- sampelit.css removed for v2 - using Tailwind only -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" />
+
+    <!-- Core Design System: Tailwind CDN + Style Standard -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+    <link rel="stylesheet" href="css/sampelit-v2.css" />
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        background: "#FFFFFF",
-                        surface: "#FAFAFA",
-                        "surface-highlight": "#F8FAFC",
-                        primary: "#0f172a",
-                        accent: "#1e3a8a",
-                        "primary-light": "#3b82f6",
-                        "primary-soft": "rgba(30, 58, 138, 0.03)",
-                        text: {
-                            main: "#1E293B",
-                            muted: "#64748B",
-                            dim: "#94A3B8"
-                        },
-                        border: {
-                            light: "#E2E8F0",
-                            subtle: "#F1F5F9"
-                        }
+                        primary: "#0f172a",   // Navy Sampelit
+                        accent: "#1e3a8a",    // Blue Accent Premium
+                        sampelit: "#0f172a"   // Alias primary
                     },
                     fontFamily: {
-                        display: ['"Manrope"', 'sans-serif'],
-                        body: ['"Inter"', 'sans-serif'],
-                    },
-                    borderRadius: {
-                        DEFAULT: "6px",
-                        'lg': "8px",
-                        'xl': "12px",
-                        '2xl': "16px",
-                        '3xl': "24px",
-                    },
-                    backgroundImage: {
-                        'gradient-subtle': 'linear-gradient(to bottom right, #F8FAFC, #FFFFFF)',
-                        'gradient-mesh': 'radial-gradient(at 27% 37%, hsla(215, 98%, 61%, 0.02) 0px, transparent 0%), radial-gradient(at 97% 21%, hsla(220, 90%, 98%, 1) 0px, transparent 50%), radial-gradient(at 52% 99%, hsla(220, 98%, 98%, 1) 0px, transparent 50%), radial-gradient(at 10% 29%, hsla(220, 96%, 93%, 0.05) 0px, transparent 50%), radial-gradient(at 97% 96%, hsla(220, 90%, 98%, 1) 0px, transparent 50%), radial-gradient(at 33% 50%, hsla(220, 90%, 98%, 1) 0px, transparent 50%), radial-gradient(at 79% 53%, hsla(220, 90%, 98%, 1) 0px, transparent 50%)',
+                        display: ['Manrope', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
                     },
                     boxShadow: {
-                        'soft': '0 2px 10px rgba(0, 0, 0, 0.03)',
-                        'card': '0 10px 30px -5px rgba(0, 0, 0, 0.04)',
-                        'elevation': '0 25px 50px -12px rgba(15, 23, 42, 0.15)',
-                        'glow': '0 0 20px rgba(59, 130, 246, 0.15)'
+                        'premium': '0 10px 30px -5px rgba(15, 23, 42, 0.08)',
+                        'soft': '0 2px 10px rgba(0, 0, 0, 0.03)'
                     }
-                },
-            },
-        };
+                }
+            }
+        }
     </script>
+
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+
+    <!-- Essential Scripts -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="js/include.js"></script>
     <style>
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;

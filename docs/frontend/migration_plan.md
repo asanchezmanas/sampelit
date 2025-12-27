@@ -236,29 +236,60 @@ Irónicamente, **V2 es técnicamente "más vanilla"** en su lógica de persisten
 
 ### Comparativa: Enfoque CSS
 
-| Aspecto | V1 | V2 |
+| Aspecto | V1 | V2 (Estrategia Definitiva) |
 |---------|----|----|
-| **Entry point** | `sampelit.css` + Tailwind CDN | `input.css` (Tailwind v4 nativo) |
-| **Configuración** | Inline `tailwind.config` en cada HTML | Centralizado en `input.css` con `@theme` |
-| **Dark mode** | Variables CSS manuales | `@custom-variant dark` + clases |
-| **Utilidades** | Clases custom `.btn`, `.card`, `.input` | `@utility` de Tailwind + `@apply` |
-| **Fonts** | Google Fonts en cada HTML | `@import` una vez en CSS |
-| **ApexCharts** | Manual dark mode fixes | Integrado en theme |
+| **Metodología** | Manual + Tailwind CDN | **Híbrido CDN + static CSS** |
+| **Configuración** | Inline `tailwind.config` disperso | **Snippet Estándar Consolidado** |
+| **Dark mode** | Variables CSS manuales | **Nativo Tailwind `class`** |
+| **Build Process** | Nulo | **Nulo (Prohibido)** |
+| **Mantenimiento** | Alto (CSS disperso) | **Bajo (Centralizado en `sampelit-v2.css`)** |
 
-### input.css (V2) - Tailwind v4 Moderno
+---
 
-```css
-@import "tailwindcss";           // Tailwind v4 syntax
-@plugin '@tailwindcss/forms';   // Plugin forms
+## 🛠️ El Snippet "No Preocupaciones" (Estándar V2)
 
-@custom-variant dark (&:is(.dark *));  // Dark mode
-@theme {
-  --color-sampelit-primary: #1754cf;
-  --color-brand-500: #1754cf;
-  // ... paleta completa
-}
+Para garantizar la longevidad y el diseño premium sin usar Node.js o compiladores, cada página V2 debe incluir exactamente este bloque en el `<head>`:
 
-@utility menu-item { ... }      // Utilities personalizados
+```html
+<!-- Sampelit Standard Snippet v2 -->
+<!-- Google Fonts & Material Symbols -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" />
+
+<!-- Tailwind 3.x CDN + Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+
+<!-- Estilos Compartidos (Premium Components) -->
+<link rel="stylesheet" href="css/sampelit-v2.css" />
+
+<!-- Configuración Centralizada -->
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                colors: {
+                    primary: "#0f172a",   // Navy Sampelit
+                    accent: "#1e3a8a",    // Blue Accent Premium
+                    sampelit: "#0f172a"   // Alias primary
+                },
+                fontFamily: {
+                    display: ['Manrope', 'sans-serif'],
+                    body: ['Inter', 'sans-serif'],
+                },
+                boxShadow: {
+                    'premium': '0 10px 30px -5px rgba(15, 23, 42, 0.08)',
+                    'soft': '0 2px 10px rgba(0, 0, 0, 0.03)'
+                }
+            }
+        }
+    }
+</script>
+
+<!-- Alpine.js (Longevidad JS) -->
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 ```
 
 ### sampelit.css (V1) - CSS Variables
@@ -313,14 +344,23 @@ Irónicamente, **V2 es técnicamente "más vanilla"** en su lógica de persisten
 |----------|---------|---------|---------|
 | Primary | `#0f172a` | `#1754cf` | `#1E3A8A` |
 
-### Acciones de Limpieza y Consolidación
+### Acciones de Consolidación (V2 Prioridad)
 
-- [ ] **[Partials]** Añadir link a Help Center en `header_landing_v2.html`
-- [ ] **[Partials]** Corregir link a `pricing.html` -> `pricing_v2.html` en headers V2
-- [ ] **[Clean]** Eliminar `header.html` y `sidebar.html` (V1)
-- [ ] **[Clean]** Unificar `footer_landing.html` y `footer_landing_v2.html`
+- [x] **[Branding]** Unificar estética Premium Sampelit en Partials V2
+- [x] **[Partials]** Añadir link a Help Center en `header_landing_v2.html`
+- [x] **[Partials]** Corregir link a `pricing.html` -> `pricing_v2.html` en headers V2
+- [x] **[Partials]** Actualizar `footer_landing_v2.html` con branding premium y links V2
 - [ ] **[Standard]** Aplicar Snippet "No Preocupaciones" a todas las páginas `*_v2.html`
-- [x] **[Clean]** Eliminar `input.css` y `main.css` (No se usan)
+- [ ] **[Verificación]** Validar navegación completa entre páginas V2
+
+### 🧹 Limpieza Pos-Migración (SOLO tras validación final)
+> [!IMPORTANT]
+> No eliminar archivos hasta que la versión V2 esté 100% operativa y probada.
+
+- [ ] Eliminar `header.html` y `sidebar.html` (V1)
+- [ ] Eliminar `footer_landing.html` (V1)
+- [ ] Eliminar páginas V1 redundantes
+- [x] Eliminar `input.css` y `main.css` (No se usan)
 
 ---
 

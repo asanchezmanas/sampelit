@@ -25,30 +25,34 @@
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#0f172a",
-                        "accent": "#1e3a8a",
-                        "sampelit": "#0f172a",
+                        primary: "#0f172a",   // Navy Sampelit
+                        accent: "#1e3a8a",    // Blue Accent Premium
+                        sampelit: "#0f172a"   // Alias primary
                     },
                     fontFamily: {
                         display: ['Manrope', 'sans-serif'],
                         body: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'premium': '0 10px 30px -5px rgba(15, 23, 42, 0.08)',
+                        'soft': '0 2px 10px rgba(0, 0, 0, 0.03)'
                     }
                 }
             }
         }
     </script>
+
     <style>
         [x-cloak] {
             display: none !important;
         }
     </style>
 
+    <!-- Essential Scripts -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <script src="js/core/api.js"></script> <!-- Core API Client -->
-    <script src="js/include.js"></script> <!-- Custom include script -->
+    <script src="js/core/api.js"></script>
+    <script src="js/include.js"></script>
 </head>
 
 <body x-data="{ page: 'dashboard', sidebarToggle: false, darkMode: false }"

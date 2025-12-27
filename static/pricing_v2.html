@@ -5,35 +5,48 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sampelit | Pricing</title>
-    <link href="https://fonts.googleapis.com" rel="preconnect" />
-    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-        rel="stylesheet" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" />
+
+    <!-- Core Design System: Tailwind CDN + Style Standard -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
-    <!-- sampelit.css removed for v2 - using Tailwind only -->
+    <link rel="stylesheet" href="css/sampelit-v2.css" />
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        background: "#FFFFFF", surface: "#FAFAFA", primary: "#0f172a", accent: "#1e3a8a", "primary-light": "#3b82f6",
-                        text: { main: "#1E293B", muted: "#64748B", dim: "#94A3B8" },
-                        border: { light: "#E2E8F0", subtle: "#F1F5F9" },
-                        gray: { 50: '#F9FAFB', 100: '#F3F4F6', 200: '#E5E7EB', 300: '#D1D5DB', 400: '#9CA3AF', 500: '#6B7280', 600: '#4B5563', 700: '#374151', 800: '#1F2937', 900: '#111827' },
-                        brand: { DEFAULT: '#3b82f6', 50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd', 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 800: '#1e40af', 900: '#1e3a8a' },
-                        success: { 50: '#ecfdf5', 500: '#10b981', 600: '#059669' },
-                        error: { 50: '#fef2f2', 500: '#ef4444', 600: '#dc2626' }
+                        primary: "#0f172a",   // Navy Sampelit
+                        accent: "#1e3a8a",    // Blue Accent Premium
+                        sampelit: "#0f172a"   // Alias primary
                     },
-                    fontFamily: { display: ['"Manrope"', 'sans-serif'], body: ['"Inter"', 'sans-serif'] },
-                },
-            },
-        };
+                    fontFamily: {
+                        display: ['Manrope', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'premium': '0 10px 30px -5px rgba(15, 23, 42, 0.08)',
+                        'soft': '0 2px 10px rgba(0, 0, 0, 0.03)'
+                    }
+                }
+            }
+        }
     </script>
+
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+
+    <!-- Essential Scripts -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="js/include.js"></script>
 </head>

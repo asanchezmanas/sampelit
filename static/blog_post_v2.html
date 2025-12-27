@@ -5,70 +5,60 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Blog Post | Sampelit V2</title>
-    <!-- Tailwind with Typography Plugin -->
-    <script src="https://cdn.tailwindcss.com?plugins=typography,forms,container-queries"></script>
-    <link href="./css/sampelit-v2.css" rel="stylesheet" />
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-        rel="stylesheet" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <!-- Include.js for partials -->
-    <script src="js/include.js"></script>
-
+    <!-- Core Design System: Tailwind CDN + Style Standard -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+    <link rel="stylesheet" href="css/sampelit-v2.css" />
     <script>
         tailwind.config = {
-            darkMode: "class",
+            darkMode: 'class',
             theme: {
-                fontFamily: {
-                    body: ["Inter", "sans-serif"],
-                    display: ["Manrope", "sans-serif"],
-                },
                 extend: {
                     colors: {
-                        brand: {
-                            50: "#eff6ff",
-                            100: "#dbeafe",
-                            200: "#bfdbfe",
-                            300: "#93c5fd",
-                            400: "#60a5fa",
-                            500: "#3b82f6",
-                            600: "#2563eb",
-                            700: "#1d4ed8",
-                            800: "#1e40af",
-                            900: "#1e3a8a",
-                            950: "#172554",
-                        },
-                        gray: {
-                            800: "#1f2937",
-                            900: "#111827",
-                        },
+                        primary: "#0f172a",   // Navy Sampelit
+                        accent: "#1e3a8a",    // Blue Accent Premium
+                        sampelit: "#0f172a"   // Alias primary
+                    },
+                    fontFamily: {
+                        display: ['Manrope', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
                     },
                     boxShadow: {
-                        premium: "0 20px 40px -15px rgba(0, 0, 0, 0.05)",
+                        'premium': '0 10px 30px -5px rgba(15, 23, 42, 0.08)',
+                        'soft': '0 2px 10px rgba(0, 0, 0, 0.03)'
                     },
                     typography: (theme) => ({
                         DEFAULT: {
                             css: {
-                                color: theme('colors.gray.700'),
-                                h1: { fontFamily: theme('fontFamily.display') },
-                                h2: { fontFamily: theme('fontFamily.display') },
-                                h3: { fontFamily: theme('fontFamily.display') },
-                            }
-                        },
-                        invert: {
-                            css: {
-                                color: theme('colors.gray.300'),
+                                h1: { fontFamily: 'Manrope, sans-serif' },
+                                h2: { fontFamily: 'Manrope, sans-serif' },
+                                h3: { fontFamily: 'Manrope, sans-serif' },
                             }
                         }
                     })
-                },
-            },
-        };
+                }
+            }
+        }
     </script>
+
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+
+    <!-- Essential Scripts -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="js/include.js"></script>
 </head>
 
 <body x-data="{ sidebarOpen: false, darkMode: false, loading: false, content: '', metadata: {} }" x-init="
