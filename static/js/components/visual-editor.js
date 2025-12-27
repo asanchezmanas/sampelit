@@ -533,11 +533,36 @@ class VisualEditor {
                 backgroundColor: styles.backgroundColor,
                 fontSize: styles.fontSize,
                 fontWeight: styles.fontWeight,
-                fontFamily: styles.fontFamily
+                fontFamily: styles.fontFamily,
+                padding: styles.padding,
+                margin: styles.margin,
+                borderRadius: styles.borderRadius,
+                display: styles.display,
+                position: styles.position,
+                zIndex: styles.zIndex
             };
         }
 
         return content;
+    }
+
+    /**
+     * SOTA: Get a formatted CSS snippet for the element
+     */
+    getElementCSS(elementId) {
+        const elementData = this.state.selectedElements.get(elementId);
+        if (!elementData) return '';
+
+        const styles = elementData.originalContent.styles;
+        if (!styles) return '';
+
+        let css = `/* Computed styles for ${elementData.tagName} */\n`;
+        Object.entries(styles).forEach(([prop, value]) => {
+            // camelCase to kebab-case
+            const kebabProp = prop.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+            css += `${kebabProp}: ${value};\n`;
+        });
+        return css;
     }
 
     // ===== ELEMENT MANAGEMENT =====

@@ -163,6 +163,12 @@
                                 <div
                                     class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                     <button
+                                        class="p-1.5 hover:bg-gray-50 rounded-md text-gray-400 hover:text-primary transition-colors dark:hover:bg-gray-600"
+                                        title="View CSS"
+                                        @click="$dispatch('toast:show', { message: 'CSS Inspector: \n\n' + window.visualEditor?.getElementCSS('el_headline_sample') || 'No styles found', type: 'info' })">
+                                        <span class="material-symbols-outlined text-[16px]">code</span>
+                                    </button>
+                                    <button
                                         class="p-1.5 hover:bg-gray-50 rounded-md text-gray-400 hover:text-primary transition-colors dark:hover:bg-gray-600">
                                         <span class="material-symbols-outlined text-[16px]">edit</span>
                                     </button>
@@ -407,6 +413,23 @@
                     controlsId: 'editor-controls'
                 });
                 editor.init();
+                window.visualEditor = editor;
+
+                // Set a sample ID for the hardcoded element in the UI for demo purposes
+                // In a real scenario, these are generated dynamically
+                editor.state.selectedElements.set('el_headline_sample', {
+                    id: 'el_headline_sample',
+                    tagName: 'h1',
+                    originalContent: {
+                        styles: {
+                            color: 'rgb(15, 23, 42)',
+                            fontSize: '72px',
+                            fontWeight: '800',
+                            fontFamily: 'Manrope, sans-serif',
+                            lineHeight: '1.1'
+                        }
+                    }
+                });
 
                 // Example: Save configuration via API
                 // editor.on('save', async (config) => {

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Integr. - Advanced Data Integration</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=Space+Grotesk:wght@500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FF5714", // Vibrant Orange from the image
+                        "primary-dark": "#E0480B",
+                        "background-light": "#FFFFFF",
+                        "background-dark": "#0F0F11",
+                        "surface-light": "#F8F8F8",
+                        "surface-dark": "#1A1A1C",
+                        "text-main-light": "#111111",
+                        "text-main-dark": "#FFFFFF",
+                        "text-muted-light": "#555555",
+                        "text-muted-dark": "#AAAAAA",
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        .isometric-card {
+            transform: perspective(1000px) rotateX(2deg) rotateY(-2deg);
+            transition: transform 0.3s ease;
+        }
+
+        .isometric-card:hover {
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(-5px);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark font-sans antialiased selection:bg-primary selection:text-white">
+    <nav
+        class="fixed w-full z-50 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-primary rounded-sm flex items-center justify-center text-white font-bold">
+                        <span class="material-icons-outlined text-sm">integration_instructions</span>
+                    </div>
+                    <span class="font-display font-bold text-xl tracking-tight">Integr.</span>
+                </div>
+                <div
+                    class="hidden md:flex space-x-8 text-sm font-medium text-text-muted-light dark:text-text-muted-dark">
+                    <a class="hover:text-primary transition-colors" href="#">Platform</a>
+                    <a class="hover:text-primary transition-colors" href="#">Solutions</a>
+                    <a class="hover:text-primary transition-colors" href="#">Pricing</a>
+                    <a class="hover:text-primary transition-colors" href="#">Resources</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a class="text-sm font-medium hover:text-primary dark:text-white" href="#">Log in</a>
+                    <a class="bg-black dark:bg-white text-white dark:text-black px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity"
+                        href="#">Sign up</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <section class="pt-32 pb-20 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-5 relative z-10">
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-xs font-semibold uppercase tracking-wider mb-6 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700">
+                        The AI-Ready iPaaS <span
+                            class="bg-primary text-white text-[10px] px-1.5 py-0.5 rounded ml-1">NEW</span>
+                    </div>
+                    <h1
+                        class="font-display text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] mb-6 tracking-tight">
+                        Advanced Integrated Data Service
+                    </h1>
+                    <p class="text-lg text-text-muted-light dark:text-text-muted-dark mb-8 max-w-md">
+                        Data integration, backup, management, and connectivity all in one powerful platform.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 mb-16">
+                        <a class="bg-black dark:bg-white text-white dark:text-black px-8 py-4 rounded-lg font-medium hover:translate-y-[-2px] transition-transform text-center shadow-lg"
+                            href="#">
+                            Get Started
+                        </a>
+                    </div>
+                </div>
+                <div class="lg:col-span-7 relative">
+                    <div
+                        class="relative bg-surface-light dark:bg-surface-dark rounded-3xl p-8 border border-gray-100 dark:border-gray-800 shadow-2xl">
+                        <div class="flex flex-col md:flex-row gap-8 items-center">
+                            <div class="flex-1 relative">
+                                <div class="absolute -inset-4 bg-primary/20 blur-3xl rounded-full"></div>
+                                <img alt="Isometric 3D orange abstract data machine illustration"
+                                    class="relative z-10 rounded-xl shadow-lg mix-blend-multiply dark:mix-blend-normal isometric-card w-full h-auto object-cover"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHulV69nx_Aab96lC3bYx20BqvUDq2s173aGLaZoWMDuyxCUv0CE96sHe19Z_43v3HHOCCOof1BlCmqJINWA3goQ3i-VtKo0NOpyDD550h1fyQ7y1MwGvTpR-q_fDbkM1tru0KKs9SCQwmL46950lXy7WCUOe3iJ9rlss6ZLUISrSjPgo2EupqeC_ybK-9g01KwV9zVXbecLPImrNleHjj0F_Im-de8SYitt4UlV69ew7Y4RBcfy7RZjk23x1XgHlmTHbvcuzbnA" />
+                            </div>
+                            <div
+                                class="w-full md:w-64 space-y-8 pl-0 md:pl-8 border-l-0 md:border-l border-gray-200 dark:border-gray-700">
+                                <div>
+                                    <p class="text-sm text-text-muted-light dark:text-text-muted-dark mb-4">
+                                        Improve your marketing performance by automating the integration.
+                                        <a class="text-black dark:text-white font-semibold flex items-center gap-1 mt-2 hover:underline"
+                                            href="#">Learn more <span
+                                                class="material-icons-outlined text-sm">arrow_forward</span></a>
+                                    </p>
+                                </div>
+                                <div class="space-y-6">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Business
+                                            value</p>
+                                        <div class="flex items-baseline gap-1">
+                                            <span class="text-4xl font-display font-bold text-primary">4.8</span>
+                                            <span class="text-gray-400">/5</span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-1">G2 recognized Skyvia as an ETL tools
+                                            Leader of Spring 2025</p>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-baseline gap-1">
+                                            <span class="text-4xl font-display font-bold text-primary">4.9</span>
+                                            <span class="text-gray-400">/5</span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-1">96% customers are willing to recommend
+                                            Skyvia</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="bg-black text-white py-10 border-y border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div
+                class="flex flex-wrap justify-center md:justify-between items-center gap-8 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
+                <span class="font-display font-bold text-xl">pipedrive</span>
+                <span class="font-display font-bold text-xl flex items-center gap-2"><span
+                        class="material-icons-outlined">savings</span> INTUIT</span>
+                <span class="font-display font-bold text-xl flex items-center gap-2"><span
+                        class="material-icons-outlined">ac_unit</span> snowflake</span>
+                <span class="font-display font-bold text-xl">WOOCOMMERCE</span>
+                <span class="font-display font-bold text-xl">mixpanel</span>
+                <span class="font-display font-bold text-xl flex items-center gap-2"><span
+                        class="material-icons-outlined">layers</span> Airtable</span>
+            </div>
+        </div>
+    </section>
+    <section class="bg-primary py-24 text-center">
+        <div class="max-w-4xl mx-auto px-4">
+            <span
+                class="inline-block px-3 py-1 border border-white/30 rounded-full text-xs font-medium text-white/90 mb-6 uppercase tracking-wider">Connect</span>
+            <h2 class="text-3xl md:text-5xl font-display font-bold text-white mb-6 leading-tight">
+                Connect, Stream, and Activate All in One Place.
+            </h2>
+            <p class="text-white/80 max-w-2xl mx-auto text-lg">
+                Bring all your data together, sync it in real time, and power your tools with clean, ready-to-use
+                insights without switching platforms or writing code.
+            </p>
+        </div>
+    </section>
+    <section class="py-24 bg-background-light dark:bg-background-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <span class="text-primary font-semibold text-sm tracking-widest uppercase mb-2 block">Unify</span>
+                    <h2 class="text-4xl font-display font-bold mb-6">Seamless Multi-Source Integration</h2>
+                    <p class="text-text-muted-light dark:text-text-muted-dark mb-10 text-lg">
+                        Connect data from CRMs, ERPs, APIs, databases, spreadsheets, and third-party platforms with zero
+                        manual mapping.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                        <div>
+                            <div
+                                class="w-10 h-10 rounded-lg bg-orange-100 dark:bg-orange-900/30 text-primary flex items-center justify-center mb-4">
+                                <span class="material-icons-outlined">hub</span>
+                            </div>
+                            <h4 class="font-bold text-lg mb-2">Over 150+ ready-to-use connectors</h4>
+                            <p class="text-sm text-text-muted-light dark:text-text-muted-dark leading-relaxed">Instantly
+                                connect to the tools, databases, and platforms your teams already use with zero custom
+                                code needed.</p>
+                        </div>
+                        <div>
+                            <div
+                                class="w-10 h-10 rounded-lg bg-orange-100 dark:bg-orange-900/30 text-primary flex items-center justify-center mb-4">
+                                <span class="material-icons-outlined">sync</span>
+                            </div>
+                            <h4 class="font-bold text-lg mb-2">Real-time syncing</h4>
+                            <p class="text-sm text-text-muted-light dark:text-text-muted-dark leading-relaxed">Keep your
+                                data up to date across all systems automatically, continuously, and without delays.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative flex justify-center">
+                    <img alt="Abstract isometric illustration of connecting servers"
+                        class="w-full max-w-md rounded-2xl shadow-xl mix-blend-multiply dark:mix-blend-normal filter hue-rotate-15"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDepbyekX4YjkGMH4WTA6Z2XLBwB0MbkVS6o3d1hXiZUC7vjyTqKTRu2T4Zj3pixyVCcL1yvqfKs1l7E8Okl1bL4zEXizsfsQzk0QW-7hIUCoxQ9byikRtwaxG-4VJmLPgTmFbNEO_frkp6Xwq76DuG5QycCEyjdBvltkUv2CiW7DCgohPWTeC4YV2l8HHplECJshxPsX2GYT-eTdS_cTLO97EEVsoSK6AfmiSInvhhnB0L3mGVNXw8Rp6NVuUW8aXRob6pJA-lfA" />
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="py-24 bg-surface-light dark:bg-surface-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                <div class="order-2 md:order-1 relative flex justify-center">
+                    <img alt="Abstract isometric illustration of data processing engine"
+                        class="w-full max-w-md rounded-2xl shadow-xl mix-blend-multiply dark:mix-blend-normal"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_Vur97md8OvpdGgC47W1ukOI8V2v6LKQmq76OLtPlDK90anL6xL-42Otr2vWOYzwf7Lv8QuAMtruCQjgNY7_KUizwOtIMRqObK3umBvI2li0N659EpsSpDpHFqrYVtTDRNJBmraCLAvmkjZC3gwST-ehUmD9ka4421pJGP95vRpGYxza6Fa4lK4XIpipiD8pUbGhtcXcRTFtWRN6_jCBZ1zDrwnRh_xo4AeBTNo0Uwyc1vax0lx2SWTWhsyMI3p7UELQ2QG2LZA" />
+                </div>
+                <div class="order-1 md:order-2">
+                    <span class="text-primary font-semibold text-sm tracking-widest uppercase mb-2 block">Empower</span>
+                    <h2 class="text-4xl font-display font-bold mb-6">Smart Data Transformation Engine</h2>
+                    <p class="text-text-muted-light dark:text-text-muted-dark mb-10 text-lg">
+                        Clean, structure, and enrich your data on the fly with AI-assisted logic and pre-built
+                        transformation workflows.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                        <div>
+                            <div
+                                class="w-10 h-10 rounded-lg bg-orange-100 dark:bg-orange-900/30 text-primary flex items-center justify-center mb-4">
+                                <span class="material-icons-outlined">drag_indicator</span>
+                            </div>
+                            <h4 class="font-bold text-lg mb-2">Drag-and-drop workflows</h4>
+                            <p class="text-sm text-text-muted-light dark:text-text-muted-dark leading-relaxed">Build
+                                complex data flows without writing a single line of code just drag, drop, and deploy in
+                                minutes.</p>
+                        </div>
+                        <div>
+                            <div
+                                class="w-10 h-10 rounded-lg bg-orange-100 dark:bg-orange-900/30 text-primary flex items-center justify-center mb-4">
+                                <span class="material-icons-outlined">psychology</span>
+                            </div>
+                            <h4 class="font-bold text-lg mb-2">AI-based anomaly detection</h4>
+                            <p class="text-sm text-text-muted-light dark:text-text-muted-dark leading-relaxed">
+                                Automatically spot unusual patterns, errors, or outliers in your data before they become
+                                problems.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="py-24 bg-black text-white relative overflow-hidden">
+        <div
+            class="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-gray-900 to-transparent pointer-events-none">
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+                <div>
+                    <span class="text-primary font-semibold text-xs tracking-widest uppercase mb-4 block">How it
+                        works</span>
+                    <h2 class="text-4xl lg:text-5xl font-display font-bold mb-6">Your Data, Working for You Fast.</h2>
+                </div>
+                <div class="flex flex-col justify-end">
+                    <p class="text-gray-400 mb-6">Integr. simplifies the entire data journey from messy, scattered
+                        sources to clean, actionable insights without the complexity. Just connect, transform, and
+                        activate.</p>
+                    <a class="text-white hover:text-primary transition-colors flex items-center gap-2 font-medium"
+                        href="#">Learn more <span class="material-icons-outlined text-sm">arrow_forward</span></a>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-gray-800 pt-12">
+                <div class="group">
+                    <div
+                        class="w-12 h-12 rounded-full border border-gray-700 flex items-center justify-center mb-6 group-hover:border-primary group-hover:bg-primary/10 transition-colors">
+                        <span class="material-icons-outlined text-primary">input</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Connect Your Sources</h3>
+                    <p class="text-gray-400 text-sm mb-4 leading-relaxed">Integr simplifies data management by
+                        connecting, unifying, and optimizing your data seamlessly.</p>
+                    <a class="text-xs font-semibold text-gray-500 hover:text-white flex items-center gap-1 uppercase tracking-wide"
+                        href="#">Learn more <span class="material-icons-outlined text-[10px]">arrow_forward</span></a>
+                </div>
+                <div class="group">
+                    <div
+                        class="w-12 h-12 rounded-full border border-gray-700 flex items-center justify-center mb-6 group-hover:border-primary group-hover:bg-primary/10 transition-colors">
+                        <span class="material-icons-outlined text-primary">auto_fix_high</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Transform with Ease</h3>
+                    <p class="text-gray-400 text-sm mb-4 leading-relaxed">Use our intuitive visual interface to clean,
+                        join, and model your data no code required.</p>
+                    <a class="text-xs font-semibold text-gray-500 hover:text-white flex items-center gap-1 uppercase tracking-wide"
+                        href="#">Learn more <span class="material-icons-outlined text-[10px]">arrow_forward</span></a>
+                </div>
+                <div class="group">
+                    <div
+                        class="w-12 h-12 rounded-full border border-gray-700 flex items-center justify-center mb-6 group-hover:border-primary group-hover:bg-primary/10 transition-colors">
+                        <span class="material-icons-outlined text-primary">rocket_launch</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Activate Anywhere</h3>
+                    <p class="text-gray-400 text-sm mb-4 leading-relaxed">Push your ready-to-use data to the tools your
+                        teams rely on from dashboards to automation tools.</p>
+                    <a class="text-xs font-semibold text-gray-500 hover:text-white flex items-center gap-1 uppercase tracking-wide"
+                        href="#">Learn more <span class="material-icons-outlined text-[10px]">arrow_forward</span></a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="py-24 bg-background-light dark:bg-background-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span
+                    class="inline-block px-3 py-1 bg-orange-50 dark:bg-orange-900/20 text-primary rounded-full text-xs font-bold uppercase tracking-wider mb-4">Security
+                    &amp; Compliance</span>
+                <h2 class="text-4xl md:text-5xl font-display font-bold mb-6">Enterprise Grade Security Comes Standard.
+                </h2>
+                <p class="text-text-muted-light dark:text-text-muted-dark">Your data is your asset. We treat it with the
+                    highest standards of security and privacy.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="pl-4 border-l-4 border-primary/20 hover:border-primary transition-colors duration-300">
+                    <span class="text-primary font-bold text-sm mb-2 block">01</span>
+                    <h3 class="text-3xl font-display font-bold mb-4">End-to-end encryption (at rest and in transit)</h3>
+                    <p class="text-text-muted-light dark:text-text-muted-dark mb-8 leading-relaxed">
+                        Your data is encrypted both during transfer and while stored, keeping it safe at every step of
+                        the pipeline. We utilize AES-256 encryption standards.
+                    </p>
+                    <a class="bg-black dark:bg-white text-white dark:text-black px-6 py-3 rounded-lg text-sm font-medium hover:opacity-80 transition-opacity"
+                        href="#">View details</a>
+                </div>
+                <div class="relative flex justify-center">
+                    <div
+                        class="w-full max-w-lg aspect-[4/3] bg-surface-light dark:bg-surface-dark rounded-2xl flex items-center justify-center relative overflow-hidden">
+                        <div
+                            class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/graphy.png')] opacity-10">
+                        </div>
+                        <img alt="Abstract 3D isometric lock illustration"
+                            class="w-3/4 relative z-10 rounded-xl shadow-2xl"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBX9wph-2laID9-JtvNdExHojuaS4o3Ky0gkb12CoD_48sU2e2huSJi1_NPlcczqJ1trs0Tvpg53xHmImlAGlqCNrzOhdTQPBs6TNpiNior-0q7IS-0pNTOO-rC-6xt8cJ7t9bgvyzWaRToxcGtHbRr4VNQuM12YXcn5kT5yUlds6pjrNyLC_hcDz92onOBRNpkO2lbfu0lZ_pvE0tVbU3cTGjKC3E9AZ2S2KWWcz1sMw1Pt3m7Mo-ptYJg6Pv3RtKq_bYDkGE-aA" />
+                        <div
+                            class="absolute top-10 right-10 w-12 h-12 bg-white dark:bg-gray-800 shadow-lg rounded-lg transform rotate-12 border border-gray-100 dark:border-gray-700">
+                        </div>
+                        <div
+                            class="absolute bottom-10 left-10 w-8 h-8 bg-primary shadow-lg rounded transform -rotate-12">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="py-20 bg-surface-light dark:bg-surface-dark text-center">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="flex justify-center gap-1 mb-6 text-primary text-lg">
+                <span class="material-icons-outlined">star</span>
+                <span class="material-icons-outlined">star</span>
+                <span class="material-icons-outlined">star</span>
+                <span class="material-icons-outlined">star</span>
+                <span class="material-icons-outlined">star</span>
+            </div>
+            <h3 class="text-2xl md:text-3xl font-medium mb-12 leading-normal">
+                "Integr. has completely changed the way we work with data. What used to take weeks now takes minutes."
+            </h3>
+            <div class="flex items-center justify-center gap-4">
+                <img alt="Maya Lin" class="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuPxjXhyT536aTqrmruz4hOhvIXwRw8hMhTVQVF8406kC15oQI52L6jteLqGLf_QTRGji-IdriGhcblkYVvbz-ncVkjNAF3ol0serAsuzDAxP98G3HcE_1uMfdUZFFXmeoIEROnSRJBDycGb3-gXkxpb2z-wxbKql--iybA6xG91zcilCPN5MQaDiYv7827EfFTHwbB7OxvWzThDDk0YdjV1tQJ3H8qLel-khI8aEj15wu_xHvYCFZ0sfFmjR1MsLF5BoLx5TQ3g" />
+                <div class="text-left">
+                    <p class="font-bold text-sm">Maya Lin</p>
+                    <p class="text-xs text-text-muted-light dark:text-text-muted-dark">Head of Data, NovaCorp</p>
+                </div>
+                <div class="h-8 w-px bg-gray-300 mx-2"></div>
+                <div class="flex items-center font-bold text-gray-700 dark:text-gray-300">
+                    <span class="material-icons-outlined mr-1">code</span> Webflow
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="relative bg-primary overflow-hidden">
+        <div
+            class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/5 rounded-full blur-3xl">
+        </div>
+        <div class="max-w-4xl mx-auto px-4 py-24 text-center relative z-10">
+            <div class="mb-10 flex justify-center">
+                <div
+                    class="w-32 h-32 bg-white rounded-xl shadow-2xl flex items-center justify-center transform rotate-45 border-4 border-black/5">
+                    <div class="transform -rotate-45 text-primary">
+                        <span class="material-icons-outlined text-6xl">rocket</span>
+                    </div>
+                </div>
+            </div>
+            <h2 class="text-4xl md:text-5xl font-display font-bold text-white mb-6">
+                Start Building with Better Data Today
+            </h2>
+            <p class="text-white/80 text-sm mb-10 max-w-lg mx-auto">
+                No more silos. No more delays. No more doubt. Just clean, reliable, actionable data exactly where you
+                need it.
+            </p>
+            <form class="flex flex-col sm:flex-row gap-2 max-w-md mx-auto bg-white p-1.5 rounded-full shadow-2xl">
+                <input
+                    class="flex-1 border-0 bg-transparent px-6 py-3 text-sm focus:ring-0 placeholder:text-gray-400 text-gray-900 rounded-full"
+                    placeholder="Enter your email" required="" type="email" />
+                <button
+                    class="bg-black text-white px-8 py-3 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors"
+                    type="submit">
+                    Subscribe
+                </button>
+            </form>
+        </div>
+    </section>
+    <footer class="bg-black text-white pt-20 pb-10 border-t border-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div
+                class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-20 border-b border-gray-800 pb-10">
+                <div class="max-w-xs">
+                    <p class="text-xs text-gray-500">One platform to clean, connect, and activate your data no hassle.
+                    </p>
+                </div>
+                <div class="flex gap-6 text-xs text-gray-400">
+                    <a class="hover:text-white transition-colors" href="#">LinkedIn</a>
+                    <a class="hover:text-white transition-colors" href="#">X (Twitter)</a>
+                    <a class="hover:text-white transition-colors" href="#">Github</a>
+                    <a class="hover:text-white transition-colors" href="#">Facebook</a>
+                    <a class="hover:text-white transition-colors" href="#">Instagram</a>
+                </div>
+            </div>
+            <div class="text-center mb-20">
+                <a class="text-3xl md:text-5xl font-display font-light tracking-wide hover:text-primary transition-colors"
+                    href="mailto:hello@integr.com">HELLO@INTEGR.COM</a>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-xs text-gray-500 mb-20">
+                <div>
+                    <p>+34 6630219651</p>
+                    <p>339 1st Ave, New York, NY</p>
+                    <p>10003, USA</p>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <a class="hover:text-white" href="#">Platform</a>
+                    <a class="hover:text-white" href="#">Solutions</a>
+                    <a class="hover:text-white" href="#">Pricing</a>
+                    <a class="hover:text-white" href="#">Resources</a>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <a class="hover:text-white" href="#">Support Center</a>
+                    <a class="hover:text-white" href="#">FAQs</a>
+                </div>
+                <div></div>
+            </div>
+            <div
+                class="flex flex-col md:flex-row justify-between items-center text-[10px] text-gray-600 border-t border-gray-900 pt-8">
+                <p>© 2025 Integr. Inc. All rights reserved.</p>
+                <div class="flex gap-4 mt-4 md:mt-0">
+                    <a class="hover:text-gray-400" href="#">Privacy Policy</a>
+                    <a class="hover:text-gray-400" href="#">Terms of Service</a>
+                    <a class="hover:text-gray-400" href="#">Cookies Setting</a>
+                </div>
+            </div>
+            <div class="mt-20 overflow-hidden">
+                <h1
+                    class="text-[15vw] leading-none font-display font-bold text-primary opacity-90 text-center tracking-tighter -mb-10 select-none">
+                    ntegr.Integ
+                </h1>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

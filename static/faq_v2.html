@@ -65,126 +65,119 @@
                 <div class="mx-auto max-w-screen-lg p-4 md:p-6 2xl:p-10">
                     <!-- Header -->
                     <div class="mb-12 text-center">
-                        <span
-                            class="text-[10px] font-bold uppercase tracking-widest text-brand-500 mb-4 block">Knowledge
-                            Base</span>
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-brand-500 mb-4 block">Help
+                            Center</span>
                         <h1
                             class="text-4xl font-extrabold tracking-tight font-display text-gray-900 dark:text-white md:text-5xl">
-                            Frequently
-                            Asked Questions</h1>
+                            Common Questions</h1>
                         <p class="mt-4 text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">Everything you need
-                            to know about
-                            Sampelit's intelligent experimentation platform.</p>
+                            to know about the product and billing.</p>
                     </div>
 
                     <!-- FAQ Accordion -->
                     <div x-data="{ openItem: null }" class="space-y-4 max-w-3xl mx-auto">
-                        <!-- Getting Started -->
+                        <!-- item 1 -->
                         <div
                             class="rounded-[32px] border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow dark:border-gray-700 dark:bg-gray-800">
                             <button @click="openItem = openItem === 1 ? null : 1"
                                 class="flex w-full items-center justify-between p-6 text-left">
-                                <span class="text-lg font-bold text-gray-900 dark:text-white">What is
-                                    Sampelit?</span>
+                                <span class="text-lg font-bold text-gray-900 dark:text-white">What is Sampelit?</span>
                                 <span class="material-symbols-outlined text-gray-400 transition-transform duration-300"
                                     :class="openItem === 1 ? 'rotate-180' : ''">expand_more</span>
                             </button>
                             <div x-show="openItem === 1" x-collapse
                                 class="border-t border-gray-100 px-6 pb-6 dark:border-gray-700">
-                                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">Sampelit is an intelligent
-                                    A/B testing
-                                    platform that uses Multi-Armed Bandit algorithms to automatically optimize your
-                                    experiments. Unlike traditional A/B testing, our adaptive algorithms shift traffic
-                                    to winning variants in real-time, maximizing conversions while gathering
-                                    statistically significant data.</p>
+                                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">It's a system to run
+                                    experiments on your landing page copy. It shows different versions of your headlines
+                                    and buttons to different users and measures which one produces more sales/leads.</p>
                             </div>
                         </div>
 
+                        <!-- item 2 -->
                         <div
                             class="rounded-[32px] border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow dark:border-gray-700 dark:bg-gray-800">
-
                             <button @click="openItem = openItem === 2 ? null : 2"
-                                class="flex w-full items-center justify-between p-5 text-left">
-                                <span class="text-lg font-semibold text-gray-900 dark:text-white">How do I install the
-                                    tracking snippet?</span>
-                                <span class="material-symbols-outlined text-gray-500 transition-transform"
+                                class="flex w-full items-center justify-between p-6 text-left">
+                                <span class="text-lg font-bold text-gray-900 dark:text-white">How is this different from
+                                    Google Optimize?</span>
+                                <span class="material-symbols-outlined text-gray-400 transition-transform duration-300"
                                     :class="openItem === 2 ? 'rotate-180' : ''">expand_more</span>
                             </button>
                             <div x-show="openItem === 2" x-collapse
-                                class="border-t border-gray-100 px-5 pb-5 dark:border-gray-700">
-                                <p class="text-gray-600 dark:text-gray-300 mb-3">Simply add our lightweight JavaScript
-                                    snippet to your website's &lt;head&gt; tag. The snippet is less than 3KB and loads
-                                    asynchronously.</p>
-                                <pre
-                                    class="bg-gray-900 text-gray-100 p-4 rounded-lg text-sm overflow-x-auto"><code>&lt;script src="https://cdn.sampelit.com/s.js" data-id="YOUR_ID" async&gt;&lt;/script&gt;</code></pre>
+                                class="border-t border-gray-100 px-6 pb-6 dark:border-gray-700">
+                                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">Simplify. Google Optimize
+                                    was powerful but slow and complex. Sampelit is built specifically for copy testing,
+                                    loads faster, and uses Bayesian statistics to give you results without needing a
+                                    Ph.D.</p>
                             </div>
                         </div>
 
+                        <!-- item 3 -->
                         <div
                             class="rounded-[32px] border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow dark:border-gray-700 dark:bg-gray-800">
                             <button @click="openItem = openItem === 3 ? null : 3"
-                                class="flex w-full items-center justify-between p-5 text-left">
-                                <span class="text-lg font-semibold text-gray-900 dark:text-white">What is a Multi-Armed
-                                    Bandit algorithm?</span>
-                                <span class="material-symbols-outlined text-gray-500 transition-transform"
+                                class="flex w-full items-center justify-between p-6 text-left">
+                                <span class="text-lg font-bold text-gray-900 dark:text-white">Do I need to be a
+                                    developer to use it?</span>
+                                <span class="material-symbols-outlined text-gray-400 transition-transform duration-300"
                                     :class="openItem === 3 ? 'rotate-180' : ''">expand_more</span>
                             </button>
                             <div x-show="openItem === 3" x-collapse
-                                class="border-t border-gray-100 px-5 pb-5 dark:border-gray-700">
-                                <p class="text-gray-600 dark:text-gray-300">Multi-Armed Bandit (MAB) balances
-                                    exploration with exploitation. Unlike A/B tests that show variants equally, MAB
-                                    dynamically allocates more traffic to winners, reducing opportunity cost while
-                                    achieving statistical significance.</p>
+                                class="border-t border-gray-100 px-6 pb-6 dark:border-gray-700">
+                                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">Only once. You (or a
+                                    developer) add a one-line script to your site. After that, you can launch and manage
+                                    experiments directly from your dashboard without touching code.</p>
                             </div>
                         </div>
 
+                        <!-- item 4 -->
                         <div
                             class="rounded-[32px] border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow dark:border-gray-700 dark:bg-gray-800">
                             <button @click="openItem = openItem === 4 ? null : 4"
-                                class="flex w-full items-center justify-between p-5 text-left">
-                                <span class="text-lg font-semibold text-gray-900 dark:text-white">How long should I run
-                                    an experiment?</span>
-                                <span class="material-symbols-outlined text-gray-500 transition-transform"
+                                class="flex w-full items-center justify-between p-6 text-left">
+                                <span class="text-lg font-bold text-gray-900 dark:text-white">How long do tests take to
+                                    yield results?</span>
+                                <span class="material-symbols-outlined text-gray-400 transition-transform duration-300"
                                     :class="openItem === 4 ? 'rotate-180' : ''">expand_more</span>
                             </button>
                             <div x-show="openItem === 4" x-collapse
-                                class="border-t border-gray-100 px-5 pb-5 dark:border-gray-700">
-                                <p class="text-gray-600 dark:text-gray-300">Run experiments until you reach 95%
-                                    statistical significance (at least 100 conversions per variant). Our dashboard shows
-                                    real-time confidence levels and notifies you when results are conclusive.</p>
+                                class="border-t border-gray-100 px-6 pb-6 dark:border-gray-700">
+                                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">It depends on your traffic.
+                                    Most sites see significant results within 7-14 days. If a variant is clearly losing,
+                                    our system can automatically stop sending it traffic early.</p>
                             </div>
                         </div>
 
+                        <!-- item 5 -->
                         <div
                             class="rounded-[32px] border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow dark:border-gray-700 dark:bg-gray-800">
                             <button @click="openItem = openItem === 5 ? null : 5"
-                                class="flex w-full items-center justify-between p-5 text-left">
-                                <span class="text-lg font-semibold text-gray-900 dark:text-white">Is Sampelit GDPR
-                                    compliant?</span>
-                                <span class="material-symbols-outlined text-gray-500 transition-transform"
+                                class="flex w-full items-center justify-between p-6 text-left">
+                                <span class="text-lg font-bold text-gray-900 dark:text-white">Is my data safe?</span>
+                                <span class="material-symbols-outlined text-gray-400 transition-transform duration-300"
                                     :class="openItem === 5 ? 'rotate-180' : ''">expand_more</span>
                             </button>
                             <div x-show="openItem === 5" x-collapse
-                                class="border-t border-gray-100 px-5 pb-5 dark:border-gray-700">
-                                <p class="text-gray-600 dark:text-gray-300">Yes. We don't use cookies by default, all
-                                    data is processed in EU data centers, and we provide tools for consent-based
-                                    tracking and DSAR handling.</p>
+                                class="border-t border-gray-100 px-6 pb-6 dark:border-gray-700">
+                                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">Yes. We don't collect
+                                    personal data from your visitors (PII). We only track events like "page view" and
+                                    "click" to measure performance. We are GDPR compliant by design.</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Contact Section -->
                     <div
-                        class="mt-16 rounded-[32px] bg-gradient-to-br from-gray-900 to-gray-800 p-10 text-center max-w-3xl mx-auto shadow-xl">
+                        class="mt-16 rounded-[32px] bg-gradient-to-br from-indigo-600 to-blue-700 p-10 text-center max-w-3xl mx-auto shadow-xl">
                         <span
-                            class="text-[10px] font-bold uppercase tracking-widest text-brand-400 mb-3 block">Support</span>
+                            class="text-[10px] font-bold uppercase tracking-widest text-indigo-200 mb-3 block">Support</span>
                         <h3 class="text-2xl font-extrabold tracking-tight font-display text-white mb-3">Still have
                             questions?</h3>
-                        <p class="text-gray-400 mb-6">Our team is ready to help you get started.</p>
-                        <button
-                            class="inline-flex items-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-sm font-bold text-gray-900 hover:bg-gray-100 transition-all shadow-lg">
+                        <p class="text-indigo-100 mb-6">Our team is ready to help you get started.</p>
+                        <a href="contact_v2.html"
+                            class="inline-flex items-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-sm font-bold text-indigo-700 hover:bg-indigo-50 transition-all shadow-lg">
                             <span class="material-symbols-outlined text-lg">mail</span> Contact Support
-                        </button>
+                        </a>
                     </div>
                 </div>
             </main>

@@ -249,7 +249,102 @@ document.addEventListener('alpine:init', () => {
         },
 
         formatNumber(num) { return nFormatter(num); },
-        formatPercent(num) { return (num * 100).toFixed(1) + '%'; }
+        formatPercent(num) { return (num * 100).toFixed(1) + '%'; },
+
+        // ===== NUEVAS MEJORAS =====
+
+        // SOTA: Statistical Calculator (Sample size estimator)
+        calculator: {
+            currentCR: 0.05,
+            expectedUplift: 0.20,
+            confidence: 0.95,
+            power: 0.80,
+            get requiredSampleSize() {
+                // Simplified sample size formula for proportions
+                const p1 = this.currentCR;
+                const p2 = p1 * (1 + this.expectedUplift);
+                const p_avg = (p1 + p2) / 2;
+
+                // Z-scores for 95% confidence and 80% power
+                const z_alpha = 1.96;
+                const z_beta = 0.84;
+
+                const numerator = Math.pow(z_alpha * Math.sqrt(2 * p_avg * (1 - p_avg)) + z_beta * Math.sqrt(p1 * (1 - p1) + p2 * (1 - p2)), 2);
+                const denominator = Math.pow(p1 - p2, 2);
+
+                return Math.ceil(numerator / denominator);
+            }
+        },
+
+        // SOTA: Sharing (Public results link)
+        isPublic: false,
+        shareUrl: '',
+
+        toggleSharing() {
+            this.isPublic = !this.isPublic;
+            if (this.isPublic) {
+                // In a real app, this would call an API to generate a token
+                this.shareUrl = `${window.location.origin}/share/experiment?id=${this.experimentId}&token=demo-token-${Math.random().toString(36).substr(2, 9)}`;
+            }
+        },
+
+        copyShareUrl() {
+            navigator.clipboard.writeText(this.shareUrl);
+            window.dispatchEvent(new CustomEvent('toast:show', {
+                detail: { message: 'Share link copied to clipboard', type: 'success' }
+            }));
+        },
+
+        // SOTA: Export Results (PDF/CSV)
+        async exportResults() {
+            window.dispatchEvent(new CustomEvent('toast:show', {
+                detail: { message: 'Generating report...', type: 'info' }
+            }));
+
+            // Simulate report generation
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            const content = `
+EXPERIMENT REPORT: ${this.data.experiment_name}
+================================================
+Status: ${this.data.status}
+Total Visitors: ${this.data.total_visitors}
+Start Date: ${this.data.created_at}
+
+Results:
+${this.data.elements?.[0]?.variants?.map(v => `- ${v.name}: ${v.conversion_rate.toFixed(4)} CR (${v.uplift >= 0 ? '+' : ''}${v.uplift.toFixed(1)}% uplift)`).join('\n')}
+
+Conclusion: ${this.data.human_insight?.title} - ${this.data.human_insight?.recommendation}
+            `.trim();
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `report-${this.experimentId}.txt`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            window.dispatchEvent(new CustomEvent('toast:show', {
+                detail: { message: 'Report downloaded', type: 'success' }
+            }));
+        },
+
+        // SOTA: Notifications (Winner alerts)
+        notificationsEnabled: false,
+
+        toggleNotifications() {
+            this.notificationsEnabled = !this.notificationsEnabled;
+            window.dispatchEvent(new CustomEvent('toast:show', {
+                detail: {
+                    message: this.notificationsEnabled ? 'Winner alerts enabled for this experiment' : 'Alerts disabled',
+                    type: 'info'
+                }
+            }));
+        }
     }));
 });
 

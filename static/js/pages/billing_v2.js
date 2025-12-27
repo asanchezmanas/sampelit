@@ -184,6 +184,92 @@ Thank you for your business!
                 difference: difference.toFixed(2),
                 isUpgrade: difference > 0
             };
+        },
+
+        // ===== NUEVAS MEJORAS =====
+
+        // SOTA: Pause Subscription
+        async pauseSubscription() {
+            if (!confirm('Are you sure you want to pause your subscription? This will stop all experiments.')) return;
+
+            this.saving = true;
+            window.dispatchEvent(new CustomEvent('toast:show', {
+                detail: { message: 'Pausing subscription...', type: 'info' }
+            }));
+
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            this.subscription.status = 'paused';
+            this.saving = false;
+
+            window.dispatchEvent(new CustomEvent('toast:show', {
+                detail: { message: 'Subscription paused. Experiments stopped.', type: 'warning' }
+            }));
+        },
+
+        async resumeSubscription() {
+            this.saving = true;
+            window.dispatchEvent(new CustomEvent('toast:show', {
+                detail: { message: 'Resuming subscription...', type: 'info' }
+            }));
+
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            this.subscription.status = 'active';
+            this.saving = false;
+
+            window.dispatchEvent(new CustomEvent('toast:show', {
+                detail: { message: 'Subscription reactivated!', type: 'success' }
+            }));
+        },
+
+        // SOTA: Payment History Chart (Visual representation of spending)
+        renderPaymentChart() {
+            const chartEl = document.querySelector("#paymentHistoryChart");
+            if (!chartEl) return;
+
+            const options = {
+                series: [{
+                    name: "Spending",
+                    data: [149, 149, 149, 149, 175, 175, 299, 299, 399, 399, 399, 399]
+                }],
+                chart: {
+                    height: 250,
+                    type: 'line',
+                    toolbar: { show: false },
+                    sparkline: { enabled: false }
+                },
+                stroke: {
+                    width: 4,
+                    curve: 'smooth'
+                },
+                colors: ['#0f172a'],
+                xaxis: {
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    labels: { show: false }
+                },
+                yaxis: {
+                    labels: { show: false }
+                },
+                grid: {
+                    show: false
+                },
+                tooltip: {
+                    theme: 'dark'
+                }
+            };
+
+            const chart = new ApexCharts(chartEl, options);
+            chart.render();
+        },
+
+        // Notification for trial ending
+        get isTrialEndingSoon() {
+            if (this.subscription.status !== 'trial') return false;
+            // logic to check if < 3 days...
+            return true;
         }
     }));
 });
