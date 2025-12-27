@@ -47,13 +47,16 @@
     </style>
 
     <!-- Essential Scripts -->
+    <script src="js/core/api.js"></script>
+    <script src="js/services/integration-service.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="js/include.js"></script>
+    <script src="js/pages/integrations_v2.js"></script>
 </head>
 
 <body class="font-sans antialiased bg-[#f8f9fc] text-gray-700 dark:bg-gray-900 dark:text-gray-300"
-    x-data="{ sidebarToggle: true, darkMode: localStorage.getItem('darkMode') === 'true' }"
-    x-init="$watch('darkMode', val => localStorage.setItem('darkMode', val))" :class="{ 'dark': darkMode }">
+    x-data="{ sidebarToggle: true, darkMode: localStorage.getItem('darkMode') === 'true', ...integrationsController() }"
+    x-init="$watch('darkMode', val => localStorage.setItem('darkMode', val)); init()" :class="{ 'dark': darkMode }">
     <!-- Page Wrapper -->
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
@@ -107,241 +110,324 @@
                     <!-- Integrations Grid -->
                     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
 
-                        <!-- Google Analytics -->
-                        <article
-                            class="overflow-hidden rounded-[32px] border border-gray-200 bg-white dark:border-white/5 dark:bg-white/[0.03]">
-                            <div class="relative p-8">
+                        <!-- SOTA: Skeleton Loader -->
+                        <template x-if="loading">
+                            <template x-for="i in 6">
                                 <div
-                                    class="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-50 dark:bg-orange-500/10">
-                                    <span class="material-symbols-outlined text-2xl text-orange-500">analytics</span>
+                                    class="animate-pulse rounded-[32px] border border-gray-200 bg-white p-8 dark:border-white/5 dark:bg-white/[0.03]">
+                                    <div class="h-14 w-14 rounded-2xl bg-gray-100 dark:bg-white/5 mb-6"></div>
+                                    <div class="h-5 w-1/2 bg-gray-100 dark:bg-white/5 rounded mb-3"></div>
+                                    <div class="h-4 w-full bg-gray-50 dark:bg-white/5 rounded"></div>
+                                    <div class="h-4 w-2/3 bg-gray-50 dark:bg-white/5 rounded mt-2"></div>
                                 </div>
-                                <h3 class="mb-2 text-lg font-extrabold text-gray-900 dark:text-white font-display">
-                                    Google Analytics</h3>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Connect Google Analytics to track
-                                    experiment performance and conversions.</p>
-                                <span
-                                    class="absolute top-8 right-8 rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400">Connected</span>
-                            </div>
-                            <div
-                                class="flex items-center justify-between border-t border-gray-100 p-6 dark:border-white/5">
-                                <div class="flex gap-2">
-                                    <button
-                                        class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 text-gray-500 hover:bg-gray-50 dark:border-white/5 dark:text-gray-400 dark:hover:bg-white/5 transition-colors">
-                                        <span class="material-symbols-outlined">settings</span>
+                            </template>
+                        </template>
+
+                        <!-- SOTA: Dynamic Integration Cards -->
+                        <template x-for="integration in filteredIntegrations" :key="integration.id">
+                            <article
+                                class="overflow-hidden rounded-[32px] border border-gray-200 bg-white dark:border-white/5 dark:bg-white/[0.03] transition-all hover:shadow-lg hover:border-gray-300 dark:hover:border-white/10">
+                                <div class="relative p-8">
+                                    <div class="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl"
+                                        :class="integration.connected ? 'bg-emerald-50 dark:bg-emerald-500/10' : 'bg-gray-100 dark:bg-white/5'">
+                                        <span class="material-symbols-outlined text-2xl"
+                                            :class="integration.connected ? 'text-emerald-500' : 'text-gray-400'"
+                                            x-text="integration.icon"></span>
+                                    </div>
+                                    <h3 class="mb-2 text-lg font-extrabold text-gray-900 dark:text-white font-display"
+                                        x-text="integration.name"></h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400"
+                                        x-text="integration.description"></p>
+                                    <span x-show="integration.connected"
+                                        class="absolute top-8 right-8 rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400">Connected</span>
+                                </div>
+                                <div
+                                    class="flex items-center justify-between border-t border-gray-100 p-6 dark:border-white/5">
+                                    <div class="flex gap-2">
+                                        <button
+                                            class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 text-gray-500 hover:bg-gray-50 dark:border-white/5 dark:text-gray-400 dark:hover:bg-white/5 transition-colors">
+                                            <span class="material-symbols-outlined">settings</span>
+                                        </button>
+                                        <button
+                                            class="inline-flex h-11 items-center justify-center rounded-xl border border-gray-200 px-4 text-sm font-bold text-gray-700 hover:bg-gray-50 dark:border-white/5 dark:text-gray-400 dark:hover:bg-white/5 transition-colors">Details</button>
+                                    </div>
+                                    <button @click="toggleConnection(integration)"
+                                        :disabled="connectingId === integration.id"
+                                        class="relative h-8 w-14 rounded-full transition-colors cursor-pointer"
+                                        :class="integration.connected ? 'bg-emerald-500' : 'bg-gray-200 dark:bg-white/10'">
+                                        <span x-show="connectingId === integration.id"
+                                            class="absolute inset-0 flex items-center justify-center">
+                                            <span
+                                                class="material-symbols-outlined text-white text-sm animate-spin">progress_activity</span>
+                                        </span>
+                                        <div x-show="connectingId !== integration.id"
+                                            :class="integration.connected ? 'translate-x-6' : 'translate-x-1'"
+                                            class="absolute top-1 h-6 w-6 rounded-full bg-white duration-200 ease-linear shadow-sm">
+                                        </div>
                                     </button>
-                                    <button
-                                        class="inline-flex h-11 items-center justify-center rounded-xl border border-gray-200 px-4 text-sm font-bold text-gray-700 hover:bg-gray-50 dark:border-white/5 dark:text-gray-400 dark:hover:bg-white/5 transition-colors">Details</button>
                                 </div>
-                                <div x-data="{ enabled: true }">
-                                    <label class="cursor-pointer">
-                                        <div class="relative">
-                                            <input type="checkbox" class="sr-only" x-model="enabled" />
-                                            <div class="block h-6 w-11 rounded-full transition-colors"
-                                                :class="enabled ? 'bg-emerald-500' : 'bg-gray-200 dark:bg-white/10'">
-                                            </div>
-                                            <div :class="enabled ? 'translate-x-full' : 'translate-x-0'"
-                                                class="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-200 ease-linear shadow-sm">
-                                            </div>
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
-                        </article>
+                            </article>
+                        </template>
 
-                        <!-- Shopify -->
-                        <article
-                            class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-                            <div class="relative p-5 pb-9">
+                        <!-- SOTA: Empty State -->
+                        <template x-if="!loading && filteredIntegrations.length === 0">
+                            <div class="col-span-full py-20 text-center">
                                 <div
-                                    class="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 dark:bg-green-500/15">
-                                    <span class="material-symbols-outlined text-2xl text-green-600">shopping_bag</span>
+                                    class="w-20 h-20 mx-auto mb-6 rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center">
+                                    <span
+                                        class="material-symbols-outlined text-4xl text-gray-300 dark:text-gray-700">extension_off</span>
                                 </div>
-                                <h3 class="mb-3 text-lg font-semibold text-gray-800 dark:text-white/90">Shopify</h3>
-                                <p class="max-w-xs text-sm text-gray-500 dark:text-gray-400">Integrate with Shopify to
-                                    run A/B tests on your e-commerce store.</p>
-                                <span
-                                    class="absolute top-5 right-5 rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-600 dark:bg-green-500/15 dark:text-green-400">Connected</span>
+                                <h4 class="text-lg font-black text-gray-900 dark:text-white mb-2">No Integrations Found
+                                </h4>
+                                <p class="text-sm text-gray-400">Try a different category or check back later for new
+                                    integrations.</p>
                             </div>
-                            <div
-                                class="flex items-center justify-between border-t border-gray-200 p-5 dark:border-gray-800">
-                                <div class="flex gap-3">
-                                    <button
-                                        class="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-gray-300 text-gray-700 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
-                                        <span class="material-symbols-outlined">settings</span>
-                                    </button>
-                                    <button
-                                        class="inline-flex h-11 items-center justify-center rounded-lg border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">Details</button>
-                                </div>
-                                <div x-data="{ enabled: true }">
-                                    <label class="cursor-pointer">
-                                        <div class="relative">
-                                            <input type="checkbox" class="sr-only" x-model="enabled" />
-                                            <div class="block h-6 w-11 rounded-full transition-colors"
-                                                :class="enabled ? 'bg-primary' : 'bg-gray-200 dark:bg-white/10'"></div>
-                                            <div :class="enabled ? 'translate-x-full' : 'translate-x-0'"
-                                                class="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-200 ease-linear shadow-sm">
-                                            </div>
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
-                        </article>
-
-                        <!-- Segment -->
-                        <article
-                            class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-                            <div class="relative p-5 pb-9">
-                                <div
-                                    class="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-500/15">
-                                    <span class="material-symbols-outlined text-2xl text-emerald-600">hub</span>
-                                </div>
-                                <h3 class="mb-3 text-lg font-semibold text-gray-800 dark:text-white/90">Segment</h3>
-                                <p class="max-w-xs text-sm text-gray-500 dark:text-gray-400">Connect Segment to unify
-                                    your customer data and send events.</p>
-                                <span
-                                    class="absolute top-5 right-5 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-400">Available</span>
-                            </div>
-                            <div
-                                class="flex items-center justify-between border-t border-gray-200 p-5 dark:border-gray-800">
-                                <button
-                                    class="inline-flex h-11 items-center justify-center rounded-lg bg-primary px-5 py-3 text-sm font-medium text-white hover:bg-primary/90 transition-colors">Connect</button>
-                                <div x-data="{ enabled: false }">
-                                    <label class="cursor-pointer">
-                                        <div class="relative">
-                                            <input type="checkbox" class="sr-only" x-model="enabled" />
-                                            <div class="block h-6 w-11 rounded-full transition-colors"
-                                                :class="enabled ? 'bg-primary' : 'bg-gray-200 dark:bg-white/10'"></div>
-                                            <div :class="enabled ? 'translate-x-full' : 'translate-x-0'"
-                                                class="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-200 ease-linear shadow-sm">
-                                            </div>
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
-                        </article>
-
-                        <!-- Mixpanel -->
-                        <article
-                            class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-                            <div class="relative p-5 pb-9">
-                                <div
-                                    class="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-purple-50 dark:bg-purple-500/15">
-                                    <span class="material-symbols-outlined text-2xl text-purple-600">donut_large</span>
-                                </div>
-                                <h3 class="mb-3 text-lg font-semibold text-gray-800 dark:text-white/90">Mixpanel</h3>
-                                <p class="max-w-xs text-sm text-gray-500 dark:text-gray-400">Track user behavior and
-                                    analyze experiment results with Mixpanel.</p>
-                                <span
-                                    class="absolute top-5 right-5 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-400">Available</span>
-                            </div>
-                            <div
-                                class="flex items-center justify-between border-t border-gray-200 p-5 dark:border-gray-800">
-                                <button
-                                    class="inline-flex h-11 items-center justify-center rounded-lg bg-primary px-5 py-3 text-sm font-medium text-white hover:bg-primary/90 transition-colors">Connect</button>
-                                <div x-data="{ enabled: false }">
-                                    <label class="cursor-pointer">
-                                        <div class="relative">
-                                            <input type="checkbox" class="sr-only" x-model="enabled" />
-                                            <div class="block h-6 w-11 rounded-full transition-colors"
-                                                :class="enabled ? 'bg-primary' : 'bg-gray-200 dark:bg-white/10'"></div>
-                                            <div :class="enabled ? 'translate-x-full' : 'translate-x-0'"
-                                                class="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-200 ease-linear shadow-sm">
-                                            </div>
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
-                        </article>
-
-                        <!-- WordPress -->
-                        <article
-                            class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-                            <div class="relative p-5 pb-9">
-                                <div
-                                    class="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-500/15">
-                                    <span class="material-symbols-outlined text-2xl text-blue-600">edit_document</span>
-                                </div>
-                                <h3 class="mb-3 text-lg font-semibold text-gray-800 dark:text-white/90">WordPress</h3>
-                                <p class="max-w-xs text-sm text-gray-500 dark:text-gray-400">Install our WordPress
-                                    plugin to run experiments on your blog or website.</p>
-                                <span
-                                    class="absolute top-5 right-5 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-400">Available</span>
-                            </div>
-                            <div
-                                class="flex items-center justify-between border-t border-gray-200 p-5 dark:border-gray-800">
-                                <button
-                                    class="inline-flex h-11 items-center justify-center rounded-lg bg-primary px-5 py-3 text-sm font-medium text-white hover:bg-primary/90 transition-colors">Connect</button>
-                                <div x-data="{ enabled: false }">
-                                    <label class="cursor-pointer">
-                                        <div class="relative">
-                                            <input type="checkbox" class="sr-only" x-model="enabled" />
-                                            <div class="block h-6 w-11 rounded-full transition-colors"
-                                                :class="enabled ? 'bg-primary' : 'bg-gray-200 dark:bg-white/10'"></div>
-                                            <div :class="enabled ? 'translate-x-full' : 'translate-x-0'"
-                                                class="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-200 ease-linear shadow-sm">
-                                            </div>
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
-                        </article>
-
-                        <!-- Webflow -->
-                        <article
-                            class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-                            <div class="relative p-5 pb-9">
-                                <div
-                                    class="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-500/15">
-                                    <span class="material-symbols-outlined text-2xl text-indigo-600">web</span>
-                                </div>
-                                <h3 class="mb-3 text-lg font-semibold text-gray-800 dark:text-white/90">Webflow</h3>
-                                <p class="max-w-xs text-sm text-gray-500 dark:text-gray-400">Integrate with Webflow to
-                                    A/B test your designs without code.</p>
-                                <span
-                                    class="absolute top-5 right-5 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-400">Available</span>
-                            </div>
-                            <div
-                                class="flex items-center justify-between border-t border-gray-200 p-5 dark:border-gray-800">
-                                <button
-                                    class="inline-flex h-11 items-center justify-center rounded-lg bg-primary px-5 py-3 text-sm font-medium text-white hover:bg-primary/90 transition-colors">Connect</button>
-                                <div x-data="{ enabled: false }">
-                                    <label class="cursor-pointer">
-                                        <div class="relative">
-                                            <input type="checkbox" class="sr-only" x-model="enabled" />
-                                            <div class="block h-6 w-11 rounded-full transition-colors"
-                                                :class="enabled ? 'bg-primary' : 'bg-gray-200 dark:bg-white/10'"></div>
-                                            <div :class="enabled ? 'translate-x-full' : 'translate-x-0'"
-                                                class="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-200 ease-linear shadow-sm">
-                                            </div>
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
-                        </article>
-
+                        </template>
                     </div>
 
-                    <!-- API Section -->
-                    <div
-                        class="mt-10 overflow-hidden rounded-[32px] border border-gray-200 bg-white p-8 dark:border-white/5 dark:bg-white/[0.03]">
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-                            <div>
-                                <h3 class="text-sm font-bold uppercase tracking-widest text-gray-400">Custom Integration
-                                </h3>
-                                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">Use our REST API to build
-                                    custom integrations with any platform.</p>
+                    <!-- Connected Count Badge -->
+                    <div class="mt-8 flex items-center gap-3" x-show="!loading">
+                        <span
+                            class="inline-flex items-center gap-2 rounded-full bg-emerald-50 dark:bg-emerald-500/10 px-4 py-2 text-sm font-bold text-emerald-600 dark:text-emerald-400">
+                            <span class="material-symbols-outlined text-lg">check_circle</span>
+                            <span x-text="connectedCount + ' Connected'"></span>
+                        </span>
+                    </div>
+
+                    <!-- Google Analytics -->
+                    <article
+                        class="overflow-hidden rounded-[32px] border border-gray-200 bg-white dark:border-white/5 dark:bg-white/[0.03]">
+                        <div class="relative p-8">
+                            <div
+                                class="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-50 dark:bg-orange-500/10">
+                                <span class="material-symbols-outlined text-2xl text-orange-500">analytics</span>
                             </div>
-                            <a href="#"
-                                class="inline-flex items-center justify-center gap-2 rounded-xl bg-gray-900 px-6 py-3 text-sm font-bold text-white hover:bg-black transition-colors shadow-lg hover:shadow-xl">
-                                <span class="material-symbols-outlined text-lg">code</span>
-                                View API Docs
-                            </a>
+                            <h3 class="mb-2 text-lg font-extrabold text-gray-900 dark:text-white font-display">
+                                Google Analytics</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Connect Google Analytics to track
+                                experiment performance and conversions.</p>
+                            <span
+                                class="absolute top-8 right-8 rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400">Connected</span>
                         </div>
-                    </div>
+                        <div class="flex items-center justify-between border-t border-gray-100 p-6 dark:border-white/5">
+                            <div class="flex gap-2">
+                                <button
+                                    class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 text-gray-500 hover:bg-gray-50 dark:border-white/5 dark:text-gray-400 dark:hover:bg-white/5 transition-colors">
+                                    <span class="material-symbols-outlined">settings</span>
+                                </button>
+                                <button
+                                    class="inline-flex h-11 items-center justify-center rounded-xl border border-gray-200 px-4 text-sm font-bold text-gray-700 hover:bg-gray-50 dark:border-white/5 dark:text-gray-400 dark:hover:bg-white/5 transition-colors">Details</button>
+                            </div>
+                            <div x-data="{ enabled: true }">
+                                <label class="cursor-pointer">
+                                    <div class="relative">
+                                        <input type="checkbox" class="sr-only" x-model="enabled" />
+                                        <div class="block h-6 w-11 rounded-full transition-colors"
+                                            :class="enabled ? 'bg-emerald-500' : 'bg-gray-200 dark:bg-white/10'">
+                                        </div>
+                                        <div :class="enabled ? 'translate-x-full' : 'translate-x-0'"
+                                            class="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-200 ease-linear shadow-sm">
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Shopify -->
+                    <article
+                        class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                        <div class="relative p-5 pb-9">
+                            <div
+                                class="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 dark:bg-green-500/15">
+                                <span class="material-symbols-outlined text-2xl text-green-600">shopping_bag</span>
+                            </div>
+                            <h3 class="mb-3 text-lg font-semibold text-gray-800 dark:text-white/90">Shopify</h3>
+                            <p class="max-w-xs text-sm text-gray-500 dark:text-gray-400">Integrate with Shopify to
+                                run A/B tests on your e-commerce store.</p>
+                            <span
+                                class="absolute top-5 right-5 rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-600 dark:bg-green-500/15 dark:text-green-400">Connected</span>
+                        </div>
+                        <div
+                            class="flex items-center justify-between border-t border-gray-200 p-5 dark:border-gray-800">
+                            <div class="flex gap-3">
+                                <button
+                                    class="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-gray-300 text-gray-700 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
+                                    <span class="material-symbols-outlined">settings</span>
+                                </button>
+                                <button
+                                    class="inline-flex h-11 items-center justify-center rounded-lg border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">Details</button>
+                            </div>
+                            <div x-data="{ enabled: true }">
+                                <label class="cursor-pointer">
+                                    <div class="relative">
+                                        <input type="checkbox" class="sr-only" x-model="enabled" />
+                                        <div class="block h-6 w-11 rounded-full transition-colors"
+                                            :class="enabled ? 'bg-primary' : 'bg-gray-200 dark:bg-white/10'"></div>
+                                        <div :class="enabled ? 'translate-x-full' : 'translate-x-0'"
+                                            class="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-200 ease-linear shadow-sm">
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Segment -->
+                    <article
+                        class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                        <div class="relative p-5 pb-9">
+                            <div
+                                class="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-500/15">
+                                <span class="material-symbols-outlined text-2xl text-emerald-600">hub</span>
+                            </div>
+                            <h3 class="mb-3 text-lg font-semibold text-gray-800 dark:text-white/90">Segment</h3>
+                            <p class="max-w-xs text-sm text-gray-500 dark:text-gray-400">Connect Segment to unify
+                                your customer data and send events.</p>
+                            <span
+                                class="absolute top-5 right-5 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-400">Available</span>
+                        </div>
+                        <div
+                            class="flex items-center justify-between border-t border-gray-200 p-5 dark:border-gray-800">
+                            <button
+                                class="inline-flex h-11 items-center justify-center rounded-lg bg-primary px-5 py-3 text-sm font-medium text-white hover:bg-primary/90 transition-colors">Connect</button>
+                            <div x-data="{ enabled: false }">
+                                <label class="cursor-pointer">
+                                    <div class="relative">
+                                        <input type="checkbox" class="sr-only" x-model="enabled" />
+                                        <div class="block h-6 w-11 rounded-full transition-colors"
+                                            :class="enabled ? 'bg-primary' : 'bg-gray-200 dark:bg-white/10'"></div>
+                                        <div :class="enabled ? 'translate-x-full' : 'translate-x-0'"
+                                            class="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-200 ease-linear shadow-sm">
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Mixpanel -->
+                    <article
+                        class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                        <div class="relative p-5 pb-9">
+                            <div
+                                class="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-purple-50 dark:bg-purple-500/15">
+                                <span class="material-symbols-outlined text-2xl text-purple-600">donut_large</span>
+                            </div>
+                            <h3 class="mb-3 text-lg font-semibold text-gray-800 dark:text-white/90">Mixpanel</h3>
+                            <p class="max-w-xs text-sm text-gray-500 dark:text-gray-400">Track user behavior and
+                                analyze experiment results with Mixpanel.</p>
+                            <span
+                                class="absolute top-5 right-5 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-400">Available</span>
+                        </div>
+                        <div
+                            class="flex items-center justify-between border-t border-gray-200 p-5 dark:border-gray-800">
+                            <button
+                                class="inline-flex h-11 items-center justify-center rounded-lg bg-primary px-5 py-3 text-sm font-medium text-white hover:bg-primary/90 transition-colors">Connect</button>
+                            <div x-data="{ enabled: false }">
+                                <label class="cursor-pointer">
+                                    <div class="relative">
+                                        <input type="checkbox" class="sr-only" x-model="enabled" />
+                                        <div class="block h-6 w-11 rounded-full transition-colors"
+                                            :class="enabled ? 'bg-primary' : 'bg-gray-200 dark:bg-white/10'"></div>
+                                        <div :class="enabled ? 'translate-x-full' : 'translate-x-0'"
+                                            class="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-200 ease-linear shadow-sm">
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- WordPress -->
+                    <article
+                        class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                        <div class="relative p-5 pb-9">
+                            <div
+                                class="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-500/15">
+                                <span class="material-symbols-outlined text-2xl text-blue-600">edit_document</span>
+                            </div>
+                            <h3 class="mb-3 text-lg font-semibold text-gray-800 dark:text-white/90">WordPress</h3>
+                            <p class="max-w-xs text-sm text-gray-500 dark:text-gray-400">Install our WordPress
+                                plugin to run experiments on your blog or website.</p>
+                            <span
+                                class="absolute top-5 right-5 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-400">Available</span>
+                        </div>
+                        <div
+                            class="flex items-center justify-between border-t border-gray-200 p-5 dark:border-gray-800">
+                            <button
+                                class="inline-flex h-11 items-center justify-center rounded-lg bg-primary px-5 py-3 text-sm font-medium text-white hover:bg-primary/90 transition-colors">Connect</button>
+                            <div x-data="{ enabled: false }">
+                                <label class="cursor-pointer">
+                                    <div class="relative">
+                                        <input type="checkbox" class="sr-only" x-model="enabled" />
+                                        <div class="block h-6 w-11 rounded-full transition-colors"
+                                            :class="enabled ? 'bg-primary' : 'bg-gray-200 dark:bg-white/10'"></div>
+                                        <div :class="enabled ? 'translate-x-full' : 'translate-x-0'"
+                                            class="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-200 ease-linear shadow-sm">
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Webflow -->
+                    <article
+                        class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                        <div class="relative p-5 pb-9">
+                            <div
+                                class="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-500/15">
+                                <span class="material-symbols-outlined text-2xl text-indigo-600">web</span>
+                            </div>
+                            <h3 class="mb-3 text-lg font-semibold text-gray-800 dark:text-white/90">Webflow</h3>
+                            <p class="max-w-xs text-sm text-gray-500 dark:text-gray-400">Integrate with Webflow to
+                                A/B test your designs without code.</p>
+                            <span
+                                class="absolute top-5 right-5 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-400">Available</span>
+                        </div>
+                        <div
+                            class="flex items-center justify-between border-t border-gray-200 p-5 dark:border-gray-800">
+                            <button
+                                class="inline-flex h-11 items-center justify-center rounded-lg bg-primary px-5 py-3 text-sm font-medium text-white hover:bg-primary/90 transition-colors">Connect</button>
+                            <div x-data="{ enabled: false }">
+                                <label class="cursor-pointer">
+                                    <div class="relative">
+                                        <input type="checkbox" class="sr-only" x-model="enabled" />
+                                        <div class="block h-6 w-11 rounded-full transition-colors"
+                                            :class="enabled ? 'bg-primary' : 'bg-gray-200 dark:bg-white/10'"></div>
+                                        <div :class="enabled ? 'translate-x-full' : 'translate-x-0'"
+                                            class="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-200 ease-linear shadow-sm">
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </article>
 
                 </div>
-            </main>
+
+                <!-- API Section -->
+                <div
+                    class="mt-10 overflow-hidden rounded-[32px] border border-gray-200 bg-white p-8 dark:border-white/5 dark:bg-white/[0.03]">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+                        <div>
+                            <h3 class="text-sm font-bold uppercase tracking-widest text-gray-400">Custom Integration
+                            </h3>
+                            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">Use our REST API to build
+                                custom integrations with any platform.</p>
+                        </div>
+                        <a href="#"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl bg-gray-900 px-6 py-3 text-sm font-bold text-white hover:bg-black transition-colors shadow-lg hover:shadow-xl">
+                            <span class="material-symbols-outlined text-lg">code</span>
+                            View API Docs
+                        </a>
+                    </div>
+                </div>
+
         </div>
+        </main>
+    </div>
     </div>
 
     <script src="./js/include.js"></script>

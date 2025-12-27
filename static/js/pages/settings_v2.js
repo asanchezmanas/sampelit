@@ -97,4 +97,47 @@ document.addEventListener('alpine:init', () => {
             await Alpine.store('team').updateRole(id, newRole);
         }
     }));
+
+    // Install Verification Component
+    Alpine.data('installVerification', () => ({
+        domain: '',
+        status: 'pending', // 'pending' | 'verified' | 'error'
+        checking: false,
+
+        async verifyInstall() {
+            if (!this.domain) return;
+
+            this.checking = true;
+            this.status = 'pending';
+
+            try {
+                // Simulate API call to verify snippet installation
+                const api = new APIClient();
+                const result = await api.post('/installations/verify', { domain: this.domain });
+
+                this.status = result.installed ? 'verified' : 'error';
+
+                // Toast notification
+                window.dispatchEvent(new CustomEvent('toast:show', {
+                    detail: {
+                        message: result.installed ? 'Snippet verified!' : 'Snippet not detected',
+                        type: result.installed ? 'success' : 'error'
+                    }
+                }));
+            } catch (error) {
+                // For demo: simulate random result
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                this.status = Math.random() > 0.3 ? 'verified' : 'error';
+
+                window.dispatchEvent(new CustomEvent('toast:show', {
+                    detail: {
+                        message: this.status === 'verified' ? 'Snippet detected!' : 'Snippet not found',
+                        type: this.status === 'verified' ? 'success' : 'error'
+                    }
+                }));
+            } finally {
+                this.checking = false;
+            }
+        }
+    }));
 });

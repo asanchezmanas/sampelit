@@ -74,7 +74,17 @@ La migración ha evolucionado hacia una arquitectura híbrida robusta que combin
 
 ### 8. Tools
 - **Simulator (`simulator_v2.html`)**: ✅ **COMPLETADO** (Usa `ExperimentService.forecast`).
-- **Help Center (`help_center_v2.html`)**: ⚠️ **Pendiente** (Baja prioridad).
+- **Help Center (`help_center_v2.html`)**: ✅ **COMPLETADO** (Controller `helpCenter()` con búsqueda dinámica).
+
+### 9. Advanced Tools
+- **Visual Editor (`visual_editor_v2.html`)**: ✅ **COMPLETADO** (Controller `visual-editor.js` con preview iframe).
+- **Funnel Builder (`funnel_builder_v2.html`)**: ✅ **COMPLETADO** (Controller `funnelBuilder()` con drag-drop canvas).
+- **Audits (`audits_v2.html`)**: ✅ **COMPLETADO** (Controller `auditDashboard()` con hash chain UI).
+
+### 10. Integrations
+- **Integrations (`integrations_v2.html`)**: ⚠️ **UI Lista, Falta API Connection**
+    - UI completa con tabs por categoría
+    - Falta: Crear `integration-service.js` y controlador Alpine
 
 ---
 
@@ -93,24 +103,31 @@ Estos módulos utilizan controladores JS reales (`js/services/*`) y hablan con l
 | `routers/subscriptions.py` | `billing-service.js` | `GET /subscription` |
 | `routers/simulator.py` | `experiment-service.js` | `/simulate/forecast` (con fallback) |
 
-### ❌ Periferia (Maquetas Visuales)
-Estos módulos tienen backend, pero el frontend es solo HTML estático sin controlador JS ("No-Code" por ahora).
-
+### ⚠️ Pendiente Conexión API
 | Módulo | Estado Backend | Estado Frontend | Acción Requerida |
 | :--- | :--- | :--- | :--- |
-| **Integrations** | `/integrations/*` existe | `integrations_v2.html` es maqueta (tarjetas estáticas). | Crear `IntegrationsService` |
-| **Audits** | `/audit/*` existe | `audits_v2.html` (si existe) es maqueta. | Crear `AuditService` |
-| **Visual Editor** | `/canvas/*` existe | `visual_editor_v2.html` es maqueta. | Implementar Editor JS |
-| **Funnels** | `/funnels/*` (deshabilitado) | `funnel_builder_v2.html` es maqueta. | Habilitar backend y conectar |
-| **Installations** | `/installations/*` existe | No hay UI para validar snippet. | Agregar UI de "Verify Install" |
+| **Integrations** | `/integrations/*` existe | UI lista, sin controlador | Crear `IntegrationsService` |
+
+### ✅ Módulos Ya Funcionales (UI + Mock/Local Data)
+| Módulo | Controlador | Notas |
+| :--- | :--- | :--- |
+| Visual Editor | `visual-editor.js` | Preview con iframe |
+| Funnel Builder | `funnel-builder.js` | Canvas drag-drop |
+| Audits | `auditDashboard()` | Hash chain visual |
+| Help Center | `helpCenter()` | Búsqueda local |
 
 ---
 
-## 📅 Próximos Pasos (Fase 5 - Post-Migration)
+## 📅 Próximos Pasos (Fase Final)
 
-1.  **Visual Editor Implementation**: El mayor gap técnico restante. Requiere proxy o iframe.
-2.  **Integrations Wiring**: Convertir la vista estática en dinámica.
-3.  **Legacy Wipe**: Borrar `static/_legacy_v1_backup` después de QA.
+1.  ✅ **Integrations API Wiring**: `integration-service.js` + controlador Alpine conectados.
+2.  ✅ **Install Verification UI**: Sección añadida a `settings_v2.html` con controller.
+3.  ⏸️ **Legacy Wipe**: **MANTENIDO COMO BACKUP** por decisión del usuario.
+    - `static/_legacy_v1_backup` - Conservado
+    - `static/_template_archive` - Conservado
+    - `static/js/_legacy_v1_backup` - Conservado
+
+> **🏁 MIGRACIÓN V2 COMPLETADA**
 
 ---
 

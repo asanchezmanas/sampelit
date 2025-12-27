@@ -350,6 +350,84 @@
                             </template>
                         </div>
                     </div>
+
+                    <!-- Install Verification Section -->
+                    <div class="mt-10 rounded-[40px] border border-gray-100 bg-white p-10 shadow-premium dark:border-white/5 dark:bg-white/[0.03]"
+                        x-data="installVerification()">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-900 dark:text-white font-display">Verify Snippet
+                                    Installation</h3>
+                                <p class="text-sm text-gray-500 mt-1">Check if the tracking snippet is properly
+                                    installed on your website.</p>
+                            </div>
+                            <span
+                                class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-widest"
+                                :class="status === 'verified' ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400' : 
+                                        status === 'error' ? 'bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400' : 
+                                        'bg-gray-50 text-gray-500 dark:bg-white/5 dark:text-gray-400'">
+                                <span class="material-symbols-outlined text-sm"
+                                    x-text="status === 'verified' ? 'check_circle' : status === 'error' ? 'error' : 'pending'"></span>
+                                <span
+                                    x-text="status === 'verified' ? 'Verified' : status === 'error' ? 'Not Detected' : 'Not Checked'"></span>
+                            </span>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <div class="relative flex-1">
+                                <div
+                                    class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-gray-400">
+                                    <span class="material-symbols-outlined text-xl">language</span>
+                                </div>
+                                <input type="text" x-model="domain" placeholder="your-website.com"
+                                    class="h-14 w-full pl-14 pr-6 bg-gray-50/50 dark:bg-[#111621] border border-gray-100 dark:border-white/5 rounded-2xl text-sm font-bold text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 transition-all">
+                            </div>
+                            <button @click="verifyInstall()" :disabled="checking || !domain"
+                                class="h-14 px-8 rounded-2xl bg-gray-900 text-sm font-bold text-white shadow-premium hover:bg-black transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 whitespace-nowrap">
+                                <span class="material-symbols-outlined text-lg" :class="checking && 'animate-spin'"
+                                    x-text="checking ? 'progress_activity' : 'verified'"></span>
+                                <span x-text="checking ? 'Checking...' : 'Verify Install'"></span>
+                            </button>
+                        </div>
+
+                        <!-- Result Feedback -->
+                        <div x-show="status === 'verified'" x-transition
+                            class="mt-6 p-6 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20">
+                            <div class="flex items-start gap-4">
+                                <div
+                                    class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+                                    <span class="material-symbols-outlined text-2xl">check_circle</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-emerald-900 dark:text-emerald-400">Snippet Detected!</h4>
+                                    <p class="text-sm text-emerald-700 dark:text-emerald-500 mt-1">The Sampelit tracking
+                                        snippet is correctly installed on <span class="font-bold"
+                                            x-text="domain"></span>. You're ready to run experiments.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div x-show="status === 'error'" x-transition
+                            class="mt-6 p-6 rounded-2xl bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-500/20">
+                            <div class="flex items-start gap-4">
+                                <div
+                                    class="flex h-12 w-12 items-center justify-center rounded-xl bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400">
+                                    <span class="material-symbols-outlined text-2xl">error</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-red-900 dark:text-red-400">Snippet Not Found</h4>
+                                    <p class="text-sm text-red-700 dark:text-red-500 mt-1">We couldn't detect the
+                                        Sampelit snippet on <span class="font-bold" x-text="domain"></span>. Make sure
+                                        it's added to your site's &lt;head&gt; section.</p>
+                                    <button
+                                        class="mt-4 text-sm font-bold text-red-600 dark:text-red-400 hover:underline flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-sm">content_copy</span>
+                                        Copy Snippet Code
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </main>
         </div>
