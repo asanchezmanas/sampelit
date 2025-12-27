@@ -1,60 +1,64 @@
+/**
+ * Profile Controller (V2)
+ * Refactorizado para usar Alpine.store('auth')
+ */
 document.addEventListener('alpine:init', () => {
     Alpine.data('profileController', () => ({
-        loading: true,
-        saving: false,
-        user: {
+        // Local form state (copied from store on init)
+        userForm: {
             first_name: '',
             last_name: '',
             email: '',
-            company: '',
-            plan: 'Pro Plan',
-            initials: '??'
+            company: ''
         },
         security: {
             current_password: '',
             new_password: '',
             confirm_password: ''
         },
+        saving: false,
 
-        async init() {
-            await this.fetchProfile();
+        init() {
+            // Wait for store to be ready or watch it
+            this.$watch('$store.auth.user', (val) => {
+                if (val) this.syncForm(val);
+            });
+
+            // Initial sync if already loaded
+            if (Alpine.store('auth').user) {
+                this.syncForm(Alpine.store('auth').user);
+            } else {
+                Alpine.store('auth').fetchUser();
+            }
         },
 
-        async fetchProfile() {
-            this.loading = true;
-            try {
-                const response = await apiClient.get('/users/me');
-                if (response.success) {
-                    this.user = {
-                        ...this.user,
-                        ...response.data
-                    };
-                    this.generateInitials();
-                }
-            } catch (error) {
-                console.error('Error fetching profile:', error);
-                window.showToast?.('Error loading profile data', 'error');
-            } finally {
-                this.loading = false;
-            }
+        syncForm(userData) {
+            this.userForm = {
+                first_name: userData.first_name || '',
+                last_name: userData.last_name || '',
+                email: userData.email || '',
+                company: userData.company || ''
+            };
+        },
+
+        // Computeds accessing Store directly for Read-Only display
+        get user() {
+            return Alpine.store('auth').user || {};
+        },
+
+        get fullName() {
+            return Alpine.store('auth').fullName;
         },
 
         async saveChanges() {
             this.saving = true;
             try {
-                const response = await apiClient.put('/users/me', {
-                    first_name: this.user.first_name,
-                    last_name: this.user.last_name,
-                    company: this.user.company
+                // Delegate to store
+                await Alpine.store('auth').updateProfile({
+                    first_name: this.userForm.first_name,
+                    last_name: this.userForm.last_name,
+                    company: this.userForm.company
                 });
-
-                if (response.success) {
-                    window.showToast?.('Profile updated successfully', 'success');
-                    this.generateInitials();
-                }
-            } catch (error) {
-                console.error('Error updating profile:', error);
-                window.showToast?.('Failed to update profile', 'error');
             } finally {
                 this.saving = false;
             }
@@ -62,31 +66,21 @@ document.addEventListener('alpine:init', () => {
 
         async updatePassword() {
             if (this.security.new_password !== this.security.confirm_password) {
-                window.showToast?.('Passwords do not match', 'error');
+                window.dispatchEvent(new CustomEvent('toast:show', { detail: { message: 'Passwords do not match', type: 'error' } }));
                 return;
             }
 
             this.saving = true;
             try {
-                // In a real app: await apiClient.post('/users/password', this.security);
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                window.showToast?.('Password updated successfully', 'success');
+                await Alpine.store('auth').updatePassword(
+                    this.security.current_password,
+                    this.security.new_password
+                );
+                // Reset form on success
                 this.security = { current_password: '', new_password: '', confirm_password: '' };
-            } catch (error) {
-                window.showToast?.('Error updating password', 'error');
             } finally {
                 this.saving = false;
             }
-        },
-
-        generateInitials() {
-            const f = this.user.first_name?.[0] || '';
-            const l = this.user.last_name?.[0] || '';
-            this.user.initials = (f + l).toUpperCase() || '??';
-        },
-
-        get fullName() {
-            return `${this.user.first_name} ${this.user.last_name}`.trim() || 'User Name';
         }
     }));
 });

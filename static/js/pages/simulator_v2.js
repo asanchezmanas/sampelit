@@ -26,8 +26,17 @@ document.addEventListener('alpine:init', () => {
         async runSimulation() {
             this.loading = true;
             try {
-                const client = new APIClient();
-                const response = await client.post('/simulate/forecast', {
+                // Use the service directly (if global) or via store if we added it there (not really fit for store state yet, direct service is fine for tools)
+                // Assuming experimentService is globally available from alpine-store.js logic
+                const service = window.ExperimentService ? new ExperimentService(new APIClient()) : null;
+                // Better yet, just reuse the one instantiated in alpine-store if accessible, or instantiate one.
+                // Since this is a standalone tool, we can instantiate a fresh service or rely on global.
+                // Let's rely on standard pattern:
+
+                const apiClient = new APIClient();
+                const expService = new ExperimentService(apiClient);
+
+                const response = await expService.forecast({
                     traffic_daily: parseInt(this.config.traffic),
                     baseline_cr: parseFloat(this.config.baseline_cr) / 100,
                     uplift: parseFloat(this.config.uplift) / 100,
@@ -40,6 +49,7 @@ document.addEventListener('alpine:init', () => {
                 }
             } catch (error) {
                 console.error("Simulation failed:", error);
+                window.dispatchEvent(new CustomEvent('toast:show', { detail: { message: 'Simulation failed', type: 'error' } }));
             } finally {
                 this.loading = false;
             }

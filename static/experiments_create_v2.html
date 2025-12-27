@@ -48,9 +48,14 @@
     </style>
 
     <!-- Essential Scripts -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- 1. JS Architecture -->
     <script src="js/core/api.js"></script>
+    <script src="js/services/experiment-service.js"></script>
+    <script src="js/alpine-store.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="js/include.js"></script>
+    <!-- 2. Page Controller -->
+    <script src="js/pages/experiments_create_v2.js"></script>
 </head>
 
 <body x-data="experimentWizard()" x-init="init()" :class="{ 'dark': darkMode === true }"
@@ -504,68 +509,7 @@
             </main>
         </div>
     </div>
-    <script>
-        function experimentWizard() {
-            return {
-                step: 1,
-                sidebarToggle: false,
-                darkMode: false,
-                isSubmitting: false,
-                experiment: {
-                    name: '',
-                    url: 'https://',
-                    metric: 'Conversion Rate',
-                    hypothesis: '',
-                    traffic: 100,
-                    variants: [
-                        { name: 'Control', type: 'baseline', traffic: 50 },
-                        { name: 'Variant A', type: 'variant', traffic: 50 }
-                    ]
-                },
-
-                init() {
-                    this.client = new APIClient();
-                    this.darkMode = JSON.parse(localStorage.getItem('darkMode')) || false;
-                    this.$watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)));
-                },
-
-                async launchExperiment() {
-                    if (this.isSubmitting) return;
-                    this.isSubmitting = true;
-
-                    try {
-                        const payload = {
-                            name: this.experiment.name || 'Untitled Experiment',
-                            description: this.experiment.hypothesis,
-                            url: this.experiment.url,
-                            traffic_allocation: this.experiment.traffic / 100,
-                            elements: [{
-                                name: "Main Content",
-                                selector: { type: "css", selector: "body" },
-                                element_type: "generic",
-                                original_content: { text: "Original" },
-                                variants: this.experiment.variants.slice(1).map(v => ({
-                                    text: v.name
-                                }))
-                            }]
-                        };
-
-                        await this.client.post('/experiments', payload);
-
-                        // Show success toast (using dispatch if toast component supports it, otherwise fallback)
-                        // For now, redirect
-                        window.location.href = 'experiments_v2.html';
-
-                    } catch (error) {
-                        console.error('Failed to create experiment:', error);
-                        alert('Failed to launch experiment. Please check console.');
-                    } finally {
-                        this.isSubmitting = false;
-                    }
-                }
-            };
-        }
-    </script>
+    <!-- Wizard logic moved to js/pages/experiments_create_v2.js -->
 </body>
 
 </html>

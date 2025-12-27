@@ -48,10 +48,15 @@
     </style>
 
     <!-- Essential Scripts -->
+    <!-- 1. JS Architecture -->
+    <script src="js/core/api.js"></script>
+    <script src="js/services/experiment-service.js"></script>
+    <!-- Optional: Other services if needed locally -->
+    <script src="js/alpine-store.js"></script>
+
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="js/include.js"></script>
-    <script src="js/core/api.js"></script>
 </head>
 
 <body x-data="simulator"
@@ -239,12 +244,8 @@
                                             traffic volume.</p>
                                     </div>
                                 </div>
-                                <!-- Placeholder for ApexCharts or SVG -->
-                                <div id="convergenceChart"
-                                    class="h-[350px] w-full flex items-center justify-center bg-gray-50 rounded-xl dark:bg-gray-900">
-                                    <!-- We will init chart here -->
-                                    <p class="text-gray-400 font-medium animate-pulse">Initializing Visualization...</p>
-                                </div>
+                                <!-- Chart Placeholder -->
+                                <div id="convergenceChart" class="w-full"></div>
                             </div>
                         </div>
                     </div>

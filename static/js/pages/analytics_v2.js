@@ -1,49 +1,55 @@
+/**
+ * Analytics Controller (V2)
+ * Refactorizado para usar Alpine.store('analytics')
+ */
 document.addEventListener('alpine:init', () => {
     Alpine.data('analyticsDashboard', () => ({
         loading: true,
         period: '30d',
-        stats: {
-            total_visitors: 0,
-            trend: 0,
-            devices: { desktop: 0, mobile: 0, tablet: 0 },
-            traffic_sources: [],
-            page_performance: []
-        },
+        // Local proxies to store state are handy but we can access directly too.
+        // We'll map them in computeds or fetch logic.
+
         charts: {
             yield: null,
             device: null
         },
 
         async init() {
-            console.log('Analytics Dashboard Initializing...');
-            await this.fetchData();
-
             // Watch for period changes to reload data
             this.$watch('period', async () => {
                 await this.fetchData();
             });
+
+            await this.fetchData();
+        },
+
+        // Computeds mapping to Store
+        get stats() {
+            const store = Alpine.store('analytics');
+            return {
+                total_visitors: store.global.total_visitors || 0,
+                trend: store.global.trend || 0,
+                traffic_sources: store.traffic || [],
+                devices: store.devices || { desktop: 0, mobile: 0, tablet: 0 },
+                page_performance: store.pages || [],
+                // Adapter for countries if not in store yet, use mock fallbacks or add to store later
+                countries: [
+                    { name: 'United States', value: 65 },
+                    { name: 'United Kingdom', value: 40 },
+                    { name: 'Germany', value: 28 }
+                ]
+            };
         },
 
         async fetchData() {
             this.loading = true;
             try {
-                // In a real app, we would pass the period to the API
-                // const response = await apiClient.get(`/analytics/global?period=${this.period}`);
-                const response = await apiClient.get('/analytics/global');
+                // Delegate to Global Store
+                await Alpine.store('analytics').fetchOverview(this.period);
 
-                if (response.success) {
-                    this.stats = {
-                        ...this.stats,
-                        total_visitors: response.data.total_visitors || 0,
-                        trend: response.data.trend || 0
-                    };
+                // Once data is in store, render charts
+                this.renderCharts();
 
-                    // Mock additional detailed data that might not be in the simple global endpoint yet
-                    // but we want to show the UI full-featured
-                    this.loadDetailedStats();
-
-                    this.renderCharts();
-                }
             } catch (error) {
                 console.error('Error fetching analytics:', error);
             } finally {
@@ -51,61 +57,39 @@ document.addEventListener('alpine:init', () => {
             }
         },
 
-        loadDetailedStats() {
-            // Devices (Mock logic if not in API)
-            this.stats.devices = { desktop: 62, mobile: 31, tablet: 7 };
-
-            // Traffic Sources with detailed data and sparkline mock series
-            this.stats.traffic_sources = [
-                { id: 1, source: 'Google Organic', icon: 'search', volume: 12450, integrity: 523, yield: 4.2, series: [10, 20, 15, 25, 22, 30, 28] },
-                { id: 2, source: 'Direct Access', icon: 'link', volume: 8234, integrity: 412, yield: 5.0, series: [25, 22, 28, 32, 30, 35, 38] },
-                { id: 3, source: 'Meta Services', icon: 'share', volume: 5120, integrity: 186, yield: 3.6, series: [15, 12, 18, 14, 20, 15, 12] },
-                { id: 4, source: 'X Ecosystem', icon: 'rss_feed', volume: 2845, integrity: 89, yield: 3.1, series: [5, 8, 4, 10, 7, 12, 9] }
-            ];
-
-            // Page Performance
-            this.stats.page_performance = [
-                { uri: '/checkout', impressions: 8234, bounce: 24 },
-                { uri: '/pricing', impressions: 6123, bounce: 31 },
-                { uri: '/homepage', impressions: 5890, bounce: 42 }
-            ];
-
-            // Countries
-            this.stats.countries = [
-                { name: 'United States', value: 65 },
-                { name: 'United Kingdom', value: 40 },
-                { name: 'Germany', value: 28 }
-            ];
-        },
-
         renderCharts() {
-            this.renderYieldChart();
-            this.renderDeviceChart();
+            // Wait for DOM
             this.$nextTick(() => {
+                this.renderYieldChart();
+                this.renderDeviceChart();
                 this.renderSparklines();
             });
         },
 
         renderSparklines() {
             this.stats.traffic_sources.forEach(source => {
+                // Sparklines often come as simple array in API, e.g. source.history
+                // If not present, we can mock visual for now or use real data if service provides it
+                const visualData = source.series || [10, 20, 15, 25, 20, 30, 25];
+
                 const options = {
-                    series: [{ data: source.series }],
+                    series: [{ data: visualData }],
                     chart: {
                         type: 'area',
                         height: 40,
                         sparkline: { enabled: true },
                         animations: { enabled: false }
                     },
-                    fill: {
-                        type: 'gradient',
-                        gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.1, stops: [0, 100] }
-                    },
+                    fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.1, stops: [0, 100] } },
                     stroke: { curve: 'smooth', width: 2 },
                     colors: [source.yield >= 4 ? '#10b981' : '#f59e0b'],
                     tooltip: { enabled: false }
                 };
                 const el = document.querySelector(`#sparkline-${source.id}`);
                 if (el) {
+                    // Destroy old if exists to prevent leaks (generic unique ID approach recommended for prod)
+                    // new ApexCharts(el, options).render();
+                    el.innerHTML = ''; // Reset
                     new ApexCharts(el, options).render();
                 }
             });
@@ -113,53 +97,21 @@ document.addEventListener('alpine:init', () => {
 
         renderYieldChart() {
             const isDark = document.documentElement.classList.contains('dark');
+            // TODO: Use real history data from Store if available. For now using structural mock for the big chart.
             const options = {
                 series: [
                     { name: 'Discovery Velocity', data: [31, 40, 28, 51, 42, 109, 100] },
                     { name: 'Yield Efficiency', data: [11, 32, 45, 32, 34, 52, 41] }
                 ],
-                chart: {
-                    type: 'area',
-                    height: 350,
-                    toolbar: { show: false },
-                    fontFamily: 'Manrope, sans-serif',
-                    zoom: { enabled: false },
-                    dropShadow: { enabled: true, top: 18, left: 0, blur: 4, opacity: 0.05 }
-                },
+                chart: { type: 'area', height: 350, toolbar: { show: false }, fontFamily: 'Manrope, sans-serif', zoom: { enabled: false } },
                 colors: ['#0f172a', '#3b82f6'],
-                fill: {
-                    type: 'gradient',
-                    gradient: { shadeIntensity: 1, opacityFrom: 0.45, opacityTo: 0.05, stops: [0, 100] }
-                },
+                fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.45, opacityTo: 0.05, stops: [0, 100] } },
                 dataLabels: { enabled: false },
                 stroke: { curve: 'smooth', width: 3 },
-                grid: {
-                    borderColor: isDark ? '#374151' : '#f1f5f9',
-                    strokeDashArray: 4,
-                    xaxis: { lines: { show: true } },
-                    yaxis: { lines: { show: true } }
-                },
-                xaxis: {
-                    categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                    axisBorder: { show: false },
-                    axisTicks: { show: false },
-                    labels: { style: { colors: '#9CA3AF', fontSize: '12px', fontWeight: 600 } }
-                },
-                yaxis: {
-                    labels: {
-                        style: { colors: '#9CA3AF', fontSize: '12px', fontWeight: 600 },
-                        formatter: (val) => val >= 1000 ? (val / 1000).toFixed(1) + 'k' : val
-                    }
-                },
-                legend: {
-                    show: true,
-                    position: 'top',
-                    horizontalAlign: 'left',
-                    fontSize: '11px',
-                    fontWeight: 800,
-                    textAnchor: 'start',
-                    markers: { radius: 12 }
-                },
+                grid: { borderColor: isDark ? '#374151' : '#f1f5f9' },
+                xaxis: { categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], labels: { style: { colors: '#9CA3AF' } } },
+                yaxis: { labels: { style: { colors: '#9CA3AF' }, formatter: (val) => val >= 1000 ? (val / 1000).toFixed(1) + 'k' : val } },
+                legend: { show: true, position: 'top', horizontalAlign: 'left' },
                 tooltip: { theme: isDark ? 'dark' : 'light' }
             };
 
@@ -173,32 +125,14 @@ document.addEventListener('alpine:init', () => {
 
         renderDeviceChart() {
             const isDark = document.documentElement.classList.contains('dark');
-
             const options = {
                 series: [this.stats.devices.desktop, this.stats.devices.mobile, this.stats.devices.tablet],
-                chart: {
-                    type: 'donut',
-                    height: 300,
-                    fontFamily: 'Manrope, sans-serif'
-                },
+                chart: { type: 'donut', height: 300, fontFamily: 'Manrope, sans-serif' },
                 labels: ['Desktop', 'Mobile', 'Tablet'],
                 colors: ['#0f172a', '#3b82f6', '#94a3b8'],
-                plotOptions: {
-                    pie: {
-                        donut: {
-                            size: '80%',
-                            labels: {
-                                show: true,
-                                name: { show: true, fontSize: '12px', fontWeight: 'bold' },
-                                value: { show: true, fontSize: '24px', fontWeight: '800', color: isDark ? '#fff' : '#0f172a' },
-                                total: { show: true, label: 'Devices', fontSize: '11px', fontWeight: 'bold', color: '#94a3b8' }
-                            }
-                        }
-                    }
-                },
+                plotOptions: { pie: { donut: { size: '80%', labels: { show: true, total: { show: true, label: 'Devices' } } } } },
                 dataLabels: { enabled: false },
                 legend: { show: false },
-                stroke: { show: false },
                 tooltip: { theme: isDark ? 'dark' : 'light' }
             };
 
@@ -213,11 +147,11 @@ document.addEventListener('alpine:init', () => {
         formatNumber(num) {
             if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
             if (num >= 1000) return (num / 1000).toFixed(1) + 'k';
-            return num.toLocaleString();
+            return num ? num.toLocaleString() : '0';
         },
 
         formatPercent(num) {
-            return num.toFixed(1) + '%';
+            return (num || 0).toFixed(1) + '%';
         }
     }));
 });

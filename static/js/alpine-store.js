@@ -13,10 +13,9 @@ document.addEventListener('alpine:init', () => {
 
     // 1. Inicializar Core API
     const apiClient = new APIClient({
-        baseUrl: '/api/v1', // Ajustar según config real si es necesario
+        baseUrl: '/api/v1',
         onError: (error) => {
             console.error('API Error:', error);
-            // Dispatch evento global para que el Toast lo capture
             window.dispatchEvent(new CustomEvent('toast:show', {
                 detail: { message: error.message || 'Server Error', type: 'error' }
             }));
@@ -24,8 +23,12 @@ document.addEventListener('alpine:init', () => {
     });
 
     // 2. Inicializar Servicios
-    const experimentService = new ExperimentService(apiClient);
-    // const authService = new AuthService(apiClient); // Future TODO
+    // Si la clase no existe (lazy load incompleto), evitamos error fatal con try/catch o condicional, 
+    // pero idealmente asumimos scripts cargados.
+    const experimentService = window.ExperimentService ? new ExperimentService(apiClient) : null;
+    const metricsService = window.MetricsService ? new MetricsService(apiClient) : null;
+    const teamService = window.TeamService ? new TeamService(apiClient) : null;
+    const authService = window.AuthService ? new AuthService(apiClient) : null;
 
     // 3. Definir Stores 
 
@@ -35,126 +38,223 @@ document.addEventListener('alpine:init', () => {
         active: [],
         current: null,
         loading: false,
-        lastUpdated: null,
 
-        // Inicialización
-        init() {
-            // Cargar caché si existe (opcional)
-        },
-
-        // Acciones CRUD
         async fetchAll(filters = {}) {
+            if (!experimentService) return;
             this.loading = true;
             try {
                 this.list = await experimentService.list(filters);
                 this.active = this.list.filter(e => e.status === 'active');
-                this.lastUpdated = new Date();
-            } catch (err) {
-                console.error('Failed to fetch experiments', err);
-            } finally {
-                this.loading = false;
-            }
+            } catch (err) { console.error(err); }
+            finally { this.loading = false; }
         },
 
         async fetchOne(id) {
+            if (!experimentService) return;
             this.loading = true;
             try {
                 this.current = await experimentService.get(id);
                 return this.current;
-            } catch (err) {
-                console.error('Failed to get experiment', err);
-            } finally {
-                this.loading = false;
-            }
+            } catch (err) { console.error(err); }
+            finally { this.loading = false; }
         },
 
         async create(data) {
+            if (!experimentService) return;
             this.loading = true;
             try {
                 const newExp = await experimentService.create(data);
-                this.list.push(newExp); // Optimistic UI or wait for fetch
-
-                window.dispatchEvent(new CustomEvent('toast:show', {
-                    detail: { message: 'Experiment created successfully', type: 'success' }
-                }));
-
+                this.list.push(newExp);
+                window.dispatchEvent(new CustomEvent('toast:show', { detail: { message: 'Experiment created', type: 'success' } }));
                 return newExp;
-            } catch (err) {
-                throw err; // Relanzar para que el componente maneje errores específicos si quiere
-            } finally {
-                this.loading = false;
-            }
+            } catch (err) { throw err; }
+            finally { this.loading = false; }
         },
 
         async delete(id) {
+            if (!experimentService) return;
             if (!confirm('Are you sure?')) return;
-
             this.loading = true;
             try {
                 await experimentService.delete(id);
                 this.list = this.list.filter(e => e.id !== id);
-
-                window.dispatchEvent(new CustomEvent('toast:show', {
-                    detail: { message: 'Experiment deleted', type: 'success' }
-                }));
-            } catch (err) {
-                throw err;
-            } finally {
-                this.loading = false;
-            }
+                window.dispatchEvent(new CustomEvent('toast:show', { detail: { message: 'Experiment deleted', type: 'success' } }));
+            } catch (e) { console.error(e); }
+            finally { this.loading = false; }
         },
 
-        // Acciones de Estado
         async start(id) {
+            if (!experimentService) return;
             this.loading = true;
             try {
                 const updated = await experimentService.start(id);
                 this.updateLocal(id, updated);
-                window.dispatchEvent(new CustomEvent('toast:show', {
-                    detail: { message: 'Experiment started 🚀', type: 'success' }
-                }));
+                window.dispatchEvent(new CustomEvent('toast:show', { detail: { message: 'Experiment started 🚀', type: 'success' } }));
             } finally { this.loading = false; }
         },
 
         async pause(id) {
+            if (!experimentService) return;
             this.loading = true;
             try {
                 const updated = await experimentService.pause(id);
                 this.updateLocal(id, updated);
-                window.dispatchEvent(new CustomEvent('toast:show', {
-                    detail: { message: 'Experiment paused ⏸️', type: 'warning' }
-                }));
+                window.dispatchEvent(new CustomEvent('toast:show', { detail: { message: 'Experiment paused', type: 'warning' } }));
             } finally { this.loading = false; }
         },
 
         async stop(id) {
-            if (!confirm('Stop this test? This cannot be undone.')) return;
-
+            if (!experimentService) return;
+            if (!confirm('Stop test?')) return;
             this.loading = true;
             try {
                 const updated = await experimentService.stop(id);
                 this.updateLocal(id, updated);
-                window.dispatchEvent(new CustomEvent('toast:show', {
-                    detail: { message: 'Experiment stopped 🛑', type: 'info' }
-                }));
+                window.dispatchEvent(new CustomEvent('toast:show', { detail: { message: 'Experiment stopped', type: 'info' } }));
             } finally { this.loading = false; }
         },
 
-        // Helpers
         updateLocal(id, data) {
-            // Actualizar en la lista general
             const index = this.list.findIndex(e => e.id === id);
-            if (index !== -1) {
-                this.list[index] = { ...this.list[index], ...data };
-            }
-            // Actualizar current si es el mismo
-            if (this.current && this.current.id === id) {
-                this.current = { ...this.current, ...data };
-            }
+            if (index !== -1) this.list[index] = { ...this.list[index], ...data };
+            if (this.current && this.current.id === id) this.current = { ...this.current, ...data };
         }
     });
 
-    // --- UI STORE (Global Helpers) ---
+    // --- ANALYTICS STORE ---
+    Alpine.store('analytics', {
+        global: { total_visitors: 0, trend: 0 },
+        traffic: [],
+        devices: { desktop: 0, mobile: 0, tablet: 0 },
+        pages: [],
+        loading: false,
+
+        async fetchOverview(period = '30d') {
+            if (!metricsService) return;
+            this.loading = true;
+            try {
+                const [global, traffic, devices, pages] = await Promise.all([
+                    metricsService.getGlobalMetrics(period),
+                    metricsService.getTrafficSources(period),
+                    metricsService.getDeviceStats(period),
+                    metricsService.getPagePerformance(period)
+                ]);
+                this.global = global;
+                this.traffic = Array.isArray(traffic) ? traffic : [];
+                this.devices = devices || { desktop: 0, mobile: 0, tablet: 0 };
+                this.pages = Array.isArray(pages) ? pages : [];
+            } catch (err) {
+                console.error(err);
+                window.dispatchEvent(new CustomEvent('toast:show', { detail: { message: 'Failed to load analytics', type: 'error' } }));
+            } finally { this.loading = false; }
+        }
+    });
+
+    // --- TEAM STORE ---
+    Alpine.store('team', {
+        members: [],
+        organization: null,
+        loading: false,
+
+        async fetchAll() {
+            if (!teamService) return;
+            this.loading = true;
+            try {
+                const [members, org] = await Promise.all([
+                    teamService.listMembers(),
+                    teamService.getOrganization()
+                ]);
+                this.members = members || [];
+                this.organization = org;
+            } catch (err) { console.error(err); }
+            finally { this.loading = false; }
+        },
+
+        async invite(email, role) {
+            if (!teamService) return;
+            this.loading = true;
+            try {
+                await teamService.inviteMember(email, role);
+                window.dispatchEvent(new CustomEvent('toast:show', { detail: { message: `Invite sent to ${email}`, type: 'success' } }));
+                await this.fetchAll();
+            } finally { this.loading = false; }
+        },
+
+        async updateRole(id, role) {
+            if (!teamService) return;
+            try {
+                await teamService.updateRole(id, role);
+                const member = this.members.find(m => m.id === id);
+                if (member) member.role = role;
+                window.dispatchEvent(new CustomEvent('toast:show', { detail: { message: 'Role updated', type: 'success' } }));
+            } catch (err) {
+                window.dispatchEvent(new CustomEvent('toast:show', { detail: { message: 'Failed update', type: 'error' } }));
+            }
+        },
+
+        async removeMember(id) {
+            if (!teamService) return;
+            if (!confirm('Remove member?')) return;
+            try {
+                await teamService.removeMember(id);
+                this.members = this.members.filter(m => m.id !== id);
+                window.dispatchEvent(new CustomEvent('toast:show', { detail: { message: 'Member removed', type: 'info' } }));
+            } catch (err) { console.error(err); }
+        }
+    });
+
+    // --- AUTH STORE ---
+    Alpine.store('auth', {
+        user: null, // { first_name, last_name, email, company, plan, ... }
+        loading: false,
+
+        async init() {
+            if (authService) await this.fetchUser();
+        },
+
+        async fetchUser() {
+            if (!authService) return;
+            this.loading = true;
+            try {
+                this.user = await authService.getProfile();
+            } catch (err) { console.error(err); }
+            finally { this.loading = false; }
+        },
+
+        async updateProfile(data) {
+            if (!authService) return;
+            this.loading = true;
+            try {
+                const updated = await authService.updateProfile(data);
+                this.user = { ...this.user, ...updated };
+                window.dispatchEvent(new CustomEvent('toast:show', { detail: { message: 'Profile updated', type: 'success' } }));
+            } catch (err) {
+                window.dispatchEvent(new CustomEvent('toast:show', { detail: { message: 'Profile update failed', type: 'error' } }));
+            } finally { this.loading = false; }
+        },
+
+        async updatePassword(current, newPass) {
+            if (!authService) return;
+            this.loading = true;
+            try {
+                await authService.updatePassword(current, newPass);
+                window.dispatchEvent(new CustomEvent('toast:show', { detail: { message: 'Password changed', type: 'success' } }));
+            } catch (err) {
+                window.dispatchEvent(new CustomEvent('toast:show', { detail: { message: 'Password update failed', type: 'error' } }));
+            } finally { this.loading = false; }
+        },
+
+        get fullName() {
+            return this.user ? `${this.user.first_name} ${this.user.last_name}`.trim() : 'Guest';
+        },
+
+        get initials() {
+            if (!this.user) return '??';
+            return ((this.user.first_name?.[0] || '') + (this.user.last_name?.[0] || '')).toUpperCase();
+        }
+    });
+
+    // --- UI STORE ---
     Alpine.store('ui', {
         sidebarOpen: false,
         darkMode: localStorage.getItem('darkMode') === 'true',

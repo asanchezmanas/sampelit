@@ -1,57 +1,69 @@
+/**
+ * Settings Controller (V2)
+ * Refactorizado para usar Alpine.store('team')
+ */
 document.addEventListener('alpine:init', () => {
     Alpine.data('settingsController', () => ({
         activeTab: 'team',
         searchQuery: '',
         roleFilter: 'all',
-        loading: true,
         inviting: false,
         currentPage: 1,
         itemsPerPage: 5,
-        organization: {
-            name: 'Sampelit Corp',
-            total_members: 19,
-            plan: 'Business Pro'
-        },
-        roles: [
-            { id: 'admin', name: 'Administrador', description: 'Total organization control, billing and security policies.', count: 2, icon: 'admin_panel_settings', color: 'blue' },
-            { id: 'editor', name: 'Editor', description: 'Full access to Discovery Lab and Experiment Detail.', count: 5, icon: 'edit_note', color: 'purple' },
-            { id: 'viewer', name: 'Visor', description: 'Read-only access to final results and analytics.', count: 12, icon: 'visibility', color: 'emerald' }
+
+        // Static definition of roles for UI display logic (could also be fetched if dynamic)
+        roleDefinitions: [
+            { id: 'admin', name: 'Administrador', description: 'Total organization control, billing and security policies.', icon: 'admin_panel_settings', color: 'blue' },
+            { id: 'editor', name: 'Editor', description: 'Full access to Discovery Lab and Experiment Detail.', icon: 'edit_note', color: 'purple' },
+            { id: 'viewer', name: 'Visor', description: 'Read-only access to final results and analytics.', icon: 'visibility', color: 'emerald' }
         ],
 
         async init() {
-            console.log('Settings Controller Initializing...');
-            await this.fetchMembers();
+            // Load initial data
+            await Alpine.store('team').fetchAll();
         },
 
-        async fetchMembers() {
-            this.loading = true;
-            try {
-                // Mock delay
-                await new Promise(resolve => setTimeout(resolve, 600));
+        // Computeds mapping to Store
+        get loading() {
+            return Alpine.store('team').loading;
+        },
 
-                this.members = [
-                    { id: 1, name: 'Ana García', email: 'ana.garcia@empresa.com', role: 'Administrador', status: 'active', last_activity: '22 Oct, 14:30', avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDmXEQoR1knRWNT84cvFQHJTdp8tJJ0D5WwwaMABhQYdPTnxG9s3vGruJVbaMeQkTI0Okg_D_1fMU_MMa0u00Zidt8Bcttw_PLOvJLfvw5iyWKPiYm4HTxmMwMOTjUMDUp1qHDidE-9Xi7btov16Ph1ec0AfGRImGldLLdt3QfMryOve3NtHY2LmoThvh1BkcAh_imo3Dmge9D6S82d1_Q5YQDT1mPxp6TwYPqEXEwxOM6BrFkd8waMGK8kG656x9SRcMMucVHa' },
-                    { id: 2, name: 'Carlos Ruiz', email: 'carlos.ruiz@empresa.com', role: 'Editor', status: 'active', last_activity: '22 Oct, 09:15', avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAXgsMyuWAHLWL_hOx41gp7oMEt7s20oK3lFyrPlHaem9JtwhyhQ2ijS7seLQjQ1L74NZyfQlT__X_znRTbAdsOUV_xOwajW-zhSrpWoFsU6qKkvuTeAeScYXcc2S27J7bJzIHdq5BWVtHOjhIQUYg1L8Kn_KUFS721xKlBSK9HjZ2BEjsqpbY87No72ylyvtGEu1HhsdBYIZL6kNPZtwqDnJ4Y1jEcHucbrdzh1_DUhPhtj2q106wdODI4aDQ7ZOZ5Yjiqty_L' },
-                    { id: 3, name: 'Marta Jiménez', email: 'marta.j@empresa.com', role: 'Visor', status: 'pending', last_activity: 'Nunca', initials: 'MJ' },
-                    { id: 4, name: 'Sofía López', email: 'sofia.lpz@empresa.com', role: 'Visor', status: 'active', last_activity: '21 Oct, 18:00', avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBeo4KQkO1l96Ie-VrX4w8MjfTC4I6jHUld4pjOBOJWWpMWu7c49JNSkVgEjJE392Nwt5jK0pfgxVklbyzowgFCiuL8n333RGZ1gljNaQgG_ANL7Jvme6fgMphsN9KOsu5D1eLSqem-yTIKPb-eiPoka0o0dL2A8Bt30byE-6h3wTXe78BxH02bPDzrt1MavVphDL__AyAaW3yXdhYHhtNgDQ0x3qEKMbzgwBfSJl8QmVPLaMHx3kF1k4q0o6EaucyiRqpbz2Bs' },
-                    { id: 5, name: 'David Chen', email: 'david.c@empresa.com', role: 'Editor', status: 'inactive', last_activity: '15 Oct, 11:20', avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA9BMeLMNdRdn_cB5b39KrX4N_B2XHhR0rqZmLGX2Bwhiw5NQKpaPaQecucGwN2mGtz2mktcApfPAx5TxGlApKS3NGVpMOrhLQv_TJYOaiHFan5OvDhiEtcLkobYdBjrByHAyh21jre-A4QPLQQMMVPN08TGb0c0G6xfF17RRVgyk2il_tAZcIyaxpqHRls2OVHzswHdNAJwHCy1zxHErbD9rQGwY7whqy-MG27dl8C1N98Aor_TZIfCfoDIe2GmiBJHZzwqcEA' }
-                ];
-            } catch (error) {
-                console.error('Error fetching members:', error);
-                window.showToast?.('Failed to load team members', 'error');
-            } finally {
-                this.loading = false;
-            }
+        get organization() {
+            const org = Alpine.store('team').organization;
+            // Default mock fallback if API returns nothing yet
+            return org || {
+                name: 'Sampelit Organization',
+                total_members: this.members.length,
+                plan: 'Business Pro'
+            };
+        },
+
+        get members() {
+            return Alpine.store('team').members;
+        },
+
+        // Derived Logic
+        get rolesWithCounts() {
+            // Calculate real counts based on current members
+            return this.roleDefinitions.map(def => {
+                const count = this.members.filter(m => m.role.toLowerCase() === def.name.toLowerCase() || m.role.toLowerCase() === def.id).length;
+                return { ...def, count };
+            });
         },
 
         get filteredMembers() {
-            const filtered = this.members.filter(m => {
-                const matchesSearch = m.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                    m.email.toLowerCase().includes(this.searchQuery.toLowerCase());
-                const matchesRole = this.roleFilter === 'all' || m.role.toLowerCase() === this.roleFilter.toLowerCase();
+            return this.members.filter(m => {
+                const matchesSearch = (m.name || '').toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                    (m.email || '').toLowerCase().includes(this.searchQuery.toLowerCase());
+
+                // Flexible role matching
+                const memberRole = (m.role || '').toLowerCase();
+                const matchesRole = this.roleFilter === 'all' ||
+                    memberRole === this.roleFilter.toLowerCase() ||
+                    memberRole === this.roleFilterName(this.roleFilter).toLowerCase();
+
                 return matchesSearch && matchesRole;
             });
-            return filtered;
         },
 
         get paginatedMembers() {
@@ -59,27 +71,30 @@ document.addEventListener('alpine:init', () => {
             return this.filteredMembers.slice(start, start + this.itemsPerPage);
         },
 
-        inviteMember() {
+        // Helpers
+        roleFilterName(filterId) {
+            const role = this.roleDefinitions.find(r => r.id === filterId);
+            return role ? role.name : filterId;
+        },
+
+        // Actions (Delegate to Store)
+        async inviteMember(email, role) {
             this.inviting = true;
-            setTimeout(() => {
-                window.showToast?.('Invitation email sent successfully', 'success');
+            try {
+                // Mock implementation in Service will just echo back, 
+                // in real app this sends invite
+                await Alpine.store('team').invite(email, role);
+            } finally {
                 this.inviting = false;
-            }, 1000);
-        },
-
-        deleteMember(id) {
-            if (confirm('Are you sure you want to remove this member from the team?')) {
-                this.members = this.members.filter(m => m.id !== id);
-                window.showToast?.('Member removed', 'info');
             }
         },
 
-        changeRole(id, newRole) {
-            const member = this.members.find(m => m.id === id);
-            if (member) {
-                member.role = newRole;
-                window.showToast?.(`Role updated for ${member.name}`, 'success');
-            }
+        async deleteMember(id) {
+            await Alpine.store('team').removeMember(id);
+        },
+
+        async changeRole(id, newRole) {
+            await Alpine.store('team').updateRole(id, newRole);
         }
     }));
 });
