@@ -175,6 +175,9 @@
                                                     class="px-8 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">
                                                     Source</th>
                                                 <th
+                                                    class="px-8 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                                                    Trend</th>
+                                                <th
                                                     class="px-8 py-4 text-right text-[10px] font-bold text-gray-400 uppercase tracking-widest">
                                                     Volume</th>
                                                 <th
@@ -189,19 +192,39 @@
                                             <template x-for="source in stats.traffic_sources" :key="source.source">
                                                 <tr
                                                     class="group hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors">
-                                                    <td class="px-8 py-4 font-bold text-sm text-gray-900 dark:text-white"
-                                                        x-text="source.source">
+                                                    <td class="px-8 py-4">
+                                                        <div class="flex items-center gap-3">
+                                                            <div
+                                                                class="h-8 w-8 rounded-lg bg-gray-50 flex items-center justify-center dark:bg-gray-800">
+                                                                <span
+                                                                    class="material-symbols-outlined text-[18px] text-gray-400"
+                                                                    x-text="source.icon || 'public'"></span>
+                                                            </div>
+                                                            <span
+                                                                class="font-bold text-sm text-gray-900 dark:text-white"
+                                                                x-text="source.source"></span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-8 py-4 min-w-[120px]">
+                                                        <div :id="`sparkline-${source.id}`"
+                                                            class="h-[40px] w-full max-w-[100px]"></div>
                                                     </td>
                                                     <td class="px-8 py-4 text-right text-sm font-bold text-gray-700 dark:text-gray-300"
                                                         x-text="formatNumber(source.volume)">
                                                     </td>
-                                                    <td class="px-8 py-4 text-right text-sm font-bold text-gray-700 dark:text-gray-300"
+                                                    <td class="px-8 py-4 text-right text-sm font-bold text-emerald-600"
                                                         x-text="formatNumber(source.integrity)">
                                                     </td>
                                                     <td class="px-8 py-4 text-right">
-                                                        <span class="text-[11px] font-bold uppercase tracking-widest"
-                                                            :class="source.yield >= 4 ? 'text-emerald-500' : 'text-gray-500'"
-                                                            x-text="formatPercent(source.yield)"></span>
+                                                        <div class="flex items-center justify-end gap-2">
+                                                            <span
+                                                                class="text-[11px] font-bold uppercase tracking-widest"
+                                                                :class="source.yield >= 4 ? 'text-emerald-500' : 'text-amber-500'"
+                                                                x-text="formatPercent(source.yield)"></span>
+                                                            <span class="material-symbols-outlined text-sm"
+                                                                :class="source.yield >= 4 ? 'text-emerald-500' : 'text-amber-500'"
+                                                                x-text="source.yield >= 4 ? 'trending_up' : 'trending_flat'"></span>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             </template>

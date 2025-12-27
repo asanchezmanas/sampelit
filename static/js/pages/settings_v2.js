@@ -5,16 +5,17 @@ document.addEventListener('alpine:init', () => {
         roleFilter: 'all',
         loading: true,
         inviting: false,
+        currentPage: 1,
+        itemsPerPage: 5,
         organization: {
             name: 'Sampelit Corp',
             total_members: 19,
             plan: 'Business Pro'
         },
-        members: [],
         roles: [
-            { id: 'admin', name: 'Administradores', description: 'Acceso total a configuración, facturación y gestión de usuarios.', count: 2, icon: 'admin_panel_settings', color: 'blue' },
-            { id: 'editor', name: 'Editores', description: 'Pueden crear, editar y lanzar experimentos A/B.', count: 5, icon: 'edit_note', color: 'purple' },
-            { id: 'viewer', name: 'Visores', description: 'Solo lectura. Acceso a dashboards y resultados finales.', count: 12, icon: 'visibility', color: 'emerald' }
+            { id: 'admin', name: 'Administrador', description: 'Total organization control, billing and security policies.', count: 2, icon: 'admin_panel_settings', color: 'blue' },
+            { id: 'editor', name: 'Editor', description: 'Full access to Discovery Lab and Experiment Detail.', count: 5, icon: 'edit_note', color: 'purple' },
+            { id: 'viewer', name: 'Visor', description: 'Read-only access to final results and analytics.', count: 12, icon: 'visibility', color: 'emerald' }
         ],
 
         async init() {
@@ -44,12 +45,18 @@ document.addEventListener('alpine:init', () => {
         },
 
         get filteredMembers() {
-            return this.members.filter(m => {
+            const filtered = this.members.filter(m => {
                 const matchesSearch = m.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
                     m.email.toLowerCase().includes(this.searchQuery.toLowerCase());
                 const matchesRole = this.roleFilter === 'all' || m.role.toLowerCase() === this.roleFilter.toLowerCase();
                 return matchesSearch && matchesRole;
             });
+            return filtered;
+        },
+
+        get paginatedMembers() {
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            return this.filteredMembers.slice(start, start + this.itemsPerPage);
         },
 
         inviteMember() {

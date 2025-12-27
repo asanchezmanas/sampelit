@@ -1141,6 +1141,50 @@ static/new/
 | `integrations_v2.html` | Crear endpoint `/integrations` |
 | `calendar_v2.html` | Conectar a datos reales |
 | `experiments_create_v2.html` | Considerar añadir timeline de new/ |
+| `analytics_v2.html` | Implementar gradientes de `chart-03.js` |
+| `dashboard_v2.html` | Usar `data-table-01.html` para el listado de experimentos |
+
+---
+
+## 💎 MATRIZ DE MEJARAS UX PREMIUM (TailAdmin)
+
+Para elevar la funcionalidad de Sampelit V2 a un estándar corporativo, se ha definido el siguiente mapeo de componentes desde el repositorio `temp_tailadmin`. El objetivo es capturar la lógica visual y funcional sin alterar el branding "Navy" de Sampelit.
+
+### 🏠 Dashboard & Core Logic
+| Componente TailAdmin | Integración en Sampelit | Valor de Negocio |
+|----------------------|-------------------------|-------------------|
+| `partials/activity-card.html` | Timeline de Actividad | Auditoría visual de cambios en experimentos y alertas de sistema. |
+| `partials/metric-group/metric-group-01.html` | KPI Cards Globales | Visualización con micro-tendencias (+/- %) nativa. |
+| `src/js/components/charts/chart-03.js` | Power Area Charts | Gradientes de profundidad para el gráfico de rendimiento global. |
+
+### 📊 Analytics & Insights
+| Componente TailAdmin | Integración en Sampelit | Valor de Negocio |
+|----------------------|-------------------------|-------------------|
+| `partials/traffic-stats.html` | Tarjetas de Métricas | Añade sparklines (mini-gráficos) a tasas de rebote y salida. |
+| `partials/traffic-source.html` | Inventario de Fuentes | Desglose por marca (Google, Meta, Direct) con barras alineadas. |
+| `src/js/components/charts/chart-12.js` | Gráfico Radial | Visualización circular de la distribución de visitantes por canal. |
+
+### 🧪 Experiment Management
+| Componente TailAdmin | Integración en Sampelit | Valor de Negocio |
+|----------------------|-------------------------|-------------------|
+| `partials/list/list-03.html` | Log Cronológico de Variantes | Historial de versiones y ajustes realizados por variante. |
+| `src/js/components/charts/chart-07.js` | Trend Comparison | Gráfico de líneas para visualizar Uplift vs Control a lo largo del tiempo. |
+| `partials/modal/modal-01.html` | Acciones Críticas | Modales con `backdrop-blur` para decisiones de "Ganador" o "Pausa". |
+
+### 👥 Administración (Team & Billing)
+| Componente TailAdmin | Integración en Sampelit | Valor de Negocio |
+|----------------------|-------------------------|-------------------|
+| `partials/table/table-04.html` | Team CRM Table | Gestión de miembros con estados (Active/Invited) y roles dinámicos. |
+| `src/api-keys.html` | API Hub | Gestión profesional de tokens para integraciones externas. |
+| `partials/invoice/invoice-01.html` | Historial Billing | Vista previa profesional de facturas y consumos mensuales. |
+
+---
+
+## 🔧 Estandarización de Interacciones (Alpine.js)
+
+Se adoptará el patrón de `src/partials/data-table/data-table-01.html` como base para todas las tablas de la aplicación.
+- **Funcionalidad**: Búsqueda global, ordenación de columnas y paginación reactiva instantánea.
+- **Uso**: Listado de experimentos, gestión de equipo e historial de facturación.
 
 ---
 

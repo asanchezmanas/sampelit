@@ -12,6 +12,10 @@ document.addEventListener('alpine:init', () => {
             elements: []
         },
         activeTab: 'overview',
+        modal: {
+            variant: false
+        },
+        selectedVariant: null,
         charts: {
             conversion: null,
             bayesian: null
@@ -206,19 +210,28 @@ document.addEventListener('alpine:init', () => {
                 total_visitors: 12450,
                 total_conversions: 1543,
                 overall_conversion_rate: 0.124,
+                change_log: [
+                    { action: 'Variant B Performance Spike', description: 'Variant B showed a 15% increase in conversion rate over the last 6 hours.', time_ago: '2 hours ago', icon: 'trending_up', timestamp: 1 },
+                    { action: 'Traffic Re-allocation', description: 'Bayesian engine increased traffic to Variant B to 65%.', time_ago: '5 hours ago', icon: 'alt_route', timestamp: 2 },
+                    { action: 'Experiment Launched', description: 'Homepage Hero Test is live across all tiers.', time_ago: '1 day ago', icon: 'rocket_launch', timestamp: 3 }
+                ],
                 elements: [{
                     bayesian_stats: {
                         winner: { probability_best: 0.952 }
                     },
+                    traffic_breakdown: [
+                        { source: 'Desktop', visitors: 8234, conversion_rate: 0.132 },
+                        { source: 'Mobile', visitors: 4216, conversion_rate: 0.118 }
+                    ],
                     variants: [
-                        { name: 'Control', conversion_rate: 0.10 },
-                        { name: 'Variant B', conversion_rate: 0.12 }
+                        { name: 'Control', conversion_rate: 0.10, total_allocations: 6225, total_conversions: 622, probability_best: 0.04, uplift: 0, is_control: true },
+                        { name: 'Variant B', conversion_rate: 0.138, total_allocations: 6225, total_conversions: 858, probability_best: 0.96, uplift: 38.0, is_control: false }
                     ],
                     daily_stats: [
                         { date: '2025-01-01', variant_stats: [{ name: 'Control', conversion_rate: 0.08 }, { name: 'Variant B', conversion_rate: 0.09 }] },
                         { date: '2025-01-02', variant_stats: [{ name: 'Control', conversion_rate: 0.09 }, { name: 'Variant B', conversion_rate: 0.10 }] },
                         { date: '2025-01-03', variant_stats: [{ name: 'Control', conversion_rate: 0.095 }, { name: 'Variant B', conversion_rate: 0.11 }] },
-                        { date: '2025-01-04', variant_stats: [{ name: 'Control', conversion_rate: 0.10 }, { name: 'Variant B', conversion_rate: 0.12 }] }
+                        { date: '2025-01-04', variant_stats: [{ name: 'Control', conversion_rate: 0.10 }, { name: 'Variant B', conversion_rate: 0.138 }] }
                     ]
                 }]
             };
@@ -226,7 +239,13 @@ document.addEventListener('alpine:init', () => {
             this.loading = false;
         },
 
+        openVariantDetails(variant) {
+            this.selectedVariant = variant;
+            this.modal.variant = true;
+        },
+
         renderBayesianChart(probability) {
+            const isDark = document.documentElement.classList.contains('dark');
             const options = {
                 series: [probability.toFixed(1)],
                 chart: {
@@ -236,19 +255,21 @@ document.addEventListener('alpine:init', () => {
                 },
                 plotOptions: {
                     radialBar: {
-                        startAngle: -135,
-                        endAngle: 135,
+                        startAngle: -110,
+                        endAngle: 110,
                         hollow: {
                             margin: 15,
-                            size: '65%',
+                            size: '70%',
                             background: 'transparent',
                         },
                         track: {
-                            background: this.darkMode ? '#374151' : '#f1f5f9',
+                            background: isDark ? '#374151' : '#f1f5f9',
                             strokeWidth: '100%',
                             margin: 0,
                         },
-                        dataLabels: { show: false }
+                        dataLabels: {
+                            show: false
+                        }
                     }
                 },
                 fill: {
@@ -265,7 +286,7 @@ document.addEventListener('alpine:init', () => {
                     }
                 },
                 stroke: { lineCap: 'round' },
-                colors: ['#1E3A8A'],
+                colors: ['#0f172a'],
                 labels: ['Confidence'],
             };
 
@@ -275,12 +296,10 @@ document.addEventListener('alpine:init', () => {
                 this.charts.bayesian = new ApexCharts(chartEl, options);
                 this.charts.bayesian.render();
             }
-
-            // Update text manually if needed or bind via Alpine
-            // (We are binding via Alpine in HTML: x-text="...")
         },
 
         renderConversionChart(chartData = null) {
+            const isDark = document.documentElement.classList.contains('dark');
             // Default mock data if no real data
             let days = ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'];
             let series = [
@@ -301,34 +320,48 @@ document.addEventListener('alpine:init', () => {
                     height: 320,
                     fontFamily: 'Manrope, sans-serif',
                     toolbar: { show: false },
-                    animations: { enabled: true }
+                    animations: { enabled: true },
+                    dropShadow: { enabled: true, top: 12, left: 0, blur: 4, opacity: 0.05 }
                 },
-                colors: ['#94a3b8', '#10b981', '#3b82f6', '#f59e0b'], // Extended color palette for more variants
+                colors: ['#94a3b8', '#10b981', '#3b82f6', '#f59e0b'],
                 fill: {
                     type: 'gradient',
                     gradient: {
                         shadeIntensity: 1,
-                        opacityFrom: 0.4,
+                        opacityFrom: 0.45,
                         opacityTo: 0.05,
-                        stops: [0, 90, 100]
+                        stops: [0, 100]
                     }
                 },
                 dataLabels: { enabled: false },
-                stroke: { curve: 'smooth', width: 2 },
+                stroke: { curve: 'smooth', width: 3 },
                 xaxis: {
                     categories: days,
                     axisBorder: { show: false },
                     axisTicks: { show: false },
-                    labels: { style: { colors: '#9CA3AF', fontSize: '11px' } }
+                    labels: { style: { colors: '#9CA3AF', fontSize: '11px', fontWeight: 600 } }
                 },
                 yaxis: {
-                    labels: { style: { colors: '#9CA3AF', fontSize: '11px' }, formatter: (val) => val + '%' }
+                    labels: {
+                        style: { colors: '#9CA3AF', fontSize: '11px', fontWeight: 600 },
+                        formatter: (val) => val + '%'
+                    }
                 },
                 grid: {
-                    borderColor: this.darkMode ? '#374151' : '#f1f5f9',
-                    strokeDashArray: 4
+                    borderColor: isDark ? '#374151' : '#f1f5f9',
+                    strokeDashArray: 4,
+                    xaxis: { lines: { show: true } },
+                    yaxis: { lines: { show: true } }
                 },
-                tooltip: { theme: this.darkMode ? 'dark' : 'light' }
+                legend: {
+                    show: true,
+                    position: 'top',
+                    horizontalAlign: 'right',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    markers: { radius: 12 }
+                },
+                tooltip: { theme: isDark ? 'dark' : 'light' }
             };
 
             const chartEl = document.querySelector("#conversionChart");
