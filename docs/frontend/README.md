@@ -10,6 +10,7 @@ Documentación del frontend de Samplit.
 |-----------|-------------|
 | **[🎯 UI Specifications](./ui_specifications.md)** | **CRÍTICO** - Principios de diseño business-first |
 | **[📋 Specs por Vista](./specs/)** | Wireframes y mapeo API por cada vista |
+| **[🚀 Migration Plan](./migration_plan.md)** | Estado V1 vs V2, plan archivo por archivo |
 | [Architecture](./architecture.md) | Estructura obligatoria para páginas v2 |
 | [Valor del Backend](../backend/valor_del_backend.md) | Potencial del backend para frontend |
 

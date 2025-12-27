@@ -12,6 +12,7 @@ Cada spec incluye: wireframe, mapeo API → UI, estados, y componente Alpine.js.
 | Vista | Archivo | Spec |
 |-------|---------|------|
 | Dashboard | `index_v2.html` | [dashboard.md](./dashboard.md) |
+| Experiments List | `experiments_v2.html` | [experiments_list.md](./experiments_list.md) |
 | Experiment Detail | `experiment_detail_v2.html` | [experiment_detail.md](./experiment_detail.md) |
 | Create Experiment | `experiments_create_v2.html` | [experiment_create.md](./experiment_create.md) |
 | Analytics | `analytics_v2.html` | [analytics.md](./analytics.md) |
@@ -41,8 +42,5 @@ Cada archivo incluye:
 
 ## Pendientes
 
-- [ ] Experiments List (`experiments_v2.html`)
-- [ ] Settings/Profile (`profile_v2.html`)
-- [ ] Integrations (`integrations_v2.html`)
 - [ ] Visual Editor (`visual_editor_v2.html`)
 - [ ] Funnel Builder (`funnel_builder_v2.html`)
