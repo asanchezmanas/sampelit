@@ -1,0 +1,107 @@
+/* static/css/sampelit-v3.css */
+
+:root {
+    /* Paleta Industrial "Earth & Sea" */
+    --s-background: #eae2b7;
+    --s-surface: #f2ecd0;
+
+    /* Charcoal Blue */
+    --s-charcoal: #264653;
+    --s-charcoal-400: #1f3943;
+    --s-charcoal-600: #3f7489;
+
+    /* Verdigris (Teal) */
+    --s-verdigris: #2a9d8f;
+    --s-verdigris-600: #3acbba;
+
+    /* Tuscan Sun (Yellow) */
+    --s-tuscan: #e9c46a;
+
+    /* Sandy Brown (Orange) */
+    --s-sandy: #f4a261;
+
+    /* Burnt Peach (Primary Action) */
+    --s-primary: #e76f51;
+    --s-primary-600: #ec8b73;
+
+    --s-text: #264653;
+    --s-text-muted: #3f7489;
+    --s-border: rgba(38, 70, 83, 0.2);
+}
+
+.dark {
+    --s-background: #0f172a;
+    --s-surface: #1e293b;
+    --s-text: #f1f5f9;
+    --s-text-muted: #94a3b8;
+    --s-border: rgba(255, 255, 255, 0.1);
+}
+
+/* Base Industrial Aesthetics */
+body {
+    background-color: var(--s-background);
+    color: var(--s-text);
+    font-family: 'Inter', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-display {
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--s-charcoal);
+}
+
+/* Technical Line-Art Helpers */
+.blueprint-border {
+    border: 2px solid var(--s-charcoal);
+}
+
+.technical-card {
+    background-color: var(--s-surface);
+    border: 1px solid var(--s-border);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.technical-card:hover {
+    border-color: var(--s-primary);
+    box-shadow: 4px 4px 0px var(--s-charcoal);
+    transform: translate(-2px, -2px);
+}
+
+/* Animations: Data Flow Pulses */
+@keyframes flow-pulse {
+    0% {
+        opacity: 0.3;
+        transform: scale(0.95);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0.3;
+        transform: scale(0.95);
+    }
+}
+
+.animate-flow {
+    animation: flow-pulse 2s infinite ease-in-out;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--s-background);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--s-charcoal);
+    border-radius: 0;
+}

@@ -17,10 +17,15 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: "#FF4D15", // Vibrant Orange from screenshot
-                        "background-light": "#FDF8F2", // Cream/Beige
-                        "background-dark": "#0A0A0A", // Near Black
-                        "surface-dark": "#151515",
+                        primary: "#e76f51", // Burnt Peach (Sun Rise Action)
+                        charcoal: "#264653", // Structural
+                        verdigris: "#2a9d8f", // Success/Flow
+                        tuscan: "#e9c46a", // Warning/Accent
+                        sandy: "#f4a261", // Interaction
+                        "background-light": "#eae2b7", // Cream Base
+                        "background-dark": "#0F172A", // Deep Navy/Charcoal
+                        "surface-light": "#f2ecd0", // Light Cream for cards
+                        "surface-dark": "#1e293b",
                     },
                     fontFamily: {
                         display: ["'Plus Jakarta Sans'", "sans-serif"],
@@ -47,23 +52,23 @@
 </head>
 
 <body
-    class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100 font-sans antialiased transition-colors duration-300">
+    class="bg-background-light dark:bg-background-dark text-charcoal dark:text-gray-100 font-sans antialiased transition-colors duration-300">
     <nav
-        class="sticky top-0 z-50 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-800/50">
+        class="sticky top-0 z-50 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-charcoal/10">
         <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
-            <a class="text-3xl font-extrabold tracking-tighter text-gray-900 dark:text-white" href="#">
+            <a class="text-3xl font-extrabold tracking-tighter text-charcoal dark:text-white" href="#">
                 integr<span class="text-primary">.</span>
             </a>
-            <div class="hidden md:flex items-center gap-8 font-medium text-sm text-gray-600 dark:text-gray-300">
-                <a class="hover:text-primary transition-colors" href="#">Platform</a>
-                <a class="hover:text-primary transition-colors" href="#">Solutions</a>
-                <a class="hover:text-primary transition-colors" href="#">Pricing</a>
-                <a class="hover:text-primary transition-colors" href="#">Resources</a>
+            <div class="hidden md:flex items-center gap-8 font-medium text-sm text-charcoal/60 dark:text-gray-300">
+                <a class="hover:text-sandy transition-colors" href="#">Platform</a>
+                <a class="hover:text-sandy transition-colors" href="#">Solutions</a>
+                <a class="hover:text-sandy transition-colors" href="#">Pricing</a>
+                <a class="hover:text-sandy transition-colors" href="#">Resources</a>
             </div>
             <div class="flex items-center gap-4">
-                <a class="bg-primary hover:bg-orange-600 text-white px-5 py-2.5 rounded text-sm font-semibold transition-colors shadow-lg shadow-orange-500/30"
+                <a class="bg-primary hover:bg-sandy text-white px-5 py-2.5 rounded text-sm font-semibold transition-colors shadow-lg shadow-primary/30"
                     href="#">Sign Up</a>
-                <a class="bg-black hover:bg-gray-800 text-white dark:bg-white dark:text-black dark:hover:bg-gray-200 px-5 py-2.5 rounded text-sm font-semibold transition-colors"
+                <a class="bg-charcoal hover:bg-sandy text-white dark:bg-white dark:text-black dark:hover:bg-sandy/10 px-5 py-2.5 rounded text-sm font-semibold transition-colors"
                     href="#">Log In</a>
             </div>
         </div>
@@ -72,41 +77,42 @@
         <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
             <div class="space-y-8 z-10">
                 <div
-                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 dark:bg-orange-900/30 text-primary text-xs font-bold uppercase tracking-wider">
-                    Data Integration 2.0
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-charcoal/5 dark:bg-charcoal/30 text-charcoal text-[10px] font-bold uppercase tracking-widest border border-charcoal/10">
+                    Data Integration 2.0 <span class="text-primary italic">v3.1</span>
                 </div>
                 <h1
-                    class="text-6xl md:text-7xl font-extrabold leading-[1.1] tracking-tight text-gray-900 dark:text-white text-balance">
+                    class="text-6xl md:text-7xl font-extrabold leading-[1.1] tracking-tight text-charcoal dark:text-white text-balance">
                     Advanced <br />
                     Integrated <br />
                     Data Service
                 </h1>
-                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-md leading-relaxed">
+                <p
+                    class="text-lg text-charcoal/60 dark:text-gray-400 max-w-md leading-relaxed border-l-2 border-verdigris/30 pl-6">
                     Streamline your entire data pipeline with our seamless, secure, and scalable integration platform
                     designed for modern enterprises.
                 </p>
                 <div class="flex items-center gap-4 pt-2">
                     <button
-                        class="bg-black text-white dark:bg-white dark:text-black px-8 py-4 rounded text-sm font-bold uppercase tracking-wide hover:opacity-90 transition-opacity">
+                        class="bg-charcoal text-white dark:bg-white dark:text-black px-8 py-4 rounded text-sm font-bold uppercase tracking-wide hover:opacity-90 transition-opacity">
                         Get Started
                     </button>
                     <div
-                        class="flex items-center gap-3 bg-white dark:bg-gray-800 px-4 py-2 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
+                        class="flex items-center gap-3 bg-surface-light dark:bg-gray-800 px-4 py-2 rounded-lg shadow-sm border border-charcoal/5 dark:border-gray-700">
                         <div class="flex -space-x-2">
-                            <div class="w-8 h-8 rounded-full bg-gray-200 border-2 border-white dark:border-gray-800">
+                            <div class="w-8 h-8 rounded-full bg-charcoal/10 border-2 border-white dark:border-gray-800">
                             </div>
-                            <div class="w-8 h-8 rounded-full bg-gray-300 border-2 border-white dark:border-gray-800">
+                            <div class="w-8 h-8 rounded-full bg-charcoal/20 border-2 border-white dark:border-gray-800">
                             </div>
                         </div>
                         <div>
-                            <div class="flex text-yellow-400 text-xs">
+                            <div class="flex text-tuscan text-xs">
                                 <i class="ph-fill ph-star"></i>
                                 <i class="ph-fill ph-star"></i>
                                 <i class="ph-fill ph-star"></i>
                                 <i class="ph-fill ph-star"></i>
                                 <i class="ph-fill ph-star"></i>
                             </div>
-                            <span class="text-xs font-bold text-gray-900 dark:text-white">4.8/5 Rating</span>
+                            <span class="text-xs font-bold text-charcoal dark:text-white">4.8/5 Rating</span>
                         </div>
                     </div>
                 </div>
@@ -116,12 +122,12 @@
                     style="animation-duration: 3s;">
                     <div class="flex items-center gap-3">
                         <div
-                            class="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center text-green-600 dark:text-green-400">
+                            class="w-10 h-10 rounded-full bg-verdigris/10 dark:bg-verdigris/20 flex items-center justify-center text-verdigris">
                             <i class="ph-bold ph-check"></i>
                         </div>
                         <div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Status</p>
-                            <p class="font-bold text-sm text-gray-900 dark:text-white">Connected</p>
+                            <p class="text-xs text-charcoal/40 dark:text-gray-400">Status</p>
+                            <p class="font-bold text-sm text-charcoal dark:text-white">Connected</p>
                         </div>
                     </div>
                 </div>
@@ -131,7 +137,7 @@
             </div>
         </div>
     </section>
-    <div class="bg-black py-10">
+    <div class="bg-charcoal py-10">
         <div class="max-w-7xl mx-auto px-6">
             <div
                 class="flex flex-wrap justify-between items-center gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
@@ -150,12 +156,13 @@
     </div>
     <section class="bg-primary py-24 text-center px-6">
         <div
-            class="inline-block bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full mb-6 backdrop-blur-sm uppercase tracking-widest">
-            Platform</div>
-        <h2 class="text-4xl md:text-5xl font-bold text-white max-w-4xl mx-auto leading-tight">
+            class="inline-block bg-white/10 text-white text-[10px] font-bold px-3 py-1 rounded-full mb-6 backdrop-blur-sm uppercase tracking-[0.2em] border border-white/20">
+            Platform Engine</div>
+        <h2
+            class="text-4xl md:text-5xl font-bold text-white max-w-4xl mx-auto leading-tight font-display tracking-tight">
             Connect, Stream, and Activate All in One Place.
         </h2>
-        <p class="text-white/80 mt-6 max-w-2xl mx-auto">
+        <p class="text-white/80 mt-6 max-w-2xl mx-auto font-medium">
             Bring all your data sources together into a single cohesive ecosystem.
         </p>
     </section>
@@ -163,26 +170,27 @@
         <div class="grid lg:grid-cols-2 gap-16 items-center">
             <div class="order-2 lg:order-1">
                 <img alt="Autonomous Data Transformation Engine" class="w-full h-auto mix-blend-multiply rounded-3xl"
-                    src="/C:/Users/Artur/.gemini/antigravity/brain/31daad5b-c812-4542-9493-8fd33670369c/uploaded_image_0_1766856250379.png" />
+                    src="/c:/Users/Artur/sampelit/new/Gemini_Generated_Image_sxgkzosxgkzosxgk.png" />
             </div>
             <div class="order-1 lg:order-2 space-y-6">
-                <span class="text-primary font-bold text-sm tracking-widest uppercase">Engine</span>
-                <h3 class="text-4xl font-bold text-gray-900 dark:text-white">Smart Data <br /> Transformation Engine
+                <span class="text-primary font-bold text-xs tracking-[0.3em] uppercase">Engine Module</span>
+                <h3 class="text-4xl font-bold text-charcoal dark:text-white font-display tracking-tight">Smart Data
+                    <br /> Transformation Engine
                 </h3>
-                <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                <p class="text-charcoal/60 dark:text-gray-400 leading-relaxed max-w-md">
                     Our core ETL engine processes terabytes of data in real-time, ensuring that your analytics are
                     always up to date without latency issues.
                 </p>
                 <div class="grid grid-cols-2 gap-6 pt-4">
                     <div>
                         <i class="ph-duotone ph-lightning text-3xl text-primary mb-2"></i>
-                        <h4 class="font-bold text-gray-900 dark:text-white mb-1">Real-time Sync</h4>
-                        <p class="text-sm text-gray-500">Instant data availability across all endpoints.</p>
+                        <h4 class="font-bold text-charcoal dark:text-white mb-1">Real-time Sync</h4>
+                        <p class="text-sm text-charcoal/40">Instant data availability across all endpoints.</p>
                     </div>
                     <div>
                         <i class="ph-duotone ph-cpu text-3xl text-primary mb-2"></i>
-                        <h4 class="font-bold text-gray-900 dark:text-white mb-1">Auto Scaling</h4>
-                        <p class="text-sm text-gray-500">Resources adapt to your current workload.</p>
+                        <h4 class="font-bold text-charcoal dark:text-white mb-1">Auto Scaling</h4>
+                        <p class="text-sm text-charcoal/40">Resources adapt to your current workload.</p>
                     </div>
                 </div>
             </div>
@@ -190,32 +198,33 @@
     </section>
     <section class="px-6 mb-24">
         <div
-            class="max-w-7xl mx-auto bg-black dark:bg-surface-dark rounded-[2.5rem] p-12 lg:p-20 text-white relative overflow-hidden">
+            class="max-w-7xl mx-auto bg-charcoal dark:bg-surface-dark rounded-[2.5rem] p-12 lg:p-20 text-white relative overflow-hidden">
             <div
-                class="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-gray-800 to-transparent opacity-20 pointer-events-none">
+                class="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-white/10 to-transparent opacity-20 pointer-events-none">
             </div>
             <div class="grid lg:grid-cols-2 gap-12">
                 <div class="space-y-6">
                     <span
-                        class="text-orange-500 font-bold tracking-widest uppercase text-xs border border-orange-500/30 px-3 py-1 rounded-full">Deep
+                        class="text-primary font-bold tracking-[0.3em] uppercase text-[10px] border border-primary/30 px-3 py-1 rounded-full">Deep
                         Dive</span>
-                    <h3 class="text-3xl md:text-4xl font-bold">Smart Data <br /> Transformation Engine</h3>
+                    <h3 class="text-3xl md:text-4xl font-bold font-display tracking-tight">Smart Data <br />
+                        Transformation Engine</h3>
                     <button
-                        class="bg-primary hover:bg-orange-600 text-white px-6 py-3 rounded text-sm font-bold transition-colors mt-4">
+                        class="bg-primary hover:opacity-90 text-white px-6 py-3 rounded text-sm font-bold transition-colors mt-4">
                         Learn More
                     </button>
                 </div>
                 <div class="grid sm:grid-cols-2 gap-8">
-                    <div class="space-y-3 border-l border-gray-800 pl-6">
-                        <i class="ph-fill ph-gear text-orange-500 text-2xl"></i>
-                        <h4 class="font-bold text-lg">Automated Workflows</h4>
-                        <p class="text-gray-400 text-sm leading-relaxed">Define logic once and let the engine handle the
+                    <div class="space-y-3 border-l border-white/10 pl-6">
+                        <i class="ph-fill ph-gear text-primary text-2xl"></i>
+                        <h4 class="font-bold text-lg font-display">Automated Workflows</h4>
+                        <p class="text-white/60 text-sm leading-relaxed">Define logic once and let the engine handle the
                             repetitive tasks seamlessly.</p>
                     </div>
-                    <div class="space-y-3 border-l border-gray-800 pl-6">
-                        <i class="ph-fill ph-shield-check text-orange-500 text-2xl"></i>
-                        <h4 class="font-bold text-lg">Secure by Default</h4>
-                        <p class="text-gray-400 text-sm leading-relaxed">End-to-end encryption ensures your data never
+                    <div class="space-y-3 border-l border-white/10 pl-6">
+                        <i class="ph-fill ph-shield-check text-primary text-2xl"></i>
+                        <h4 class="font-bold text-lg font-display">Secure by Default</h4>
+                        <p class="text-white/60 text-sm leading-relaxed">End-to-end encryption ensures your data never
                             falls into the wrong hands.</p>
                     </div>
                 </div>
@@ -225,49 +234,51 @@
     <section class="py-12 max-w-7xl mx-auto px-6">
         <div class="grid lg:grid-cols-2 gap-16 items-center">
             <div class="space-y-6">
-                <span class="text-primary font-bold text-sm tracking-widest uppercase">Integration</span>
-                <h3 class="text-4xl font-bold text-gray-900 dark:text-white">Seamless Multi-Source <br /> Comes to You
+                <span class="text-primary font-bold text-xs tracking-[0.3em] uppercase">Integration</span>
+                <h3 class="text-4xl font-bold text-charcoal dark:text-white font-display tracking-tight">Seamless
+                    Multi-Source <br /> Comes to You
                     Fast.</h3>
-                <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                <p class="text-charcoal/60 dark:text-white/40 leading-relaxed max-w-md">
                     Connect legacy databases, cloud APIs, and file storage in one unified interface. Drag, drop, and
                     deploy.
                 </p>
                 <div class="grid grid-cols-2 gap-6 pt-4">
                     <div class="flex gap-4">
                         <div
-                            class="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center text-primary shrink-0">
+                            class="w-10 h-10 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary shrink-0">
                             <i class="ph-bold ph-plugs"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-gray-900 dark:text-white mb-1">400+ Connectors</h4>
-                            <p class="text-sm text-gray-500">Pre-built integrations ready to go.</p>
+                            <h4 class="font-bold text-charcoal dark:text-white mb-1">400+ Connectors</h4>
+                            <p class="text-sm text-charcoal/40">Pre-built integrations ready to go.</p>
                         </div>
                     </div>
                     <div class="flex gap-4">
                         <div
-                            class="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center text-primary shrink-0">
+                            class="w-10 h-10 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary shrink-0">
                             <i class="ph-bold ph-chart-line-up"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-gray-900 dark:text-white mb-1">Instant Analytics</h4>
-                            <p class="text-sm text-gray-500">Visualize data as it flows.</p>
+                            <h4 class="font-bold text-charcoal dark:text-white mb-1">Instant Analytics</h4>
+                            <p class="text-sm text-charcoal/40">Visualize data as it flows.</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div>
                 <img alt="Seamless Multi-Source Integration" class="w-full h-auto mix-blend-multiply rounded-3xl"
-                    src="/C:/Users/Artur/.gemini/antigravity/brain/31daad5b-c812-4542-9493-8fd33670369c/uploaded_image_1_1766856250379.png" />
+                    src="/c:/Users/Artur/sampelit/new/Gemini_Generated_Image_q7hqsvq7hqsvq7hq.png" />
             </div>
         </div>
     </section>
     <section class="py-24 max-w-7xl mx-auto px-6">
         <div class="grid lg:grid-cols-2 gap-16 items-center">
             <div class="space-y-6">
-                <span class="text-primary font-bold text-sm tracking-widest uppercase">Security</span>
-                <h3 class="text-4xl font-bold text-gray-900 dark:text-white">Enterprise Grade Security <br /> Data
+                <span class="text-primary font-bold text-xs tracking-[0.3em] uppercase">Security</span>
+                <h3 class="text-4xl font-bold text-charcoal dark:text-white font-display tracking-tight">Enterprise
+                    Grade Security <br /> Data
                     Today.</h3>
-                <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                <p class="text-charcoal/60 dark:text-gray-400 leading-relaxed max-w-md">
                     Compliance is built-in. SOC2, GDPR, and HIPAA ready infrastructure right out of the box so you can
                     focus on insights.
                 </p>
@@ -275,42 +286,44 @@
                     <div class="flex items-start gap-4">
                         <i class="ph-duotone ph-lock-key text-2xl text-primary mt-1"></i>
                         <div>
-                            <h4 class="font-bold text-gray-900 dark:text-white">Zero Trust Architecture</h4>
-                            <p class="text-sm text-gray-500 mt-1">Every request is authenticated and authorized.</p>
+                            <h4 class="font-bold text-charcoal dark:text-white">Zero Trust Architecture</h4>
+                            <p class="text-sm text-charcoal/40 mt-1">Every request is authenticated and authorized.</p>
                         </div>
                     </div>
                     <div class="flex items-start gap-4">
                         <i class="ph-duotone ph-cloud-check text-2xl text-primary mt-1"></i>
                         <div>
-                            <h4 class="font-bold text-gray-900 dark:text-white">Automatic Backups</h4>
-                            <p class="text-sm text-gray-500 mt-1">Point-in-time recovery available for 30 days.</p>
+                            <h4 class="font-bold text-charcoal dark:text-white">Automatic Backups</h4>
+                            <p class="text-sm text-charcoal/40 mt-1">Point-in-time recovery available for 30 days.</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="order-first lg:order-last">
                 <img alt="Enterprise Grade Security Vault" class="w-full h-auto mix-blend-multiply rounded-3xl"
-                    src="/C:/Users/Artur/.gemini/antigravity/brain/31daad5b-c812-4542-9493-8fd33670369c/uploaded_image_2_1766856250379.png" />
+                    src="/c:/Users/Artur/sampelit/new/Gemini_Generated_Image_rcvus2rcvus2rcvu.png" />
             </div>
         </div>
     </section>
     <section class="px-6 mb-24">
-        <div class="max-w-7xl mx-auto bg-black dark:bg-surface-dark rounded-[2.5rem] p-12 lg:p-20 text-white relative">
+        <div
+            class="max-w-7xl mx-auto bg-charcoal dark:bg-surface-dark rounded-[2.5rem] p-12 lg:p-20 text-white relative">
             <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <div class="space-y-6">
                     <span
-                        class="text-orange-500 font-bold tracking-widest uppercase text-xs border border-orange-500/30 px-3 py-1 rounded-full">Speed</span>
-                    <h3 class="text-4xl font-bold">Your Data, Working <br /> for You Fast.</h3>
+                        class="text-primary font-bold tracking-[0.3em] uppercase text-[10px] border border-primary/30 px-3 py-1 rounded-full">Speed</span>
+                    <h3 class="text-4xl font-bold font-display tracking-tight">Your Data, Working <br /> for You Fast.
+                    </h3>
                     <div class="grid grid-cols-2 gap-8 mt-8">
                         <div>
-                            <i class="ph-fill ph-rocket-launch text-orange-500 text-3xl mb-3"></i>
-                            <h4 class="font-bold text-lg">99.99% Uptime</h4>
-                            <p class="text-gray-400 text-sm mt-2">Reliability you can count on.</p>
+                            <i class="ph-fill ph-rocket-launch text-primary text-3xl mb-3"></i>
+                            <h4 class="font-bold text-lg font-display">99.99% Uptime</h4>
+                            <p class="text-white/60 text-sm mt-2">Reliability you can count on.</p>
                         </div>
                         <div>
-                            <i class="ph-fill ph-users-three text-orange-500 text-3xl mb-3"></i>
-                            <h4 class="font-bold text-lg">Team Access</h4>
-                            <p class="text-gray-400 text-sm mt-2">Granular permissions for all.</p>
+                            <i class="ph-fill ph-users-three text-primary text-3xl mb-3"></i>
+                            <h4 class="font-bold text-lg font-display">Team Access</h4>
+                            <p class="text-white/60 text-sm mt-2">Granular permissions for all.</p>
                         </div>
                     </div>
                 </div>
@@ -338,66 +351,69 @@
     </section>
     <section class="bg-primary py-24 px-6 relative overflow-hidden">
         <div class="max-w-4xl mx-auto text-center relative z-10">
-            <h2 class="text-4xl md:text-5xl font-bold text-white mb-10 leading-tight">
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-10 leading-tight font-display tracking-tight">
                 Start Building with Better Data <br /> Today
             </h2>
             <div class="bg-white p-2 rounded-full max-w-lg mx-auto flex shadow-2xl">
-                <input class="flex-1 border-none focus:ring-0 rounded-full px-6 text-gray-800 placeholder-gray-400"
+                <input
+                    class="flex-1 border-none focus:ring-0 rounded-full px-6 text-charcoal placeholder-charcoal/30 font-medium"
                     placeholder="Enter your email" type="email" />
                 <button
-                    class="bg-black hover:bg-gray-800 text-white px-8 py-3 rounded-full font-bold transition-colors">
+                    class="bg-charcoal hover:bg-sandy text-white px-8 py-3 rounded-full font-bold transition-colors uppercase tracking-widest text-xs">
                     Sign Up
                 </button>
             </div>
-            <p class="text-white/60 text-sm mt-4">No credit card required for 14-day trial.</p>
+            <p class="text-white/60 text-[10px] uppercase tracking-widest mt-4">No credit card required for 14-day
+                trial.</p>
         </div>
         <div
             class="absolute top-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2">
         </div>
         <div
-            class="absolute bottom-0 right-0 w-64 h-64 bg-black/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2">
+            class="absolute bottom-0 right-0 w-64 h-64 bg-charcoal/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2">
         </div>
     </section>
-    <footer class="bg-black text-white pt-20 pb-10 px-6 border-t border-gray-800">
+    <footer class="bg-charcoal text-white pt-20 pb-10 px-6">
         <div class="max-w-7xl mx-auto">
             <div class="grid md:grid-cols-4 gap-12 mb-20">
                 <div class="col-span-2">
-                    <h2 class="text-3xl md:text-5xl font-extrabold tracking-tighter mb-8">
+                    <h2 class="text-3xl md:text-5xl font-extrabold tracking-tighter mb-8 font-display">
                         HELLO<span class="text-primary">@</span>INTEGR.COM
                     </h2>
-                    <p class="text-gray-400 max-w-sm">
+                    <p class="text-white/40 max-w-sm font-medium">
                         San Francisco, CA 94103<br />
                         123 Market St, Suite 400
                     </p>
                 </div>
                 <div>
-                    <h4 class="font-bold mb-6 text-gray-200">Platform</h4>
-                    <ul class="space-y-4 text-gray-500">
-                        <li><a class="hover:text-primary transition-colors" href="#">Overview</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="#">Features</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="#">Integrations</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="#">Security</a></li>
+                    <h4 class="font-bold mb-6 text-white/90 font-display">Platform</h4>
+                    <ul class="space-y-4 text-white/40">
+                        <li><a class="hover:text-sandy transition-colors" href="#">Overview</a></li>
+                        <li><a class="hover:text-sandy transition-colors" href="#">Features</a></li>
+                        <li><a class="hover:text-sandy transition-colors" href="#">Integrations</a></li>
+                        <li><a class="hover:text-sandy transition-colors" href="#">Security</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-bold mb-6 text-gray-200">Company</h4>
-                    <ul class="space-y-4 text-gray-500">
-                        <li><a class="hover:text-primary transition-colors" href="#">About Us</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="#">Careers</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="#">Blog</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="#">Contact</a></li>
+                    <h4 class="font-bold mb-6 text-white/90 font-display">Company</h4>
+                    <ul class="space-y-4 text-white/40">
+                        <li><a class="hover:text-sandy transition-colors" href="#">About Us</a></li>
+                        <li><a class="hover:text-sandy transition-colors" href="#">Careers</a></li>
+                        <li><a class="hover:text-sandy transition-colors" href="#">Blog</a></li>
+                        <li><a class="hover:text-sandy transition-colors" href="#">Contact</a></li>
                     </ul>
                 </div>
             </div>
             <div
-                class="border-t border-gray-900 pt-10 flex flex-col md:flex-row justify-between items-end gap-6 overflow-hidden relative">
-                <div class="text-gray-600 text-sm">
+                class="border-t border-white/5 pt-10 flex flex-col md:flex-row justify-between items-end gap-6 overflow-hidden relative">
+                <div class="text-white/20 text-xs uppercase tracking-widest">
                     © 2023 Integr Inc. All rights reserved. <br />
                     <a class="hover:text-white" href="#">Privacy Policy</a> • <a class="hover:text-white" href="#">Terms
                         of Service</a>
                 </div>
-                <div class="absolute -bottom-16 -right-10 opacity-20 pointer-events-none select-none">
-                    <span class="text-[12rem] font-bold tracking-tighter text-white whitespace-nowrap leading-none">
+                <div class="absolute -bottom-16 -right-10 opacity-10 pointer-events-none select-none">
+                    <span
+                        class="text-[12rem] font-bold tracking-tighter text-white whitespace-nowrap leading-none font-display">
                         integr<span class="text-primary">.</span>
                     </span>
                 </div>
