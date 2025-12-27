@@ -60,7 +60,7 @@ Not a long testimonial. Just:
 **Option A:** 12 additional months free (added to your account)
 
 **Option B:** Keep your 50% discount for year 2  
-(Instead of going to standard €49/month, stay at €24/month for another year)
+(Instead of going to standard €149/month, stay at €74.50/month for another year)
 
 ---
 

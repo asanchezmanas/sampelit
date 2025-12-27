@@ -10,7 +10,7 @@
 **What we are:** Copy testing infrastructure.
 **What we're not:** A marketing agency, an enterprise platform, a magic solution.
 
-**Price position:** Premium methodology, accessible price (€49 vs €300+).
+**Price position:** Premium methodology, accessible price (€149 vs €300+).
 
 ---
 
@@ -90,7 +90,7 @@ Quality, precision, thoughtfulness.
 
 ```
 ✓ "Copy testing infrastructure for teams that prefer data over opinions."
-✓ "A/B testing for copy. €49/month. No sales calls."
+✓ "A/B testing for copy. €149/month. No sales calls."
 ✓ "We test our own landing pages with the same system we offer."
 ```
 
@@ -173,7 +173,7 @@ Quality, precision, thoughtfulness.
 > "Get started for just $49/month! 🚀 Limited time offer - 50% off for early adopters! Don't miss out!"
 
 **After:**
-> "€49/month. Traditional tools charge €300+. Early adopters receive 50% off the first year."
+> "€149/month. Traditional tools charge €300+. Early adopters receive 50% off the first year."
 
 ---
 

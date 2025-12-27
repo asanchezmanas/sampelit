@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Terms of Service | Sampelit</title>
+    <meta name="description"
+        content="Terms of Service for using Sampelit. Use our product to test copy on your sites. Don't use it for anything illegal." />
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" />
+
+    <!-- Core Design System -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+    <link rel="stylesheet" href="css/sampelit-v2.css" />
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#0f172a",
+                        accent: "#1e3a8a",
+                        sampelit: "#0f172a"
+                    },
+                    fontFamily: {
+                        display: ['Manrope', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="js/include.js"></script>
+</head>
+
+<body x-data="{ page: 'terms', darkMode: false }"
+    x-init="darkMode = JSON.parse(localStorage.getItem('darkMode')) || false; $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{ 'dark': darkMode }"
+    class="font-sans antialiased bg-white text-gray-700 dark:bg-gray-900 dark:text-gray-300">
+
+    <include src="./partials/header_landing_v2.html"></include>
+
+    <main class="pt-20">
+        <article class="px-4 py-16 mx-auto max-w-4xl">
+            <header class="mb-12">
+                <h1 class="text-4xl font-bold text-gray-900 dark:text-white font-display">Terms of Service</h1>
+                <p class="mt-4 text-sm text-gray-500">Last updated: December 2025</p>
+            </header>
+
+            <div class="prose prose-lg dark:prose-invert max-w-none">
+                <p class="lead">These terms govern your use of our service.</p>
+
+                <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg my-8">
+                    <p class="font-semibold mb-2">Summary in plain English:</p>
+                    <ul class="mb-0">
+                        <li>You can use our product to test copy on your sites</li>
+                        <li>Don't use it for anything illegal or abusive</li>
+                        <li>We'll provide the service as described, but can't guarantee specific results</li>
+                        <li>You can cancel anytime</li>
+                        <li>We can terminate accounts that violate these terms</li>
+                    </ul>
+                </div>
+
+                <h2>1. Acceptance of Terms</h2>
+                <p>By using this service, you agree to these terms. If you don't agree, don't use the service.</p>
+
+                <h2>2. Description of Service</h2>
+                <p>We provide a system for running copy experiments on your website.</p>
+                <p><strong>What this includes:</strong></p>
+                <ul>
+                    <li>JavaScript snippet to distribute traffic</li>
+                    <li>Dashboard to view results</li>
+                    <li>Statistical analysis of performance</li>
+                </ul>
+                <p><strong>What this doesn't include:</strong></p>
+                <ul>
+                    <li>Consulting or strategy services</li>
+                    <li>Guaranteed improvements to conversion rates</li>
+                    <li>Custom development</li>
+                </ul>
+
+                <h2>3. Account Requirements</h2>
+                <p>To use the service, you must:</p>
+                <ul>
+                    <li>Be at least 18 years old</li>
+                    <li>Provide accurate information</li>
+                    <li>Have legal authority to bind your company (if applicable)</li>
+                    <li>Comply with all applicable laws</li>
+                </ul>
+
+                <h2>4. Acceptable Use</h2>
+                <p><strong>You may:</strong></p>
+                <ul>
+                    <li>Run experiments on websites you own or have permission to modify</li>
+                    <li>Use data for optimizing your own sites</li>
+                    <li>Cancel your subscription at any time</li>
+                </ul>
+                <p><strong>You may not:</strong></p>
+                <ul>
+                    <li>Use the service for illegal purposes</li>
+                    <li>Run experiments on sites you don't own</li>
+                    <li>Attempt to reverse-engineer the system</li>
+                    <li>Abuse or overload our infrastructure</li>
+                    <li>Resell access to the service</li>
+                </ul>
+
+                <h2>5. Payment and Billing</h2>
+                <ul>
+                    <li>Plans start at €149/month</li>
+                    <li>Billed monthly via Stripe</li>
+                    <li>Cancel anytime, no refunds for partial months</li>
+                    <li>Price changes with 30 days notice</li>
+                </ul>
+
+                <h2>6. Data and Privacy</h2>
+                <ul>
+                    <li>You own all data from your experiments</li>
+                    <li>We don't sell or share it</li>
+                    <li>You can export it anytime</li>
+                    <li>We delete it within 30 days of account closure</li>
+                </ul>
+
+                <h2>7. Limitation of Liability</h2>
+                <p>Our total liability is limited to the amount you paid us in the previous 12 months.</p>
+                <p>We're not liable for indirect damages, lost profits, or third-party claims.</p>
+
+                <h2>8. Termination</h2>
+                <p>You can terminate anytime by canceling your subscription. We can terminate if you violate these terms
+                    or for non-payment.</p>
+
+                <h2>9. Dispute Resolution</h2>
+                <p>Jurisdiction: Spain, EU. First, email us to resolve informally. If that fails, mediation, then
+                    courts.</p>
+
+                <h2>10. Contact</h2>
+                <p>Questions about these terms? Email <a href="mailto:legal@sampelit.com">legal@sampelit.com</a></p>
+            </div>
+        </article>
+    </main>
+
+    <include src="./partials/footer_landing_v2.html"></include>
+</body>
+
+</html>

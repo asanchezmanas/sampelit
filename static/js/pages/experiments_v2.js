@@ -192,6 +192,112 @@ document.addEventListener('alpine:init', () => {
 
         async deleteExperiment(id) {
             await Alpine.store('experiments').delete(id);
+        },
+
+        // ===== NUEVAS MEJORAS =====
+
+        // Quick Preview on hover
+        previewExperiment: null,
+        showPreview(exp) {
+            this.previewExperiment = exp;
+        },
+        hidePreview() {
+            this.previewExperiment = null;
+        },
+
+        // Show/Hide Archived
+        showArchived: false,
+        toggleArchived() {
+            this.showArchived = !this.showArchived;
+        },
+
+        get activeData() {
+            if (this.showArchived) {
+                return this.filteredData;
+            }
+            return this.filteredData.filter(exp => exp.status !== 'archived');
+        },
+
+        get archivedCount() {
+            return this.data.filter(exp => exp.status === 'archived').length;
+        },
+
+        // Tags filter
+        selectedTags: [],
+
+        get allTags() {
+            const tags = new Set();
+            this.data.forEach(exp => {
+                if (exp.tags && Array.isArray(exp.tags)) {
+                    exp.tags.forEach(t => tags.add(t));
+                }
+            });
+            return [...tags].sort();
+        },
+
+        toggleTag(tag) {
+            const idx = this.selectedTags.indexOf(tag);
+            if (idx > -1) {
+                this.selectedTags.splice(idx, 1);
+            } else {
+                this.selectedTags.push(tag);
+            }
+            this.currentPage = 1;
+        },
+
+        get tagFilteredData() {
+            let data = this.activeData;
+            if (this.selectedTags.length === 0) return data;
+            return data.filter(exp =>
+                exp.tags && this.selectedTags.some(t => exp.tags.includes(t))
+            );
+        },
+
+        // Export experiments list
+        exportList() {
+            const headers = ['Name', 'Status', 'URL', 'Created', 'Traffic'];
+            const rows = this.filteredData.map(exp => [
+                exp.name,
+                exp.status,
+                exp.url,
+                exp.created_at,
+                exp.traffic_allocation
+            ]);
+
+            const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `experiments-${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            window.dispatchEvent(new CustomEvent('toast:show', {
+                detail: { message: 'Experiments exported to CSV', type: 'success' }
+            }));
+        },
+
+        // Duplicate experiment
+        async duplicateExperiment(id) {
+            const original = this.data.find(e => e.id === id);
+            if (!original) return;
+
+            const duplicate = {
+                ...original,
+                name: `${original.name} (Copy)`,
+                status: 'draft',
+                id: undefined
+            };
+
+            await Alpine.store('experiments').create(duplicate);
+
+            window.dispatchEvent(new CustomEvent('toast:show', {
+                detail: { message: 'Experiment duplicated', type: 'success' }
+            }));
         }
     }));
 });

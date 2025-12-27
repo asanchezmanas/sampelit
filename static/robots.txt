@@ -1,0 +1,30 @@
+User-agent: *
+Allow: /
+
+# Public pages
+Allow: /about_v2.html
+Allow: /pricing_v2.html
+Allow: /contact_v2.html
+Allow: /faq_v2.html
+Allow: /blog_v2.html
+Allow: /privacy_v2.html
+Allow: /terms_v2.html
+Allow: /homepage_v2.html
+
+# App pages (search engines can index but no crawling needed)
+Allow: /index_v2.html
+Allow: /experiments_v2.html
+Allow: /analytics_v2.html
+Allow: /billing_v2.html
+Allow: /settings_v2.html
+
+# Disallow internal/partial files
+Disallow: /partials/
+Disallow: /components/
+Disallow: /js/
+Disallow: /css/
+Disallow: /_legacy_v1_backup/
+Disallow: /_template_archive/
+
+# Sitemap
+Sitemap: https://sampelit.com/sitemap.xml

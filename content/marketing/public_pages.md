@@ -212,7 +212,7 @@ We read everything, even if it's critical feedback.
 A: Q1 2026. Join the [waitlist](#) for updates.
 
 **Q: How much will it cost?**  
-A: €49/month standard. Early adopters get 50% off first year.
+A: €149/month standard. Early adopters get 50% off first year (€74.50/month).
 
 **Q: Can I use this with [other tool]?**  
 A: Probably. It's a simple JavaScript snippet. Details on integration coming soon.
@@ -519,7 +519,7 @@ We provide a system for running copy experiments on your website.
 ### 5. Payment and Billing
 
 **Pricing:**
-- Plans start at €49/month (or current pricing)
+- Plans start at €149/month
 - Billed monthly via Stripe
 - Early adopters may have different pricing (honored as agreed)
 
@@ -766,7 +766,7 @@ A: You do. You can export it anytime and it's deleted when you close your accoun
 
 **Q: How much does it cost?**
 
-A: €49/month standard pricing. Early adopters get 50% off for the first year (€24/month).
+A: €149/month standard pricing. Early adopters get 50% off for the first year (€74.50/month).
 
 ---
 

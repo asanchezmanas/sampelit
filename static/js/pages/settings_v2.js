@@ -140,4 +140,90 @@ document.addEventListener('alpine:init', () => {
             }
         }
     }));
+
+    // SOTA: Dark Mode Controller with OS Preference Sync
+    Alpine.data('darkModeController', () => ({
+        darkMode: localStorage.getItem('darkMode') || 'system', // 'light' | 'dark' | 'system'
+
+        init() {
+            this.applyTheme();
+
+            // Watch for OS preference changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                if (this.darkMode === 'system') {
+                    this.applyTheme();
+                }
+            });
+        },
+
+        setMode(mode) {
+            this.darkMode = mode;
+            localStorage.setItem('darkMode', mode);
+            this.applyTheme();
+
+            window.dispatchEvent(new CustomEvent('toast:show', {
+                detail: { message: `Theme: ${mode === 'system' ? 'System Default' : mode}`, type: 'info' }
+            }));
+        },
+
+        applyTheme() {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const isDark = this.darkMode === 'dark' || (this.darkMode === 'system' && prefersDark);
+
+            document.documentElement.classList.toggle('dark', isDark);
+        },
+
+        get currentTheme() {
+            if (this.darkMode === 'system') {
+                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            return this.darkMode;
+        }
+    }));
+
+    // SOTA: Settings Changes Tracker (Reset)
+    Alpine.data('settingsTracker', () => ({
+        originalSettings: null,
+        isDirty: false,
+
+        init() {
+            // Capture original state on load
+            setTimeout(() => {
+                this.originalSettings = JSON.stringify(this.getCurrentSettings());
+            }, 1000);
+
+            // Watch for changes
+            this.$watch('getCurrentSettings()', () => {
+                this.checkDirty();
+            });
+        },
+
+        getCurrentSettings() {
+            // Return current form values (customize per form)
+            return {
+                darkMode: localStorage.getItem('darkMode'),
+                // Add other settings as needed
+            };
+        },
+
+        checkDirty() {
+            this.isDirty = JSON.stringify(this.getCurrentSettings()) !== this.originalSettings;
+        },
+
+        resetAll() {
+            if (this.originalSettings) {
+                const original = JSON.parse(this.originalSettings);
+                if (original.darkMode) localStorage.setItem('darkMode', original.darkMode);
+
+                this.isDirty = false;
+
+                window.dispatchEvent(new CustomEvent('toast:show', {
+                    detail: { message: 'Settings reset to last saved state', type: 'info' }
+                }));
+
+                // Reload to apply
+                location.reload();
+            }
+        }
+    }));
 });

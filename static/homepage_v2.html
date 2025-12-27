@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sampelit | Test Copy. Increase Conversions.</title>
+    <meta name="description"
+        content="Stop guessing which copy works. Run controlled experiments on your website and let data decide. Adaptive optimization. Real results." />
+
+    <!-- OG Tags -->
+    <meta property="og:title" content="Sampelit | Test Copy. Increase Conversions." />
+    <meta property="og:description"
+        content="Run controlled copy experiments on your website. Adaptive optimization that routes traffic to winning variants automatically." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://sampelit.com" />
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" />
+
+    <!-- Core Design System -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+    <link rel="stylesheet" href="css/sampelit-v2.css" />
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#0f172a",
+                        accent: "#1e3a8a",
+                        sampelit: "#0f172a"
+                    },
+                    fontFamily: {
+                        display: ['Manrope', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'premium': '0 25px 50px -12px rgba(15, 23, 42, 0.15)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="js/include.js"></script>
+</head>
+
+<body x-data="{ page: 'home', darkMode: false }"
+    x-init="darkMode = JSON.parse(localStorage.getItem('darkMode')) || false; $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{ 'dark': darkMode }"
+    class="font-sans antialiased bg-white text-gray-700 dark:bg-gray-900 dark:text-gray-300">
+
+    <include src="./partials/header_landing_v2.html"></include>
+
+    <main class="pt-16">
+        <!-- Hero Section -->
+        <section class="relative px-4 py-20 mx-auto max-w-7xl md:py-32 lg:py-40 overflow-hidden">
+            <!-- Background decoration -->
+            <div class="absolute inset-0 -z-10">
+                <div
+                    class="absolute top-0 right-0 w-96 h-96 bg-blue-100 dark:bg-blue-900/20 rounded-full blur-3xl opacity-50">
+                </div>
+                <div
+                    class="absolute bottom-0 left-0 w-96 h-96 bg-indigo-100 dark:bg-indigo-900/20 rounded-full blur-3xl opacity-50">
+                </div>
+            </div>
+
+            <div class="text-center max-w-4xl mx-auto">
+                <!-- Live experiment badge -->
+                <div
+                    class="inline-flex items-center gap-2 px-4 py-2 mb-8 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-full">
+                    <span class="relative flex h-2 w-2">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    </span>
+                    This page is running a live copy experiment
+                </div>
+
+                <h1
+                    class="text-5xl font-extrabold text-gray-900 dark:text-white md:text-6xl lg:text-7xl font-display tracking-tight leading-[1.1]">
+                    Stop guessing.<br />
+                    <span class="gradient-text">Start testing.</span>
+                </h1>
+
+                <p class="mt-8 text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
+                    Run controlled copy experiments on your website. Adaptive optimization routes traffic to winning
+                    variants automatically. Data-driven decisions, not intuition.
+                </p>
+
+                <div class="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="simulator_v2.html"
+                        class="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-bold text-white bg-primary rounded-xl hover:bg-primary/90 shadow-xl shadow-primary/20 transition-all hover:scale-[1.02]">
+                        <span class="material-symbols-outlined">play_arrow</span>
+                        See Live Simulation
+                    </a>
+                    <a href="pricing_v2.html"
+                        class="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-bold text-gray-700 dark:text-white bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        View Pricing
+                    </a>
+                </div>
+
+                <p class="mt-6 text-sm text-gray-500">
+                    Starting at €149/month. No credit card required for trial.
+                </p>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="px-4 py-20 bg-gray-50 dark:bg-gray-800/50">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white font-display md:text-4xl">
+                        What's happening here
+                    </h2>
+                    <p class="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                        Every visitor does not see the same page. This landing has 9 active copy variants running
+                        simultaneously.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Card 1 -->
+                    <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-lg">
+                        <div
+                            class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center mb-6">
+                            <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">shuffle</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Traffic Distribution</h3>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            Traffic is distributed automatically across variants. Underperformers receive less traffic
+                            over time.
+                        </p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-lg">
+                        <div
+                            class="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center mb-6">
+                            <span
+                                class="material-symbols-outlined text-emerald-600 dark:text-emerald-400">monitoring</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Continuous Measurement</h3>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            Performance is measured continuously. A winner is declared only when statistical confidence
+                            is met.
+                        </p>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-lg">
+                        <div
+                            class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center mb-6">
+                            <span
+                                class="material-symbols-outlined text-purple-600 dark:text-purple-400">trending_up</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Adaptive Optimization</h3>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            Unlike 50/50 splits, strong variants get more exposure. Same traffic, more conversions.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Impact Calculator Section -->
+        <section class="px-4 py-20">
+            <div class="max-w-4xl mx-auto">
+                <div
+                    class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-8 md:p-12 text-white shadow-premium">
+                    <div class="text-center mb-10">
+                        <h2 class="text-3xl font-bold font-display md:text-4xl">
+                            Estimate the impact on your site
+                        </h2>
+                        <p class="mt-4 text-gray-400">
+                            A modeled estimation based on controlled copy experiments. Not a promise. A calculation.
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-6 mb-10" x-data="{ visitors: 3000, cr: 3.0, aov: 100 }">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Monthly visitors</label>
+                            <input type="number" x-model="visitors"
+                                class="w-full h-12 px-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Conversion rate (%)</label>
+                            <input type="number" x-model="cr" step="0.1"
+                                class="w-full h-12 px-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Avg order value (€)</label>
+                            <input type="number" x-model="aov"
+                                class="w-full h-12 px-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-6 text-center">
+                        <div class="bg-white/5 rounded-2xl p-6">
+                            <p class="text-sm text-gray-400 mb-2">Conservative (+0.5% CR)</p>
+                            <p class="text-2xl font-bold text-emerald-400">+€1,500/mo</p>
+                            <p class="text-sm text-gray-500 mt-1">€18,000/year</p>
+                        </div>
+                        <div class="bg-white/10 rounded-2xl p-6 ring-2 ring-blue-500">
+                            <p class="text-sm text-blue-300 mb-2">Typical (+1.0% CR)</p>
+                            <p class="text-3xl font-bold text-white">+€3,000/mo</p>
+                            <p class="text-sm text-gray-400 mt-1">€36,000/year</p>
+                        </div>
+                        <div class="bg-white/5 rounded-2xl p-6">
+                            <p class="text-sm text-gray-400 mb-2">Upper range (+1.5% CR)</p>
+                            <p class="text-2xl font-bold text-emerald-400">+€4,500/mo</p>
+                            <p class="text-sm text-gray-500 mt-1">€54,000/year</p>
+                        </div>
+                    </div>
+
+                    <p class="mt-8 text-center text-sm text-gray-500">
+                        Tool cost: €149-399/month. Potential upside: €18,000-54,000/year.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why This Matters Section -->
+        <section class="px-4 py-20 bg-gray-50 dark:bg-gray-800/50">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white font-display md:text-4xl">
+                    Why this matters
+                </h2>
+                <div class="mt-10 grid md:grid-cols-2 gap-8 text-left">
+                    <div class="bg-white dark:bg-gray-900 rounded-2xl p-8">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">If you don't test:</h3>
+                        <ul class="space-y-3 text-gray-600 dark:text-gray-400">
+                            <li class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-red-500 text-lg mt-0.5">close</span>
+                                You don't know which version performs better
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-red-500 text-lg mt-0.5">close</span>
+                                You choose based on intuition
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-red-500 text-lg mt-0.5">close</span>
+                                You leave revenue unexplained
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bg-white dark:bg-gray-900 rounded-2xl p-8">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">With Sampelit:</h3>
+                        <ul class="space-y-3 text-gray-600 dark:text-gray-400">
+                            <li class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-emerald-500 text-lg mt-0.5">check</span>
+                                Data tells you what works
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-emerald-500 text-lg mt-0.5">check</span>
+                                Decisions backed by evidence
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-emerald-500 text-lg mt-0.5">check</span>
+                                Uncertainty removed, not created
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="mt-10 text-lg text-gray-600 dark:text-gray-400">
+                    Testing doesn't create demand. <strong class="text-gray-900 dark:text-white">It removes
+                        uncertainty.</strong>
+                </p>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="px-4 py-20">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white font-display md:text-4xl">
+                    See the experiment updates
+                </h2>
+                <p class="mt-4 text-lg text-gray-600 dark:text-gray-400">
+                    Get notified when we publish results from our live experiments. No spam. Only learnings.
+                </p>
+
+                <form class="mt-10 flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
+                    <input type="email" placeholder="Enter your email" required
+                        class="flex-1 h-14 px-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 focus:ring-2 focus:ring-primary focus:border-transparent" />
+                    <button type="submit"
+                        class="h-14 px-8 font-bold text-white bg-primary rounded-xl hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all whitespace-nowrap">
+                        Get Updates
+                    </button>
+                </form>
+
+                <p class="mt-4 text-sm text-gray-500">
+                    We only write when there is something to learn.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <include src="./partials/footer_landing_v2.html"></include>
+</body>
+
+</html>

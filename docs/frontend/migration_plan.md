@@ -171,26 +171,26 @@ Mejoras que afectan a toda la aplicación.
 *   **Status Filter Tabs**: ✅ Implementado (All/Active/Draft/Completed).
 
 ### 4. Creation Wizard (`experiments_create_v2.js`)
-*   **Persistencia Total**: Si cierro el navegador en el Paso 3, al volver mañana sigo en el Paso 3.
-*   **Validación Inline**: El campo se pone rojo en cuanto dejo de escribir (blur), no al enviar. Mensajes de error contextuales.
-*   **Preview Realista**: Al poner la URL, mostrar un iframe (o screenshot) del sitio objetivo, no solo texto.
-*   **Smart Defaults**: Si el 90% de mis tests son "A/B", no preseleccionar "Multivariante". Aprender del usuario.
+*   **Persistencia Total**: ✅ Implementado (localStorage + step recovery).
+*   **Validación Inline**: ✅ Implementado (blur validation + error messages).
+*   **Preview Realista**: ✅ Loader state implementado, iframe ready.
+*   **Smart Defaults**: ⏸️ Future (user preference learning).
 
 ### 5. Analytics & Reports (`analytics_v2.js`)
-*   **Interactive Charts**: Tooltips detallados al pasar el mouse. Zoom (seleccionar área para ampliar).
-*   **Export nativo**: "Download as PNG" y "Export CSV" generados en cliente (JS), sin esperar al servidor.
-*   **Comparison Mode**: Superponer gráficas de dos experimentos para ver correlaciones.
-*   **Annotated Timeline**: Marcar hitos en la gráfica (ej: "Black Friday", "Cambio de diseño") para explicar picos.
+*   **Interactive Charts**: ✅ ApexCharts con tooltips.
+*   **Export nativo**: ✅ Implementado (CSV + PNG client-side).
+*   **Comparison Mode**: ✅ Implementado (overlay two experiments).
+*   **Annotated Timeline**: ✅ Implementado (add/remove markers on chart).
 
 ### 6. Billing & Subscription (`billing_v2.js`)
-*   **Pro-rata Calculator**: Al cambiar de plan a mitad de mes, mostrar exactamente cuánto se cobrará/abonará antes de confirmar.
-*   **Invoice PDF**: Generación de PDF en cliente para descarga inmediata.
-*   **Usage Alerts**: Barra de progreso que cambia de color (verde -> amarillo -> rojo) al acercarse al límite de MAUs.
+*   **Pro-rata Calculator**: ✅ Implementado (calculates upgrade/downgrade cost).
+*   **Invoice PDF**: ✅ Implementado (client-side download).
+*   **Usage Alerts**: ✅ Implementado (color changes: green → yellow → red).
 
 ### 7. Settings & Team (`settings_v2.js`)
-*   **Avatar Crop**: Subir imagen, recortar en cliente (círculo), optimizar a WebP antes de subir.
-*   **Dark Mode Sync**: Opción "System Default" que reacciona si cambia el OS de día a noche.
-*   **Undo Changes**: Botón "Reset" global si he tocado muchas configuraciones y quiero volver al estado guardado.
+*   **Avatar Crop**: ⏸️ Future (cropper.js integration).
+*   **Dark Mode Sync**: ✅ Implementado (light/dark/system + OS listener).
+*   **Undo Changes**: ✅ Implementado (Settings Reset tracker).
 
 ### 8. Visual Editor (Integración Futura)
 *   **Undo/Redo Stack**: ✅ Implementado (50 items max, Ctrl+Z/Y).

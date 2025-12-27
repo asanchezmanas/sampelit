@@ -38,7 +38,7 @@ See the results → [link]
 ```
 A/B testing tools charge €300/month.
 
-We charge €49.
+We charge €149.
 
 Same methodology. No sales calls. No enterprise contracts.
 Built for teams that want to test, not negotiate.
@@ -96,7 +96,7 @@ We don't promise miracles.
 ```
 Built in Barcelona.
 
-Copy testing infrastructure for companies that prefer data over opinions. €49/month. Currently in private beta.
+Copy testing infrastructure for companies that prefer data over opinions. €149/month. Currently in private beta.
 
 [link]
 ```

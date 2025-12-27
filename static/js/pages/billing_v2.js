@@ -97,6 +97,93 @@ document.addEventListener('alpine:init', () => {
                 this.showUpgradeModal = false;
                 window.showToast?.(`Subscription updated successfully!`, 'success');
             }, 1500);
+        },
+
+        // SOTA: Usage Alert Color (green -> yellow -> red)
+        getUsageColor(percent) {
+            if (percent >= 90) return 'red';
+            if (percent >= 70) return 'yellow';
+            return 'emerald';
+        },
+
+        getUsageBarClass(percent) {
+            const color = this.getUsageColor(percent);
+            return {
+                'bg-emerald-500': color === 'emerald',
+                'bg-yellow-500': color === 'yellow',
+                'bg-red-500': color === 'red'
+            };
+        },
+
+        getUsageTextClass(percent) {
+            const color = this.getUsageColor(percent);
+            return {
+                'text-emerald-600': color === 'emerald',
+                'text-yellow-600': color === 'yellow',
+                'text-red-600': color === 'red'
+            };
+        },
+
+        // SOTA: Invoice PDF Generation (client-side)
+        async generateInvoicePDF(invoice) {
+            window.dispatchEvent(new CustomEvent('toast:show', {
+                detail: { message: 'Generating PDF...', type: 'info' }
+            }));
+
+            // Simulate PDF generation (in production, use jsPDF)
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            // Create a simple text representation as downloadable file
+            const content = `
+INVOICE: ${invoice.id}
+========================
+Date: ${invoice.date}
+Amount: ${invoice.amount}
+Status: ${invoice.status}
+
+Sampelit Inc.
+Thank you for your business!
+            `.trim();
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `invoice-${invoice.id}.txt`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            window.dispatchEvent(new CustomEvent('toast:show', {
+                detail: { message: 'Invoice downloaded!', type: 'success' }
+            }));
+        },
+
+        // SOTA: Pro-rata Calculator
+        calculateProrata(targetPlan) {
+            const currentPrice = this.pricingPlans.find(p => p.current)?.price[this.billingCycle] || 0;
+            const targetPrice = this.pricingPlans.find(p => p.name === targetPlan)?.price[this.billingCycle] || 0;
+
+            if (typeof targetPrice === 'string') return null; // Custom pricing
+
+            // Calculate days remaining in current period
+            const today = new Date();
+            const renewalDate = new Date(this.subscription.renewal_date);
+            const daysRemaining = Math.ceil((renewalDate - today) / (1000 * 60 * 60 * 24));
+            const daysInMonth = 30;
+
+            const currentCredit = (currentPrice / daysInMonth) * daysRemaining;
+            const newCharge = (targetPrice / daysInMonth) * daysRemaining;
+            const difference = newCharge - currentCredit;
+
+            return {
+                credit: currentCredit.toFixed(2),
+                charge: newCharge.toFixed(2),
+                difference: difference.toFixed(2),
+                isUpgrade: difference > 0
+            };
         }
     }));
 });

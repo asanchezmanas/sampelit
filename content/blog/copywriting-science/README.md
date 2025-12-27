@@ -70,7 +70,7 @@ Estudios fMRI muestran que el **medial prefrontal cortex** (mPFC) se activa cuan
 
 **Aplicación al Copy:**
 - Reducir el riesgo percibido (garantías, devoluciones)
-- Justificar el valor ("€49/mes = €1.60/día")
+- Justificar el valor ("€149/mes = €5/día")
 - Crear sensación de "obvio" en lugar de "arriesgado"
 
 **Fuente:** MDPI, Journal of Consumer Neuroscience, 2024

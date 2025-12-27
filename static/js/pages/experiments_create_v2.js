@@ -36,8 +36,10 @@ document.addEventListener('alpine:init', () => {
                     const draft = JSON.parse(savedDraft);
                     // Merge draft into experiment object safely
                     this.experiment = { ...this.experiment, ...draft };
-                    // If we had a saved step, restore it too (optional, maybe better to start at 1 to review)
-                    // this.step = draft._step || 1; 
+                    // SOTA: Restore step position
+                    if (draft._step) {
+                        this.step = draft._step;
+                    }
                     console.log('Draft restored from local storage');
 
                     window.dispatchEvent(new CustomEvent('toast:show', {
@@ -109,9 +111,110 @@ document.addEventListener('alpine:init', () => {
             }
         },
 
-        // Navigation Helpers
-        nextStep() { if (this.step < 4) this.step++; },
-        prevStep() { if (this.step > 1) this.step--; },
-        goToStep(s) { this.step = s; }
+        // SOTA: Inline Validation State
+        errors: {},
+        touched: {},
+
+        // SOTA: Validate field on blur
+        validateField(field) {
+            this.touched[field] = true;
+            this.errors[field] = null;
+
+            switch (field) {
+                case 'name':
+                    if (!this.experiment.name || this.experiment.name.length < 3) {
+                        this.errors[field] = 'Name must be at least 3 characters';
+                    }
+                    break;
+                case 'url':
+                    try {
+                        new URL(this.experiment.url);
+                        if (!this.experiment.url.startsWith('http')) {
+                            this.errors[field] = 'URL must start with http:// or https://';
+                        }
+                    } catch {
+                        this.errors[field] = 'Invalid URL format';
+                    }
+                    break;
+                case 'hypothesis':
+                    if (!this.experiment.hypothesis || this.experiment.hypothesis.length < 10) {
+                        this.errors[field] = 'Hypothesis should be at least 10 characters';
+                    }
+                    break;
+            }
+
+            return !this.errors[field];
+        },
+
+        hasError(field) {
+            return this.touched[field] && this.errors[field];
+        },
+
+        getError(field) {
+            return this.errors[field];
+        },
+
+        // SOTA: Validate current step before proceeding
+        canProceed() {
+            switch (this.step) {
+                case 1:
+                    return this.validateField('name') && this.validateField('url');
+                case 2:
+                    return this.validateField('hypothesis');
+                default:
+                    return true;
+            }
+        },
+
+        // Navigation Helpers with validation
+        nextStep() {
+            if (this.step < 4 && this.canProceed()) {
+                this.step++;
+                this.saveStepToStorage();
+            } else if (!this.canProceed()) {
+                window.dispatchEvent(new CustomEvent('toast:show', {
+                    detail: { message: 'Please fix validation errors before continuing', type: 'error' }
+                }));
+            }
+        },
+        prevStep() {
+            if (this.step > 1) {
+                this.step--;
+                this.saveStepToStorage();
+            }
+        },
+        goToStep(s) {
+            this.step = s;
+            this.saveStepToStorage();
+        },
+
+        // SOTA: Persist step to localStorage
+        saveStepToStorage() {
+            const draft = JSON.parse(localStorage.getItem('wizard_draft') || '{}');
+            draft._step = this.step;
+            localStorage.setItem('wizard_draft', JSON.stringify(draft));
+        },
+
+        // SOTA: URL Site Preview
+        sitePreviewLoading: false,
+        sitePreviewError: null,
+
+        async loadSitePreview() {
+            if (!this.experiment.url || this.experiment.url === 'https://') return;
+
+            try {
+                new URL(this.experiment.url);
+                this.sitePreviewLoading = true;
+                this.sitePreviewError = null;
+
+                // The actual iframe will handle loading
+                // This just sets the state for UI feedback
+                setTimeout(() => {
+                    this.sitePreviewLoading = false;
+                }, 2000);
+            } catch {
+                this.sitePreviewError = 'Invalid URL';
+            }
+        }
     }));
 });

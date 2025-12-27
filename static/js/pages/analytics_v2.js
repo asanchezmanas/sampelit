@@ -208,6 +208,85 @@ document.addEventListener('alpine:init', () => {
                     detail: { message: 'No chart to export', type: 'error' }
                 }));
             }
+        },
+
+        // SOTA: Comparison Mode
+        comparisonMode: false,
+        comparisonExperimentId: null,
+        comparisonData: null,
+
+        toggleComparisonMode() {
+            this.comparisonMode = !this.comparisonMode;
+            if (!this.comparisonMode) {
+                this.comparisonExperimentId = null;
+                this.comparisonData = null;
+                this.renderCharts(); // Re-render without comparison
+            }
+        },
+
+        async addComparisonExperiment(experimentId) {
+            this.comparisonExperimentId = experimentId;
+
+            // Fetch comparison data
+            try {
+                const store = Alpine.store('analytics');
+                this.comparisonData = await store.fetchForExperiment(experimentId, this.period);
+
+                // Re-render chart with overlay
+                this.renderYieldChartWithComparison();
+
+                window.dispatchEvent(new CustomEvent('toast:show', {
+                    detail: { message: 'Comparison data loaded', type: 'success' }
+                }));
+            } catch (error) {
+                window.dispatchEvent(new CustomEvent('toast:show', {
+                    detail: { message: 'Failed to load comparison data', type: 'error' }
+                }));
+            }
+        },
+
+        renderYieldChartWithComparison() {
+            // Extend the existing chart with a second series
+            if (this.charts.yield && this.comparisonData) {
+                this.charts.yield.updateSeries([
+                    { name: 'Current', data: this.stats.traffic_sources.map(s => s.visitors || 0) },
+                    { name: 'Comparison', data: this.comparisonData.map(s => s.visitors || 0) }
+                ]);
+            }
+        },
+
+        // SOTA: Timeline Annotations
+        annotations: [],
+
+        addAnnotation(date, label) {
+            this.annotations.push({ date, label, id: Date.now() });
+            this.applyAnnotations();
+
+            window.dispatchEvent(new CustomEvent('toast:show', {
+                detail: { message: `Annotation added: ${label}`, type: 'success' }
+            }));
+        },
+
+        removeAnnotation(id) {
+            this.annotations = this.annotations.filter(a => a.id !== id);
+            this.applyAnnotations();
+        },
+
+        applyAnnotations() {
+            if (this.charts.yield) {
+                const xaxisAnnotations = this.annotations.map(a => ({
+                    x: new Date(a.date).getTime(),
+                    borderColor: '#f59e0b',
+                    label: {
+                        text: a.label,
+                        style: { background: '#f59e0b', color: '#fff' }
+                    }
+                }));
+
+                this.charts.yield.updateOptions({
+                    annotations: { xaxis: xaxisAnnotations }
+                });
+            }
         }
     }));
 });
