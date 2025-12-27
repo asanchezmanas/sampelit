@@ -9,20 +9,28 @@ class AuthService {
     }
 
     async login(email, password) {
-        // En V2 real, esto retornaría un token JWT o cookie session
-        // Por ahora simulamos la llamada al endpoint estándar OAuth2 o similar
-        const response = await this.api.post('/auth/login', { username: email, password });
+        // Backend expects 'email', not 'username'
+        const response = await this.api.post('/auth/login', { email, password });
         return response.data;
     }
 
     async register(data) {
-        // data: { first_name, last_name, email, password, company }
-        const response = await this.api.post('/auth/register', data);
+        // Backend expects 'name', not split names.
+        // Frontend sends: { first_name, last_name, email, password, company }
+        const payload = {
+            email: data.email,
+            password: data.password,
+            name: `${data.first_name || ''} ${data.last_name || ''}`.trim(),
+            company: data.company || '',
+            role: 'client' // auto-default
+        };
+        const response = await this.api.post('/auth/register', payload);
         return response.data;
     }
 
     async getProfile() {
-        const response = await this.api.get('/users/me');
+        // Backend endpoint is /auth/me
+        const response = await this.api.get('/auth/me');
         // Fallback mock check handled by api client usually, or here
         if (!response.data && !response.success) {
             // Mock data for demo if API fails/is missing

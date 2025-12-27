@@ -25,9 +25,33 @@ document.addEventListener('alpine:init', () => {
 
         init() {
             console.log('Wizard Initialized');
-            // Init dark mode from store or local storage if store not ready (fallback)
+            // Init dark mode
             this.darkMode = JSON.parse(localStorage.getItem('darkMode')) || false;
             this.$watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)));
+
+            // SOTA: Auto-Recovery of Draft
+            const savedDraft = localStorage.getItem('wizard_draft');
+            if (savedDraft) {
+                try {
+                    const draft = JSON.parse(savedDraft);
+                    // Merge draft into experiment object safely
+                    this.experiment = { ...this.experiment, ...draft };
+                    // If we had a saved step, restore it too (optional, maybe better to start at 1 to review)
+                    // this.step = draft._step || 1; 
+                    console.log('Draft restored from local storage');
+
+                    window.dispatchEvent(new CustomEvent('toast:show', {
+                        detail: { message: 'Draft restored from your last session', type: 'info' }
+                    }));
+                } catch (e) {
+                    console.error('Failed to restore draft', e);
+                }
+            }
+
+            // SOTA: Auto-Save on change
+            this.$watch('experiment', (value) => {
+                localStorage.setItem('wizard_draft', JSON.stringify(value));
+            });
         },
 
         async launchExperiment() {
@@ -60,7 +84,8 @@ document.addEventListener('alpine:init', () => {
                 await Alpine.store('experiments').create(payload);
 
                 // 3. Success Handling
-                // Toast is already fired by the Store
+                // SOTA: Clear draft on success
+                localStorage.removeItem('wizard_draft');
 
                 // Redirect after short delay to let user see success
                 setTimeout(() => {

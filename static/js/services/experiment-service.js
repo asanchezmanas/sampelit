@@ -73,7 +73,8 @@ class ExperimentService {
      * @returns {Promise<Object>}
      */
     async start(id) {
-        const response = await this.api.post(`/experiments/${id}/start`);
+        // Backend expects PATCH /experiments/{id}/status?new_status=active
+        const response = await this.api.patch(`/experiments/${id}/status`, null, { params: { new_status: 'active' } });
         return response.data;
     }
 
@@ -83,7 +84,7 @@ class ExperimentService {
      * @returns {Promise<Object>}
      */
     async pause(id) {
-        const response = await this.api.post(`/experiments/${id}/pause`);
+        const response = await this.api.patch(`/experiments/${id}/status`, null, { params: { new_status: 'paused' } });
         return response.data;
     }
 
@@ -93,7 +94,7 @@ class ExperimentService {
      * @returns {Promise<Object>}
      */
     async stop(id) {
-        const response = await this.api.post(`/experiments/${id}/stop`);
+        const response = await this.api.patch(`/experiments/${id}/status`, null, { params: { new_status: 'completed' } });
         return response.data;
     }
 
@@ -103,7 +104,8 @@ class ExperimentService {
      * @returns {Promise<Object>}
      */
     async getResults(id) {
-        const response = await this.api.get(`/experiments/${id}/results`);
+        // Backend endpoint: /analytics/experiment/{id}
+        const response = await this.api.get(`/analytics/experiment/${id}`);
         return response.data;
     }
 

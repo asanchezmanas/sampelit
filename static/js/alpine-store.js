@@ -74,13 +74,24 @@ document.addEventListener('alpine:init', () => {
         async delete(id) {
             if (!experimentService) return;
             if (!confirm('Are you sure?')) return;
-            this.loading = true;
+
+            // SOTA: Optimistic Update
+            // 1. Snapshot state
+            const previousList = [...this.list];
+
+            // 2. Update UI immediately
+            this.list = this.list.filter(e => e.id !== id);
+
+            // 3. Perform Async Operation
             try {
                 await experimentService.delete(id);
-                this.list = this.list.filter(e => e.id !== id);
                 window.dispatchEvent(new CustomEvent('toast:show', { detail: { message: 'Experiment deleted', type: 'success' } }));
-            } catch (e) { console.error(e); }
-            finally { this.loading = false; }
+            } catch (e) {
+                // 4. Revert on failure
+                console.error(e);
+                this.list = previousList;
+                window.dispatchEvent(new CustomEvent('toast:show', { detail: { message: 'Failed to delete experiment', type: 'error' } }));
+            }
         },
 
         async start(id) {
