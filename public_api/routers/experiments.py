@@ -139,11 +139,12 @@ async def list_experiments(
                 description=row['description'],
                 status=row['status'],
                 optimization_strategy=row.get('optimization_strategy', 'adaptive'),
+                url=row.get('url', ''),
                 created_at=row['created_at'],
                 started_at=row.get('started_at'),
                 variant_count=row['variant_count'],
-                total_users=row.get('total_allocations', 0),
-                conversion_rate=float(row.get('conversion_rate', 0))
+                total_visitors=row.get('total_allocations', 0),  # Mapped to total_visitors in model
+                overall_conversion_rate=float(row.get('conversion_rate', 0)) # Mapped to overall_conversion_rate
             )
             for row in rows
         ]

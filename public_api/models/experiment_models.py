@@ -171,6 +171,17 @@ class UpdateExperimentRequest(BaseModel):
 # EXPERIMENT RESPONSES
 # ============================================
 
+class DailyStat(BaseModel):
+    """Estadísticas diarias para gráficos"""
+    date: str
+    variant_stats: List[Dict[str, Any]]  # [{name, conversion_rate, conversions}]
+
+class TrafficStats(BaseModel):
+    """Estadísticas por fuente de tráfico"""
+    source: str  # mobile, desktop, direct, social, etc
+    visitors: int
+    conversion_rate: float
+
 class VariantPerformance(BaseModel):
     """Performance de una variante de un elemento"""
     variant_index: int
@@ -179,6 +190,7 @@ class VariantPerformance(BaseModel):
     conversions: int = 0
     conversion_rate: float = 0.0
     confidence_score: float = 0.0
+    uplift: float = 0.0 # Added for convenience
 
 class ElementPerformance(BaseModel):
     """Performance de un elemento completo"""
@@ -188,6 +200,9 @@ class ElementPerformance(BaseModel):
     variants: List[VariantPerformance]
     best_variant_index: Optional[int] = None
     statistical_significance: bool = False
+    bayesian_stats: Optional[Dict[str, Any]] = None
+    daily_stats: Optional[List[Dict[str, Any]]] = None
+    traffic_breakdown: Optional[List[TrafficStats]] = None
 
 class ExperimentListResponse(BaseModel):
     """Respuesta de lista de experimentos"""
@@ -200,7 +215,7 @@ class ExperimentListResponse(BaseModel):
     started_at: Optional[datetime]
     
     # Stats agregadas
-    elements_count: int
+    variant_count: int
     total_visitors: int = 0
     overall_conversion_rate: float = 0.0
 

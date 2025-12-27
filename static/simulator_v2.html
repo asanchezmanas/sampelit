@@ -59,9 +59,7 @@
     <script src="js/core/api.js"></script>
 </head>
 
-<body x-data="{ page: 'simulator', sidebarToggle: false, darkMode: false }"
-    x-init="darkMode = JSON.parse(localStorage.getItem('darkMode')) || false; $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
-    :class="{ 'dark': darkMode === true }"
+<body x-data="simulator"
     class="bg-[#f8f9fc] dark:bg-gray-900 text-text-main dark:text-gray-300 font-sans antialiased selection:bg-primary/10 selection:text-primary">
 
     <div class="flex h-screen overflow-hidden">
@@ -121,21 +119,22 @@
                                     <!-- Traffic Allocation -->
                                     <div class="p-5">
                                         <div class="flex items-center justify-between mb-4">
-                                            <span class="text-sm font-bold text-gray-800 dark:text-gray-200">Traffic
-                                                Allocation</span>
+                                            <span class="text-sm font-bold text-gray-800 dark:text-gray-200">Total Daily
+                                                Traffic</span>
                                         </div>
                                         <div class="space-y-6">
                                             <div>
                                                 <div class="flex justify-between text-xs mb-2">
-                                                    <span class="text-gray-500">Control Group</span>
-                                                    <span class="font-bold text-gray-900 dark:text-white">50%</span>
+                                                    <span class="text-gray-500">Traffic Volume</span>
+                                                    <span class="font-bold text-gray-900 dark:text-white"
+                                                        x-text="config.traffic + ' visitors'"></span>
                                                 </div>
-                                                <input
+                                                <input x-model="config.traffic" @input.debounce.500ms="runSimulation()"
                                                     class="w-full accent-primary h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-                                                    type="range" min="0" max="100" value="50">
+                                                    type="range" min="100" max="50000" step="100">
                                                 <div class="flex justify-between text-xs mt-1 text-gray-400">
-                                                    <span>0%</span>
-                                                    <span>100%</span>
+                                                    <span>100</span>
+                                                    <span>50k</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -144,27 +143,27 @@
                                     <!-- Statistical Parameters -->
                                     <div class="p-5">
                                         <div class="flex items-center justify-between mb-4">
-                                            <span class="text-sm font-bold text-gray-800 dark:text-gray-200">Statistical
-                                                Parameters</span>
+                                            <span
+                                                class="text-sm font-bold text-gray-800 dark:text-gray-200">Parameters</span>
                                         </div>
                                         <div class="space-y-4">
                                             <div class="grid grid-cols-2 gap-4">
                                                 <div class="space-y-1.5">
-                                                    <label class="text-xs font-bold text-gray-500">Confidence
-                                                        Level</label>
-                                                    <select
+                                                    <label class="text-xs font-bold text-gray-500">Confidence</label>
+                                                    <select x-model="config.confidence" @change="runSimulation()"
                                                         class="w-full text-sm border-gray-200 rounded-lg focus:border-primary focus:ring-primary/20 bg-gray-50 py-2 font-medium text-gray-700 appearance-none dark:bg-gray-900 dark:border-gray-600 dark:text-gray-300">
-                                                        <option>90%</option>
-                                                        <option selected>95%</option>
-                                                        <option>99%</option>
+                                                        <option value="90">90%</option>
+                                                        <option value="95">95%</option>
+                                                        <option value="99">99%</option>
                                                     </select>
                                                 </div>
                                                 <div class="space-y-1.5">
-                                                    <label class="text-xs font-bold text-gray-500">Power</label>
-                                                    <select
+                                                    <label class="text-xs font-bold text-gray-500">Uplift</label>
+                                                    <select x-model="config.uplift" @change="runSimulation()"
                                                         class="w-full text-sm border-gray-200 rounded-lg focus:border-primary focus:ring-primary/20 bg-gray-50 py-2 font-medium text-gray-700 appearance-none dark:bg-gray-900 dark:border-gray-600 dark:text-gray-300">
-                                                        <option selected>80%</option>
-                                                        <option>90%</option>
+                                                        <option value="5">5%</option>
+                                                        <option value="10">10%</option>
+                                                        <option value="20">20%</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -174,10 +173,11 @@
 
                                 <div
                                     class="p-5 bg-gray-50/50 border-t border-gray-100 dark:bg-white/5 dark:border-gray-700">
-                                    <button
-                                        class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2 active:scale-[0.98]">
-                                        <span class="material-symbols-outlined text-[20px]">play_arrow</span>
-                                        Run Simulation
+                                    <button @click="runSimulation()" :disabled="loading"
+                                        class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-50">
+                                        <span class="material-symbols-outlined text-[20px]"
+                                            x-text="loading ? 'sync' : 'play_arrow'"></span>
+                                        <span x-text="loading ? 'Simulating...' : 'Run Simulation'"></span>
                                     </button>
                                     <p
                                         class="text-xs text-center text-gray-400 mt-3 flex items-center justify-center gap-1">
@@ -260,76 +260,7 @@
     </div>
 
     <!-- Chart Init -->
-    <script>
-        document.addEventListener('DOMContentLoaded', async function () {
-            // Initialize API Client
-            const api = new APIClient();
-
-            // Simulation Parameters (Mock for now, will bind to API)
-            const simulationParams = {
-                traffic: 50,
-                confidence: 0.95,
-                power: 0.8
-            };
-
-            // Attempt to fetch simulation forecast
-            let forecastData = [0.45, 0.38, 0.25, 0.15, 0.08, 0.045, 0.03, 0.015, 0.008];
-
-            try {
-                // Future endpoint: /api/v1/simulation/forecast
-                // const response = await api.post('/simulation/forecast', simulationParams);
-                // if (response.data) forecastData = response.data;
-                console.log('Using local simulation kernel for forecast.');
-            } catch (err) {
-                console.warn('Simulation unavailable, using cached projection.', err);
-            }
-
-            // Simulated Chart Initialization
-            setTimeout(() => {
-                const options = {
-                    series: [{
-                        name: 'P-Value',
-                        data: forecastData
-                    }],
-                    chart: {
-                        type: 'area',
-                        height: 350,
-                        toolbar: { show: false },
-                        fontFamily: 'Manrope, sans-serif'
-                    },
-                    stroke: { curve: 'smooth', width: 2 },
-                    colors: ['#1E3A8A'], // Dark Navy Theme
-                    fill: {
-                        type: 'gradient',
-                        gradient: {
-                            shadeIntensity: 1,
-                            opacityFrom: 0.3,
-                            opacityTo: 0.05,
-                            stops: [0, 90, 100]
-                        }
-                    },
-                    annotations: {
-                        yaxis: [{
-                            y: 0.05,
-                            borderColor: '#10b981',
-                            label: {
-                                borderColor: '#10b981',
-                                style: { color: '#fff', background: '#10b981' },
-                                text: 'Significance (0.05)'
-                            }
-                        }]
-                    },
-                    border: { show: false },
-                    yaxis: { min: 0, max: 0.5 },
-                    xaxis: { categories: ['Day 1', 'Day 3', 'Day 5', 'Day 7', 'Day 9', 'Day 11', 'Day 13', 'Day 15', 'Day 17'] },
-                    tooltip: { theme: 'light' }
-                };
-
-                document.getElementById('convergenceChart').innerHTML = ''; // Clear placeholder
-                new ApexCharts(document.querySelector("#convergenceChart"), options).render();
-            }, 500);
-        });
-    </script>
+    <script src="js/pages/simulator_v2.js"></script>
 </body>
 
 </html>

@@ -37,9 +37,7 @@
     <script src="js/include.js"></script>
 </head>
 
-<body x-data="{ page: 'analytics', sidebarToggle: false, darkMode: false, period: '30d' }"
-    x-init="darkMode = JSON.parse(localStorage.getItem('darkMode')) || false; $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
-    :class="{ 'dark': darkMode }"
+<body x-data="analyticsDashboard"
     class="bg-[#f8f9fc] dark:bg-gray-900 text-text-main dark:text-gray-300 font-sans antialiased">
     <div class="flex h-screen overflow-hidden">
         <include src="./partials/sidebar_v2.html"></include>
@@ -79,10 +77,11 @@
                             <div>
                                 <h3 class="text-sm font-bold uppercase tracking-widest text-gray-400">Yield Velocity
                                 </h3>
-                                <p
+                                <p <p
                                     class="mt-1 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white font-display">
-                                    30,327 <span
-                                        class="text-xs font-bold text-emerald-500 uppercase tracking-widest ml-2">+12.4%</span>
+                                    <span x-text="loading ? '...' : stats.total_visitors.toLocaleString()"></span>
+                                    <span class="text-xs font-bold text-emerald-500 uppercase tracking-widest ml-2"
+                                        x-text="loading ? '' : '+' + stats.trend + '%'"></span>
                                 </p>
                             </div>
                             <div class="flex items-center gap-1 rounded-2xl bg-gray-50 p-1 dark:bg-white/5">
@@ -355,94 +354,7 @@
         </div>
     </div>
 
-    <script>
-        // Performance Lab Data Visualization
-        document.addEventListener('DOMContentLoaded', function () {
-            // Main Yield Velocity Chart
-            var analyticsOptions = {
-                series: [
-                    { name: 'Experiment Volume', data: [4500, 5200, 4800, 6100, 5800, 7200, 6500] },
-                    { name: 'Conversion Yield', data: [180, 220, 195, 280, 245, 320, 290] }
-                ],
-                chart: {
-                    type: 'area',
-                    height: 350,
-                    fontFamily: 'Manrope, sans-serif',
-                    toolbar: { show: false },
-                    zoom: { enabled: false },
-                    sparkline: { enabled: false }
-                },
-                colors: ['#1754cf', '#10b981'],
-                stroke: { curve: 'smooth', width: 2.5 },
-                fill: {
-                    type: 'gradient',
-                    gradient: {
-                        shadeIntensity: 1,
-                        opacityFrom: 0.2,
-                        opacityTo: 0.0,
-                        stops: [0, 90, 100]
-                    }
-                },
-                xaxis: {
-                    categories: ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'],
-                    axisBorder: { show: false },
-                    axisTicks: { show: false },
-                    labels: { style: { colors: '#9CA3AF', fontSize: '10px', fontWeight: 700 } }
-                },
-                yaxis: {
-                    labels: { style: { colors: '#9CA3AF', fontSize: '10px', fontWeight: 700 } }
-                },
-                legend: {
-                    position: 'top',
-                    horizontalAlign: 'right',
-                    fontSize: '10px',
-                    fontWeight: 700,
-                    markers: { radius: 12 }
-                },
-                grid: {
-                    borderColor: '#f3f4f6',
-                    strokeDashArray: 4,
-                    padding: { left: 20, right: 20 }
-                }
-            };
-            new ApexCharts(document.querySelector("#analyticsChart"), analyticsOptions).render();
-
-            // Geodesic Distribution (Donut)
-            var deviceOptions = {
-                series: [62, 31, 7],
-                chart: { type: 'donut', height: 300 },
-                colors: ['#1754cf', '#93c5fd', '#e5e7eb'],
-                labels: ['Desktop', 'Mobile', 'Tablet'],
-                stroke: { width: 0 },
-                legend: { show: false },
-                plotOptions: {
-                    pie: {
-                        donut: {
-                            size: '80%',
-                            labels: {
-                                show: true,
-                                total: {
-                                    show: true,
-                                    label: 'Volume',
-                                    fontSize: '10px',
-                                    fontWeight: 700,
-                                    color: '#9CA3AF',
-                                    formatter: () => '30,327'
-                                },
-                                value: {
-                                    fontSize: '24px',
-                                    fontWeight: 800,
-                                    color: '#0F172A',
-                                    offsetY: 4
-                                }
-                            }
-                        }
-                    }
-                }
-            };
-            new ApexCharts(document.querySelector("#deviceChart"), deviceOptions).render();
-        });
-    </script>
+    <script src="js/pages/analytics_v2.js"></script>
 </body>
 
 </html>

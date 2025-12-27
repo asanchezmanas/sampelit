@@ -47,9 +47,7 @@
     <script src="js/include.js"></script>
 </head>
 
-<body x-data="{ page: 'audits', sidebarToggle: false, darkMode: false }"
-    x-init="darkMode = JSON.parse(localStorage.getItem('darkMode')) || false; $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
-    :class="{ 'dark': darkMode === true }"
+<body x-data="auditDashboard()" x-init="init()" :class="{ 'dark': darkMode === true }"
     class="bg-[#f8f9fc] dark:bg-gray-900 text-text-main dark:text-gray-300 font-sans antialiased">
     <div class="flex h-screen overflow-hidden">
         <include src="./partials/sidebar_v2.html"></include>
@@ -205,6 +203,67 @@
             </main>
         </div>
     </div>
+    <script src="js/core/api.js"></script>
+    <script>
+        function auditDashboard() {
+            return {
+                sidebarToggle: false,
+                darkMode: false,
+                loading: true,
+                experimentId: null,
+                stats: {
+                    total_decisions: 0,
+                    conversions: 0,
+                    chain_integrity: true,
+                    latest_decision: null
+                },
+                auditTrail: [], // Mock data or fetched data
+
+                async init() {
+                    this.client = new APIClient();
+                    this.darkMode = JSON.parse(localStorage.getItem('darkMode')) || false;
+                    this.$watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)));
+
+                    // Get experiment ID from URL
+                    const urlParams = new URLSearchParams(window.location.search);
+                    this.experimentId = urlParams.get('experiment_id');
+
+                    if (this.experimentId) {
+                        await this.fetchAuditData();
+                    } else {
+                        // Demo mode / Empty state
+                        this.loading = false;
+                        this.auditTrail = [
+                            { sequence_number: '12,401', decision_hash: '0x7d5a...4f91', type: 'User_Assign', ok: true },
+                            { sequence_number: '12,402', decision_hash: '0x9a2b...c1d2', type: 'Conv_Event', ok: true },
+                            { sequence_number: '12,403', decision_hash: 'Pending...', type: 'Mining', ok: null }
+                        ];
+                    }
+                },
+
+                async fetchAuditData() {
+                    try {
+                        const [statsReq, trailReq] = await Promise.all([
+                            this.client.get(`/audit/experiments/${this.experimentId}/stats`),
+                            this.client.get(`/audit/experiments/${this.experimentId}/trail?limit=10`)
+                        ]);
+
+                        this.stats = statsReq.data;
+                        this.auditTrail = trailReq.data.map(r => ({
+                            sequence_number: r.sequence_number,
+                            decision_hash: r.decision_hash.substring(0, 10) + '...',
+                            type: r.conversion_observed ? 'Conv_Event' : 'User_Assign',
+                            ok: true // Assumed valid if returned
+                        }));
+                    } catch (error) {
+                        console.error("Failed to fetch audit data:", error);
+                    } finally {
+                        this.loading = false;
+                    }
+                }
+            };
+        }
+    </script>
 </body>
 
 </html>

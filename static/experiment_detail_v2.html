@@ -55,9 +55,7 @@
     <script src="js/include.js"></script>
 </head>
 
-<body x-data="{ page: 'experiments', sidebarToggle: false, darkMode: false }"
-    x-init="darkMode = JSON.parse(localStorage.getItem('darkMode')) || false; $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
-    :class="{ 'dark': darkMode }"
+<body x-data="experimentDetail"
     class="bg-[#f8f9fc] dark:bg-gray-900 text-text-main dark:text-gray-300 font-sans antialiased">
     <div class="flex h-screen overflow-hidden">
         <include src="./partials/sidebar_v2.html"></include>
@@ -139,38 +137,39 @@
                                     class="rounded-[32px] border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-800">
                                     <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Total
                                         Visitors</p>
-                                    <p
+                                    <p x-text="data.total_visitors"
                                         class="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white font-display">
-                                        12,450</p>
+                                        ...</p>
                                     <p class="mt-1 text-xs font-bold text-emerald-600">+8.2% from last week</p>
                                 </div>
                                 <div
                                     class="rounded-[32px] border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-800">
                                     <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Conversions
                                     </p>
-                                    <p
+                                    <p x-text="data.total_conversions"
                                         class="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white font-display">
-                                        1,543</p>
+                                        ...</p>
                                     <p class="mt-1 text-xs font-bold text-emerald-600">+12.4% improvement</p>
                                 </div>
                                 <div
                                     class="rounded-[32px] border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-800">
                                     <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Conversion
                                         Rate</p>
-                                    <p
+                                    <p x-text="(data.overall_conversion_rate * 100).toFixed(1) + '%'"
                                         class="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white font-display">
-                                        12.4%</p>
+                                        ...</p>
                                     <p class="mt-1 text-xs font-medium text-gray-500">vs 11.0% baseline</p>
                                 </div>
                                 <div
                                     class="rounded-[32px] border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-800">
-                                    <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Statistical
-                                        Significance</p>
-                                    <p
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Projected
+                                        Win Rate</p>
+                                    <p x-text="data.statistical_significance + '%'"
                                         class="mt-2 text-3xl font-extrabold tracking-tight text-emerald-600 font-display">
-                                        95.2%</p>
+                                        ...</p>
                                     <div class="mt-3 h-2 w-full rounded-full bg-gray-100 dark:bg-gray-700">
-                                        <div class="h-2 rounded-full bg-emerald-500" style="width: 95.2%"></div>
+                                        <div class="h-2 rounded-full bg-emerald-500"
+                                            :style="`width: ${data.statistical_significance}%`"></div>
                                     </div>
                                 </div>
                             </div>
@@ -183,34 +182,172 @@
                                         Conversion Rate</h3>
                                     <div id="conversionChart" class="h-[300px]"></div>
                                 </div>
-                                <h3 class="mb-6 text-sm font-bold uppercase tracking-widest text-gray-400">Bayesian Win
-                                    Probability</h3>
-                                <div class="relative flex items-center justify-center h-[300px]">
-                                    <div id="bayesianChart" class="w-full"></div>
-                                    <!-- Gauge Center Text -->
-                                    <div
-                                        class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                                        <p class="text-4xl font-extrabold text-gray-900 dark:text-white font-display">
-                                            95.2%</p>
-                                        <p class="text-[10px] font-bold uppercase tracking-widest text-emerald-600">
-                                            Confidence</p>
+                                <div
+                                    class="relative flex flex-col items-center justify-center rounded-[32px] border border-gray-100 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-800">
+                                    <h3
+                                        class="mb-6 text-sm font-bold uppercase tracking-widest text-gray-400 w-full text-left">
+                                        Probability of Outperformance</h3>
+                                    <div class="relative flex items-center justify-center h-[300px] w-full">
+                                        <div id="bayesianChart" class="w-full"></div>
+                                        <!-- Gauge Center Text -->
+                                        <div
+                                            class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                            <p x-text="data.statistical_significance + '%'"
+                                                class="text-4xl font-extrabold text-gray-900 dark:text-white font-display">
+                                                ...</p>
+                                            <p class="text-[10px] font-bold uppercase tracking-widest text-emerald-600">
+                                                Confidence</p>
+                                        </div>
+                                    </div>
+                                    <!-- Business Value Card -->
+                                    <div x-show="data.business_impact && data.business_impact.extra_conversions > 0"
+                                        class="mt-4 rounded-xl bg-emerald-50 p-4 border border-emerald-100 dark:bg-emerald-900/10 dark:border-emerald-800">
+                                        <div class="flex items-start gap-3">
+                                            <span class="material-symbols-outlined text-emerald-600">trending_up</span>
+                                            <div>
+                                                <p class="text-sm font-bold text-gray-900 dark:text-gray-100">Business
+                                                    Impact</p>
+                                                <p class="text-xs text-gray-600 dark:text-gray-400">
+                                                    This experiment has generated approx.
+                                                    <strong class="text-emerald-700 dark:text-emerald-400"
+                                                        x-text="'+' + data.business_impact.extra_conversions + ' conversions'"></strong>
+                                                    compared to baseline.
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <!-- Risk Assessment Card -->
-                                <div
-                                    class="mt-4 rounded-xl bg-emerald-50 p-4 border border-emerald-100 dark:bg-emerald-900/10 dark:border-emerald-800">
-                                    <div class="flex items-start gap-3">
-                                        <span class="material-symbols-outlined text-emerald-600">verified_user</span>
-                                        <div>
-                                            <p class="text-sm font-bold text-gray-900 dark:text-gray-100">Low Risk
-                                                Decisions</p>
-                                            <p class="text-xs text-gray-600 dark:text-gray-400">
-                                                Deploying Variant B has a predicted <strong>expected loss</strong> of
-                                                only
-                                                <span class="font-mono text-emerald-600">0.02%</span> if it's the wrong
-                                                choice.
-                                            </p>
-                                        </div>
+                            </div>
+
+                            <!-- Results Breakdown Section -->
+                            <div class="mt-10 grid grid-cols-1 xl:grid-cols-3 gap-8">
+                                <!-- Variants Performance Table -->
+                                <div class="xl:col-span-2 flex flex-col gap-6">
+                                    <h3 class="text-sm font-bold uppercase tracking-widest text-gray-400">Variant
+                                        Performance</h3>
+                                    <div
+                                        class="overflow-hidden rounded-[32px] border border-gray-200 bg-white shadow-premium dark:border-white/5 dark:bg-white/[0.03]">
+                                        <table class="w-full">
+                                            <thead>
+                                                <tr
+                                                    class="border-b border-gray-50 bg-gray-50 dark:border-white/5 dark:bg-white/[0.02]">
+                                                    <th
+                                                        class="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                                                        Variant</th>
+                                                    <th
+                                                        class="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                                                        Traffic</th>
+                                                    <th
+                                                        class="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                                                        Conversions</th>
+                                                    <th
+                                                        class="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                                                        Conv. Rate</th>
+                                                    <th
+                                                        class="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                                                        Uplift</th>
+                                                    <th
+                                                        class="px-6 py-4 text-right text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                                                        Confidence</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-gray-50 dark:divide-white/5"
+                                                x-if="data.elements.length > 0">
+                                                <template x-for="variant in data.elements[0].variants"
+                                                    :key="variant.name">
+                                                    <tr
+                                                        class="group hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors">
+                                                        <td class="px-6 py-4">
+                                                            <div class="flex items-center gap-3">
+                                                                <div class="h-2 w-2 rounded-full"
+                                                                    :class="variant.is_control ? 'bg-gray-400' : 'bg-brand-500'">
+                                                                </div>
+                                                                <div>
+                                                                    <p class="text-sm font-bold text-gray-900 dark:text-white"
+                                                                        x-text="variant.name || 'Variant'"></p>
+                                                                    <p class="text-[10px] text-gray-400 uppercase tracking-wider"
+                                                                        x-text="variant.is_control ? 'Baseline' : 'Challenger'">
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400"
+                                                            x-text="(variant.total_allocations || 0).toLocaleString()">
+                                                        </td>
+                                                        <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400"
+                                                            x-text="(variant.total_conversions || 0).toLocaleString()">
+                                                        </td>
+                                                        <td class="px-6 py-4">
+                                                            <span
+                                                                class="text-sm font-bold text-gray-900 dark:text-gray-100"
+                                                                x-text="((variant.conversion_rate || 0) * 100).toFixed(2) + '%'"></span>
+                                                        </td>
+                                                        <td class="px-6 py-4">
+                                                            <div x-show="!variant.is_control"
+                                                                class="flex items-center gap-1">
+                                                                <span class="text-xs font-bold"
+                                                                    :class="variant.uplift > 0 ? 'text-emerald-600' : 'text-red-500'"
+                                                                    x-text="(variant.uplift > 0 ? '+' : '') + variant.uplift.toFixed(1) + '%'"></span>
+                                                            </div>
+                                                            <span x-show="variant.is_control"
+                                                                class="text-xs text-gray-400">-</span>
+                                                        </td>
+                                                        <td class="px-6 py-4 text-right">
+                                                            <div class="flex justify-end">
+                                                                <span
+                                                                    class="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider"
+                                                                    :class="variant.probability_best > 90 ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400' : 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400'">
+                                                                    <span
+                                                                        x-text="variant.probability_best.toFixed(1) + '%'"></span>
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </template>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Traffic Breakdown -->
+                                <div class="flex flex-col gap-6">
+                                    <h3 class="text-sm font-bold uppercase tracking-widest text-gray-400">Traffic
+                                        Analysis</h3>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-4"
+                                        x-if="data.elements.length > 0 && data.elements[0].traffic_breakdown">
+                                        <template x-for="source in data.elements[0].traffic_breakdown"
+                                            :key="source.source">
+                                            <div
+                                                class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-white/5 dark:bg-white/[0.03]">
+                                                <div class="flex items-center justify-between mb-3">
+                                                    <div class="flex items-center gap-2">
+                                                        <span class="material-symbols-outlined text-gray-400 text-lg">
+                                                            <span
+                                                                x-text="source.source === 'Mobile' ? 'smartphone' : (source.source === 'Desktop' ? 'computer' : 'public')"></span>
+                                                        </span>
+                                                        <span
+                                                            class="text-xs font-bold text-gray-500 uppercase tracking-wider"
+                                                            x-text="source.source"></span>
+                                                    </div>
+                                                    <span class="text-xs font-bold"
+                                                        :class="source.conversion_rate > data.overall_conversion_rate ? 'text-emerald-600' : 'text-gray-500'"
+                                                        x-text="((source.conversion_rate || 0) * 100).toFixed(1) + '% CR'"></span>
+                                                </div>
+                                                <div class="flex items-end justify-between">
+                                                    <div>
+                                                        <span
+                                                            class="text-2xl font-extrabold text-gray-900 dark:text-white"
+                                                            x-text="(source.visitors || 0).toLocaleString()"></span>
+                                                        <span class="text-xs text-gray-400 ml-1">visitors</span>
+                                                    </div>
+                                                    <div class="h-1.5 w-16 rounded-full bg-gray-100 dark:bg-gray-700">
+                                                        <div class="h-1.5 rounded-full bg-brand-500"
+                                                            :style="`width: ${(source.visitors / data.total_visitors * 100)}%`">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
                                     </div>
                                 </div>
                             </div>
@@ -325,157 +462,7 @@
     </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', async function () {
-            // Initialize API Client
-            const api = new APIClient();
-
-            // Mock Data for Experiment (To be replaced by API)
-            let experimentData = {
-                conversion: {
-                    control: [10.2, 10.5, 10.8, 11.0, 11.2, 10.9, 11.0, 11.2, 11.4],
-                    variant: [10.2, 11.5, 12.2, 12.8, 13.2, 13.5, 13.8, 14.2, 14.5],
-                    days: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7', 'Day 8', 'Day 9']
-                },
-                bayesian: {
-                    probability: 95.2
-                }
-            };
-
-            try {
-                // Future endpoint: /api/v1/experiments/{id}/analytics
-                // const response = await api.get('/experiments/123/analytics');
-                // if (response.data) experimentData = response.data;
-                console.log('Using mock experiment data until backend endpoint is ready.');
-            } catch (err) {
-                console.warn('Failed to fetch experiment analytics', err);
-            }
-
-            // Chart 1: Conversion Rate Over Time (Gradient Area Chart - Premium Style)
-            const conversionOptions = {
-                series: [
-                    { name: 'Control (A)', data: experimentData.conversion.control },
-                    { name: 'Variant B', data: experimentData.conversion.variant }
-                ],
-                chart: {
-                    type: 'area',
-                    height: 320,
-                    fontFamily: 'Manrope, sans-serif',
-                    toolbar: { show: false },
-                    animations: { enabled: true, easing: 'easeinout', speed: 800 }
-                },
-                colors: ['#94a3b8', '#10b981'], // Gray for Control, Emerald for Winner (Semantic)
-                fill: {
-                    type: 'gradient',
-                    gradient: {
-                        shadeIntensity: 1,
-                        opacityFrom: 0.4,
-                        opacityTo: 0.05,
-                        stops: [0, 90, 100]
-                    }
-                },
-                dataLabels: { enabled: false },
-                stroke: { curve: 'smooth', width: 2 },
-                xaxis: {
-                    categories: experimentData.conversion.days,
-                    axisBorder: { show: false },
-                    axisTicks: { show: false },
-                    labels: { style: { colors: '#94a3b8', fontSize: '11px' } }
-                },
-                yaxis: {
-                    min: 8,
-                    max: 16,
-                    labels: { style: { colors: '#94a3b8', fontSize: '11px' }, formatter: (val) => val.toFixed(1) + '%' }
-                },
-                grid: {
-                    borderColor: '#f1f5f9',
-                    strokeDashArray: 4,
-                    yaxis: { lines: { show: true } },
-                    xaxis: { lines: { show: false } },
-                    padding: { top: 0, right: 0, bottom: 0, left: 10 }
-                },
-                legend: {
-                    position: 'top',
-                    horizontalAlign: 'right',
-                    markers: { radius: 12 },
-                    itemMargin: { horizontal: 10 }
-                },
-                tooltip: {
-                    theme: 'light',
-                    y: { formatter: (val) => val + '%' },
-                    style: { fontSize: '12px', fontFamily: 'Inter, sans-serif' }
-                }
-            };
-
-            // Check for dark mode to adjust chart colors if needed
-            if (document.documentElement.classList.contains('dark')) {
-                conversionOptions.grid.borderColor = '#374151';
-                conversionOptions.tooltip.theme = 'dark';
-            }
-
-            if (document.querySelector("#conversionChart")) {
-                new ApexCharts(document.querySelector("#conversionChart"), conversionOptions).render();
-            }
-
-            // Chart 2: Bayesian Probability Gauge (Radial Bar)
-            // Visualizes probability_best from analytics_service.py
-            const bayesianOptions = {
-                series: [experimentData.bayesian.probability],
-                chart: {
-                    type: 'radialBar',
-                    height: 320,
-                    fontFamily: 'Manrope, sans-serif',
-                },
-                plotOptions: {
-                    radialBar: {
-                        startAngle: -135,
-                        endAngle: 135,
-                        hollow: {
-                            margin: 15,
-                            size: '65%',
-                            background: 'transparent',
-                            image: undefined,
-                        },
-                        track: {
-                            background: '#f1f5f9', // Light gray track
-                            strokeWidth: '100%',
-                            margin: 0, // margin is in pixels
-                        },
-                        dataLabels: {
-                            show: false // We use custom center text HTML above
-                        }
-                    }
-                },
-                fill: {
-                    type: 'gradient',
-                    gradient: {
-                        shade: 'dark',
-                        type: 'horizontal',
-                        shadeIntensity: 0.5,
-                        gradientToColors: ['#10b981'], // Emerald-500
-                        inverseColors: true,
-                        opacityFrom: 1,
-                        opacityTo: 1,
-                        stops: [0, 100]
-                    }
-                },
-                stroke: {
-                    lineCap: 'round'
-                },
-                colors: ['#1E3A8A'], // Dark Navy Start (Updated from Bright Blue)
-                labels: ['Confidence'],
-            };
-
-            // Dark mode adjustment for track color
-            if (document.documentElement.classList.contains('dark')) {
-                bayesianOptions.plotOptions.radialBar.track.background = '#374151'; // Gray-700
-            }
-
-            if (document.querySelector("#bayesianChart")) {
-                new ApexCharts(document.querySelector("#bayesianChart"), bayesianOptions).render();
-            }
-        });
-    </script>
+    <script src="js/pages/experiment_detail_v2.js"></script>
 </body>
 
 </html>

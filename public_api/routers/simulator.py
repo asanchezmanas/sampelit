@@ -12,6 +12,7 @@ from typing import List, Dict, Any, Optional
 import numpy as np
 import random
 import logging
+from scipy import stats
 
 logger = logging.getLogger(__name__)
 
@@ -165,7 +166,68 @@ async def get_simulation_summary():
 @router.get("/stream")
 async def get_realtime_stream():
     """Returns a comparative batch of simulation events for visual value proof"""
+# ════════════════════════════════════════════════════════════════════════════
+# FORECAST ENGINE
+# ════════════════════════════════════════════════════════════════════════════
+
+class ForecastRequest(BaseModel):
+    traffic_daily: int = 1000
+    baseline_cr: float = 0.05
+    uplift: float = 0.10  # 10% improvement
+    confidence_target: float = 0.95
+
+@router.post("/forecast")
+async def forecast_convergence(req: ForecastRequest):
+    """
+    Project experiment convergence based on Samplit Predictive Engine.
+    Returns the confidence evolution over time.
+    """
+    days = 14
+    data_points = []
+    
+    # Simulation Parameters
+    visitors_per_day = req.traffic_daily // 2 # split between A/B
+    baseline_cr = req.baseline_cr
+    test_cr = baseline_cr * (1 + req.uplift)
+    
+    # Predictive Simulation
+    # We simulate one "typical" path for visualization
+    cum_visitors_A = 0
+    cum_conv_A = 0
+    cum_visitors_B = 0
+    cum_conv_B = 0
+    
+    for day in range(1, days + 1):
+        # Simulating daily batch
+        # Add variability to match real-world conditions
+        daily_A_conv = np.random.binomial(visitors_per_day, baseline_cr)
+        daily_B_conv = np.random.binomial(visitors_per_day, test_cr)
+        
+        cum_visitors_A += visitors_per_day
+        cum_visitors_B += visitors_per_day
+        cum_conv_A += daily_A_conv
+        cum_conv_B += daily_B_conv
+        
+        # Calculate P-Value (Z-test approximation for speed)
+        # pooled p
+        p_pool = (cum_conv_A + cum_conv_B) / (cum_visitors_A + cum_visitors_B)
+        se = np.sqrt(p_pool * (1 - p_pool) * (1/cum_visitors_A + 1/cum_visitors_B))
+        
+        if se > 0:
+            z = ((cum_conv_B/cum_visitors_B) - (cum_conv_A/cum_visitors_A)) / se
+            p_curr = 2 * (1 - stats.norm.cdf(abs(z)))
+        else:
+            p_curr = 1.0
+            
+        # Clamp for visualization
+        data_points.append(min(p_curr, 0.5)) 
+
     return {
-        "batch": engine.generate_live_batch(20),
-        "schema": engine.elements
+        "days": days,
+        "forecast": data_points,
+        "parameters": {
+            "traffic": req.traffic_daily,
+            "uplift": req.uplift
+        }
     }
+

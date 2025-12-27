@@ -26,6 +26,26 @@ Guides for end-users on how to install and use Sampelit:
 
 ---
 
+## 🖥️ Backend Documentation (Complete)
+
+Documentación técnica detallada del backend, archivo por archivo:
+
+| Document | Description |
+|----------|-------------|
+| **[Backend Overview](backend/README.md)** | Índice completo de la documentación del backend. |
+| **[Arquitectura](backend/architecture.md)** | Diagramas de capas, patrones de diseño, flujo de requests. |
+| **[Configuración](backend/configuration.md)** | Variables de entorno, settings, conexión a DB. |
+| **[Base de Datos](backend/database.md)** | Esquema SQL completo, tablas, índices, migraciones. |
+| **[Repositorios](backend/repositories.md)** | Capa de acceso a datos explicada archivo por archivo. |
+| **[Servicios](backend/services.md)** | Lógica de negocio, Thompson Sampling, análisis Bayesiano. |
+| **[API Reference](backend/api_reference.md)** | Todos los endpoints REST con ejemplos. |
+| **[Motor de Optimización](backend/engine.md)** | Thompson Sampling, Multi-Armed Bandits explicados. |
+| **[Integraciones](backend/integrations.md)** | Shopify, WordPress, Email, Proxy. |
+| **[Scripts](backend/scripts.md)** | Scripts de mantenimiento y utilidades. |
+| **[Testing](backend/testing.md)** | Estrategia de pruebas y ejemplos. |
+
+---
+
 ## 🛠 Technical Documentation
 
 | Document | Description |

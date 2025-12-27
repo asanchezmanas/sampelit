@@ -16,6 +16,12 @@ class TestExperiments:
         data = response.json()
         assert "items" in data
         assert isinstance(data["items"], list)
+        if len(data["items"]) > 0:
+            item = data["items"][0]
+            assert "url" in item
+            assert "variant_count" in item
+            assert "total_visitors" in item
+            assert "overall_conversion_rate" in item
     
     def test_create_experiment_success(self, client, auth_headers):
         """Test experiment creation with valid data"""

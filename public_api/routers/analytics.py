@@ -161,3 +161,71 @@ async def get_experiment_insights(
     except Exception as e:
         logger.error(f"Insight generation failed for {experiment_id}: {e}")
         raise APIError("Failed to generate experiment insights", code=ErrorCodes.INTERNAL_ERROR, status=500)
+
+
+@router.get("/global", response_model=APIResponse)
+async def get_global_analytics(
+    user_id: str = Depends(get_current_user),
+    db: DatabaseManager = Depends(get_db),
+    period: str = Query("30d", description="Time period for analysis (24h, 7d, 30d, 12m)")
+):
+    """
+    Get global aggregated analytics for the user.
+    Returns total traffic, conversions, and yield across all experiments.
+    """
+    try:
+        async with db.pool.acquire() as conn:
+            # 1. Fetch user's experiments
+            experiments = await conn.fetch(
+                "SELECT id FROM experiments WHERE user_id = $1",
+                user_id
+            )
+            
+            if not experiments:
+                 return APIResponse(
+                    success=True,
+                    message="No data availble",
+                    data={
+                        "total_visitors": 0,
+                        "total_conversions": 0,
+                        "conversion_rate": 0.0,
+                        "yield_velocity": 0.0
+                    }
+                )
+
+            experiment_ids = [str(r['id']) for r in experiments]
+
+            # 2. Aggregated metrics from variants
+            # Note: This is an approximation. Ideally we'd filter by time period using session tables,
+            # but for MVP we use the counters in element_variants.
+            metrics = await conn.fetchrow(
+                """
+                SELECT 
+                    SUM(ev.total_allocations) as visitors,
+                    SUM(ev.total_conversions) as conversions
+                FROM element_variants ev
+                JOIN experiment_elements ee ON ev.element_id = ee.id
+                WHERE ee.experiment_id = ANY($1)
+                """,
+                experiment_ids
+            )
+            
+            visitors = metrics['visitors'] or 0
+            conversions = metrics['conversions'] or 0
+            rate = (conversions / visitors) if visitors > 0 else 0.0
+            
+            return APIResponse(
+                success=True,
+                message="Global analytics retrieved",
+                data={
+                    "total_visitors": visitors,
+                    "total_conversions": conversions,
+                    "conversion_rate": rate,
+                    "yield_velocity": conversions, # Using conversions as proxy for "velocity" for now
+                    "period": period
+                }
+            )
+
+    except Exception as e:
+        logger.error(f"Global analytics failed: {e}")
+        raise APIError("Failed to retrieve global metrics", code=ErrorCodes.INTERNAL_ERROR, status=500)

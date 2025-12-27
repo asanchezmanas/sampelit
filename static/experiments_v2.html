@@ -76,11 +76,11 @@
                                 </p>
                             </div>
                             <div class="flex items-center gap-3">
-                                <button @click="$dispatch('open-modal', 'create-experiment')"
+                                <a href="experiments_create_v2.html"
                                     class="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-3 text-sm font-bold text-white transition-all hover:bg-black hover:shadow-xl dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100">
                                     <span class="material-symbols-outlined text-[20px]">add</span>
                                     New Discovery
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -207,7 +207,7 @@
                                                         <p class="text-sm font-bold text-gray-900 dark:text-white"
                                                             x-text="exp.name"></p>
                                                         <p class="text-[11px] font-medium text-gray-400 mt-0.5"
-                                                            x-text="exp.page"></p>
+                                                            x-text="new URL(exp.url).pathname"></p>
                                                     </div>
                                                 </div>
                                             </td>
@@ -231,16 +231,16 @@
                                             </td>
                                             <td class="px-8 py-5">
                                                 <p class="text-sm font-bold text-gray-700 dark:text-gray-300"
-                                                    x-text="exp.visitors.toLocaleString()"></p>
+                                                    x-text="exp.total_visitors.toLocaleString()"></p>
                                                 <p class="text-[11px] font-medium text-gray-400 mt-0.5"
-                                                    x-text="exp.variants + ' variants'"></p>
+                                                    x-text="exp.variant_count + ' variants'"></p>
                                             </td>
                                             <td class="px-8 py-5">
                                                 <div class="flex items-center gap-2">
                                                     <span class="text-sm font-bold tracking-tight"
-                                                        :class="exp.conversion > 0 ? 'text-emerald-600' : 'text-gray-500'"
-                                                        x-text="(exp.conversion > 0 ? '+' : '') + exp.conversion + '%'"></span>
-                                                    <div x-show="exp.conversion > 0"
+                                                        :class="exp.overall_conversion_rate > 0 ? 'text-emerald-600' : 'text-gray-500'"
+                                                        x-text="(exp.overall_conversion_rate > 0 ? '+' : '') + (exp.overall_conversion_rate * 100).toFixed(1) + '%'"></span>
+                                                    <div x-show="exp.overall_conversion_rate > 0"
                                                         class="flex items-center justify-center h-4 w-4 rounded-full bg-emerald-50 text-emerald-600 text-[10px]">
                                                         <span
                                                             class="material-symbols-outlined text-[12px]">trending_up</span>
@@ -250,7 +250,7 @@
                                             <td class="px-8 py-5">
                                                 <span
                                                     class="text-[11px] font-bold text-gray-400 uppercase tracking-widest"
-                                                    x-text="exp.created"></span>
+                                                    x-text="new Date(exp.created_at).toLocaleDateString()"></span>
                                             </td>
                                             <td class="px-8 py-5 text-right">
                                                 <div
@@ -311,6 +311,7 @@
         </div>
     </div>
 
+    <script src="js/core/api.js"></script>
     <script>
         function experimentsTable() {
             return {
@@ -319,16 +320,24 @@
                 perPage: 10,
                 sortColumn: 'created',
                 sortDirection: 'desc',
-                data: [
-                    { id: 1, name: 'Homepage Hero Test', page: '/home', status: 'Running', variants: 3, visitors: 12450, conversion: 12.4, created: 'Dec 20, 2024' },
-                    { id: 2, name: 'Checkout V2', page: '/checkout', status: 'Running', variants: 2, visitors: 8320, conversion: 8.2, created: 'Dec 18, 2024' },
-                    { id: 3, name: 'Pricing Page CTA', page: '/pricing', status: 'Paused', variants: 2, visitors: 5100, conversion: -2.1, created: 'Dec 15, 2024' },
-                    { id: 4, name: 'Product Gallery', page: '/products', status: 'Completed', variants: 4, visitors: 24500, conversion: 15.3, created: 'Dec 10, 2024' },
-                    { id: 5, name: 'Sign Up Form', page: '/signup', status: 'Running', variants: 2, visitors: 3200, conversion: 5.7, created: 'Dec 08, 2024' },
-                    { id: 6, name: 'Blog Layout', page: '/blog', status: 'Draft', variants: 2, visitors: 0, conversion: 0, created: 'Dec 05, 2024' },
-                    { id: 7, name: 'Footer Redesign', page: 'Global', status: 'Completed', variants: 2, visitors: 45000, conversion: 3.2, created: 'Nov 28, 2024' },
-                    { id: 8, name: 'Mobile Menu', page: 'Global', status: 'Running', variants: 3, visitors: 18900, conversion: 9.1, created: 'Nov 20, 2024' },
-                ],
+                data: [],
+
+                async init() {
+                    this.client = new APIClient();
+                    await this.fetchExperiments();
+                },
+
+                async fetchExperiments() {
+                    try {
+                        const response = await this.client.get('/experiments');
+                        this.data = response.data;
+                    } catch (error) {
+                        console.error('Failed to fetch experiments:', error);
+                        // Fallback to empty array
+                        this.data = [];
+                    }
+                },
+
                 sortBy(column) {
                     if (this.sortColumn === column) {
                         this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
