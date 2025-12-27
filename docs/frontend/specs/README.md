@@ -7,14 +7,22 @@ Cada spec incluye: wireframe, mapeo API → UI, estados, y componente Alpine.js.
 
 ## Índice
 
+### Vistas Principales
+
 | Vista | Archivo | Spec |
 |-------|---------|------|
 | Dashboard | `index_v2.html` | [dashboard.md](./dashboard.md) |
 | Experiment Detail | `experiment_detail_v2.html` | [experiment_detail.md](./experiment_detail.md) |
 | Create Experiment | `experiments_create_v2.html` | [experiment_create.md](./experiment_create.md) |
 | Analytics | `analytics_v2.html` | [analytics.md](./analytics.md) |
-| Simulator | `simulator_v2.html` | [simulator.md](./simulator.md) |
 | Audits | `audits_v2.html` | [audits.md](./audits.md) |
+
+### Funcionalidades de Transparencia 🔒
+
+| Vista | Archivo | Spec | Descripción |
+|-------|---------|------|-------------|
+| Simulator Avanzado | `simulator_v2.html` | [simulator.md](./simulator.md) | CSV + datos sintéticos + documentos verificación |
+| Public Dashboard | `/public-dashboard/*` | [public_dashboard.md](./public_dashboard.md) | Demo en vivo con datos reales ofuscados |
 
 ---
 

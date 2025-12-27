@@ -1,94 +1,218 @@
-# UI Specs - Audits (Historial Verificable)
+# UI Specs - Audits & Downloads (Historial Verificable)
 
 **Archivo**: `audits_v2.html`  
-**Endpoint**: `GET /audit/experiments/{id}`
+**Endpoints**:
+- `GET /api/v1/audit/experiments/{id}/trail` - Lista de decisiones
+- `GET /api/v1/audit/experiments/{id}/stats` - Métricas agregadas
+- `GET /api/v1/audit/experiments/{id}/proof-of-fairness` - Certificado
+- `GET /api/v1/audit/experiments/{id}/export/csv` - Descarga CSV
+- `GET /api/v1/audit/experiments/{id}/export/json` - Descarga JSON
+- `GET /api/v1/downloads/audit-log/{id}` - CSV/Excel
+- `GET /api/v1/downloads/results/{id}` - Reporte Excel completo
 
 ---
 
-## Job del Usuario
+## Propósito (Transparencia)
 
-> "Quiero ver que las decisiones del sistema son reales y auditables"
+> **Cada decisión del algoritmo queda registrada con timestamp, hash y secuencia. El usuario puede descargar y verificar que no hubo manipulación.**
 
 ---
 
-## Wireframe
+## Jobs del Usuario
+
+1. "Quiero ver todas las decisiones que tomó el algoritmo"
+2. "Quiero verificar que no se manipularon los datos"
+3. "Quiero descargar todo para auditoría interna/externa"
+4. "Quiero un certificado de que el proceso fue justo"
+
+---
+
+## Wireframe Principal
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │  🔒 Historial Verificable                                          │
-│  Todas las decisiones quedan registradas. Nadie puede modificarlas.│
+│  Cada decisión registrada. Inmutable. Auditable.                   │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                     │
-│  ┌─────────────────────────────────────────────────────────────┐   │
-│  │  ✓ INTEGRIDAD VERIFICADA                                    │   │
-│  │  Total decisiones: 12,847     Estado: Todo correcto ✓       │   │
-│  │  [📥 Descargar evidencia]  [🔍 Verificar integridad]        │   │
-│  └─────────────────────────────────────────────────────────────┘   │
+│  ┌──────────────────────────────────────────────────────────────┐  │
+│  │  ✓ INTEGRIDAD VERIFICADA                                     │  │
+│  │                                                              │  │
+│  │  12,847 decisiones  •  0 violaciones  •  0 gaps             │  │
+│  │                                                              │  │
+│  │  [📄 Certificado de Fairness]  [📥 Descargar Todo]          │  │
+│  └──────────────────────────────────────────────────────────────┘  │
 │                                                                     │
-│  Experimento: [CTA Homepage ▼]                   Buscar: [____]    │
+│  Experimento: [CTA Homepage ▼]                                     │
 │                                                                     │
-│  ┌─────────────────────────────────────────────────────────────┐   │
-│  │  #     Fecha          Tipo          Detalles         Estado │   │
-│  ├─────────────────────────────────────────────────────────────┤   │
-│  │  127   09:45:23       Asignación    → Variante B     ✓      │   │
-│  │  126   09:45:21       Conversión    → €45.00         ✓      │   │
-│  │  125   09:45:18       Asignación    → Variante B     ✓      │   │
-│  │  124   09:45:15       Asignación    → Control        ✓      │   │
-│  │  123   09:44:58       Conversión    → €89.00         ✓      │   │
-│  └─────────────────────────────────────────────────────────────┘   │
+│  ┌──────────────────────────────────────────────────────────────┐  │
+│  │  #      Hora       Tipo         Variante    Hash     Estado  │  │
+│  ├──────────────────────────────────────────────────────────────┤  │
+│  │  12847  09:45:23   Asignación   Var B       a3f2...  ✓       │  │
+│  │  12846  09:45:21   Conversión   Var B       b8c1...  ✓       │  │
+│  │  12845  09:45:18   Asignación   Var B       d4e9...  ✓       │  │
+│  │  12844  09:45:15   Asignación   Control     f7a2...  ✓       │  │
+│  │  ...                                                         │  │
+│  └──────────────────────────────────────────────────────────────┘  │
 │                                                                     │
 │  ← Anterior    Página 1 de 128    Siguiente →                      │
+│                                                                     │
+│  FORMATOS DE DESCARGA:                                             │
+│  [CSV] [JSON] [Excel con análisis]                                 │
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Mapeo API → UI
+## API: Audit Trail
 
-### Endpoint: `GET /audit/experiments/{id}?page=1&limit=50`
+### `GET /api/v1/audit/experiments/{id}/trail`
+
+**Response:**
+```json
+[
+  {
+    "id": "rec_001",
+    "visitor_id": "vis_abc123",
+    "selected_variant_id": "var_002",
+    "segment_key": "default",
+    "decision_timestamp": "2024-12-27T09:45:23Z",
+    "conversion_observed": true,
+    "conversion_timestamp": "2024-12-27T09:47:15Z",
+    "conversion_value": 45.00,
+    "decision_hash": "a3f2c8d1e9b7...",
+    "sequence_number": 12847,
+    "algorithm_version": "adaptive-optimizer-v2.1"
+  }
+]
+```
+
+| Campo | UI | Uso |
+|-------|-----|-----|
+| `sequence_number` | # | Orden cronológico |
+| `decision_timestamp` | Hora | Solo hora (HH:MM:SS) |
+| `conversion_observed` | Tipo | Si true → "Conversión", else "Asignación" |
+| `selected_variant_id` | Variante | Nombre de la variante |
+| `decision_hash` | Hash | Primeros 8 caracteres |
+| `algorithm_version` | (oculto) | Solo en detalles técnicos |
+
+---
+
+## API: Stats (Métricas Agregadas)
+
+### `GET /api/v1/audit/experiments/{id}/stats`
 
 **Response:**
 ```json
 {
-  "experiment_id": "...",
-  "experiment_name": "CTA Homepage",
-  "total_events": 12847,
-  "integrity_verified": true,
-  "events": [
-    {
-      "id": 127,
-      "timestamp": "2024-12-27T09:45:23Z",
-      "event_type": "assignment",
-      "variant_name": "Variante B",
-      "session_id": "sess_abc123",
-      "verified": true
-    },
-    {
-      "id": 126,
-      "timestamp": "2024-12-27T09:45:21Z",
-      "event_type": "conversion",
-      "variant_name": "Variante B",
-      "value": 45.00,
-      "verified": true
-    }
-  ],
-  "pagination": {
-    "page": 1,
-    "total_pages": 128,
-    "limit": 50
+  "total_decisions": 12847,
+  "conversions": 687,
+  "pending_conversions": 0,
+  "conversion_rate": 0.0535,
+  "chain_integrity": true,
+  "earliest_decision": "2024-12-20T10:00:00Z",
+  "latest_decision": "2024-12-27T09:45:23Z"
+}
+```
+
+---
+
+## API: Proof of Fairness (Certificado)
+
+### `GET /api/v1/audit/experiments/{id}/proof-of-fairness`
+
+**Response:**
+```json
+{
+  "is_fair": true,
+  "checks": {
+    "chain_integrity": { "passed": true, "total_records": 12847 },
+    "temporal_sequence": { "passed": true, "violations": 0 },
+    "log_continuity": { "passed": true, "gaps": 0 }
+  },
+  "evidence": {
+    "generated_at": "2024-12-27T09:50:00Z",
+    "algorithm": "adaptive-optimizer-v2.1",
+    "integrity_hash": "final_abc123..."
   }
 }
 ```
 
-| Campo API | Componente UI | Formato |
-|-----------|---------------|---------|
-| `total_events` | Banner | "12,847 decisiones" |
-| `integrity_verified` | Badge | ✓ o ⚠️ |
-| `events[].timestamp` | Columna Fecha | "09:45:23" (solo hora) |
-| `events[].event_type` | Columna Tipo | "Asignación" o "Conversión" |
-| `events[].variant_name` | Columna Detalles | "→ Variante B" |
-| `events[].value` | Columna Detalles | "→ €45.00" (si conversión) |
+### Certificado UI
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                                                              │
+│             🏆 CERTIFICADO DE FAIRNESS                       │
+│                                                              │
+│  Experimento: CTA Homepage                                   │
+│  Generado: 27 Dic 2024, 09:50                                │
+│                                                              │
+│  ┌────────────────────────────────────────────────────────┐ │
+│  │  ✓ Integridad de cadena    12,847 registros válidos   │ │
+│  │  ✓ Secuencia temporal      0 violaciones              │ │
+│  │  ✓ Continuidad del log     0 gaps                     │ │
+│  └────────────────────────────────────────────────────────┘ │
+│                                                              │
+│  Hash de integridad: final_abc123...                         │
+│                                                              │
+│  [📥 Descargar PDF]   [📤 Compartir]                         │
+│                                                              │
+└──────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Descargas Disponibles
+
+| Endpoint | Formato | Contenido |
+|----------|---------|-----------|
+| `/audit/.../export/csv` | CSV | Audit trail completo |
+| `/audit/.../export/json` | JSON | Audit trail estructurado |
+| `/downloads/audit-log/{id}?fmt=csv` | CSV | Con headers descriptivos |
+| `/downloads/audit-log/{id}?fmt=xlsx` | Excel | Formateado con columnas |
+| `/downloads/results/{id}` | Excel | Reporte completo con análisis |
+
+### Contenido del Excel de Resultados
+
+1. **Hoja 1: Resumen**
+   - Métricas principales
+   - Comparación vs baseline
+
+2. **Hoja 2: Variantes**
+   - Tabla de rendimiento por variante
+   - Gráfico de conversiones
+
+3. **Hoja 3: Audit Trail**
+   - Todos los registros
+   - Con timestamps y hashes
+
+4. **Hoja 4: Verificación**
+   - Proof of fairness
+   - Checks de integridad
+
+---
+
+## Scripts de Demo (`scripts/demo/`)
+
+Para generar datos de demostración:
+
+| Script | Propósito |
+|--------|-----------|
+| `audit_demo.py` | Demo completo del sistema de auditoría |
+| `run_demo_with_audit_trail.py` | Simulación con registro de cada decisión |
+| `run_demo_single_element.py` | Demo simple de un elemento |
+| `run_demo_multielement.py` | Demo con múltiples elementos |
+
+### Ejemplo de uso:
+
+```bash
+# Generar demo con auditoría completa
+python scripts/demo/run_demo_with_audit_trail.py
+
+# Salida: audit_trail_export.json, audit_results.xlsx
+```
 
 ---
 
@@ -98,59 +222,63 @@
 function auditsView() {
   return {
     loading: true,
-    experiments: [],
-    selectedExperiment: null,
-    events: [],
-    pagination: { page: 1, total_pages: 1 },
-    search: '',
+    experimentId: null,
+    trail: [],
+    stats: null,
+    fairness: null,
+    pagination: { page: 1, limit: 50, total: 0 },
     
     async init() {
-      // Cargar lista de experimentos
-      const res = await APIClient.get('/experiments');
-      this.experiments = res.data.experiments;
-      if (this.experiments.length > 0) {
-        this.selectedExperiment = this.experiments[0].id;
-        await this.loadEvents();
-      }
+      this.experimentId = new URLSearchParams(location.search).get('id');
+      await Promise.all([
+        this.loadTrail(),
+        this.loadStats(),
+        this.loadFairness()
+      ]);
       this.loading = false;
     },
     
-    async loadEvents() {
+    async loadTrail() {
       const res = await APIClient.get(
-        `/audit/experiments/${this.selectedExperiment}?page=${this.pagination.page}`
+        `/audit/experiments/${this.experimentId}/trail?limit=${this.pagination.limit}`
       );
-      this.events = res.data.events;
-      this.pagination = res.data.pagination;
+      this.trail = res.data;
     },
     
-    async changePage(delta) {
-      this.pagination.page += delta;
-      await this.loadEvents();
+    async loadStats() {
+      const res = await APIClient.get(
+        `/audit/experiments/${this.experimentId}/stats`
+      );
+      this.stats = res.data;
     },
     
+    async loadFairness() {
+      const res = await APIClient.get(
+        `/audit/experiments/${this.experimentId}/proof-of-fairness`
+      );
+      this.fairness = res.data;
+    },
+    
+    // Descargas
+    downloadCSV() {
+      window.open(`/api/v1/audit/experiments/${this.experimentId}/export/csv`);
+    },
+    downloadJSON() {
+      window.open(`/api/v1/audit/experiments/${this.experimentId}/export/json`);
+    },
+    downloadExcel() {
+      window.open(`/api/v1/downloads/results/${this.experimentId}`);
+    },
+    
+    // Helpers
     formatTime(iso) {
       return new Date(iso).toLocaleTimeString('es-ES');
     },
-    
-    getEventLabel(type) {
-      return type === 'assignment' ? 'Asignación' : 'Conversión';
+    truncateHash(hash) {
+      return hash.slice(0, 8) + '...';
     },
-    
-    getEventIcon(type) {
-      return type === 'assignment' ? 'person_add' : 'paid';
-    },
-    
-    async downloadEvidence() {
-      const res = await APIClient.get(
-        `/audit/experiments/${this.selectedExperiment}/export`,
-        { responseType: 'blob' }
-      );
-      // Trigger download
-      const url = URL.createObjectURL(res.data);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `audit_${this.selectedExperiment}.csv`;
-      a.click();
+    getEventType(record) {
+      return record.conversion_observed ? 'Conversión' : 'Asignación';
     }
   }
 }
@@ -158,59 +286,19 @@ function auditsView() {
 
 ---
 
-## Tipos de Eventos
+## Verificaciones de Integridad
 
-| Tipo | Icono | Color | Descripción |
-|------|-------|-------|-------------|
-| `assignment` | `person_add` | Azul | Usuario asignado a variante |
-| `conversion` | `paid` | Verde | Conversión registrada |
-| `error` | `warning` | Amarillo | Error en procesamiento |
-
----
-
-## Filtros
-
-```html
-<div class="flex gap-4">
-  <!-- Selector de experimento -->
-  <select x-model="selectedExperiment" @change="loadEvents()">
-    <template x-for="exp in experiments">
-      <option :value="exp.id" x-text="exp.name"></option>
-    </template>
-  </select>
-  
-  <!-- Búsqueda -->
-  <input type="text" 
-         x-model="search" 
-         placeholder="Buscar por session ID...">
-</div>
-```
+| Check | Qué verifica | Si falla |
+|-------|--------------|----------|
+| **Chain Integrity** | Cada hash depende del anterior | Los datos fueron alterados |
+| **Temporal Sequence** | Decision timestamp < Conversion timestamp | Conversión retroactiva (fraude) |
+| **Log Continuity** | Sequence numbers consecutivos | Registros eliminados |
 
 ---
 
-## Por Qué Es Importante Esta Vista
+## Por qué es importante
 
-Esta vista es clave para:
-1. **Confianza**: El cliente ve que los datos son reales
-2. **Compliance**: Auditorías internas/externas
-3. **Debugging**: Encontrar problemas específicos
-4. **Diferenciación**: Pocos competidores ofrecen esto
-
----
-
-## Banner de Integridad
-
-```html
-<div class="p-4 rounded-xl" 
-     :class="integrity_verified ? 'bg-green-50' : 'bg-yellow-50'">
-  <div class="flex items-center gap-3">
-    <span class="material-symbols-outlined text-2xl"
-          :class="integrity_verified ? 'text-green-600' : 'text-yellow-600'"
-          x-text="integrity_verified ? 'verified' : 'warning'"></span>
-    <div>
-      <h3 class="font-bold" x-text="integrity_verified ? 'Integridad Verificada' : 'Verificación Pendiente'"></h3>
-      <p class="text-sm text-gray-500" x-text="total_events.toLocaleString() + ' decisiones registradas'"></p>
-    </div>
-  </div>
-</div>
-```
+1. **Cumplimiento legal**: GDPR requiere trazabilidad
+2. **Confianza del cliente**: Pueden verificar independientemente
+3. **Diferenciación**: La mayoría de herramientas NO ofrecen esto
+4. **Auditorías externas**: Consultores/inversores lo piden
