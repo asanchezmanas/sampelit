@@ -73,7 +73,7 @@
             <!-- ===== Header End ===== -->
 
             <!-- ===== Main Content Start ===== -->
-            <main>
+            <main x-data="dashboard()">
                 <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
 
                     <!-- Dashboard Title & Breadcrumb -->
@@ -136,9 +136,9 @@
                                 <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Total
                                     Discovery</span>
                                 <div class="mt-2 flex items-baseline justify-between">
-                                    <h4
-                                        class="text-3xl font-bold tracking-premium-tight text-gray-900 dark:text-white/90">
-                                        24,892</h4>
+                                    <h4 class="text-3xl font-bold tracking-premium-tight text-gray-900 dark:text-white/90"
+                                        x-text="formatNumber(globalMetrics.total_visitors)">
+                                        0</h4>
                                     <span
                                         class="flex items-center gap-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">
                                         <span class="material-symbols-outlined text-xs">trending_up</span>
@@ -164,9 +164,9 @@
                                 <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Yield
                                     achieved</span>
                                 <div class="mt-2 flex items-baseline justify-between">
-                                    <h4
-                                        class="text-3xl font-bold tracking-premium-tight text-gray-900 dark:text-white/90">
-                                        1,048</h4>
+                                    <h4 class="text-3xl font-bold tracking-premium-tight text-gray-900 dark:text-white/90"
+                                        x-text="formatNumber(globalMetrics.total_conversions)">
+                                        0</h4>
                                     <span
                                         class="flex items-center gap-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">
                                         <span class="material-symbols-outlined text-xs">trending_up</span>
@@ -192,9 +192,9 @@
                                     class="text-[10px] font-black uppercase tracking-widest text-sampelit dark:text-blue-400">Success
                                     Ratio</span>
                                 <div class="mt-2 flex items-baseline justify-between">
-                                    <h4
-                                        class="text-3xl font-black tracking-premium-tight text-sampelit dark:text-blue-400">
-                                        4.21%</h4>
+                                    <h4 class="text-3xl font-black tracking-premium-tight text-sampelit dark:text-blue-400"
+                                        x-text="formatPercent(globalMetrics.conversion_rate)">
+                                        0.00%</h4>
                                     <span
                                         class="flex items-center gap-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">
                                         +0.4%
@@ -273,18 +273,18 @@
                         </div>
 
                         <!-- Side Panel: System Vitals -->
-                        <div x-data="systemVitals()" x-init="init()"
+                        <div
                             class="col-span-12 rounded-[32px] border border-gray-100 bg-white p-6 shadow-soft dark:border-gray-800 dark:bg-white/[0.03] xl:col-span-4">
                             <h4 class="text-lg font-bold tracking-premium-tight text-gray-900 dark:text-white mb-6">
                                 System Vitals</h4>
                             <div class="space-y-6">
-                                <template x-if="loading">
+                                <template x-if="loading.system">
                                     <div class="animate-pulse space-y-4">
                                         <div class="h-10 bg-gray-200 rounded"></div>
                                         <div class="h-10 bg-gray-200 rounded"></div>
                                     </div>
                                 </template>
-                                <template x-if="!loading">
+                                <template x-if="!loading.system">
                                     <div class="space-y-6">
                                         <div class="group flex items-center gap-4">
                                             <div
@@ -297,49 +297,56 @@
                                                         Auto-Scaling
                                                     </h5>
                                                     <span class="text-xs font-black"
-                                                        :class="metrics.buffer_tier.active ? 'text-emerald-600' : 'text-gray-400'"
-                                                        x-text="metrics.buffer_tier.active ? 'Active (Redis)' : 'Inactive'"></span>
+                                                        :class="system.buffer_tier?.active ? 'text-emerald-600' : 'text-gray-400'"
+                                                        x-text="system.buffer_tier?.active ? 'Active (Redis)' : 'Inactive'"></span>
                                                 </div>
                                                 <div class="h-1.5 w-full rounded-full bg-gray-50 dark:bg-gray-800">
-                                                    <div class="h-1.5 rounded-full bg-emerald-500"
-                                                        :style="`width: ${metrics.buffer_tier.usage_pct}%`"></div>
+                                                    <div class="h-1.5 rounded-full bg-emerald-500 transition-all duration-500"
+                                                        :style="`width: ${system.buffer_tier?.usage_pct || 0}%`"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="group flex items-center gap-4">
+                                            <div
+                                                class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 group-hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-400">
+                                                <span class="material-symbols-outlined text-2xl">speed</span>
+                                            </div>
+                                            <div class="flex-1">
+                                                <div class="flex justify-between items-baseline mb-1">
+                                                    <h5 class="text-sm font-bold text-gray-900 dark:text-white">
+                                                        Throughput (Day)
+                                                    </h5>
+                                                    <span class="text-xs font-black text-blue-600"
+                                                        x-text="formatNumber(system.throughput?.day || 0)">0</span>
+                                                </div>
+                                                <div class="h-1.5 w-full rounded-full bg-gray-50 dark:bg-gray-800">
+                                                    <div class="h-1.5 rounded-full bg-blue-500" style="width: 15%">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="group flex items-center gap-4">
+                                            <div
+                                                class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 group-hover:bg-amber-100 dark:bg-amber-500/10 dark:text-amber-400">
+                                                <span class="material-symbols-outlined text-2xl">shield_lock</span>
+                                            </div>
+                                            <div class="flex-1">
+                                                <div class="flex justify-between items-baseline mb-1">
+                                                    <h5 class="text-sm font-bold text-gray-900 dark:text-white">Status
+                                                    </h5>
+                                                    <span class="text-xs font-black text-amber-600 capitalize"
+                                                        x-text="system.status || 'unknown'">Verified</span>
+                                                </div>
+                                                <div class="h-1.5 w-full rounded-full bg-gray-50 dark:bg-gray-800">
+                                                    <div class="h-1.5 rounded-full bg-amber-500 shadow-premium"
+                                                        style="width: 100%"></div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </template>
-                            </div>
-                        </div>
-                        <div class="group flex items-center gap-4">
-                            <div
-                                class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 group-hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-400">
-                                <span class="material-symbols-outlined text-2xl">speed</span>
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex justify-between items-baseline mb-1">
-                                    <h5 class="text-sm font-bold text-gray-900 dark:text-white">Engine Latency
-                                    </h5>
-                                    <span class="text-xs font-black text-blue-600">42ms</span>
-                                </div>
-                                <div class="h-1.5 w-full rounded-full bg-gray-50 dark:bg-gray-800">
-                                    <div class="h-1.5 rounded-full bg-blue-500" style="width: 15%"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="group flex items-center gap-4">
-                            <div
-                                class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 group-hover:bg-amber-100 dark:bg-amber-500/10 dark:text-amber-400">
-                                <span class="material-symbols-outlined text-2xl">shield_lock</span>
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex justify-between items-baseline mb-1">
-                                    <h5 class="text-sm font-bold text-gray-900 dark:text-white">Audit Integrity
-                                    </h5>
-                                    <span class="text-xs font-black text-amber-600">Verified</span>
-                                </div>
-                                <div class="h-1.5 w-full rounded-full bg-gray-50 dark:bg-gray-800">
-                                    <div class="h-1.5 rounded-full bg-amber-500" style="width: 100%"></div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -373,102 +380,67 @@
                 </div>
 
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    <!-- Discovery Card -->
-                    <div
-                        class="group rounded-3xl border border-gray-50 bg-gray-50/30 p-5 transition-all duration-300 hover:border-sampelit/20 hover:bg-white hover:shadow-premium dark:border-white/5 dark:bg-white/[0.02]">
-                        <div class="flex items-start justify-between">
+                    <template x-if="loading.experiments">
+                        <div class="col-span-full py-10 text-center">
                             <div
-                                class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-sampelit shadow-theme-xs dark:bg-gray-800">
-                                <span class="material-symbols-outlined text-2xl">science</span>
+                                class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-sampelit border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]">
                             </div>
-                            <span
-                                class="flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-black uppercase text-emerald-600">
-                                Performing
-                            </span>
+                            <p class="mt-4 text-sm font-bold text-gray-500">Discovering active labs...</p>
                         </div>
-                        <div class="mt-5">
-                            <h5 class="text-base font-bold text-gray-900 dark:text-white">Homepage Hero
-                                Evolution</h5>
-                            <p class="mt-1 text-xs font-medium text-gray-400 tracking-premium">Optimization
-                                of above-the-fold engagement levels.</p>
-                        </div>
-                        <div
-                            class="mt-6 flex items-center justify-between border-t border-gray-100 pt-4 dark:border-white/5">
-                            <div class="flex -space-x-2">
-                                <div
-                                    class="h-8 w-8 rounded-full border-2 border-white bg-gray-200 dark:border-gray-800">
-                                </div>
-                                <div
-                                    class="h-8 w-8 rounded-full border-2 border-white bg-gray-300 dark:border-gray-800">
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <span
-                                    class="block text-[10px] font-black uppercase tracking-widest text-gray-400">Yield</span>
-                                <span class="text-sm font-black text-emerald-600">+14.2%</span>
-                            </div>
-                        </div>
-                    </div>
+                    </template>
 
-                    <!-- Discovery Card -->
-                    <div
-                        class="group rounded-3xl border border-gray-50 bg-gray-50/30 p-5 transition-all duration-300 hover:border-sampelit/20 hover:bg-white hover:shadow-premium dark:border-white/5 dark:bg-white/[0.02]">
-                        <div class="flex items-start justify-between">
-                            <div
-                                class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-blue-500 shadow-theme-xs dark:bg-gray-800">
-                                <span class="material-symbols-outlined text-2xl">shopping_cart</span>
-                            </div>
-                            <span
-                                class="flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-1 text-[10px] font-black uppercase text-blue-600">
-                                Gathering
-                            </span>
+                    <template x-if="!loading.experiments && experiments.length === 0">
+                        <div class="col-span-full rounded-2xl border-2 border-dashed border-gray-100 p-10 text-center">
+                            <span class="material-symbols-outlined text-4xl text-gray-300">science</span>
+                            <p class="mt-2 text-sm font-bold text-gray-500">No active experiments found.</p>
+                            <a href="experiments_create_v2.html"
+                                class="mt-4 inline-block text-xs font-black text-sampelit uppercase tracking-widest hover:underline">Start
+                                your first discovery</a>
                         </div>
-                        <div class="mt-5">
-                            <h5 class="text-base font-bold text-gray-900 dark:text-white">Smart Checkout
-                                Flow</h5>
-                            <p class="mt-1 text-xs font-medium text-gray-400 tracking-premium">Reducing
-                                friction in the multi-step acquisition pipeline.</p>
-                        </div>
+                    </template>
+
+                    <template x-for="exp in experiments" :key="exp.id">
                         <div
-                            class="mt-6 flex items-center justify-between border-t border-gray-100 pt-4 dark:border-white/5">
-                            <div class="flex -space-x-2">
+                            class="group rounded-3xl border border-gray-50 bg-gray-50/30 p-5 transition-all duration-300 hover:border-sampelit/20 hover:bg-white hover:shadow-premium dark:border-white/5 dark:bg-white/[0.02]">
+                            <div class="flex items-start justify-between">
                                 <div
-                                    class="h-8 w-8 rounded-full border-2 border-white bg-gray-200 dark:border-gray-800">
+                                    class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-sampelit shadow-theme-xs dark:bg-gray-800">
+                                    <span class="material-symbols-outlined text-2xl"
+                                        x-text="exp.status === 'active' ? 'science' : 'auto_fix_high'"></span>
+                                </div>
+                                <span
+                                    class="flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-black uppercase"
+                                    :class="exp.status === 'active' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'"
+                                    x-text="exp.status">
+                                </span>
+                            </div>
+                            <div class="mt-5">
+                                <h5 class="text-base font-bold text-gray-900 dark:text-white" x-text="exp.name"></h5>
+                                <p class="mt-1 text-xs font-medium text-gray-400 tracking-premium truncate"
+                                    x-text="exp.description"></p>
+                            </div>
+                            <div
+                                class="mt-6 flex items-center justify-between border-t border-gray-100 pt-4 dark:border-white/5">
+                                <div class="text-left">
+                                    <span
+                                        class="block text-[10px] font-black uppercase tracking-widest text-gray-400">Visitors</span>
+                                    <span class="text-sm font-black text-gray-900 dark:text-white"
+                                        x-text="formatNumber(exp.total_visitors || 0)"></span>
+                                </div>
+                                <div class="text-right">
+                                    <span
+                                        class="block text-[10px] font-black uppercase tracking-widest text-gray-400">Yield</span>
+                                    <span class="text-sm font-black text-emerald-600"
+                                        x-text="formatPercent(exp.overall_conversion_rate || 0)"></span>
                                 </div>
                             </div>
-                            <div class="text-right">
-                                <span
-                                    class="block text-[10px] font-black uppercase tracking-widest text-gray-400">Status</span>
-                                <span class="text-sm font-black text-gray-400">Stable</span>
-                            </div>
+                            <!-- Detail Link -->
+                            <a :href="`experiment_detail_v2.html?id=${exp.id}`"
+                                class="mt-4 block text-center text-[10px] font-black uppercase tracking-widest text-sampelit opacity-0 group-hover:opacity-100 transition-opacity hover:underline">
+                                View Lab Details
+                            </a>
                         </div>
-                    </div>
-
-                    <!-- Discovery Card (Scheduled) -->
-                    <div
-                        class="group rounded-3xl border border-dashed border-gray-200 p-5 transition-all duration-300 hover:border-sampelit/40 dark:border-white/10">
-                        <div class="flex items-start justify-between">
-                            <div
-                                class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gray-50 text-gray-300 dark:bg-white/[0.02]">
-                                <span class="material-symbols-outlined text-2xl">event_upcoming</span>
-                            </div>
-                            <span
-                                class="flex items-center gap-1 rounded-full bg-gray-100 px-2.5 py-1 text-[10px] font-black uppercase text-gray-400">
-                                Scheduled
-                            </span>
-                        </div>
-                        <div class="mt-5">
-                            <h5 class="text-base font-bold text-gray-300 dark:text-white/30">Pricing
-                                Precision</h5>
-                            <p class="mt-1 text-xs font-medium text-gray-200 dark:text-white/10 tracking-premium">
-                                Value-based discovery on the pricing matrices.</p>
-                        </div>
-                        <div
-                            class="mt-6 flex items-center justify-between border-t border-gray-100 pt-4 opacity-30 dark:border-white/5">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                                Commencing in 4d</p>
-                        </div>
-                    </div>
+                    </template>
                 </div>
             </div>
         </div>
@@ -483,103 +455,109 @@
     <!-- ===== Page Wrapper End ===== -->
 
     <script>
-        document.addEventListener('DOMContentLoaded', async function () {
-            // Initialize API Client
-            const api = new APIClient();
-
-            // Default Mock Data (Fallback)
-            let chartData = {
-                discovery: [31, 40, 28, 51, 42, 109, 100, 120, 80, 95, 110, 140],
-                yield: [11, 32, 45, 32, 34, 52, 41, 60, 40, 45, 50, 65],
-                categories: ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']
-            };
-
-            // Attempt to fetch real data
-            try {
-                // Future endpoint: /api/v1/analytics/performance
-                // const response = await api.get('/analytics/performance');
-                // if (response.data) chartData = response.data;
-                console.log('Using mock data for ChartOne until backend endpoint is ready.');
-            } catch (err) {
-                console.warn('Failed to load chart data, using fallback.', err);
-            }
-
-            // Chart One: Performance Overview
-            const chartOneOptions = {
-                series: [
-                    { name: 'Discovery', data: chartData.discovery },
-                    { name: 'Yield', data: chartData.yield }
-                ],
-                chart: {
-                    type: 'area',
-                    height: 320,
-                    toolbar: { show: false },
-                    fontFamily: 'Inter, sans-serif'
-                },
-                colors: ['#1E3A8A', '#3b82f6'], // Updated to Dark Navy Theme
-                fill: {
-                    type: 'gradient',
-                    gradient: {
-                        shadeIntensity: 1,
-                        opacityFrom: 0.2,
-                        opacityTo: 0,
-                        stops: [0, 90, 100]
-                    }
-                },
-                stroke: { curve: 'smooth', width: 2.5 },
-                xaxis: {
-                    categories: chartData.categories,
-                    axisBorder: { show: false },
-                    axisTicks: { show: false },
-                    labels: {
-                        style: { colors: '#94a3b8', fontSize: '11px', fontWeight: 600 }
-                    }
-                },
-                yaxis: {
-                    labels: {
-                        style: { colors: '#94a3b8', fontSize: '11px', fontWeight: 600 }
-                    }
-                },
-                grid: {
-                    show: true,
-                    borderColor: '#f1f5f9',
-                    strokeDashArray: 4,
-                    padding: { left: 0, right: 0 }
-                },
-                legend: { show: false },
-                dataLabels: { enabled: false },
-                tooltip: { theme: 'light' } // Changed to light for better contrast with new theme
-            };
-
-            if (document.querySelector("#chartOne")) {
-                new ApexCharts(document.querySelector("#chartOne"), chartOneOptions).render();
-            }
-        });
-    </script>
-    <script>
-        function systemVitals() {
+        function dashboard() {
             return {
-                metrics: {
-                    status: 'Unknown',
-                    buffer_tier: { active: false, usage_pct: 0 }
+                globalMetrics: {
+                    total_visitors: 0,
+                    total_conversions: 0,
+                    conversion_rate: 0,
+                    yield_velocity: 0
                 },
-                loading: true,
+                experiments: [],
+                system: {
+                    buffer_tier: { active: false, usage_pct: 0 },
+                    status: 'Operational'
+                },
+                loading: {
+                    metrics: true,
+                    experiments: true,
+                    system: true
+                },
+                api: new APIClient(),
 
                 async init() {
-                    const client = new APIClient();
+                    this.fetchGlobalMetrics();
+                    this.fetchExperiments();
+                    this.fetchSystemMetrics();
+                    this.initChart();
+                },
+
+                async fetchGlobalMetrics() {
                     try {
-                        const response = await client.get('/system/metrics');
-                        this.metrics = response.data;
+                        const res = await this.api.get('/analytics/global');
+                        if (res.success) {
+                            this.globalMetrics = res.data;
+                        }
                     } catch (e) {
-                        console.error("Failed to load system metrics", e);
-                        // Fallback mock
-                        this.metrics = {
-                            status: 'Operational',
-                            buffer_tier: { active: true, usage_pct: 12 }
-                        };
+                        console.error("Dashboard: Error fetching global metrics", e);
                     } finally {
-                        this.loading = false;
+                        this.loading.metrics = false;
                     }
+                },
+
+                async fetchExperiments() {
+                    try {
+                        const res = await this.api.get('/experiments', { per_page: 3 });
+                        if (res.items) {
+                            this.experiments = res.items;
+                        }
+                    } catch (e) {
+                        console.error("Dashboard: Error fetching experiments", e);
+                    } finally {
+                        this.loading.experiments = false;
+                    }
+                },
+
+                async fetchSystemMetrics() {
+                    try {
+                        const res = await this.api.get('/system/metrics');
+                        if (res.status) {
+                            this.system = res;
+                        }
+                    } catch (e) {
+                        console.error("Dashboard: Error fetching system metrics", e);
+                    } finally {
+                        this.loading.system = false;
+                    }
+                },
+
+                initChart() {
+                    // Logic for chart remains similar but could be tied to data later
+                    const options = {
+                        series: [
+                            { name: 'Discovery', data: [31, 40, 28, 51, 42, 109, 100] },
+                            { name: 'Yield', data: [11, 32, 45, 32, 34, 52, 41] }
+                        ],
+                        chart: {
+                            type: 'area', height: 320, toolbar: { show: false }, fontFamily: 'Inter, sans-serif'
+                        },
+                        colors: ['#1E3A8A', '#3b82f6'],
+                        stroke: { curve: 'smooth', width: 2.5 },
+                        fill: {
+                            type: 'gradient',
+                            gradient: { shadeIntensity: 1, opacityFrom: 0.2, opacityTo: 0, stops: [0, 90, 100] }
+                        },
+                        xaxis: {
+                            categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                            labels: { style: { colors: '#94a3b8', fontSize: '11px' } }
+                        },
+                        yaxis: { labels: { style: { colors: '#94a3b8', fontSize: '11px' } } },
+                        grid: { borderColor: '#f1f5f9', strokeDashArray: 4 },
+                        legend: { show: false },
+                        dataLabels: { enabled: false },
+                        tooltip: { theme: 'light' }
+                    };
+                    if (document.querySelector("#chartOne")) {
+                        new ApexCharts(document.querySelector("#chartOne"), options).render();
+                    }
+                },
+
+                formatNumber(num) {
+                    return new Intl.NumberFormat().format(num);
+                },
+
+                formatPercent(num) {
+                    return (num * 100).toFixed(2) + '%';
                 }
             }
         }

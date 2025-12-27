@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sampelit | Settings</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" />
+
+    <!-- Core Design System: Tailwind CDN + Style Standard -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+    <link rel="stylesheet" href="css/sampelit-v2.css" />
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#0f172a",   // Navy Sampelit
+                        accent: "#1e3a8a",    // Blue Accent Premium
+                        sampelit: "#0f172a"   // Alias primary
+                    },
+                    fontFamily: {
+                        display: ['Manrope', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'premium': '0 10px 30px -5px rgba(15, 23, 42, 0.08)',
+                        'soft': '0 2px 10px rgba(0, 0, 0, 0.03)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+
+    <!-- Essential Scripts -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="js/core/api.js"></script>
+    <script src="js/include.js"></script>
+</head>
+
+<body x-data="settingsController"
+    class="bg-[#f8f9fc] dark:bg-gray-900 text-text-main dark:text-gray-300 font-sans antialiased">
+    <div class="flex h-screen overflow-hidden">
+        <include src="./partials/sidebar_v2.html"></include>
+
+        <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+            <include src="./partials/header_v2.html"></include>
+
+            <main>
+                <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+                    <!-- Page Header -->
+                    <div class="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between px-2">
+                        <div>
+                            <nav
+                                class="mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">
+                                <a href="index_v2.html" class="hover:text-brand-500 transition-colors">Command
+                                    Center</a>
+                                <span class="material-symbols-outlined text-[10px]">chevron_right</span>
+                                <span class="text-gray-900 dark:text-white">Organization Nexus</span>
+                            </nav>
+                            <h1
+                                class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white font-display">
+                                Settings
+                            </h1>
+                            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                Control team access, define roles and manage organization-wide preferences.
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button @click="activeTab = 'roles'"
+                                :class="activeTab === 'roles' ? 'bg-gray-900 text-white' : 'bg-white text-gray-700'"
+                                class="rounded-xl border border-gray-200 px-5 py-2.5 text-xs font-bold shadow-soft hover:bg-gray-50 transition-all dark:border-white/5 dark:bg-white/5 dark:text-white">
+                                Roles Policy
+                            </button>
+                            <button @click="inviteMember"
+                                class="rounded-xl bg-gray-900 px-5 py-2.5 text-xs font-bold text-white shadow-premium hover:bg-black transition-all flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm">person_add</span>
+                                Invite Member
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Role Overview Cards -->
+                    <div class="grid grid-cols-1 gap-6 md:grid-cols-3 mb-10 px-2" x-show="activeTab === 'team'">
+                        <template x-for="role in roles" :key="role.id">
+                            <div
+                                class="group relative overflow-hidden rounded-[32px] border border-gray-200 bg-white p-8 shadow-premium transition-all duration-300 hover:border-brand-500/50 dark:border-white/5 dark:bg-white/[0.03]">
+                                <div class="flex justify-between items-start mb-6">
+                                    <div class="flex h-14 w-14 items-center justify-center rounded-2xl transition-colors"
+                                        :class="{
+                                            'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400': role.color === 'blue',
+                                            'bg-purple-50 text-purple-600 dark:bg-purple-500/10 dark:text-purple-400': role.color === 'purple',
+                                            'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400': role.color === 'emerald'
+                                        }">
+                                        <span class="material-symbols-outlined text-3xl"
+                                            x-text="role.icon">admin_panel_settings</span>
+                                    </div>
+                                    <button
+                                        class="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all">
+                                        <span class="material-symbols-outlined text-xl">settings</span>
+                                    </button>
+                                </div>
+                                <h3 class="text-xl font-extrabold text-gray-900 dark:text-white font-display"
+                                    x-text="role.name">Administrators</h3>
+                                <p class="mt-2 text-xs text-gray-500 dark:text-gray-400 leading-relaxed h-10"
+                                    x-text="role.description">Full access to settings, billing and user management.</p>
+                                <div class="mt-6 flex items-center gap-2">
+                                    <span class="text-2xl font-extrabold text-gray-900 dark:text-white"
+                                        x-text="role.count">2</span>
+                                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Active
+                                        Users</span>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Team Members Table Section -->
+                    <div class="flex flex-col gap-4 rounded-[32px] border border-gray-200 bg-white dark:border-white/5 dark:bg-white/[0.03] overflow-hidden shadow-premium"
+                        x-show="activeTab === 'team'">
+                        <!-- Toolbar -->
+                        <div
+                            class="p-6 border-b border-gray-100 dark:border-white/5 flex flex-col sm:flex-row justify-between gap-6 items-center">
+                            <div class="relative w-full sm:w-96">
+                                <div
+                                    class="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none text-gray-400">
+                                    <span class="material-symbols-outlined text-xl">search</span>
+                                </div>
+                                <input type="text" x-model="searchQuery"
+                                    class="h-12 w-full pl-14 pr-6 bg-gray-50 dark:bg-[#111621] border border-gray-100 dark:border-white/5 rounded-2xl text-sm font-bold text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-brand-500/10 focus:border-brand-500 transition-all"
+                                    placeholder="Find team members...">
+                            </div>
+                            <div class="flex gap-3 w-full sm:w-auto">
+                                <div class="relative">
+                                    <select x-model="roleFilter"
+                                        class="h-12 appearance-none pl-6 pr-12 rounded-2xl border border-gray-100 dark:border-white/5 bg-white dark:bg-[#111621] text-xs font-bold uppercase tracking-widest text-gray-600 dark:text-gray-300 focus:outline-none focus:ring-4 focus:ring-brand-500/10 cursor-pointer">
+                                        <option value="all">Every Role</option>
+                                        <option value="Administrador">Admins</option>
+                                        <option value="Editor">Editors</option>
+                                        <option value="Visor">Viewers</option>
+                                    </select>
+                                    <div
+                                        class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-400">
+                                        <span class="material-symbols-outlined text-xl">expand_more</span>
+                                    </div>
+                                </div>
+                                <button
+                                    class="h-12 px-5 rounded-2xl border border-gray-100 dark:border-white/5 bg-white dark:bg-[#111621] text-gray-500 hover:text-gray-900 dark:hover:text-white transition-all flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-xl">filter_alt</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Table -->
+                        <div class="overflow-x-auto w-full">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr
+                                        class="bg-gray-50/50 dark:bg-white/[0.01] border-b border-gray-100 dark:border-white/5 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                                        <th class="px-8 py-5">Individual</th>
+                                        <th class="px-8 py-5">Authority Level</th>
+                                        <th class="px-8 py-5">Presence</th>
+                                        <th class="px-8 py-5">Last Activity</th>
+                                        <th class="px-8 py-5 text-right">Directives</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-50 dark:divide-white/5">
+                                    <template x-for="member in filteredMembers" :key="member.id">
+                                        <tr class="group hover:bg-gray-50 dark:hover:bg-white/[0.01] transition-colors">
+                                            <td class="px-8 py-5">
+                                                <div class="flex items-center gap-4">
+                                                    <div class="relative">
+                                                        <template x-if="member.avatar">
+                                                            <img :src="member.avatar"
+                                                                class="size-11 rounded-2xl object-cover ring-2 ring-white dark:ring-gray-800 shadow-soft">
+                                                        </template>
+                                                        <template x-if="!member.avatar">
+                                                            <div class="size-11 rounded-2xl bg-brand-50 text-brand-500 flex items-center justify-center font-bold text-sm"
+                                                                x-text="member.initials"></div>
+                                                        </template>
+                                                        <div x-show="member.status === 'active'"
+                                                            class="absolute -bottom-1 -right-1 size-3.5 rounded-full bg-emerald-500 border-2 border-white dark:border-gray-800 shadow-sm">
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <p class="text-sm font-extrabold text-gray-900 dark:text-white"
+                                                            x-text="member.name">Ana García</p>
+                                                        <p class="text-[10px] font-medium text-gray-400"
+                                                            x-text="member.email">ana.garcia@empresa.com</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-8 py-5">
+                                                <span
+                                                    class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all"
+                                                    :class="{
+                                                        'bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400': member.role === 'Administrador',
+                                                        'bg-purple-50 text-purple-600 dark:bg-purple-500/10 dark:text-purple-400': member.role === 'Editor',
+                                                        'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400': member.role === 'Visor'
+                                                    }" x-text="member.role">
+                                                    Administrador
+                                                </span>
+                                            </td>
+                                            <td class="px-8 py-5">
+                                                <div class="flex items-center gap-2">
+                                                    <span class="size-1.5 rounded-full"
+                                                        :class="member.status === 'active' ? 'bg-emerald-500' : 'bg-amber-500'"></span>
+                                                    <span
+                                                        class="text-[10px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400"
+                                                        x-text="member.status">Active</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-8 py-5">
+                                                <span class="text-xs font-bold text-gray-400 font-mono"
+                                                    x-text="member.last_activity">22 Oct, 14:30</span>
+                                            </td>
+                                            <td class="px-8 py-5 text-right">
+                                                <div class="flex justify-end gap-2">
+                                                    <button @click="changeRole(member.id, 'Editor')"
+                                                        class="p-2 text-gray-400 hover:text-brand-500 transition-colors">
+                                                        <span class="material-symbols-outlined text-xl">upgrade</span>
+                                                    </button>
+                                                    <button @click="deleteMember(member.id)"
+                                                        class="p-2 text-gray-400 hover:text-rose-500 transition-colors">
+                                                        <span
+                                                            class="material-symbols-outlined text-xl">person_remove</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div
+                            class="p-6 border-t border-gray-100 dark:border-white/5 flex items-center justify-between bg-gray-50/30 dark:bg-white/[0.01]">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                                Displaying <span class="text-gray-900 dark:text-white"
+                                    x-text="filteredMembers.length">1-5</span> of <span
+                                    class="text-gray-900 dark:text-white" x-text="members.length">19</span> team members
+                            </p>
+                            <div class="flex gap-2">
+                                <button
+                                    class="rounded-xl border border-gray-200 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:border-white/5">Prev</button>
+                                <button
+                                    class="rounded-xl border border-gray-200 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-gray-900 dark:border-white/5 dark:text-white">Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/pages/settings_v2.js"></script>
+</body>
+
+</html>

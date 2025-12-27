@@ -84,14 +84,14 @@
 
         <ul class="flex flex-col gap-1.5">
           <li>
-            <a href="pricing_v2.html" @click="selected = 'Pricing'"
+            <a href="billing_v2.html" @click="selected = 'Billing'"
               class="group relative flex items-center gap-3.5 rounded-xl px-4 py-3 font-medium transition-all duration-200 tracking-premium"
-              :class="selected === 'Pricing' 
+              :class="selected === 'Billing' 
                 ? 'bg-gray-50 text-sampelit shadow-inner' 
                 : 'text-gray-600 hover:bg-gray-50/50 dark:text-gray-400 dark:hover:bg-white/5'">
               <span class="material-symbols-outlined text-[22px]"
-                :class="selected === 'Pricing' ? 'text-sampelit' : 'text-gray-400 group-hover:text-gray-600'">account_balance_wallet</span>
-              <span :class="sidebarToggle ? 'xl:hidden' : ''">Plans & Billing</span>
+                :class="selected === 'Billing' ? 'text-sampelit' : 'text-gray-400 group-hover:text-gray-600'">account_balance_wallet</span>
+              <span :class="sidebarToggle ? 'xl:hidden' : ''">Billing & Plan</span>
             </a>
           </li>
 
@@ -147,13 +147,13 @@
 
         <ul class="flex flex-col gap-1.5">
           <li>
-            <a href="/?tab=users" @click="selected = 'Users'"
+            <a href="settings_v2.html" @click="selected = 'Settings'"
               class="group relative flex items-center gap-3.5 rounded-xl px-4 py-3 font-medium transition-all duration-200 tracking-premium"
-              :class="selected === 'Users' 
+              :class="selected === 'Settings' 
                 ? 'bg-gray-50 text-sampelit shadow-inner' 
                 : 'text-gray-600 hover:bg-gray-50/50 dark:text-gray-400 dark:hover:bg-white/5'">
               <span class="material-symbols-outlined text-[22px]"
-                :class="selected === 'Users' ? 'text-sampelit' : 'text-gray-400 group-hover:text-gray-600'">badge</span>
+                :class="selected === 'Settings' ? 'text-sampelit' : 'text-gray-400 group-hover:text-gray-600'">badge</span>
               <span :class="sidebarToggle ? 'xl:hidden' : ''">Team & Access</span>
             </a>
           </li>

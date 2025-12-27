@@ -134,17 +134,20 @@
                                         <div class="text-center">
                                             <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">
                                                 Desktop</p>
-                                            <p class="mt-1 text-lg font-extrabold text-gray-900 dark:text-white">62%</p>
+                                            <p class="mt-1 text-lg font-extrabold text-gray-900 dark:text-white"
+                                                x-text="`${stats.devices.desktop}%`"></p>
                                         </div>
                                         <div class="text-center border-x border-gray-100 dark:border-white/5">
                                             <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">
                                                 Mobile</p>
-                                            <p class="mt-1 text-lg font-extrabold text-gray-900 dark:text-white">31%</p>
+                                            <p class="mt-1 text-lg font-extrabold text-gray-900 dark:text-white"
+                                                x-text="`${stats.devices.mobile}%`"></p>
                                         </div>
                                         <div class="text-center">
                                             <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">
                                                 Tablet</p>
-                                            <p class="mt-1 text-lg font-extrabold text-gray-900 dark:text-white">7%</p>
+                                            <p class="mt-1 text-lg font-extrabold text-gray-900 dark:text-white"
+                                                x-text="`${stats.devices.tablet}%`"></p>
                                         </div>
                                     </div>
                                 </div>
@@ -183,66 +186,25 @@
                                             </tr>
                                         </thead>
                                         <tbody class="divide-y divide-gray-50 dark:divide-white/5">
-                                            <tr
-                                                class="group hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors">
-                                                <td class="px-8 py-4 font-bold text-sm text-gray-900 dark:text-white">
-                                                    Google Organic</td>
-                                                <td
-                                                    class="px-8 py-4 text-right text-sm font-bold text-gray-700 dark:text-gray-300">
-                                                    12,450</td>
-                                                <td
-                                                    class="px-8 py-4 text-right text-sm font-bold text-gray-700 dark:text-gray-300">
-                                                    523</td>
-                                                <td class="px-8 py-4 text-right">
-                                                    <span
-                                                        class="text-[11px] font-bold text-emerald-500 uppercase tracking-widest">4.2%</span>
-                                                </td>
-                                            </tr>
-                                            <tr
-                                                class="group hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors">
-                                                <td class="px-8 py-4 font-bold text-sm text-gray-900 dark:text-white">
-                                                    Direct Access</td>
-                                                <td
-                                                    class="px-8 py-4 text-right text-sm font-bold text-gray-700 dark:text-gray-300">
-                                                    8,234</td>
-                                                <td
-                                                    class="px-8 py-4 text-right text-sm font-bold text-gray-700 dark:text-gray-300">
-                                                    412</td>
-                                                <td class="px-8 py-4 text-right">
-                                                    <span
-                                                        class="text-[11px] font-bold text-emerald-500 uppercase tracking-widest">5.0%</span>
-                                                </td>
-                                            </tr>
-                                            <tr
-                                                class="group hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors">
-                                                <td class="px-8 py-4 font-bold text-sm text-gray-900 dark:text-white">
-                                                    Meta Services</td>
-                                                <td
-                                                    class="px-8 py-4 text-right text-sm font-bold text-gray-700 dark:text-gray-300">
-                                                    5,120</td>
-                                                <td
-                                                    class="px-8 py-4 text-right text-sm font-bold text-gray-700 dark:text-gray-300">
-                                                    186</td>
-                                                <td class="px-8 py-4 text-right">
-                                                    <span
-                                                        class="text-[11px] font-bold text-gray-500 uppercase tracking-widest">3.6%</span>
-                                                </td>
-                                            </tr>
-                                            <tr
-                                                class="group hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors">
-                                                <td class="px-8 py-4 font-bold text-sm text-gray-900 dark:text-white">X
-                                                    Ecosystem</td>
-                                                <td
-                                                    class="px-8 py-4 text-right text-sm font-bold text-gray-700 dark:text-gray-300">
-                                                    2,845</td>
-                                                <td
-                                                    class="px-8 py-4 text-right text-sm font-bold text-gray-700 dark:text-gray-300">
-                                                    89</td>
-                                                <td class="px-8 py-4 text-right">
-                                                    <span
-                                                        class="text-[11px] font-bold text-gray-500 uppercase tracking-widest">3.1%</span>
-                                                </td>
-                                            </tr>
+                                            <template x-for="source in stats.traffic_sources" :key="source.source">
+                                                <tr
+                                                    class="group hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors">
+                                                    <td class="px-8 py-4 font-bold text-sm text-gray-900 dark:text-white"
+                                                        x-text="source.source">
+                                                    </td>
+                                                    <td class="px-8 py-4 text-right text-sm font-bold text-gray-700 dark:text-gray-300"
+                                                        x-text="formatNumber(source.volume)">
+                                                    </td>
+                                                    <td class="px-8 py-4 text-right text-sm font-bold text-gray-700 dark:text-gray-300"
+                                                        x-text="formatNumber(source.integrity)">
+                                                    </td>
+                                                    <td class="px-8 py-4 text-right">
+                                                        <span class="text-[11px] font-bold uppercase tracking-widest"
+                                                            :class="source.yield >= 4 ? 'text-emerald-500' : 'text-gray-500'"
+                                                            x-text="formatPercent(source.yield)"></span>
+                                                    </td>
+                                                </tr>
+                                            </template>
                                         </tbody>
                                     </table>
                                 </div>
@@ -274,42 +236,22 @@
                                             </tr>
                                         </thead>
                                         <tbody class="divide-y divide-gray-50 dark:divide-white/5">
-                                            <tr
-                                                class="group hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors">
-                                                <td class="px-8 py-4 font-bold text-sm text-gray-900 dark:text-white">
-                                                    /checkout</td>
-                                                <td
-                                                    class="px-8 py-4 text-right text-sm font-bold text-gray-700 dark:text-gray-300">
-                                                    8,234</td>
-                                                <td class="px-8 py-4 text-right">
-                                                    <span
-                                                        class="text-[11px] font-bold text-emerald-500 uppercase tracking-widest">24%</span>
-                                                </td>
-                                            </tr>
-                                            <tr
-                                                class="group hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors">
-                                                <td class="px-8 py-4 font-bold text-sm text-gray-900 dark:text-white">
-                                                    /pricing</td>
-                                                <td
-                                                    class="px-8 py-4 text-right text-sm font-bold text-gray-700 dark:text-gray-300">
-                                                    6,123</td>
-                                                <td class="px-8 py-4 text-right">
-                                                    <span
-                                                        class="text-[11px] font-bold text-gray-500 uppercase tracking-widest">31%</span>
-                                                </td>
-                                            </tr>
-                                            <tr
-                                                class="group hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors">
-                                                <td class="px-8 py-4 font-bold text-sm text-gray-900 dark:text-white">
-                                                    /homepage</td>
-                                                <td
-                                                    class="px-8 py-4 text-right text-sm font-bold text-gray-700 dark:text-gray-300">
-                                                    5,890</td>
-                                                <td class="px-8 py-4 text-right">
-                                                    <span
-                                                        class="text-[11px] font-bold text-rose-500 uppercase tracking-widest">42%</span>
-                                                </td>
-                                            </tr>
+                                            <template x-for="page in stats.page_performance" :key="page.uri">
+                                                <tr
+                                                    class="group hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors">
+                                                    <td class="px-8 py-4 font-bold text-sm text-gray-900 dark:text-white"
+                                                        x-text="page.uri">
+                                                    </td>
+                                                    <td class="px-8 py-4 text-right text-sm font-bold text-gray-700 dark:text-gray-300"
+                                                        x-text="formatNumber(page.impressions)">
+                                                    </td>
+                                                    <td class="px-8 py-4 text-right">
+                                                        <span class="text-[11px] font-bold uppercase tracking-widest"
+                                                            :class="page.bounce <= 30 ? 'text-emerald-500' : 'text-rose-500'"
+                                                            x-text="`${page.bounce}%`"></span>
+                                                    </td>
+                                                </tr>
+                                            </template>
                                         </tbody>
                                     </table>
                                 </div>
@@ -325,41 +267,23 @@
                                         Geodesics</h3>
                                 </div>
                                 <div class="p-8 space-y-6">
-                                    <div class="space-y-2">
-                                        <div class="flex items-center justify-between">
-                                            <span class="text-sm font-bold text-gray-900 dark:text-white">United
-                                                States</span>
-                                            <span
-                                                class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">65%</span>
+                                    <template x-for="country in stats.countries" :key="country.name">
+                                        <div class="space-y-2">
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-sm font-bold text-gray-900 dark:text-white"
+                                                    x-text="country.name"></span>
+                                                <span
+                                                    class="text-[11px] font-bold text-gray-400 uppercase tracking-widest"
+                                                    x-text="`${country.value}%`"></span>
+                                            </div>
+                                            <div class="h-1.5 w-full rounded-full bg-gray-100 dark:bg-white/5">
+                                                <div class="h-1.5 rounded-full bg-brand-500 transition-all duration-1000"
+                                                    :style="`width: ${country.value}%`"
+                                                    :class="country.value < 40 ? 'bg-brand-500/40' : (country.value < 60 ? 'bg-brand-500/60' : 'bg-brand-500')">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="h-1.5 w-full rounded-full bg-gray-100 dark:bg-white/5">
-                                            <div class="h-1.5 rounded-full bg-brand-500 transition-all duration-1000"
-                                                style="width: 65%"></div>
-                                        </div>
-                                    </div>
-                                    <div class="space-y-2">
-                                        <div class="flex items-center justify-between">
-                                            <span class="text-sm font-bold text-gray-900 dark:text-white">United
-                                                Kingdom</span>
-                                            <span
-                                                class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">40%</span>
-                                        </div>
-                                        <div class="h-1.5 w-full rounded-full bg-gray-100 dark:bg-white/5">
-                                            <div class="h-1.5 rounded-full bg-brand-500/60 transition-all duration-1000"
-                                                style="width: 40%"></div>
-                                        </div>
-                                    </div>
-                                    <div class="space-y-2">
-                                        <div class="flex items-center justify-between">
-                                            <span class="text-sm font-bold text-gray-900 dark:text-white">Germany</span>
-                                            <span
-                                                class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">28%</span>
-                                        </div>
-                                        <div class="h-1.5 w-full rounded-full bg-gray-100 dark:bg-white/5">
-                                            <div class="h-1.5 rounded-full bg-brand-500/40 transition-all duration-1000"
-                                                style="width: 28%"></div>
-                                        </div>
-                                    </div>
+                                    </template>
                                 </div>
                             </div>
                         </div>

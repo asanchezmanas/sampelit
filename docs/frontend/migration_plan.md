@@ -88,6 +88,14 @@ La identidad visual de Sampelit combina la robustez técnica de la arquitectura 
     *   `accent`: `#1e3a8a` (Azul Eléctrico - Interacción/Premium)
     *   `surface`: `#FAFAFA` (Fondo suave - Estilo Europeo)
 
+### 🧘 Mantra de Diseño (Business First)
+
+> "El dato más importante debe verse sin scroll y responder: ¿Estoy ganando más dinero?"
+
+1.  **Habla el idioma del negocio**: No digas "Alpha/Beta", di "94% de probabilidad de ser mejor".
+2.  **Di qué hacer, no solo qué pasó**: No muestres datos sin conclusión. Di "Recomendación: Implementar ahora".
+3.  **Menos es más**: Máximo 4 métricas principales por vista. Elimina IDs técnicos y timestamps ISO del UI.
+
 ### Estado de Branding por Directorio
 
 | Ubicación | Branding | Estado |
@@ -292,6 +300,46 @@ Para garantizar la longevidad y el diseño premium sin usar Node.js o compilador
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 ```
 
+---
+
+## ⚙️ Estado de Conexión Técnica (API Integration)
+
+| Módulo | Endpoint Base | Estado | Nota |
+|--------|---------------|--------|------|
+| **Dashboard** | `/api/v1/analytics/global` | **Conectado** | Métricas reales + System Vitals UI. |
+| **Exp. List** | `/api/v1/experiments` | **Conectado** | Listado dinámico en Dashboard. |
+| **Exp. Detail**| `/api/v1/analytics/experiment/{id}` | **Conectado** | Business Insights + Bayesian Logic. |
+| **Analytics** | `/api/v1/analytics/global` | **Conectado** | ApexCharts + Series temporales reactivas. |
+| **Profile** | `/api/v1/users/me` | **Conectado** | Gestión de identidad y seguridad. |
+| **Billing** | `/api/v1/billing` | **Conectado** | Gestión de suscripción e historial. |
+| **Settings** | `/api/v1/organization` | **Conectado** | Gestión de equipo y roles fusionada. |
+
+---
+
+## 🧠 Mantra de Diseño (Business First)
+
+### `experiment_detail_v2.html` (Insights Profundos)
+
+**Mantra:** "¿Sigo con el experimento o lo paro ya? ¿Quién gana y por cuánto?"
+
+**Qué poner (Valor de Negocio):**
+- **Win Probability (Bayesian):** No digas "p-value". Di "94% Probabilidad de ser el mejor". Usa un dial circular premium.
+- **Estimated Uplift:** "Esta variante mejora la conversión en un +12.5%".
+- **Business Impact:** "Extra Conversions: +142". Traduce la estadística a volumen de negocio.
+- **Micro-Data:** Tabla de variantes limpia: Traffic (N), Conversions, Conversion Rate, Uplift vs Control.
+- **Visual Evidence:** Si es posible, miniatura del selector/elemento optimizado.
+
+---
+
+### `analytics_v2.html` (Tendencias y Segmentación)
+
+**Qué poner (Valor de Negocio):**
+- Gráfico de tendencia de conversiones (ApexCharts).
+- Comparativa de variantes con intervalos de confianza.
+- Recomendación IA: "Dejar correr 3 días más para significancia".
+
+---
+
 ### sampelit.css (V1) - CSS Variables
 
 ```css
@@ -350,8 +398,9 @@ Para garantizar la longevidad y el diseño premium sin usar Node.js o compilador
 - [x] **[Partials]** Añadir link a Help Center en `header_landing_v2.html`
 - [x] **[Partials]** Corregir link a `pricing.html` -> `pricing_v2.html` en headers V2
 - [x] **[Partials]** Actualizar `footer_landing_v2.html` con branding premium y links V2
-- [ ] **[Standard]** Aplicar Snippet "No Preocupaciones" a todas las páginas `*_v2.html`
+- [x] **[Standard]** Aplicar Snippet "No Preocupaciones" a todas las páginas `*_v2.html`
 - [ ] **[Verificación]** Validar navegación completa entre páginas V2
+- [ ] **[Implementación]** Conectar datos reales según UI Specs (Dashboard, Analytics, Listas)
 
 ### 🧹 Limpieza Pos-Migración (SOLO tras validación final)
 > [!IMPORTANT]
@@ -474,14 +523,20 @@ Landing Pages (index, about, pricing, etc.):
 
 ### V2: `index_v2.html` ✅
 
-**Estado:** Funcional
+**Estado:** Funcional y **Estandarizado**
 - ✅ Usa `<include>` para sidebar/header
 - ✅ Tiene `include.js`
 - ✅ x-data con darkMode
-- ⚠️ Conecta a API pero podría mejorar
+- ✅ Snippet "No Preocupaciones" aplicado
+- ⚠️ Conecta a API pero podría mejorar (Métrica core: Revenue ganado)
+
+**What to put (Business Value):**
+- **Impacto monetario**: Revenue adicional ganado por experimentos conclusively.
+- **Tus Experimentos**: Cards con barra de progreso de confianza (probabilidad bayesiana).
+- **Acción Sugerida**: "Implementar Variante X" si hay ganador claro.
 
 ### Sub-tareas:
-- [ ] Verificar que conecta a `/analytics/global`
+- [ ] Conectar métricas de negocio reales (`GET /analytics/global`)
 - [ ] Extraer JS a `js/pages/dashboard_v2.js`
 - [ ] Eliminar `dashboard.html` tras validación
 
@@ -493,13 +548,18 @@ Landing Pages (index, about, pricing, etc.):
 
 ### V2: `experiments_v2.html` ✅
 
-**Estado:** Funcional
+**Estado:** Funcional y **Estandarizado**
 - ✅ Arquitectura v2 correcta
 - ✅ Conecta a `GET /experiments`
+- ✅ Snippet "No Preocupaciones" aplicado
 - ✅ Sorting, filtering, pagination
 
+**What to put (Business Value):**
+- **Lista de Experimentos**: Nombre, Status (Running/Paused), Tráfico real, Uplift vs Control.
+- **Acciones Rápidas**: Ver detalle, Editar, Pausar/Eliminar.
+
 ### Sub-tareas:
-- [ ] Añadir estado empty/error
+- [ ] Añadir estado empty/error (según spec UI)
 - [ ] Bulk actions (opcional)
 - [ ] Extraer JS a archivo separado
 
@@ -516,10 +576,16 @@ Landing Pages (index, about, pricing, etc.):
 
 ### V2: `experiment_detail_v2.html` ✅
 
-**Estado:** Funcional
+**Estado:** Funcional y **Estandarizado**
 - ✅ Conecta a `/analytics/experiment/{id}`
 - ✅ Muestra variantes, confianza
+- ✅ Snippet "No Preocupaciones" aplicado
 - ✅ JS extraído a `js/pages/experiment_detail_v2.js`
+
+**What to put (Business Value):**
+- **Resultado Actual**: "¿Quién gana?" con probabilidad clara (ej: "Variante B tiene 94% de probabilidad de ser mejor").
+- **Comparativa**: Uplift exacto vs Control.
+- **Micro-datos**: Conversiones y visitantes por variante (sin datos Bayesianos crudos alpha/beta).
 
 ### Sub-tareas:
 - [x] Spec completo ✅
@@ -677,14 +743,20 @@ El visual editor necesita layout fullscreen. Opciones:
 
 ### V2: `analytics_v2.html` ✅
 
-**Estado:** Funcional
-- ✅ Arquitectura v2
+**Estado:** Funcional y **Estandarizado**
+- ✅ Arquitectura v2 con Includes
 - ✅ Conecta a `/analytics/global`
+- ✅ Snippet "No Preocupaciones" aplicado
+
+**What to put (Business Value):**
+- **Tendencia de Conversión**: Gráfico de líneas (ApexCharts) mostrando mejora en el tiempo.
+- **Segmentación**: Impacto por tipo de tráfico o dispositivo (si el backend lo permite).
+- **KPIs Core**: Yield achieved, Success ratio, Discovery rate.
 
 ### Sub-tareas:
 - [x] Spec creado ✅
-- [ ] Añadir gráficos con ApexCharts
-- [ ] Extraer JS a archivo
+- [ ] Añadir gráficos con ApexCharts (Configurar en `sampelit-v2.css`)
+- [ ] Extraer JS a archivo `js/pages/analytics_v2.js`
 
 ---
 

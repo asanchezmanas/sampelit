@@ -51,9 +51,7 @@
     <script src="js/include.js"></script>
 </head>
 
-<body x-data="{ page: 'profile', sidebarToggle: false, darkMode: false }"
-    x-init="darkMode = JSON.parse(localStorage.getItem('darkMode')) || false; $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
-    :class="{ 'dark': darkMode }"
+<body x-data="profileController"
     class="bg-[#f8f9fc] dark:bg-gray-900 text-text-main dark:text-gray-300 font-sans antialiased">
     <div class="flex h-screen overflow-hidden">
         <include src="./partials/sidebar_v2.html"></include>
@@ -86,7 +84,8 @@
                             <div class="relative">
                                 <div
                                     class="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-brand-50 dark:bg-brand-500/10">
-                                    <span class="text-3xl font-extrabold text-brand-500">JD</span>
+                                    <span class="text-3xl font-extrabold text-brand-500"
+                                        x-text="user.initials">JD</span>
                                 </div>
                                 <button
                                     class="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-gray-900 text-white hover:bg-black transition-colors">
@@ -94,13 +93,15 @@
                                 </button>
                             </div>
                             <div class="text-center sm:text-left">
-                                <h2
-                                    class="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white font-display">
+                                <h2 class="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white font-display"
+                                    x-text="fullName">
                                     John Doe</h2>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">john.doe@example.com</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400" x-text="user.email">
+                                    john.doe@example.com</p>
                                 <span
                                     class="mt-3 inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400">
-                                    <span class="material-symbols-outlined text-sm">verified</span> Pro Plan
+                                    <span class="material-symbols-outlined text-sm">verified</span> <span
+                                        x-text="user.plan">Pro Plan</span>
                                 </span>
                             </div>
                         </div>
@@ -115,38 +116,39 @@
                                 <h3 class="text-sm font-bold uppercase tracking-widest text-gray-400">Personal
                                     Information</h3>
                             </div>
-                            <form class="p-8 space-y-6">
+                            <form @submit.prevent="saveChanges" class="p-8 space-y-6">
                                 <div class="grid gap-6 sm:grid-cols-2">
                                     <div class="space-y-2">
                                         <label
                                             class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">First
                                             Name</label>
-                                        <input type="text" value="John"
+                                        <input type="text" x-model="user.first_name"
                                             class="h-12 w-full rounded-2xl border border-gray-100 bg-gray-50 px-6 text-sm font-bold text-gray-900 transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:bg-white/5 dark:text-white dark:border-white/5">
                                     </div>
                                     <div class="space-y-2">
                                         <label
                                             class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">Last
                                             Name</label>
-                                        <input type="text" value="Doe"
+                                        <input type="text" x-model="user.last_name"
                                             class="h-12 w-full rounded-2xl border border-gray-100 bg-gray-50 px-6 text-sm font-bold text-gray-900 transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:bg-white/5 dark:text-white dark:border-white/5">
                                     </div>
                                 </div>
                                 <div class="space-y-2">
                                     <label
                                         class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">Email</label>
-                                    <input type="email" value="john.doe@example.com"
-                                        class="h-12 w-full rounded-2xl border border-gray-100 bg-gray-50 px-6 text-sm font-bold text-gray-900 transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:bg-white/5 dark:text-white dark:border-white/5">
+                                    <input type="email" x-model="user.email" readonly
+                                        class="h-12 w-full rounded-2xl border border-gray-100 bg-gray-50 px-6 text-sm font-bold text-gray-400 opacity-60 cursor-not-allowed dark:bg-white/5 dark:text-gray-500 dark:border-white/5">
                                 </div>
                                 <div class="space-y-2">
                                     <label
                                         class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">Company</label>
-                                    <input type="text" value="Acme Inc."
+                                    <input type="text" x-model="user.company"
                                         class="h-12 w-full rounded-2xl border border-gray-100 bg-gray-50 px-6 text-sm font-bold text-gray-900 transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:bg-white/5 dark:text-white dark:border-white/5">
                                 </div>
-                                <button type="submit"
-                                    class="rounded-xl bg-gray-900 px-6 py-3 text-sm font-bold text-white shadow-lg hover:bg-black hover:shadow-xl transition-all">
-                                    Save Changes
+                                <button type="submit" :disabled="saving"
+                                    class="rounded-xl bg-gray-900 px-6 py-3 text-sm font-bold text-white shadow-lg hover:bg-black hover:shadow-xl transition-all disabled:opacity-50">
+                                    <span x-show="!saving">Save Changes</span>
+                                    <span x-show="saving">Saving...</span>
                                 </button>
                             </form>
                         </div>
@@ -158,31 +160,32 @@
                                 <h3 class="text-sm font-bold uppercase tracking-widest text-gray-400">Security Protocol
                                 </h3>
                             </div>
-                            <form class="p-8 space-y-6">
+                            <form @submit.prevent="updatePassword" class="p-8 space-y-6">
                                 <div class="space-y-2">
                                     <label
                                         class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">Current
                                         Password</label>
-                                    <input type="password" placeholder="••••••••"
+                                    <input type="password" x-model="security.current_password" required
                                         class="h-12 w-full rounded-2xl border border-gray-100 bg-gray-50 px-6 text-sm font-bold text-gray-900 transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:bg-white/5 dark:text-white dark:border-white/5">
                                 </div>
                                 <div class="space-y-2">
                                     <label
                                         class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">New
                                         Password</label>
-                                    <input type="password" placeholder="••••••••"
+                                    <input type="password" x-model="security.new_password" required minlength="8"
                                         class="h-12 w-full rounded-2xl border border-gray-100 bg-gray-50 px-6 text-sm font-bold text-gray-900 transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:bg-white/5 dark:text-white dark:border-white/5">
                                 </div>
                                 <div class="space-y-2">
                                     <label
                                         class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">Confirm
                                         New Password</label>
-                                    <input type="password" placeholder="••••••••"
+                                    <input type="password" x-model="security.confirm_password" required
                                         class="h-12 w-full rounded-2xl border border-gray-100 bg-gray-50 px-6 text-sm font-bold text-gray-900 transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:bg-white/5 dark:text-white dark:border-white/5">
                                 </div>
-                                <button type="submit"
-                                    class="rounded-xl bg-gray-900 px-6 py-3 text-sm font-bold text-white shadow-lg hover:bg-black hover:shadow-xl transition-all">
-                                    Update Password
+                                <button type="submit" :disabled="saving"
+                                    class="rounded-xl bg-gray-900 px-6 py-3 text-sm font-bold text-white shadow-lg hover:bg-black hover:shadow-xl transition-all disabled:opacity-50">
+                                    <span x-show="!saving">Update Password</span>
+                                    <span x-show="saving">Updating...</span>
                                 </button>
                             </form>
                         </div>
@@ -207,6 +210,7 @@
             </main>
         </div>
     </div>
+    <script src="js/pages/profile_v2.js"></script>
 </body>
 
 </html>
