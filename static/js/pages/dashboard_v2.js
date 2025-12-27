@@ -164,6 +164,89 @@ document.addEventListener('alpine:init', () => {
 
         formatPercent(num) {
             return (num * 100).toFixed(2) + '%';
+        },
+
+        // ===== NUEVAS MEJORAS =====
+
+        // Quick Actions
+        quickActions: [
+            { id: 'new-exp', label: 'New Experiment', icon: 'add', href: 'experiments_create_v2.html' },
+            { id: 'view-analytics', label: 'View Analytics', icon: 'analytics', href: 'analytics_v2.html' },
+            { id: 'invite-team', label: 'Invite Team', icon: 'person_add', href: 'settings_v2.html#team' }
+        ],
+
+        showQuickActionsModal: false,
+
+        toggleQuickActions() {
+            this.showQuickActionsModal = !this.showQuickActionsModal;
+        },
+
+        // Period Comparison
+        previousPeriodMetrics: {
+            total_discovery: 112340,
+            yield_achieved: 42.1,
+            success_ratio: 0.82,
+            precision_score: 97.2
+        },
+
+        getMetricChange(current, previous) {
+            if (!previous || previous === 0) return null;
+            const change = ((current - previous) / previous) * 100;
+            return {
+                value: Math.abs(change).toFixed(1),
+                direction: change >= 0 ? 'up' : 'down',
+                isPositive: change >= 0
+            };
+        },
+
+        get metricChanges() {
+            return {
+                total_discovery: this.getMetricChange(this.metrics.total_discovery, this.previousPeriodMetrics.total_discovery),
+                yield_achieved: this.getMetricChange(this.metrics.yield_achieved, this.previousPeriodMetrics.yield_achieved),
+                success_ratio: this.getMetricChange(this.metrics.success_ratio, this.previousPeriodMetrics.success_ratio),
+                precision_score: this.getMetricChange(this.metrics.precision_score, this.previousPeriodMetrics.precision_score)
+            };
+        },
+
+        // Sparkline data for metrics
+        sparklineData: {
+            total_discovery: [85, 92, 88, 95, 100, 105, 112, 108, 115, 120, 118, 124],
+            yield_achieved: [38, 40, 42, 41, 44, 45, 43, 46, 47, 46, 48, 48],
+            success_ratio: [78, 80, 82, 81, 83, 84, 83, 85, 84, 85, 85, 85],
+            precision_score: [95, 96, 96, 97, 97, 97, 98, 98, 98, 98, 98, 98]
+        },
+
+        getSparklinePath(key, width = 60, height = 20) {
+            const data = this.sparklineData[key];
+            if (!data || data.length === 0) return '';
+
+            const min = Math.min(...data);
+            const max = Math.max(...data);
+            const range = max - min || 1;
+
+            const points = data.map((val, i) => {
+                const x = (i / (data.length - 1)) * width;
+                const y = height - ((val - min) / range) * height;
+                return `${x},${y}`;
+            });
+
+            return `M${points.join(' L')}`;
+        },
+
+        // Refresh dashboard data
+        async refreshDashboard() {
+            this.isLoading = true;
+            await Alpine.store('experiments').fetchAll();
+
+            // Simulate metrics refresh
+            setTimeout(() => {
+                this.metrics.total_discovery += Math.floor(Math.random() * 100);
+                this.isLoading = false;
+
+                window.dispatchEvent(new CustomEvent('toast:show', {
+                    detail: { message: 'Dashboard refreshed', type: 'success' }
+                }));
+            }, 500);
         }
     }));
 });
