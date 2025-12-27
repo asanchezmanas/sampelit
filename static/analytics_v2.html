@@ -122,7 +122,33 @@
                             </div>
                         </div>
                         <div class="px-8 pb-8 pt-6">
-                            <div id="analyticsChart" class="h-[350px]"></div>
+                            <!-- SOTA: Chart Skeleton -->
+                            <div x-show="loading" class="h-[350px] flex items-center justify-center">
+                                <div
+                                    class="w-full h-full bg-gray-100 dark:bg-white/5 rounded-2xl animate-pulse flex items-center justify-center">
+                                    <span
+                                        class="material-symbols-outlined text-4xl text-gray-300 dark:text-gray-700 animate-bounce">insights</span>
+                                </div>
+                            </div>
+
+                            <!-- SOTA: Waiting State (No Data Yet) -->
+                            <div x-show="!loading && stats.total_visitors === 0"
+                                class="h-[350px] flex flex-col items-center justify-center text-center">
+                                <div
+                                    class="w-20 h-20 mb-6 rounded-full bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center">
+                                    <span
+                                        class="material-symbols-outlined text-4xl text-blue-500 animate-pulse">radar</span>
+                                </div>
+                                <h4 class="text-lg font-black text-gray-900 dark:text-white mb-2">Listening for
+                                    events...</h4>
+                                <p class="text-sm text-gray-400 max-w-sm">Once traffic starts flowing, your data will
+                                    appear here in real-time.</p>
+                            </div>
+
+                            <!-- Real Chart -->
+                            <div id="analyticsChart" class="h-[350px]" x-show="!loading && stats.total_visitors > 0"
+                                x-transition:enter="transition ease-out duration-300"
+                                x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"></div>
                         </div>
                     </div>
 

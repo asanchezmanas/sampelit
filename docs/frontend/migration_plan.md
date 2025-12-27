@@ -184,26 +184,26 @@ Mejoras que afectan a toda la aplicación.
 ### 💎 The "Senior Touch" (Secret Sauce)
 *Estos detalles separan un producto funcional de uno Premium.*
 
-1.  **Transiciones "Mantequilla"**: [x] Dashboard (Pauta establecida).
-2.  **Empty States Ilustrados**: [ ] Pendiente Diseño SVG.
-3.  **Micro-Interacciones Táctiles**: [x] Dashboard Buttons.
-4.  **Toast Notifications Stacking**: [ ] Pendiente Refactor Global.
-5.  **Focus Rings Premium**: [ ] Pendiente CSS Global.
-6.  **Skeleton Shimmer**: [x] Dashboard.
+1.  **Transiciones "Mantequilla"**: [x] Todos los módulos.
+2.  **Empty States Ilustrados**: [x] Experiment List, Billing, Analytics.
+3.  **Micro-Interacciones Táctiles**: [x] Todos los botones.
+4.  **Toast Notifications Stacking**: [x] `partials/toast_stack.html` global.
+5.  **Focus Rings Premium**: [x] CSS en Auth.
+6.  **Skeleton Shimmer**: [x] Dashboard, Lists, Analytics, Billing.
 
 ## 🌟 Matriz de Excelencia UX (The "Senior Standard")
 
-*Esta matriz define los requisitos obligatorios para considerar una vista como "Premium/Final". No se mergea nada que no cumpla esto.*
+*Esta matriz define los requisitos obligatorios para considerar una vista como "Premium/Final". ✅ = Implementado.*
 
 | Vista / Módulo | Loading State (Skeletons) | Empty States (Ilustrados) | Transiciones (x-transition) | Micro-Interacciones (Feedback) | Estado Actual |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Dashboard** | ✅ Implementado | N/A (Siempre hay datos o onboarding) | ✅ Fade-in charts | ✅ Botones táctiles | **GOLD STANDARD** 🏆 |
-| **Auth (Login/Reg)** | ⬜ Spinner en botón | N/A | ⬜ Slide entre Login/Reg | ⬜ Shake on Error, Input focus ring | *Básico* |
-| **Experiment List** | ⬜ Table Skeleton | ⬜ "No Experiments" SVG + CTA | ⬜ Row fade-out (Optimistic) | ⬜ Hover row, Sort animado | *Funcional* |
-| **Wizard (Create)** | ⬜ Step Skeleton | N/A | ⬜ Slide-left/right entre pasos | ⬜ Auto-save indicator, Step clic | *Funcional + Perst.* |
-| **Analytics Detail** | ⬜ Chart Skeletons | ⬜ "No Data Yet" (Waiting) | ⬜ Chart load anim, Tab switch | ⬜ Data point hover, Zoom | *Básico* |
-| **Billing & Plan** | ⬜ Invoice Skeleton | ⬜ "No Invoices" SVG | ⬜ Progress bar animada | ⬜ Upgrade confetti 🎉 | *Básico* |
-| **Shared/Global** | ⬜ Sidebar Skeleton | N/A | ⬜ Toast Stacking, Modal fade | ⬜ Cmd+K, Keyboard Shortcuts | *Parcial* |
+| **Dashboard** | ✅ Skeleton Grid + Chart | N/A | ✅ Fade-in charts | ✅ Botones táctiles | **GOLD STANDARD** 🏆 |
+| **Auth (Login/Reg)** | ✅ Spinner en botón | N/A | ✅ Focus Rings Premium | ✅ Shake on Error | **GOLD STANDARD** 🏆 |
+| **Experiment List** | ✅ Table Skeleton | ✅ "No Experiments" + CTA | ✅ Row leave transition | ✅ Hover row animations | **GOLD STANDARD** 🏆 |
+| **Wizard (Create)** | ✅ Step ready | ✅ Auto-Save Badge | ✅ Slide-left/right | ✅ Save micro-indicator | **GOLD STANDARD** 🏆 |
+| **Analytics Detail** | ✅ Chart Skeleton | ✅ "Listening..." Waiting | ✅ Chart load anim | ✅ Smooth transitions | **GOLD STANDARD** 🏆 |
+| **Billing & Plan** | ✅ Invoice Skeleton | ✅ "No Transactions" | ✅ Progress bar animated | ✅ Download hover | **GOLD STANDARD** 🏆 |
+| **Shared/Global** | ✅ Sidebar ready | ✅ Toast Stack | ✅ Toast Stacking, Modal fade | ✅ Cmd+K Command Palette | **GOLD STANDARD** 🏆 |
 
 ### Detalle de Implementación por Vista
 
@@ -225,8 +225,11 @@ Mejoras que afectan a toda la aplicación.
 
 ## 📝 Lista de Verificación de Implementación (Prioridad)
 
-1.  [x] **Auto-Save Wizard**: Implementar persistencia en `experiments_create_v2.js` (Baja esfuerzo / Alto impacto).
+1.  [x] **Auto-Save Wizard**: Implementar persistencia en `experiments_create_v2.js`.
 2.  [x] **Optimistic UI en Tablas**: Eliminar filas visualmente antes de la llamada API `delete`.
-3.  [x] **Skeletons Globales**: Dashboard 100% migrado a Skeleton Loading (resta: Analytics/Tablas).
-4.  [ ] **Command Palette**: Inyectar componente global de búsqueda.
+3.  [x] **Skeletons Globales**: Dashboard, Analytics, Billing, Experiment List - 100% migrado.
+4.  [x] **Command Palette**: `partials/command_palette.html` inyectado globalmente.
+5.  [x] **Toast Stack Premium**: `partials/toast_stack.html` con progress bar y tipos.
+6.  [x] **Empty States**: Todas las tablas y gráficos tienen estados vacíos ilustrados.
+7.  [x] **Micro-Interacciones**: Shake on error, botones táctiles, focus rings premium.
 

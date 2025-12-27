@@ -286,6 +286,58 @@
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-50 dark:divide-white/5">
+                                        <!-- SOTA: Invoice Table Skeleton -->
+                                        <template x-if="loading">
+                                            <template x-for="i in 3">
+                                                <tr class="animate-pulse">
+                                                    <td class="px-8 py-6">
+                                                        <div class="h-4 w-24 bg-gray-100 dark:bg-white/5 rounded"></div>
+                                                    </td>
+                                                    <td class="px-8 py-6">
+                                                        <div class="h-3 w-20 bg-gray-100 dark:bg-white/5 rounded"></div>
+                                                    </td>
+                                                    <td class="px-8 py-6">
+                                                        <div class="h-4 w-16 bg-gray-100 dark:bg-white/5 rounded"></div>
+                                                    </td>
+                                                    <td class="px-8 py-6 text-center">
+                                                        <div
+                                                            class="h-3 w-12 mx-auto bg-gray-100 dark:bg-white/5 rounded">
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-8 py-6 text-center">
+                                                        <div
+                                                            class="h-5 w-16 mx-auto bg-gray-100 dark:bg-white/5 rounded-full">
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-8 py-6 text-right">
+                                                        <div
+                                                            class="h-10 w-10 ml-auto bg-gray-100 dark:bg-white/5 rounded-xl">
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </template>
+
+                                        <!-- SOTA: Empty State -->
+                                        <template x-if="!loading && invoices.length === 0">
+                                            <tr>
+                                                <td colspan="6" class="py-20 text-center">
+                                                    <div class="flex flex-col items-center">
+                                                        <div
+                                                            class="w-20 h-20 mb-6 rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center">
+                                                            <span
+                                                                class="material-symbols-outlined text-4xl text-gray-300 dark:text-gray-700">receipt_long</span>
+                                                        </div>
+                                                        <h4
+                                                            class="text-lg font-black text-gray-900 dark:text-white mb-2">
+                                                            No Transactions Yet</h4>
+                                                        <p class="text-sm text-gray-400">Your financial history will
+                                                            appear here after your first billing cycle.</p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </template>
+
                                         <template x-for="invoice in invoices" :key="invoice.id">
                                             <tr
                                                 class="group hover:bg-gray-50/50 dark:hover:bg-white/[0.01] transition-all duration-300">

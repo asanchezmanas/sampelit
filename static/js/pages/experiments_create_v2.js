@@ -51,8 +51,14 @@ document.addEventListener('alpine:init', () => {
             // SOTA: Auto-Save on change
             this.$watch('experiment', (value) => {
                 localStorage.setItem('wizard_draft', JSON.stringify(value));
+                // Flash "Saved" badge
+                this.showSavedBadge = true;
+                setTimeout(() => { this.showSavedBadge = false; }, 1500);
             });
         },
+
+        // SOTA: Auto-Save Indicator
+        showSavedBadge: false,
 
         async launchExperiment() {
             if (this.isSubmitting) return; // Prevent double submit
