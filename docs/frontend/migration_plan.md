@@ -306,13 +306,14 @@ Para garantizar la longevidad y el diseño premium sin usar Node.js o compilador
 
 | Módulo | Endpoint Base | Estado | Nota |
 |--------|---------------|--------|------|
-| **Dashboard** | `/api/v1/analytics/global` | **Conectado** | Métricas reales + System Vitals UI. |
-| **Exp. List** | `/api/v1/experiments` | **Conectado** | Listado dinámico en Dashboard. |
-| **Exp. Detail**| `/api/v1/analytics/experiment/{id}` | **Conectado** | Business Insights + Bayesian Logic. |
-| **Analytics** | `/api/v1/analytics/global` | **Conectado** | ApexCharts + Series temporales reactivas. |
-| **Profile** | `/api/v1/users/me` | **Conectado** | Gestión de identidad y seguridad. |
-| **Billing** | `/api/v1/billing` | **Conectado** | Gestión de suscripción e historial. |
-| **Settings** | `/api/v1/organization` | **Conectado** | Gestión de equipo y roles fusionada. |
+| **Dashboard** | `/api/v1/analytics/global` | ✅ **Conectado** | Métricas reales + Timeline de actividad premium. |
+| **Exp. List** | `/api/v1/experiments` | ✅ **Conectado** | Filtros, ordenación y paginación reactiva. |
+| **Exp. Detail**| `/api/v1/analytics/experiment/{id}` | ✅ **Conectado** | Business Insights + Modales de detalle de variante. |
+| **Analytics** | `/api/v1/analytics/global` | ✅ **Conectado** | ApexCharts + Sparklines de fuentes de tráfico. |
+| **Profile** | `/api/v1/users/me` | ✅ **Conectado** | Identidad reactiva y avatar dinámico. |
+| **Billing** | `/api/v1/billing` | ✅ **Conectado** | Pricing slider interactivo e historial de facturas. |
+| **Settings** | `/api/v1/organization` | ✅ **Conectado** | Gestión de equipo y roles con política visual. |
+| **Help Center** | `Mocks (Alpine)` | ✅ **Conectado** | Búsqueda reactiva de artículos y categorías. |
 
 ---
 
@@ -399,6 +400,8 @@ Para garantizar la longevidad y el diseño premium sin usar Node.js o compilador
 - [x] **[Partials]** Corregir link a `pricing.html` -> `pricing_v2.html` en headers V2
 - [x] **[Partials]** Actualizar `footer_landing_v2.html` con branding premium y links V2
 - [x] **[Standard]** Aplicar Snippet "No Preocupaciones" a todas las páginas `*_v2.html`
+- [x] **[Refinamiento]** Integrar componentes TailAdmin (Activity, Sparklines, Premium Tables)
+- [x] **[Feature]** Implementar Centro de Ayuda Reactivo V2
 - [ ] **[Verificación]** Validar navegación completa entre páginas V2
 - [ ] **[Implementación]** Conectar datos reales según UI Specs (Dashboard, Analytics, Listas)
 
