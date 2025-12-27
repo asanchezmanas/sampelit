@@ -57,54 +57,22 @@ document.addEventListener('alpine:init', () => {
         async fetchBillingData() {
             this.loading = true;
             try {
-                // Realistic wait to show skeleton/loading
-                await new Promise(resolve => setTimeout(resolve, 800));
+                // Instantiate service directly for this page (or use store if we had one)
+                const api = new APIClient();
+                const billingService = new BillingService(api);
 
-                this.invoices = [
-                    {
-                        id: 'INV-2023-009',
-                        date: '24 Sep, 2023',
-                        amount: '€149.00',
-                        plan: 'Business Pro',
-                        status: 'paid',
-                        items: [
-                            { desc: 'Business Pro Subscription (Monthly)', qty: 1, price: 149.00 }
-                        ]
-                    },
-                    {
-                        id: 'INV-2023-008',
-                        date: '24 Aug, 2023',
-                        amount: '€149.00',
-                        plan: 'Business Pro',
-                        status: 'paid',
-                        items: [
-                            { desc: 'Business Pro Subscription (Monthly)', qty: 1, price: 149.00 }
-                        ]
-                    },
-                    {
-                        id: 'INV-2023-007',
-                        date: '24 Jul, 2023',
-                        amount: '€149.00',
-                        plan: 'Business Pro',
-                        status: 'paid',
-                        items: [
-                            { desc: 'Business Pro Subscription (Monthly)', qty: 1, price: 149.00 }
-                        ]
-                    },
-                    {
-                        id: 'INV-2023-006',
-                        date: '24 Jun, 2023',
-                        amount: '€49.00',
-                        plan: 'Starter',
-                        status: 'paid',
-                        items: [
-                            { desc: 'Starter Plan Subscription (Monthly)', qty: 1, price: 49.00 }
-                        ]
-                    }
-                ];
+                // Parallel fetch
+                const [sub, invoices] = await Promise.all([
+                    billingService.getSubscription(),
+                    billingService.listInvoices()
+                ]);
+
+                this.subscription = sub;
+                this.invoices = invoices;
+
             } catch (error) {
                 console.error('Error fetching billing data:', error);
-                window.showToast?.('Error loading billing information', 'error');
+                window.dispatchEvent(new CustomEvent('toast:show', { detail: { message: 'Error loading billing information', type: 'error' } }));
             } finally {
                 this.loading = false;
             }

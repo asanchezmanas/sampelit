@@ -48,7 +48,14 @@
 
     <!-- Essential Scripts -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Essential Scripts -->
+    <!-- 1. JS Architecture -->
+    <script src="js/core/api.js"></script>
+    <script src="js/services/auth-service.js"></script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="js/include.js"></script>
+    <script src="js/pages/auth_v2.js"></script>
 </head>
 
 <body x-data="{ darkMode: false }" :class="{ 'dark': darkMode }"
@@ -178,73 +185,87 @@
                 </div>
 
                 <!-- Form -->
-                <form action="/index_v2.html" class="space-y-6">
-                    <div class="grid grid-cols-2 gap-4">
-                        <!-- First Name -->
+                <div x-data="signupController" class="w-full">
+                    <!-- Error Alert -->
+                    <div x-show="error" x-transition
+                        class="mb-6 p-4 rounded-xl bg-red-50 text-red-600 border border-red-100 text-sm font-bold flex items-center gap-2">
+                        <span class="material-symbols-outlined text-lg">error</span>
+                        <span x-text="error"></span>
+                    </div>
+
+                    <form @submit.prevent="submit" class="space-y-6">
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- First Name -->
+                            <div class="space-y-2">
+                                <label
+                                    class="block text-[11px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">First
+                                    Name</label>
+                                <input type="text" x-model="form.first_name" placeholder="John" required
+                                    class="w-full h-12 rounded-2xl border border-gray-200 bg-gray-50 dark:bg-white/5 dark:border-gray-800 px-4 text-sm font-medium transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:text-white dark:placeholder-gray-500 dark:focus:bg-gray-900" />
+                            </div>
+                            <!-- Last Name -->
+                            <div class="space-y-2">
+                                <label
+                                    class="block text-[11px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Last
+                                    Name</label>
+                                <input type="text" x-model="form.last_name" placeholder="Doe" required
+                                    class="w-full h-12 rounded-2xl border border-gray-200 bg-gray-50 dark:bg-white/5 dark:border-gray-800 px-4 text-sm font-medium transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:text-white dark:placeholder-gray-500 dark:focus:bg-gray-900" />
+                            </div>
+                        </div>
+
+                        <!-- Email -->
                         <div class="space-y-2">
                             <label
-                                class="block text-[11px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">First
-                                Name</label>
-                            <input type="text" placeholder="John"
-                                class="w-full h-12 rounded-2xl border border-gray-200 bg-gray-50 dark:bg-white/5 dark:border-gray-800 px-4 text-sm font-medium transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:text-white dark:placeholder-gray-500 dark:focus:bg-gray-900" />
+                                class="block text-[11px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Work
+                                Email</label>
+                            <div class="relative group">
+                                <span
+                                    class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-500 transition-colors">
+                                    <span class="material-symbols-outlined text-xl">mail</span>
+                                </span>
+                                <input type="email" x-model="form.email" placeholder="name@company.com" required
+                                    class="w-full h-12 rounded-2xl border border-gray-200 bg-gray-50 dark:bg-white/5 dark:border-gray-800 pl-12 pr-4 text-sm font-medium transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:text-white dark:placeholder-gray-500 dark:focus:bg-gray-900" />
+                            </div>
                         </div>
-                        <!-- Last Name -->
+
+                        <!-- Password -->
                         <div class="space-y-2">
                             <label
-                                class="block text-[11px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Last
-                                Name</label>
-                            <input type="text" placeholder="Doe"
-                                class="w-full h-12 rounded-2xl border border-gray-200 bg-gray-50 dark:bg-white/5 dark:border-gray-800 px-4 text-sm font-medium transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:text-white dark:placeholder-gray-500 dark:focus:bg-gray-900" />
+                                class="block text-[11px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Password</label>
+                            <div class="relative group">
+                                <span
+                                    class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-500 transition-colors">
+                                    <span class="material-symbols-outlined text-xl">lock</span>
+                                </span>
+                                <input type="password" x-model="form.password" placeholder="8+ characters" required
+                                    minlength="8"
+                                    class="w-full h-12 rounded-2xl border border-gray-200 bg-gray-50 dark:bg-white/5 dark:border-gray-800 pl-12 pr-4 text-sm font-medium transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:text-white dark:placeholder-gray-500 dark:focus:bg-gray-900" />
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Email -->
-                    <div class="space-y-2">
-                        <label
-                            class="block text-[11px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Work
-                            Email</label>
-                        <div class="relative group">
-                            <span
-                                class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-500 transition-colors">
-                                <span class="material-symbols-outlined text-xl">mail</span>
-                            </span>
-                            <input type="email" placeholder="name@company.com"
-                                class="w-full h-12 rounded-2xl border border-gray-200 bg-gray-50 dark:bg-white/5 dark:border-gray-800 pl-12 pr-4 text-sm font-medium transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:text-white dark:placeholder-gray-500 dark:focus:bg-gray-900" />
+                        <div class="flex items-start gap-3">
+                            <div class="flex items-center h-5">
+                                <input id="terms" type="checkbox" value=""
+                                    class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-brand-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-brand-600 dark:ring-offset-gray-800"
+                                    required>
+                            </div>
+                            <label for="terms" class="text-sm font-medium text-gray-500 dark:text-gray-400">I agree to
+                                the
+                                <a href="#" class="text-brand-600 hover:underline dark:text-brand-500">Terms and
+                                    Conditions</a> and <a href="#"
+                                    class="text-brand-600 hover:underline dark:text-brand-500">Privacy
+                                    Policy</a>.</label>
                         </div>
-                    </div>
 
-                    <!-- Password -->
-                    <div class="space-y-2">
-                        <label
-                            class="block text-[11px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Password</label>
-                        <div class="relative group">
-                            <span
-                                class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-500 transition-colors">
-                                <span class="material-symbols-outlined text-xl">lock</span>
-                            </span>
-                            <input type="password" placeholder="8+ characters"
-                                class="w-full h-12 rounded-2xl border border-gray-200 bg-gray-50 dark:bg-white/5 dark:border-gray-800 pl-12 pr-4 text-sm font-medium transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:text-white dark:placeholder-gray-500 dark:focus:bg-gray-900" />
-                        </div>
-                    </div>
-
-                    <div class="flex items-start gap-3">
-                        <div class="flex items-center h-5">
-                            <input id="terms" type="checkbox" value=""
-                                class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-brand-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-brand-600 dark:ring-offset-gray-800"
-                                required>
-                        </div>
-                        <label for="terms" class="text-sm font-medium text-gray-500 dark:text-gray-400">I agree to the
-                            <a href="#" class="text-brand-600 hover:underline dark:text-brand-500">Terms and
-                                Conditions</a> and <a href="#"
-                                class="text-brand-600 hover:underline dark:text-brand-500">Privacy Policy</a>.</label>
-                    </div>
-
-                    <!-- Submit -->
-                    <button type="submit"
-                        class="w-full h-12 rounded-2xl bg-gray-900 text-white font-bold text-sm shadow-xl hover:bg-black hover:scale-[1.02] active:scale-[0.98] transition-all dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100">
-                        Start Free Trial
-                    </button>
-                </form>
+                        <!-- Submit -->
+                        <button type="submit" :disabled="loading"
+                            class="w-full h-12 rounded-2xl bg-gray-900 text-white font-bold text-sm shadow-xl hover:bg-black hover:scale-[1.02] active:scale-[0.98] transition-all dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100 disabled:opacity-70 disabled:cursor-wait flex items-center justify-center gap-2">
+                            <span x-show="loading"
+                                class="animate-spin material-symbols-outlined text-lg">progress_activity</span>
+                            <span x-text="loading ? 'Creating Account...' : 'Start Free Trial'"></span>
+                        </button>
+                    </form>
+                </div>
 
                 <!-- Footer -->
                 <p class="mt-8 text-center text-sm font-medium text-gray-500 dark:text-gray-400">

@@ -48,7 +48,14 @@
 
     <!-- Essential Scripts -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Essential Scripts -->
+    <!-- 1. JS Architecture -->
+    <script src="js/core/api.js"></script>
+    <script src="js/services/auth-service.js"></script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="js/include.js"></script>
+    <script src="js/pages/auth_v2.js"></script>
 </head>
 
 <body x-data="{ darkMode: false }" :class="{ 'dark': darkMode }"
@@ -164,46 +171,65 @@
                 </div>
 
                 <!-- Form -->
-                <form action="/index_v2.html" class="space-y-6">
-                    <!-- Email -->
-                    <div class="space-y-2">
-                        <label
-                            class="block text-[11px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Email
-                            Address</label>
-                        <div class="relative group">
-                            <span
-                                class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-500 transition-colors">
-                                <span class="material-symbols-outlined text-xl">mail</span>
-                            </span>
-                            <input type="email" placeholder="name@company.com"
-                                class="w-full h-12 rounded-2xl border border-gray-200 bg-gray-50 dark:bg-white/5 dark:border-gray-800 pl-12 pr-4 text-sm font-medium transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:text-white dark:placeholder-gray-500 dark:focus:bg-gray-900" />
-                        </div>
+                <div x-data="loginController" class="w-full">
+                    <!-- Error Alert -->
+                    <div x-show="error" x-transition
+                        class="mb-6 p-4 rounded-xl bg-red-50 text-red-600 border border-red-100 text-sm font-bold flex items-center gap-2">
+                        <span class="material-symbols-outlined text-lg">error</span>
+                        <span x-text="error"></span>
                     </div>
 
-                    <!-- Password -->
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between">
+                    <form @submit.prevent="submit" class="space-y-6">
+                        <!-- Email -->
+                        <div class="space-y-2">
                             <label
-                                class="block text-[11px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Password</label>
-                            <a href="reset_password_v2.html"
-                                class="text-[11px] font-bold text-brand-600 hover:text-brand-700">Forgot Password?</a>
+                                class="block text-[11px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Email
+                                Address</label>
+                            <div class="relative group">
+                                <span
+                                    class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-500 transition-colors">
+                                    <span class="material-symbols-outlined text-xl">mail</span>
+                                </span>
+                                <input type="email" x-model="email" placeholder="name@company.com" required
+                                    @click.once="demoLogin"
+                                    class="w-full h-12 rounded-2xl border border-gray-200 bg-gray-50 dark:bg-white/5 dark:border-gray-800 pl-12 pr-4 text-sm font-medium transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:text-white dark:placeholder-gray-500 dark:focus:bg-gray-900" />
+                            </div>
                         </div>
-                        <div class="relative group">
-                            <span
-                                class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-500 transition-colors">
-                                <span class="material-symbols-outlined text-xl">lock</span>
-                            </span>
-                            <input type="password" placeholder="••••••••"
-                                class="w-full h-12 rounded-2xl border border-gray-200 bg-gray-50 dark:bg-white/5 dark:border-gray-800 pl-12 pr-4 text-sm font-medium transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:text-white dark:placeholder-gray-500 dark:focus:bg-gray-900" />
-                        </div>
-                    </div>
 
-                    <!-- Submit -->
-                    <button type="submit"
-                        class="w-full h-12 rounded-2xl bg-gray-900 text-white font-bold text-sm shadow-xl hover:bg-black hover:scale-[1.02] active:scale-[0.98] transition-all dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100">
-                        Sign In to Command Center
-                    </button>
-                </form>
+                        <!-- Password -->
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <label
+                                    class="block text-[11px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Password</label>
+                                <a href="reset_password_v2.html"
+                                    class="text-[11px] font-bold text-brand-600 hover:text-brand-700">Forgot
+                                    Password?</a>
+                            </div>
+                            <div class="relative group">
+                                <span
+                                    class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-500 transition-colors">
+                                    <span class="material-symbols-outlined text-xl">lock</span>
+                                </span>
+                                <input :type="showPassword ? 'text' : 'password'" x-model="password"
+                                    placeholder="••••••••" required
+                                    class="w-full h-12 rounded-2xl border border-gray-200 bg-gray-50 dark:bg-white/5 dark:border-gray-800 pl-12 pr-12 text-sm font-medium transition-all focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:text-white dark:placeholder-gray-500 dark:focus:bg-gray-900" />
+                                <button type="button" @click="showPassword = !showPassword"
+                                    class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                                    <span class="material-symbols-outlined text-lg"
+                                        x-text="showPassword ? 'visibility_off' : 'visibility'"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Submit -->
+                        <button type="submit" :disabled="loading"
+                            class="w-full h-12 rounded-2xl bg-gray-900 text-white font-bold text-sm shadow-xl hover:bg-black hover:scale-[1.02] active:scale-[0.98] transition-all dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100 disabled:opacity-70 disabled:cursor-wait flex items-center justify-center gap-2">
+                            <span x-show="loading"
+                                class="animate-spin material-symbols-outlined text-lg">progress_activity</span>
+                            <span x-text="loading ? 'Signing in...' : 'Sign In to Command Center'"></span>
+                        </button>
+                    </form>
+                </div>
 
                 <!-- Footer -->
                 <p class="mt-8 text-center text-sm font-medium text-gray-500 dark:text-gray-400">
