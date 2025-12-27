@@ -1,365 +1,423 @@
-# Metrics Dashboard
+# Metrics Dashboard — Solo Founder
 
-Qué medir, cuándo, y qué hacer cuando algo está mal.
+Qué medir, cuándo mirarlo, y cuándo preocuparse.
 
-**Actualizado:** Diciembre 2024
+**Última actualización:** Diciembre 2024
 
 ---
 
-## 🎯 Métricas Tier 1 (Revisar Semanalmente)
+## 🎯 Filosofía de Métricas
 
-Estas son las métricas que determinan si el negocio está sano.
+### Principios
+
+1. **Menos es más.** 10 métricas bien trackadas > 50 ignoradas.
+2. **Actionable > Vanity.** Si no puedes actuar sobre ella, no la midas.
+3. **Leading > Lagging.** Trials predicen MRR futuro mejor que MRR actual.
+4. **Thresholds, no trends.** Define cuándo actuar ANTES de que pase.
+
+### Anti-patrones
+
+- ❌ Revisar métricas cada hora (ansiedad, no insight)
+- ❌ Celebrar vanity metrics (visitors sin conversión)
+- ❌ Ignorar métricas por semanas
+- ❌ Cambiar definiciones constantemente
+
+---
+
+## 📊 Métricas Tier 1: Críticas
+
+Revisar **semanalmente**. Acción inmediata si cruzan threshold.
+
+### 1. MRR (Monthly Recurring Revenue)
+
+```
+MRR = Suma de todas las suscripciones activas
+```
+
+| Threshold | Significado | Acción |
+|-----------|-------------|--------|
+| ↑ 10%+ MoM | Crecimiento sano | Mantener estrategia |
+| ↔ 0-5% MoM | Estancamiento | Revisar acquisition o churn |
+| ↓ 5%+ MoM | Problema serio | Pausar gasto, investigar |
+| ↓ 20%+ MoM | Emergencia | Modo crisis (ver contingency) |
+
+**Dónde verlo:** Stripe Dashboard → Billing → MRR
+
+### 2. Churn Rate
+
+```
+Churn = Clientes perdidos este mes / Clientes al inicio del mes × 100
+```
+
+| Threshold | Significado | Acción |
+|-----------|-------------|--------|
+| < 5% | Excelente | Mantener |
+| 5-8% | Aceptable para early stage | Monitorear |
+| 8-12% | Problema | Investigar razones, pausar acquisition |
+| > 12% | Crisis | Stop todo, focus 100% en retención |
+
+**Benchmark:** SaaS B2B típico: 3-7% mensual. Startups early stage: hasta 10%.
+
+### 3. Trial → Paid Conversion
+
+```
+Conversion = Trials que pagaron / Total trials × 100
+```
+
+| Threshold | Significado | Acción |
+|-----------|-------------|--------|
+| > 30% | Excelente | Escalar acquisition |
+| 20-30% | Bueno | Optimizar onboarding |
+| 10-20% | Problema | Revisar producto o pricing |
+| < 10% | Crisis | Parar ads, fix fundamental |
+
+**Cómo mejorar:**
+- Revisar dónde abandonan (email open rates, login frequency)
+- Hablar con trials que no convirtieron
+- Mejorar onboarding emails
+
+### 4. ARPU (Average Revenue Per User)
+
+```
+ARPU = MRR / Clientes activos
+```
+
+| Threshold | Significado | Acción |
+|-----------|-------------|--------|
+| > €300 | Excelente mix hacia Pro/Scale | Mantener |
+| €250-300 | Buen equilibrio | Optimizar upgrades |
+| €200-250 | Demasiado Starter | Push upgrade path |
+| < €200 | Problema de mix | Revisar pricing o targeting |
+
+**Target:** €275+
+
+---
+
+## 📈 Métricas Tier 2: Importantes
+
+Revisar **mensualmente**. Informan estrategia.
+
+### 5. CAC (Customer Acquisition Cost)
+
+```
+CAC = Gasto total marketing / Nuevos clientes pagando
+```
+
+| Threshold | Significado | Acción |
+|-----------|-------------|--------|
+| < €150 | Muy eficiente | Escalar ese canal |
+| €150-300 | Sostenible | Mantener |
+| €300-500 | Caro pero ok si LTV alto | Optimizar |
+| > €500 | Insostenible | Parar o pivotar canal |
+
+**Por canal:** Trackear CAC por fuente (organic, ads, referral)
+
+### 6. LTV (Lifetime Value)
+
+```
+LTV = ARPU × (1 / Churn rate mensual)
+```
+
+**Ejemplo:** €275 ARPU × (1/0.06) = €4,583 LTV
+
+| LTV:CAC Ratio | Significado |
+|---------------|-------------|
+| > 5:1 | Excelente, escalar agresivo |
+| 3-5:1 | Bueno, crecimiento sostenible |
+| 1-3:1 | Ajustado, optimizar |
+| < 1:1 | Perdiendo dinero, parar |
+
+### 7. Runway
+
+```
+Runway (meses) = Cash en banco / Burn rate mensual
+```
+
+| Threshold | Significado | Acción |
+|-----------|-------------|--------|
+| > 18 meses | Cómodo | Invertir en growth |
+| 12-18 meses | Ok | Mantener disciplina |
+| 6-12 meses | Alerta | Reducir gasto, acelerar revenue |
+| < 6 meses | Crisis | Modo supervivencia |
+
+### 8. Net Revenue Retention (NRR)
+
+```
+NRR = (MRR inicio + Upgrades - Downgrades - Churn) / MRR inicio × 100
+```
+
+| Threshold | Significado |
+|-----------|-------------|
+| > 100% | Creciendo solo con clientes existentes |
+| 90-100% | Sano, pero necesitas nuevos clientes |
+| < 90% | Problema de retención serio |
+
+---
+
+## 🔍 Métricas Tier 3: Diagnóstico
+
+Revisar cuando algo Tier 1/2 falla. Para entender el "por qué".
+
+### Acquisition
+
+| Métrica | Qué indica | Dónde verlo |
+|---------|------------|-------------|
+| Website visitors | Top of funnel | PostHog/Analytics |
+| Visitor → Trial | Landing page effectiveness | PostHog |
+| Traffic by source | Qué canal funciona | UTM tracking |
+| Blog traffic | SEO progress | Analytics |
+
+### Activation
+
+| Métrica | Qué indica | Dónde verlo |
+|---------|------------|-------------|
+| Trial signup → First experiment | Onboarding friction | DB query |
+| Time to first experiment | Product complexity | DB query |
+| Email open rates (onboarding) | Email quality | Resend |
+| Day 1/3/7 retention | Early engagement | PostHog |
 
 ### Revenue
 
-| Métrica | Cálculo | Target | Alarma |
-|---------|---------|--------|--------|
-| **MRR** | Suma de revenue mensual recurrente | Creciendo | Cae 2 semanas seguidas |
-| **MRR Growth %** | (MRR actual - MRR mes anterior) / MRR mes anterior | > 10%/mes | < 5%/mes |
-| **ARPU** | MRR / Clientes activos | > €275 | < €200 |
+| Métrica | Qué indica | Dónde verlo |
+|---------|------------|-------------|
+| Upgrade rate | Expansion revenue | Stripe |
+| Downgrade rate | Price sensitivity | Stripe |
+| Failed payments | Technical/card issues | Stripe |
+| Annual vs monthly mix | Revenue predictability | Stripe |
 
-### Clientes
+### Retention
 
-| Métrica | Cálculo | Target | Alarma |
-|---------|---------|--------|--------|
-| **Clientes activos** | Clientes con suscripción activa | Creciendo | Decrece |
-| **New MRR** | MRR de nuevos clientes este mes | > Churned MRR | < Churned MRR |
-| **Churned MRR** | MRR perdido por churn | < 5% del MRR | > 8% del MRR |
-
-### Conversión
-
-| Métrica | Cálculo | Target | Alarma |
-|---------|---------|--------|--------|
-| **Trial starts** | Nuevos trials / semana | > 10/semana | < 5/semana |
-| **Trial → Paid** | Trials convertidos / Trials expirados | > 20% | < 12% |
+| Métrica | Qué indica | Dónde verlo |
+|---------|------------|-------------|
+| DAU/MAU | Product stickiness | PostHog |
+| Feature usage | What matters to users | PostHog |
+| Support ticket volume | Product issues | Crisp |
+| NPS score | Overall satisfaction | Survey |
 
 ---
 
-## 📊 Métricas Tier 2 (Revisar Mensualmente)
+## 📅 Calendario de Revisión
 
-### Unit Economics
+### Daily (2 min)
 
-| Métrica | Cálculo | Target | Alarma |
-|---------|---------|--------|--------|
-| **CAC** | Gasto marketing / Nuevos clientes | < €250 | > €400 |
-| **LTV** | ARPU × Meses promedio de vida | > €2,500 | < €1,500 |
-| **LTV:CAC** | LTV / CAC | > 10:1 | < 5:1 |
-| **Payback** | CAC / ARPU | < 2 meses | > 4 meses |
+Solo si hay campaña de ads activa o lanzamiento reciente:
 
-### Retención
+- [ ] MRR (quick glance en Stripe)
+- [ ] Cualquier alerta configurada
 
-| Métrica | Cálculo | Target | Alarma |
-|---------|---------|--------|--------|
-| **Gross Churn** | Clientes perdidos / Clientes inicio mes | < 5% | > 8% |
-| **Net Revenue Retention** | (MRR inicio + Expansion - Churn) / MRR inicio | > 100% | < 90% |
-| **Logo Retention** | Clientes retenidos / Clientes inicio mes | > 95% | < 92% |
+### Weekly (15 min) — Viernes
 
-### Engagement
+```
+[ ] MRR actual: €______
+[ ] MRR cambio vs semana pasada: ____%
+[ ] Nuevos trials esta semana: ____
+[ ] Trials → Paid esta semana: ____
+[ ] Churn esta semana: ____
+[ ] ARPU actual: €____
+[ ] Runway (meses): ____
 
-| Métrica | Cálculo | Target | Alarma |
-|---------|---------|--------|--------|
-| **DAU/MAU** | Daily active / Monthly active | > 30% | < 15% |
-| **Experiments created** | Experimentos nuevos / mes / cliente | > 1 | < 0.3 |
-| **Time to first experiment** | Tiempo desde signup hasta primer experimento | < 2 días | > 7 días |
+Notas:
+_________________________________
+_________________________________
+```
 
----
+### Monthly (1 hora) — Primer lunes del mes
 
-## 🔴 Métricas Tier 3 (Revisar Trimestralmente)
+```
+[ ] MRR cierre mes anterior: €______
+[ ] MRR growth MoM: ____%
+[ ] Churn rate: ____%
+[ ] CAC promedio: €____
+[ ] LTV estimado: €____
+[ ] LTV:CAC ratio: ____
+[ ] NRR: ____%
 
-### Financieras
+[ ] Top 3 churns - razones:
+    1. ______________________
+    2. ______________________
+    3. ______________________
 
-| Métrica | Cálculo | Target | Alarma |
-|---------|---------|--------|--------|
-| **Runway** | Cash / Burn mensual | > 18 meses | < 12 meses |
-| **Gross Margin** | (Revenue - COGS) / Revenue | > 80% | < 70% |
-| **Net Margin** | (Revenue - Todos los gastos) / Revenue | > 50% | < 30% |
+[ ] Top 3 upgrades - qué los motivó:
+    1. ______________________
+    2. ______________________
+    3. ______________________
 
-### Growth Efficiency
+Acciones para próximo mes:
+_________________________________
+_________________________________
+```
 
-| Métrica | Cálculo | Target | Alarma |
-|---------|---------|--------|--------|
-| **Burn Multiple** | Net Burn / Net New ARR | < 1 | > 2 |
-| **Magic Number** | New ARR / Sales & Marketing spend (Q anterior) | > 0.75 | < 0.5 |
-| **Rule of 40** | Growth rate % + Profit margin % | > 40 | < 25 |
+### Quarterly (2 horas)
 
----
-
-## 📈 Dashboard por Canal
-
-### SEO / Organic
-
-| Métrica | Target | Frecuencia |
-|---------|--------|------------|
-| Organic sessions | Creciendo 10%/mes | Semanal |
-| Keyword rankings (top 10) | +5/mes | Mensual |
-| Organic trials | > 30% de total trials | Semanal |
-| Blog → Trial conversion | > 2% | Mensual |
-
-### Paid (cuando activo)
-
-| Métrica | Instagram | LinkedIn |
-|---------|-----------|----------|
-| CTR | > 1% | > 0.5% |
-| CPC | < €2 | < €5 |
-| CPL (lead) | < €30 | < €50 |
-| CPA (trial) | < €100 | < €150 |
-| CPA (paid) | < €200 | < €300 |
-| ROAS | > 3x | > 2.5x |
-
-### Email
-
-| Métrica | Target | Alarma |
-|---------|--------|--------|
-| Open rate | > 40% | < 25% |
-| Click rate | > 5% | < 2% |
-| Unsubscribe rate | < 0.5% | > 1% |
-| Reply rate (nurture) | > 2% | < 0.5% |
-
-### Referrals
-
-| Métrica | Target | Alarma |
-|---------|--------|--------|
-| % clientes que refieren | > 10% | < 5% |
-| Referrals por referidor | > 1.5 | < 1 |
-| Referral → Paid conversion | > 40% | < 25% |
-| % revenue de referrals | > 15% | < 5% |
+- Revisar todas las métricas vs objetivos
+- Actualizar projections para siguiente quarter
+- Ajustar OKRs
+- Benchmark vs competencia si hay data pública
 
 ---
 
 ## 🚨 Sistema de Alertas
 
-### Alertas Críticas (Actuar HOY)
+### Configurar en Stripe/PostHog:
 
-| Alerta | Trigger | Acción |
-|--------|---------|--------|
-| 🔴 **MRR Drop** | MRR cae > 10% semana | Investigar churn, contactar clientes |
-| 🔴 **Churn Spike** | > 3 cancellations / día | Llamar (sí, llamar) a churned users |
-| 🔴 **Trial Crash** | Trials caen > 50% semana | Check site, ads, tracking |
-| 🔴 **Payment Failed** | > 20% failed payments | Revisar Stripe, contactar clientes |
+| Alerta | Trigger | Acción inmediata |
+|--------|---------|------------------|
+| Churn spike | > 3 churns en 1 semana | Contactar cada uno, investigar |
+| Payment failed | Cualquier fallo | Revisar dunning, contactar |
+| No trials | 0 trials en 7 días | Revisar acquisition |
+| Trial sin actividad | Trial no crea experimento en 5 días | Email manual personal |
 
-### Alertas Importantes (Actuar esta semana)
+### Herramientas para alertas
 
-| Alerta | Trigger | Acción |
-|--------|---------|--------|
-| 🟡 **Conversion Drop** | Trial→Paid < 15% (2 semanas) | Revisar onboarding, talk to trials |
-| 🟡 **CAC Rising** | CAC > €300 | Revisar spend, pausar underperformers |
-| 🟡 **Engagement Drop** | DAU/MAU < 20% | Revisar producto, enviar re-engagement |
-| 🟡 **Support Spike** | Tickets > 2x normal | Identificar issue común |
-
-### Alertas de Monitoreo (Revisar en weekly)
-
-| Alerta | Trigger | Acción |
-|--------|---------|--------|
-| 🟢 **Growth Slowing** | MRR growth < 8% | Evaluar nuevos canales |
-| 🟢 **ARPU Dropping** | ARPU < €250 | Revisar upgrade paths |
-| 🟢 **Organic Stall** | Organic flat 4 semanas | Aumentar content velocity |
+- **Stripe:** Webhooks → Slack/Email
+- **PostHog:** Alertas en dashboards
+- **UptimeRobot:** Site down alerts
+- **Sentry:** Error rate spikes
 
 ---
 
-## 📋 Reporting Templates
+## 📊 Dashboard Setup
 
-### Weekly Snapshot (Lunes, 15 min)
+### Stripe (ya viene built-in)
+
+Usar Stripe Dashboard para:
+- MRR
+- Churn
+- ARPU
+- Failed payments
+- Subscription distribution
+
+### PostHog (gratis)
+
+Crear dashboard con:
+1. **Visitors por día** (trend)
+2. **Signups por día** (trend)
+3. **Conversion funnel:** Visit → Signup → First experiment → Paid
+4. **Retention:** Day 1, 7, 30
+5. **Feature usage:** Qué features usan los que convierten
+
+### Google Sheets (weekly tracker)
+
+Simple spreadsheet:
+
+| Semana | MRR | Trials | Conversions | Churn | ARPU | Notas |
+|--------|-----|--------|-------------|-------|------|-------|
+| W1 Jan | €5,200 | 12 | 3 | 1 | €260 | Lanzamos blog |
+| W2 Jan | €5,450 | 15 | 4 | 0 | €268 | Ads started |
+| ... | | | | | | |
+
+---
+
+## 🎯 Benchmarks por Fase
+
+### Fase 1: 0-20 clientes
+
+| Métrica | Target | "Bien" |
+|---------|--------|--------|
+| Trial → Paid | > 20% | > 25% |
+| Churn | < 10% | < 8% |
+| ARPU | > €200 | > €250 |
+| CAC | < €300 | < €200 |
+
+### Fase 2: 20-50 clientes
+
+| Métrica | Target | "Bien" |
+|---------|--------|--------|
+| Trial → Paid | > 25% | > 30% |
+| Churn | < 8% | < 6% |
+| ARPU | > €250 | > €275 |
+| CAC | < €250 | < €175 |
+| NRR | > 95% | > 100% |
+
+### Fase 3: 50-100 clientes
+
+| Métrica | Target | "Bien" |
+|---------|--------|--------|
+| Trial → Paid | > 25% | > 30% |
+| Churn | < 6% | < 5% |
+| ARPU | > €275 | > €300 |
+| CAC | < €200 | < €150 |
+| NRR | > 100% | > 105% |
+
+---
+
+## ❌ Métricas a Ignorar
+
+| Métrica vanity | Por qué ignorar |
+|----------------|-----------------|
+| Total visitors | Sin contexto de conversión = ruido |
+| Social followers | No paga facturas |
+| Email list size | Open rates y conversiones importan más |
+| "Usuarios registrados" | Trials que no pagan = 0 value |
+| Competitors' funding | No afecta tu negocio |
+| Feature requests count | Prioriza por quién paga, no cuántos piden |
+
+---
+
+## 🔧 Queries Útiles (SQL/DB)
+
+### Trials sin actividad (últimos 7 días)
+
+```sql
+SELECT email, created_at 
+FROM users 
+WHERE subscription_status = 'trial'
+  AND created_at > NOW() - INTERVAL '7 days'
+  AND id NOT IN (SELECT user_id FROM experiments);
+```
+
+### Clientes por tier
+
+```sql
+SELECT 
+  plan_name,
+  COUNT(*) as customers,
+  SUM(price) as mrr
+FROM subscriptions 
+WHERE status = 'active'
+GROUP BY plan_name;
+```
+
+### Churn del mes
+
+```sql
+SELECT 
+  COUNT(*) as churned,
+  (SELECT COUNT(*) FROM subscriptions 
+   WHERE status = 'active' 
+   AND created_at < DATE_TRUNC('month', NOW())) as start_of_month
+FROM subscriptions
+WHERE status = 'cancelled'
+  AND cancelled_at >= DATE_TRUNC('month', NOW());
+```
+
+---
+
+## 📝 Template: Weekly Review
 
 ```markdown
 ## Week of [DATE]
 
-### Headlines
-- MRR: €X,XXX (↑/↓ X% vs last week)
-- New trials: XX
-- New customers: X
-- Churned: X
-
-### Health Check
-- [✅/⚠️/❌] Trial→Paid: XX%
-- [✅/⚠️/❌] Churn: X%
-- [✅/⚠️/❌] Support tickets: XX
+### Numbers
+- MRR: €____
+- New trials: ____
+- Conversions: ____
+- Churn: ____
+- ARPU: €____
 
 ### Wins
-- 
-
-### Issues
-- 
-
-### Focus this week
 1. 
 2. 
-3. 
-```
 
-### Monthly Report (1er día del mes, 1h)
-
-```markdown
-## [MONTH] Report
-
-### Revenue
-| Metric | This Month | Last Month | Change |
-|--------|------------|------------|--------|
-| MRR | | | |
-| New MRR | | | |
-| Churned MRR | | | |
-| Net New MRR | | | |
-| ARPU | | | |
-
-### Customers
-| Metric | This Month | Last Month | Change |
-|--------|------------|------------|--------|
-| Active customers | | | |
-| New customers | | | |
-| Churned customers | | | |
-| Trials started | | | |
-| Trial→Paid % | | | |
-
-### Unit Economics
-| Metric | Value | Target | Status |
-|--------|-------|--------|--------|
-| CAC | | <€250 | |
-| LTV | | >€2,500 | |
-| LTV:CAC | | >10:1 | |
-| Payback | | <2 mo | |
-
-### Channels
-| Channel | Trials | Customers | CAC |
-|---------|--------|-----------|-----|
-| Organic | | | |
-| Paid | | | |
-| Referral | | | |
-| Direct | | | |
-
-### Learnings
+### Problems
 1. 
 2. 
-3. 
 
-### Next Month Focus
+### Actions next week
 1. 
 2. 
-3. 
+
+### Notes
 ```
 
----
-
-## 🛠️ Herramientas de Tracking
-
-### Stack Recomendado (Bootstrap)
-
-| Función | Herramienta | Coste |
-|---------|-------------|-------|
-| Product analytics | Plausible | €9/mes |
-| Revenue metrics | Stripe Dashboard | €0 |
-| Spreadsheet | Google Sheets | €0 |
-| Visualization | Notion | €10/mes |
-
-### Stack Avanzado (€15k+ MRR)
-
-| Función | Herramienta | Coste |
-|---------|-------------|-------|
-| Product analytics | PostHog o Amplitude | €0-100/mes |
-| Revenue metrics | ChartMogul o Baremetrics | €50-150/mes |
-| BI | Metabase | €85/mes |
-| Data warehouse | Supabase (ya tienes) | €0 |
-
----
-
-## 📊 Benchmarks por Fase
-
-### Early Stage (€0-10k MRR)
-
-| Métrica | Poor | OK | Good | Great |
-|---------|------|----|----- |-------|
-| MRR Growth | <10% | 15% | 20% | >30% |
-| Churn | >10% | 7% | 5% | <3% |
-| Trial→Paid | <15% | 20% | 25% | >35% |
-| CAC | >€400 | €300 | €200 | <€150 |
-
-### Growth Stage (€10k-50k MRR)
-
-| Métrica | Poor | OK | Good | Great |
-|---------|------|----|----- |-------|
-| MRR Growth | <8% | 12% | 15% | >20% |
-| Churn | >8% | 6% | 4% | <3% |
-| NRR | <90% | 95% | 100% | >110% |
-| LTV:CAC | <4 | 6 | 10 | >15 |
-
-### Scale Stage (€50k+ MRR)
-
-| Métrica | Poor | OK | Good | Great |
-|---------|------|----|----- |-------|
-| MRR Growth | <5% | 8% | 12% | >15% |
-| Churn | >6% | 4% | 3% | <2% |
-| Rule of 40 | <25 | 35 | 45 | >60 |
-| Magic Number | <0.5 | 0.75 | 1 | >1.5 |
-
----
-
-## 🔄 Proceso de Review
-
-### Weekly (Lunes, 15 min)
-
-1. Open Stripe → Check MRR, new, churn
-2. Open Database → Check trials this week
-3. Open Crisp → Check ticket volume
-4. Fill weekly snapshot
-5. Identify any 🔴 alerts → Act today
-
-### Monthly (1st of month, 1h)
-
-1. Export all data to spreadsheet
-2. Calculate unit economics
-3. Compare vs targets
-4. Fill monthly report
-5. Adjust next month's focus
-
-### Quarterly (2h)
-
-1. Deep dive on trends
-2. Calculate burn multiple, magic number
-3. Cohort analysis (retention by signup month)
-4. Channel attribution analysis
-5. Update annual projections
-
----
-
-## 📈 North Star Metrics por Fase
-
-| Fase | North Star | Por qué |
-|------|------------|---------|
-| Pre-PMF | Trial → Paid % | Valida que el producto resuelve problema |
-| Early (€0-10k) | MRR | Prueba que puedes vender |
-| Growth (€10k-50k) | Net Revenue Retention | Prueba que puedes retener y expandir |
-| Scale (€50k+) | Rule of 40 | Prueba que puedes crecer eficientemente |
-
----
-
-## 🎯 Quick Reference
-
-### "¿Estoy OK?"
-
-```
-IF MRR growing AND churn < 8% AND runway > 12mo
-  → You're fine, keep going
-  
-IF MRR flat AND churn < 8%
-  → Focus on acquisition
-  
-IF MRR growing AND churn > 8%
-  → STOP acquisition, fix retention
-  
-IF MRR declining
-  → EMERGENCY: talk to every churned user this week
-```
-
-### "¿Dónde poner foco?"
-
-```
-IF Trial→Paid < 15%
-  → Fix onboarding/activation
-  
-IF CAC > €400
-  → Fix channels/messaging
-  
-IF Churn > 8%
-  → Fix product/support
-  
-IF All good but growth slow
-  → Add new channel or increase spend
-```
+Guarda en Notion/Doc cada semana. Invaluable para ver patrones después.
