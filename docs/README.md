@@ -33,6 +33,7 @@ Documentación técnica detallada del backend, archivo por archivo:
 | Document | Description |
 |----------|-------------|
 | **[Backend Overview](backend/README.md)** | Índice completo de la documentación del backend. |
+| **[🚀 Valor del Backend](backend/valor_del_backend.md)** | **LEER PRIMERO** - Potencial del backend para el frontend. |
 | **[Arquitectura](backend/architecture.md)** | Diagramas de capas, patrones de diseño, flujo de requests. |
 | **[Configuración](backend/configuration.md)** | Variables de entorno, settings, conexión a DB. |
 | **[Base de Datos](backend/database.md)** | Esquema SQL completo, tablas, índices, migraciones. |
@@ -43,6 +44,17 @@ Documentación técnica detallada del backend, archivo por archivo:
 | **[Integraciones](backend/integrations.md)** | Shopify, WordPress, Email, Proxy. |
 | **[Scripts](backend/scripts.md)** | Scripts de mantenimiento y utilidades. |
 | **[Testing](backend/testing.md)** | Estrategia de pruebas y ejemplos. |
+
+---
+
+## 🎨 Frontend Documentation
+
+| Document | Description |
+|----------|-------------|
+| **[Frontend Overview](frontend/README.md)** | Índice de documentación frontend. |
+| **[Architecture](frontend/architecture.md)** | Estructura obligatoria para páginas v2. |
+
+> 💡 **Importante**: Leer primero [Valor del Backend](backend/valor_del_backend.md) para entender qué debe mostrar el frontend.
 
 ---
 
