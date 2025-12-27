@@ -266,6 +266,31 @@
                                 acme-corp.com/landing-page
                             </div>
                             <div class="flex gap-3 text-gray-400">
+                                <!-- SOTA: Viewport Toggle Buttons -->
+                                <div class="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-0.5 mr-2">
+                                    <button onclick="window.visualEditor?.setViewportMode('desktop')"
+                                        title="Desktop (1)"
+                                        class="p-1.5 rounded-md hover:bg-white dark:hover:bg-gray-600 transition-colors">
+                                        <span class="material-symbols-outlined text-[16px]">desktop_windows</span>
+                                    </button>
+                                    <button onclick="window.visualEditor?.setViewportMode('tablet')" title="Tablet (2)"
+                                        class="p-1.5 rounded-md hover:bg-white dark:hover:bg-gray-600 transition-colors">
+                                        <span class="material-symbols-outlined text-[16px]">tablet_mac</span>
+                                    </button>
+                                    <button onclick="window.visualEditor?.setViewportMode('mobile')" title="Mobile (3)"
+                                        class="p-1.5 rounded-md hover:bg-white dark:hover:bg-gray-600 transition-colors">
+                                        <span class="material-symbols-outlined text-[16px]">smartphone</span>
+                                    </button>
+                                </div>
+                                <!-- SOTA: Undo/Redo Buttons -->
+                                <button onclick="window.visualEditor?.undo()" title="Undo (Ctrl+Z)"
+                                    class="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                    <span class="material-symbols-outlined text-[18px]">undo</span>
+                                </button>
+                                <button onclick="window.visualEditor?.redo()" title="Redo (Ctrl+Y)"
+                                    class="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                    <span class="material-symbols-outlined text-[18px]">redo</span>
+                                </button>
                                 <span
                                     class="material-symbols-outlined text-[18px] hover:text-gray-600 cursor-pointer dark:hover:text-gray-300">refresh</span>
                             </div>

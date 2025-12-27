@@ -193,9 +193,10 @@ Mejoras que afectan a toda la aplicación.
 *   **Undo Changes**: Botón "Reset" global si he tocado muchas configuraciones y quiero volver al estado guardado.
 
 ### 8. Visual Editor (Integración Futura)
-*   **Undo/Redo Stack**: Ctrl+Z y Ctrl+Y infinitos.
-*   **Element Selector**: Al pasar el mouse por el sitio web, resaltar elementos del DOM inteligentemente.
-*   **Responsive Preview**: Botones para ver cómo queda el cambio en Mobile/Tablet/Desktop al instante.
+*   **Undo/Redo Stack**: ✅ Implementado (50 items max, Ctrl+Z/Y).
+*   **Element Selector**: ✅ Implementado (highlight on hover, CSS selector generation).
+*   **Responsive Preview**: ✅ Implementado (Desktop/Tablet/Mobile buttons + shortcuts 1/2/3).
+*   **Keyboard Shortcuts**: ✅ Ctrl+Z, Ctrl+Y, Escape, 1/2/3 viewports.
 
 ---
 
