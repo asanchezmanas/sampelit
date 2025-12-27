@@ -13,6 +13,8 @@
         rel="stylesheet" />
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Include.js for partials -->
+    <script src="js/include.js"></script>
     <script>
         tailwind.config = {
             darkMode: "class",
@@ -66,16 +68,18 @@
     </style>
 </head>
 
-<body x-data="{ sidebarOpen: false, darkMode: false }" :class="{ 'dark': darkMode }"
+<body x-data="{ page: 'calendar', sidebarToggle: false, darkMode: false }"
+    x-init="darkMode = JSON.parse(localStorage.getItem('darkMode')) || false; $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{ 'dark': darkMode }"
     class="font-body text-gray-800 antialiased bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <div id="sidebar-container" class="flex-shrink-0 transition-all duration-300 z-50 h-full"></div>
+        <include src="./partials/sidebar_v2.html"></include>
 
         <!-- Content Area -->
         <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
             <!-- Header -->
-            <div id="header-container" class="sticky top-0 z-40"></div>
+            <include src="./partials/header_v2.html"></include>
 
             <!-- Main Content -->
             <main class="w-full h-full p-6 lg:p-8">
@@ -240,20 +244,9 @@
         </div>
     </div>
 
-    <!-- Include Layout Partials -->
-    <script>
-        fetch("./partials/sidebar_v2.html")
-            .then((response) => response.text())
-            .then((data) => {
-                document.getElementById("sidebar-container").innerHTML = data;
-            });
-
-        fetch("./partials/header_v2.html")
-            .then((response) => response.text())
-            .then((data) => {
-                document.getElementById("header-container").innerHTML = data;
-            });
-    </script>
+    <!-- Toast and Modals -->
+    <include src="./partials/toast_v2.html"></include>
+    <include src="./partials/modals_v2.html"></include>
 </body>
 
 </html>

@@ -8,16 +8,18 @@ Documentación del frontend de Samplit.
 
 | Documento | Descripción |
 |-----------|-------------|
+| **[🎯 UI Specifications](./ui_specifications.md)** | **CRÍTICO** - Principios de diseño business-first |
+| **[📋 Specs por Vista](./specs/)** | Wireframes y mapeo API por cada vista |
 | [Architecture](./architecture.md) | Estructura obligatoria para páginas v2 |
-| [Valor del Backend](../backend/valor_del_backend.md) | **LEER PRIMERO** - Qué debe mostrar el frontend |
+| [Valor del Backend](../backend/valor_del_backend.md) | Potencial del backend para frontend |
 
 ---
 
 ## ⚡ Quick Start
 
-1. **Leer** [Valor del Backend](../backend/valor_del_backend.md) para entender qué mostrar
-2. **Copiar** `experiments_v2.html` como base
-3. **Seguir** checklist de [Architecture](./architecture.md)
+1. **Leer** [UI Specifications](./ui_specifications.md) - wireframes de cada vista
+2. **Leer** [Valor del Backend](../backend/valor_del_backend.md) - qué hace especial Samplit
+3. **Seguir** [Architecture](./architecture.md) - cómo estructurar código
 
 ---
 

@@ -73,3 +73,6 @@ coverage.xml
 # 🌐 Static / Build output (optional - depends if you pre-build)
 # node_modules/
 # static/build/
+
+# Internal documentation - competitive advantage
+.internal/

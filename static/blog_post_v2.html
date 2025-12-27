@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Include.js for partials -->
+    <script src="js/include.js"></script>
 
     <script>
         tailwind.config = {
@@ -101,12 +103,12 @@
     class="font-body text-gray-800 antialiased bg-white dark:bg-gray-950 transition-colors duration-300">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <div id="sidebar-container" class="flex-shrink-0 transition-all duration-300 z-50 h-full"></div>
+        <include src="./partials/sidebar_v2.html"></include>
 
         <!-- Content Area -->
         <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
             <!-- Header -->
-            <div id="header-container" class="sticky top-0 z-40"></div>
+            <include src="./partials/header_v2.html"></include>
 
             <!-- Main Content -->
             <main class="w-full">
@@ -190,20 +192,10 @@
         </div>
     </div>
 
-    <!-- Include Layout Partials -->
-    <script>
-        fetch("./partials/sidebar_v2.html")
-            .then((response) => response.text())
-            .then((data) => {
-                document.getElementById("sidebar-container").innerHTML = data;
-            });
+    <!-- Toast and Modals -->
+    <include src="./partials/toast_v2.html"></include>
+    <include src="./partials/modals_v2.html"></include>
 
-        fetch("./partials/header_v2.html")
-            .then((response) => response.text())
-            .then((data) => {
-                document.getElementById("header-container").innerHTML = data;
-            });
-    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script>
         document.addEventListener('alpine:init', () => {
